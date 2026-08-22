@@ -22,6 +22,7 @@ const categoryColors = {
   'text-hasher-cryptography': { bg: '#E74C3C', light: '#FDEDEC' },
   'list-array-tools': { bg: '#27AE60', light: '#E9F7EF' },
   'web-developer-tools': { bg: '#2980B9', light: '#D6EAF8' },
+  'audio-speech-tools': { bg: '#EAB308', light: '#FEF9C3' },
 };
 
 // Homepage FAQ
@@ -94,6 +95,20 @@ export default function Home() {
               <div className="hero-stat-label">Instant Results</div>
             </div>
           </div>
+        </div>
+      </section>
+
+      {/* NEW PROMO BANNER */}
+      <section style={{ padding: 'var(--space-6) 24px', background: 'linear-gradient(135deg, #1e293b, #0f172a)' }}>
+        <div className="container" style={{ display: 'flex', flexWrap: 'wrap', gap: 'var(--space-4)', alignItems: 'center', justifyContent: 'space-between', background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.1)', borderRadius: 'var(--radius-lg)', padding: 'var(--space-5)' }}>
+          <div style={{ flex: '1 1 500px' }}>
+            <span style={{ background: '#eab308', color: '#000', padding: '4px 8px', borderRadius: '4px', fontSize: '0.75rem', fontWeight: 700, textTransform: 'uppercase', marginBottom: '8px', display: 'inline-block' }}>New Feature</span>
+            <h2 style={{ color: '#fff', margin: '0 0 8px 0', fontSize: '1.5rem' }}>Text to Audio Converter (TTS)</h2>
+            <p style={{ color: '#94a3b8', margin: 0, fontSize: '0.95rem' }}>Convert any text into natural-sounding speech. Supports 50+ languages, multiple voice variants, and speed controls. 100% private and runs entirely in your browser.</p>
+          </div>
+          <Link href="/audio-speech-tools/text-to-audio" className="btn btn-primary" style={{ background: '#eab308', color: '#000', border: 'none', boxShadow: '0 4px 14px rgba(234, 179, 8, 0.4)' }}>
+            Try it now →
+          </Link>
         </div>
       </section>
 

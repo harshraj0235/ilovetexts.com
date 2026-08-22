@@ -39,6 +39,128 @@ export default function ClientTool({ categoryId, toolSlug }) {
   const [isDragging, setIsDragging] = useState(false);
   const inputRef = useRef(null);
 
+  // ─── Text to Speech State ───
+  const [voices, setVoices] = useState([]);
+  const [selectedVoiceIndex, setSelectedVoiceIndex] = useState(0);
+  const [pitch, setPitch] = useState(1);
+  const [rate, setRate] = useState(1);
+  const [isPlaying, setIsPlaying] = useState(false);
+  const [isPaused, setIsPaused] = useState(false);
+  const [isDownloading, setIsDownloading] = useState(false);
+
+  useEffect(() => {
+    if (typeof window === 'undefined' || !window.speechSynthesis) return;
+    const loadVoices = () => {
+      const availableVoices = window.speechSynthesis.getVoices();
+      if (availableVoices.length > 0) {
+        setVoices(availableVoices);
+      }
+    };
+    loadVoices();
+    window.speechSynthesis.onvoiceschanged = loadVoices;
+  }, []);
+
+  const handlePlayAudio = () => {
+    if (!input || typeof window === 'undefined' || !window.speechSynthesis) return;
+    
+    if (isPaused) {
+      window.speechSynthesis.resume();
+      setIsPaused(false);
+      setIsPlaying(true);
+      return;
+    }
+
+    window.speechSynthesis.cancel(); // Stop any current speech
+    
+    const utterance = new SpeechSynthesisUtterance(input);
+    if (voices[selectedVoiceIndex]) {
+      utterance.voice = voices[selectedVoiceIndex];
+    }
+    utterance.pitch = pitch;
+    utterance.rate = rate;
+    
+    utterance.onend = () => {
+      setIsPlaying(false);
+      setIsPaused(false);
+    };
+    
+    window.speechSynthesis.speak(utterance);
+    setIsPlaying(true);
+    setIsPaused(false);
+  };
+
+  const handlePauseAudio = () => {
+    if (typeof window !== 'undefined' && window.speechSynthesis) {
+      window.speechSynthesis.pause();
+      setIsPaused(true);
+      setIsPlaying(false);
+    }
+  };
+
+  const handleStopAudio = () => {
+    if (typeof window !== 'undefined' && window.speechSynthesis) {
+      window.speechSynthesis.cancel();
+      setIsPlaying(false);
+      setIsPaused(false);
+    }
+  };
+
+  const handleDownloadAudio = async () => {
+    if (!input) {
+      setToast({ message: 'Please enter some text first.', type: 'warning' });
+      return;
+    }
+    setIsDownloading(true);
+    setToast({ message: 'Generating high-quality MP3 (this may take a moment)...', type: 'success' });
+    try {
+      const selectedVoice = voices[selectedVoiceIndex];
+      const lang = selectedVoice ? selectedVoice.lang.split('-')[0] : 'en';
+
+      const response = await fetch('/api/tts', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ text: input, lang: lang })
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to generate audio');
+      }
+
+      const data = await response.json();
+      if (data.audioChunks && data.audioChunks.length > 0) {
+        const byteArrays = [];
+        for (const chunk of data.audioChunks) {
+          const binaryString = window.atob(chunk.base64);
+          const bytes = new Uint8Array(binaryString.length);
+          for (let i = 0; i < binaryString.length; i++) {
+            bytes[i] = binaryString.charCodeAt(i);
+          }
+          byteArrays.push(bytes);
+        }
+
+        const blob = new Blob(byteArrays, { type: 'audio/mpeg' });
+        const url = URL.createObjectURL(blob);
+        
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `ilovetexts-audio-${Date.now()}.mp3`;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+        
+        setToast({ message: 'Audio downloaded successfully!', type: 'success' });
+      } else {
+        throw new Error('No audio data received');
+      }
+    } catch (error) {
+      console.error('Download error:', error);
+      setToast({ message: 'Error generating audio. Please try again.', type: 'error' });
+    } finally {
+      setIsDownloading(false);
+    }
+  };
+
   // ─── Processing Effect ───
   useEffect(() => {
     const noInputRequired = ['uuid-generator', 'password-generator', 'lorem-ipsum', 'random-number', 'random-string', 'fake-name-generator', 'fake-address-generator', 'mac-address-generator'];
@@ -384,6 +506,93 @@ export default function ClientTool({ categoryId, toolSlug }) {
       </div>
     </div>
   );
+
+  // ─── AUDIO SPEECH TOOLS UI ───
+  if (categoryId === 'audio-speech-tools' && toolSlug === 'text-to-audio') {
+    return (
+      <div className="tool-container-full">
+        <div className="tool-panel" style={{ marginBottom: 'var(--space-6)', padding: 'var(--space-5)' }}>
+          <h3 style={{ marginBottom: 'var(--space-4)', fontWeight: 700 }}>Audio Settings</h3>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-4)' }}>
+            <div>
+              <label style={{ display: 'block', marginBottom: 'var(--space-2)', fontWeight: 600 }}>Select Voice / Language ({voices.length} available)</label>
+              <select 
+                value={selectedVoiceIndex} 
+                onChange={(e) => setSelectedVoiceIndex(Number(e.target.value))}
+                style={{ width: '100%', padding: '12px', borderRadius: 'var(--radius-sm)', border: '1px solid var(--border-dark)', background: 'var(--bg-white)', fontFamily: 'var(--font-sans)' }}
+              >
+                {voices.length === 0 ? <option>Loading voices...</option> : null}
+                {voices.map((voice, idx) => (
+                  <option key={idx} value={idx}>
+                    {voice.name} ({voice.lang}) {voice.default ? '— Default' : ''}
+                  </option>
+                ))}
+              </select>
+            </div>
+            <div style={{ display: 'flex', gap: 'var(--space-6)', flexWrap: 'wrap' }}>
+              <div style={{ flex: 1, minWidth: '200px' }}>
+                <label style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 'var(--space-2)', fontWeight: 600 }}>
+                  <span>Speech Speed (Rate)</span>
+                  <span>{rate}x</span>
+                </label>
+                <input type="range" min="0.5" max="2" step="0.1" value={rate} onChange={(e) => setRate(parseFloat(e.target.value))} style={{ width: '100%' }} />
+              </div>
+              <div style={{ flex: 1, minWidth: '200px' }}>
+                <label style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 'var(--space-2)', fontWeight: 600 }}>
+                  <span>Voice Pitch</span>
+                  <span>{pitch}</span>
+                </label>
+                <input type="range" min="0" max="2" step="0.1" value={pitch} onChange={(e) => setPitch(parseFloat(e.target.value))} style={{ width: '100%' }} />
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div className="tool-actions" style={{ justifyContent: 'center', marginBottom: 'var(--space-6)', gap: 'var(--space-4)' }}>
+          {!isPlaying ? (
+            <button className="btn btn-primary" onClick={handlePlayAudio} style={{ fontSize: '1.2rem', padding: '12px 32px' }}>
+              ▶️ {isPaused ? 'Resume' : 'Play Audio'}
+            </button>
+          ) : (
+            <button className="btn btn-secondary" onClick={handlePauseAudio} style={{ fontSize: '1.2rem', padding: '12px 32px' }}>
+              ⏸️ Pause
+            </button>
+          )}
+          <button className="btn btn-secondary" onClick={handleStopAudio} disabled={!isPlaying && !isPaused} style={{ fontSize: '1.2rem', padding: '12px 32px' }}>
+            ⏹️ Stop
+          </button>
+        </div>
+        <div className="tool-actions" style={{ justifyContent: 'center', marginBottom: 'var(--space-6)' }}>
+          <button className="btn btn-secondary" onClick={handleDownloadAudio} disabled={isDownloading} style={{ background: 'var(--bg-card)', color: 'var(--text-main)', border: '1px solid var(--border-dark)', width: '100%', maxWidth: '400px' }}>
+            {isDownloading ? '⏳ Generating MP3...' : '💾 Download MP3 Audio'}
+          </button>
+        </div>
+
+        <div className="tool-panel"
+          onDragOver={handleDragOver}
+          onDragLeave={handleDragLeave}
+          onDrop={handleDrop}
+        >
+          <div className="tool-panel-header">
+            <div className="tool-panel-title">TYPE OR PASTE YOUR TEXT TO LISTEN</div>
+            <div className="tool-panel-actions">
+              <button className="btn btn-ghost btn-icon" onClick={handleClear} title="Clear">🗑️</button>
+            </div>
+          </div>
+          <InputHelperBar />
+          <textarea 
+            ref={inputRef}
+            className={`tool-textarea ${isDragging ? 'dragging' : ''}`} 
+            placeholder="Type or paste your text here to convert to speech... (or drag & drop a .txt file)" 
+            value={input} 
+            onChange={(e) => setInput(e.target.value)} 
+            spellCheck="false" 
+          />
+        </div>
+        {toast && <Toast message={toast.message} type={toast.type} onClose={() => setToast(null)} />}
+      </div>
+    );
+  }
 
   // ─── WORD COUNTER: Stats UI ───
   if (categoryId === 'word-counter') {
