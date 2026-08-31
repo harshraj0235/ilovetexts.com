@@ -95,6 +95,12 @@
       "longDesc": "",
       "name": "Herramientas para crear redes sociales",
       "description": "Formatee, optimice y organice su texto para Instagram, TikTok, Twitter, YouTube y LinkedIn."
+    },
+    "gta-6-tools": {
+      "name": "GTA 6 Tools",
+      "description": "Trending GTA 6 tools: generate Vice City news headlines, custom license plates, and rap sheets. Build hype for Grand Theft Auto VI!",
+      "longDesc": "",
+      "useCases": []
     }
   },
   "tools": {
@@ -3269,6 +3275,231 @@
         "howToDesc": "Learn how to securely generate and verify Bcrypt password hashes using {toolName} on {domain}.",
         "howToTool": "Web Browser"
       }
+    },
+    "vice-city-headline-generator": {
+      "name": "Vice City News Headline Generator",
+      "description": "Create a custom Florida Man / Vice City style breaking news graphic.",
+      "metaTitle": "Vice City News Headline Generator - GTA 6 Style Meme Maker",
+      "metaDescription": "Create your own viral GTA 6 style Vice City breaking news headline. Generate Florida Man memes, customize the text, and download the graphic instantly.",
+      "keywords": "gta 6 news generator, vice city headline maker, florida man meme generator, grand theft auto 6 custom news, breaking news generator",
+      "whatIs": "The Vice City News Headline Generator is a fun, interactive tool that lets you create authentic-looking 'Florida Man' and Vice City breaking news graphics inspired by the GTA 6 trailers. You can customize the headline, the breaking news ticker, and the character's name to generate hilarious, shareable memes that look exactly like the in-game Weazel News or Bleeter posts.",
+      "whyChoose": [
+        {
+          "title": "Authentic Aesthetic",
+          "description": "Perfectly replicates the neon, chaotic vibes of the Vice City universe."
+        },
+        {
+          "title": "Instant Download",
+          "description": "Generate your custom graphic in seconds and download it directly to share on social media."
+        },
+        {
+          "title": "100% Free",
+          "description": "No watermarks, no signups required. Just pure meme generation."
+        },
+        {
+          "title": "Custom Ticker",
+          "description": "Add your own funny scrolling text at the bottom of the news screen."
+        }
+      ],
+      "useCases": [
+        "Creating viral TikTok or Twitter memes about GTA 6.",
+        "Making funny custom profile pictures or banners.",
+        "Joking with friends by putting them in a 'Florida Man' news headline."
+      ],
+      "faqs": [
+        {
+          "question": "Is this an official GTA 6 tool?",
+          "answer": "No, this is a fan-made meme generator designed to replicate the style seen in the GTA 6 trailers."
+        },
+        {
+          "question": "Can I use the images on social media?",
+          "answer": "Yes! The images you generate are yours to download and share anywhere."
+        },
+        {
+          "question": "How do I make the text fit better?",
+          "answer": "Try keeping your headlines short and punchy, just like real breaking news alerts."
+        }
+      ]
+    },
+    "vice-city-license-plate": {
+      "name": "Vice City License Plate Creator",
+      "description": "Design a custom Leonida state license plate in GTA 6 style.",
+      "metaTitle": "Vice City License Plate Creator — Custom GTA 6 Leonida Plate",
+      "metaDescription": "Design your own custom Leonida state license plate in GTA 6 style. Choose from 4 unique plate designs, type your text, and download instantly.",
+      "keywords": "gta 6 license plate generator, custom vice city plate maker, leonida state plate creator",
+      "whatIs": "Design a custom license plate inspired by the state of Leonida from GTA 6. Choose from 4 unique styles and download a high-resolution PNG image.",
+      "whyChoose": [
+        {
+          "title": "4 Unique Styles",
+          "description": "Choose from Leonida, Vice City, Ocean Beach, and Retro 80s plate designs."
+        },
+        {
+          "title": "Realistic 3D Design",
+          "description": "Features bolts, registration stickers, and authentic plate textures."
+        },
+        {
+          "title": "Instant Download",
+          "description": "Download your custom plate as a high-resolution PNG image."
+        },
+        {
+          "title": "100% Free",
+          "description": "No watermarks, no signups. Just create and download."
+        }
+      ],
+      "useCases": [
+        "Creating a custom plate for your Discord server profile.",
+        "Designing vanity plates to share on GTA communities.",
+        "Making personalized gifts for GTA fans."
+      ],
+      "faqs": [
+        {
+          "question": "How many characters can I put on the plate?",
+          "answer": "Up to 7 characters including letters, numbers, and spaces."
+        },
+        {
+          "question": "What plate styles are available?",
+          "answer": "4 styles: Leonida, Vice City, Ocean Beach, and Retro 80s."
+        },
+        {
+          "question": "Is this free?",
+          "answer": "Yes, 100% free with no watermarks."
+        }
+      ]
+    },
+    "gta-6-pc-requirements": {
+      "name": "GTA 6 PC Requirements Checker",
+      "description": "Check if your PC can run GTA 6 and get upgrade recommendations.",
+      "metaTitle": "Can My PC Run GTA 6? — Free System Requirements Checker",
+      "metaDescription": "Check if your PC can run GTA 6. Select your GPU, CPU, RAM, and storage to get an instant readiness score.",
+      "keywords": "can my pc run gta 6, gta 6 system requirements checker, gta vi pc specs test",
+      "whatIs": "Check if your PC hardware can handle GTA 6 with our free requirements checker. Select your components and get a detailed score.",
+      "whyChoose": [
+        {
+          "title": "30+ GPUs",
+          "description": "Supports NVIDIA, AMD, and Intel GPUs from the latest and previous generations."
+        },
+        {
+          "title": "20+ CPUs",
+          "description": "Comprehensive CPU database from AMD Ryzen and Intel Core families."
+        },
+        {
+          "title": "Weighted Scoring",
+          "description": "GPU-heavy scoring reflects real gaming workloads."
+        },
+        {
+          "title": "Upgrade Advice",
+          "description": "Identifies your biggest bottleneck for efficient upgrades."
+        }
+      ],
+      "useCases": [
+        "Checking if your PC is ready before buying GTA 6.",
+        "Finding your biggest bottleneck for an efficient upgrade.",
+        "Planning a new PC build for GTA 6."
+      ],
+      "faqs": [
+        {
+          "question": "Are these the official requirements?",
+          "answer": "No, these are estimates based on engine analysis and similar Rockstar titles."
+        },
+        {
+          "question": "Is 16GB RAM enough?",
+          "answer": "16GB is expected minimum. We recommend 32GB for comfortable gameplay."
+        },
+        {
+          "question": "Why is GPU weighted most?",
+          "answer": "Open-world games are primarily GPU-bound for rendering the massive world."
+        }
+      ]
+    },
+    "vice-city-speculation-map": {
+      "name": "Vice City Interactive Map",
+      "description": "Explore and pin locations on the speculated GTA 6 Vice City map.",
+      "metaTitle": "GTA 6 Interactive Vice City Map — Explore & Pin Locations",
+      "metaDescription": "Explore the speculated GTA 6 Vice City map. Pin locations, filter by type, and discover community-identified landmarks.",
+      "keywords": "gta 6 map interactive, vice city map explorer, leonida map gta vi",
+      "whatIs": "Explore the speculated GTA 6 map with pre-populated landmarks. Add custom pins, filter by category, and plan your Vice City adventure.",
+      "whyChoose": [
+        {
+          "title": "Pre-populated Landmarks",
+          "description": "Key locations like Downtown, Ocean Beach, and the Everglades."
+        },
+        {
+          "title": "Custom Pins",
+          "description": "Add your own pins anywhere on the map."
+        },
+        {
+          "title": "Filter by Type",
+          "description": "Filter pins by City, Beach, Transport, Nature, Luxury, or Custom."
+        },
+        {
+          "title": "Interactive",
+          "description": "Click pins to view details, remove, or explore."
+        }
+      ],
+      "useCases": [
+        "Exploring speculated locations in the GTA 6 world.",
+        "Planning your first playthrough route.",
+        "Pinning your dream safehouse location."
+      ],
+      "faqs": [
+        {
+          "question": "Is this the real GTA 6 map?",
+          "answer": "No, this is speculative based on trailer analysis and community research."
+        },
+        {
+          "question": "Can I add my own pins?",
+          "answer": "Yes! Click Add Pin, choose a category, and click on the map."
+        },
+        {
+          "question": "Will my pins be saved?",
+          "answer": "Pins are saved in your browser session only."
+        }
+      ]
+    },
+    "vice-city-rap-sheet": {
+      "name": "Vice City Rap Sheet Generator",
+      "description": "Generate your own VCPD criminal record and mugshot card.",
+      "metaTitle": "Vice City Rap Sheet Generator — GTA 6 Mugshot & Criminal Record",
+      "metaDescription": "Generate your own VCPD criminal record card. Customize name, charges, bounty, and status. Download your GTA 6 style rap sheet.",
+      "keywords": "gta 6 mugshot generator, vice city police record maker, criminal rap sheet creator",
+      "whatIs": "Create a professional-looking VCPD criminal record card. Customize your name, alias, charges, bounty, and wanted status, then download as a PNG.",
+      "whyChoose": [
+        {
+          "title": "Realistic Design",
+          "description": "Yellowed paper texture with authentic police document styling."
+        },
+        {
+          "title": "16 Hilarious Charges",
+          "description": "From Grand Theft Auto to Assault with a Flamingo."
+        },
+        {
+          "title": "Randomize",
+          "description": "One-click randomization for instant fun results."
+        },
+        {
+          "title": "Downloadable",
+          "description": "Save as a high-resolution PNG for social media sharing."
+        }
+      ],
+      "useCases": [
+        "Creating funny criminal records to share on social media.",
+        "Making character cards for GTA RP servers.",
+        "Generating content for YouTube or TikTok videos."
+      ],
+      "faqs": [
+        {
+          "question": "Can I customize the charges?",
+          "answer": "Yes! Choose from 16 GTA-style charges."
+        },
+        {
+          "question": "Can I upload my own photo?",
+          "answer": "Not yet. A placeholder avatar is used currently."
+        },
+        {
+          "question": "What bounty amounts are available?",
+          "answer": "From $5,000 to $1,000,000. Use Randomize for random amounts."
+        }
+      ]
     }
   },
   "ui": {

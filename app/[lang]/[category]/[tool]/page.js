@@ -32,6 +32,11 @@ import PiiRedactor from '@/components/tools/PiiRedactor';
 import PromptMinifier from '@/components/tools/PromptMinifier';
 import CaptionFormatter from '@/components/tools/CaptionFormatter';
 import JsonToMarkdown from '@/components/tools/JsonToMarkdown';
+import ViceCityHeadlineGenerator from '@/components/tools/ViceCityHeadlineGenerator';
+import ViceCityLicensePlate from '@/components/tools/ViceCityLicensePlate';
+import Gta6PcBuilder from '@/components/tools/Gta6PcBuilder';
+import ViceCitySpeculationMap from '@/components/tools/ViceCitySpeculationMap';
+import ViceCityRapSheet from '@/components/tools/ViceCityRapSheet';
 import { notFound } from 'next/navigation';
 import Link from 'next/link';
 
@@ -258,6 +263,16 @@ export default async function ToolPage({ params }) {
           <CaptionFormatter t={t} lang={lang} />
         ) : toolData.slug === 'json-to-markdown' ? (
           <JsonToMarkdown t={t} lang={lang} />
+        ) : toolData.slug === 'vice-city-headline-generator' ? (
+          <ViceCityHeadlineGenerator t={t} lang={lang} />
+        ) : toolData.slug === 'vice-city-license-plate' ? (
+          <ViceCityLicensePlate t={t} lang={lang} />
+        ) : toolData.slug === 'gta-6-pc-requirements' ? (
+          <Gta6PcBuilder t={t} lang={lang} />
+        ) : toolData.slug === 'vice-city-speculation-map' ? (
+          <ViceCitySpeculationMap t={t} lang={lang} />
+        ) : toolData.slug === 'vice-city-rap-sheet' ? (
+          <ViceCityRapSheet t={t} lang={lang} />
         ) : (
           <ClientTool categoryId={category.id} toolSlug={toolData.slug} t={t} />
         )}
