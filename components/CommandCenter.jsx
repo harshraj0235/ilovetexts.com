@@ -45,6 +45,30 @@ export default function CommandCenter({ allTools, categories, lang, t }) {
         
         {!query && (
           <div style={{ marginBottom: '48px' }}>
+            <h3 style={{ marginBottom: '24px', color: '#ec4899', display: 'flex', alignItems: 'center', gap: '8px' }}>
+              <span style={{ fontSize: '1.4rem' }}>🌴</span> Trending: GTA 6 Vice City Tools
+            </h3>
+            <div className="tools-grid">
+              {allTools.filter(t => ['vice-city-headline-generator', 'vice-city-license-plate', 'gta-6-pc-requirements', 'vice-city-speculation-map', 'vice-city-rap-sheet'].includes(t.slug)).map(tool => (
+                <Link 
+                  key={tool.slug} 
+                  href={langLink(`/${tool.categoryId}/${tool.slug}`)} 
+                  className="tool-card"
+                  style={{ border: '1px solid #ec4899', boxShadow: '0 4px 15px rgba(236, 72, 153, 0.1)' }}
+                >
+                  <div className="tool-card-icon" role="img" aria-hidden="true">{tool.icon}</div>
+                  <div className="tool-card-content">
+                    <h3>{tool.name}</h3>
+                    <p>{tool.description.length > 60 ? tool.description.substring(0, 60) + '...' : tool.description}</p>
+                  </div>
+                </Link>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {!query && (
+          <div style={{ marginBottom: '48px' }}>
             <h3 style={{ marginBottom: '24px', color: '#ef4444', display: 'flex', alignItems: 'center', gap: '8px' }}>
               <span style={{ fontSize: '1.4rem' }}>🔥</span> Trending: AI & Creator Tools
             </h3>
