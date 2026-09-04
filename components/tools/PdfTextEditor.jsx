@@ -888,7 +888,11 @@ export default function PdfTextEditor({ t, lang }) {
       {/* Merge PDF modal */}
       {showMergePanel && (
         <PdfMergePanel
-          onMerged={(mergedFile) => { handleFile(mergedFile); }}
+          onMerged={(mergedFile) => {
+            setShowMergePanel(false); // close modal first
+            handleFile(mergedFile);   // then start loading
+            return Promise.resolve(); // satisfy await in PdfMergePanel
+          }}
           onClose={() => setShowMergePanel(false)}
         />
       )}
