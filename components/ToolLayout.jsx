@@ -4,6 +4,8 @@ import Link from 'next/link';
 import { useState, useEffect } from 'react';
 import { getTranslations } from '@/lib/i18n';
 import EmbedWidget from './EmbedWidget';
+import RatingWidget from './RatingWidget';
+import RatingSchema from './RatingSchema';
 
 // Toast Notification Component
 function Toast({ message, type, onClose }) {
@@ -109,6 +111,9 @@ export default function ToolLayout({
 
   return (
     <>
+      {/* Real aggregateRating JSON-LD — only emits when user has actually rated */}
+      <RatingSchema tool={tool} category={category} />
+
       {/* ═══ Colored Hero Banner ═══ */}
       <div className="tool-hero" style={{ '--tool-color': category.color }}>
         <div className="container">
@@ -286,6 +291,15 @@ export default function ToolLayout({
               <p>{t.trust.devicesDesc}</p>
             </div>
           </div>
+        </section>
+
+        {/* ═══ Real Rating Widget ═══ */}
+        <section style={{ maxWidth: 320, margin: '0 auto' }}>
+          <RatingWidget
+            toolSlug={tool.slug}
+            toolName={tool.name}
+            lang={lang}
+          />
         </section>
 
 
