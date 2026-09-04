@@ -24,6 +24,154 @@ function Toast({ message, type, onClose }) {
   );
 }
 
+// ── Embed CTA Banner — shown below every tool, drives backlinks ──────────────
+function EmbedCTA({ toolUrl, toolName }) {
+  const [open,   setOpen]   = useState(false);
+  const [copied, setCopied] = useState(false);
+
+  const getEmbedUrl = () => {
+    try {
+      const url = new URL(toolUrl);
+      const parts = url.pathname.split('/').filter(Boolean);
+      const embedPath = parts.length === 2 ? `/embed/en${url.pathname}` : `/embed${url.pathname}`;
+      return `${url.origin}${embedPath}`;
+    } catch { return ''; }
+  };
+
+  const embedCode = `<iframe src="${getEmbedUrl()}" width="100%" height="600" style="border:1px solid #e2e8f0;border-radius:8px;" title="${toolName} — Free Online Tool by ilovetexts.com" loading="lazy"></iframe>\n<p style="font-size:12px;text-align:right;font-family:sans-serif;margin-top:4px;">Free tool by <a href="https://ilovetexts.com" style="color:#3b82f6;">ilovetexts.com</a></p>`;
+
+  const handleCopy = () => {
+    navigator.clipboard.writeText(embedCode);
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2500);
+  };
+
+  return (
+    <>
+      {/* Banner */}
+      <div style={{
+        background: 'linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%)',
+        borderTop: '1px solid #bae6fd',
+        borderBottom: '1px solid #bae6fd',
+        padding: '16px 24px',
+      }}>
+        <div className="container" style={{ display: 'flex', alignItems: 'center', gap: '16px', flexWrap: 'wrap', justifyContent: 'space-between' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+            <span style={{ fontSize: '1.5rem' }}>📎</span>
+            <div>
+              <div style={{ fontWeight: 700, fontSize: '0.92rem', color: '#0c4a6e' }}>
+                Embed this tool on your website — free, no limits
+              </div>
+              <div style={{ fontSize: '0.8rem', color: '#075985', marginTop: '2px' }}>
+                Add the fully working {toolName} to your blog or site in 30 seconds. No API key, no backend.
+              </div>
+            </div>
+          </div>
+          <button
+            onClick={() => setOpen(true)}
+            style={{
+              display: 'inline-flex', alignItems: 'center', gap: '7px',
+              padding: '9px 20px', borderRadius: '8px',
+              background: '#0284c7', color: '#fff',
+              border: 'none', cursor: 'pointer',
+              fontWeight: 700, fontSize: '0.88rem',
+              boxShadow: '0 2px 8px rgba(2,132,199,0.35)',
+              whiteSpace: 'nowrap', flexShrink: 0,
+              transition: 'background 0.15s',
+            }}
+          >
+            📎 Get Embed Code
+          </button>
+        </div>
+      </div>
+
+      {/* Modal */}
+      {open && (
+        <div
+          onClick={() => setOpen(false)}
+          style={{
+            position: 'fixed', inset: 0, zIndex: 2000,
+            background: 'rgba(0,0,0,0.55)',
+            display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '20px',
+          }}
+        >
+          <div onClick={e => e.stopPropagation()} style={{
+            background: 'var(--bg-main, #fff)', color: 'var(--text-primary, #111)',
+            borderRadius: '14px', padding: '28px', width: '100%', maxWidth: '620px',
+            boxShadow: '0 24px 40px rgba(0,0,0,0.18)',
+          }}>
+            {/* Header */}
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '18px' }}>
+              <div>
+                <h3 style={{ margin: 0, fontSize: '1.15rem', fontWeight: 800 }}>📎 Embed {toolName}</h3>
+                <p style={{ margin: '6px 0 0', fontSize: '0.83rem', color: 'var(--text-secondary)' }}>
+                  Paste this into any HTML page. The tool is fully functional and always up-to-date.
+                </p>
+              </div>
+              <button onClick={() => setOpen(false)} style={{ background: 'none', border: 'none', cursor: 'pointer', fontSize: '1.4rem', color: 'var(--text-secondary)', lineHeight: 1, padding: '0 0 0 12px' }}>×</button>
+            </div>
+
+            {/* Benefits row */}
+            <div style={{ display: 'flex', gap: '10px', marginBottom: '18px', flexWrap: 'wrap' }}>
+              {[
+                { icon: '🆓', text: 'Always free' },
+                { icon: '🔒', text: '100% private' },
+                { icon: '📱', text: 'Mobile responsive' },
+                { icon: '🔄', text: 'Auto-updated' },
+              ].map(b => (
+                <span key={b.text} style={{
+                  display: 'inline-flex', alignItems: 'center', gap: '5px',
+                  padding: '4px 10px', borderRadius: '20px',
+                  background: 'var(--bg-section)', border: '1px solid var(--border-light)',
+                  fontSize: '0.78rem', color: 'var(--text-secondary)', fontWeight: 500,
+                }}>{b.icon} {b.text}</span>
+              ))}
+            </div>
+
+            {/* Preview */}
+            <div style={{
+              border: '1px solid var(--border-light)', borderRadius: '8px',
+              overflow: 'hidden', marginBottom: '14px', background: '#f8fafc',
+            }}>
+              <div style={{ padding: '6px 12px', background: '#e2e8f0', fontSize: '0.75rem', fontWeight: 600, color: '#64748b', display: 'flex', alignItems: 'center', gap: '6px' }}>
+                <span style={{ width: 8, height: 8, borderRadius: '50%', background: '#ef4444', display: 'inline-block' }} />
+                <span style={{ width: 8, height: 8, borderRadius: '50%', background: '#f59e0b', display: 'inline-block' }} />
+                <span style={{ width: 8, height: 8, borderRadius: '50%', background: '#10b981', display: 'inline-block' }} />
+                <span style={{ marginLeft: 6 }}>Preview — your-site.com</span>
+              </div>
+              <div style={{ padding: '12px', fontFamily: 'monospace', fontSize: '0.78rem', color: '#374151', overflowX: 'auto', whiteSpace: 'pre-wrap', wordBreak: 'break-all', maxHeight: 120, overflowY: 'auto' }}>
+                {embedCode}
+              </div>
+            </div>
+
+            {/* Actions */}
+            <div style={{ display: 'flex', gap: '10px', justifyContent: 'flex-end' }}>
+              <button onClick={() => setOpen(false)} style={{
+                padding: '9px 18px', border: '1px solid var(--border-light)',
+                borderRadius: '8px', background: 'transparent', cursor: 'pointer',
+                fontSize: '0.88rem', color: 'var(--text-secondary)',
+              }}>Cancel</button>
+              <button onClick={handleCopy} style={{
+                padding: '9px 22px', border: 'none', borderRadius: '8px',
+                background: copied ? '#10b981' : '#0284c7', color: '#fff',
+                cursor: 'pointer', fontWeight: 700, fontSize: '0.88rem',
+                display: 'flex', alignItems: 'center', gap: '7px',
+                transition: 'background 0.2s',
+              }}>
+                {copied ? '✓ Copied!' : '📋 Copy Embed Code'}
+              </button>
+            </div>
+
+            <p style={{ marginTop: '14px', fontSize: '0.74rem', color: 'var(--text-tertiary)', textAlign: 'center' }}>
+              By embedding, you help us stay free. The "Powered by ilovetexts.com" link is appreciated but not required.
+            </p>
+          </div>
+        </div>
+      )}
+    </>
+  );
+}
+
 export default function ToolLayout({ 
   tool, 
   category, 
@@ -183,6 +331,9 @@ export default function ToolLayout({
           </div>
         </div>
       </div>
+
+      {/* ═══ Embed CTA Banner ═══ */}
+      <EmbedCTA toolUrl={toolUrl} toolName={tool.name} />
 
       {/* ═══ Content Sections ═══ */}
       <div className="tool-content-sections">
