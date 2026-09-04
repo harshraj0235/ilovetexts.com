@@ -55,6 +55,14 @@ import PdfToJpg from '@/components/tools/PdfToJpg';
 import SplitPdf from '@/components/tools/SplitPdf';
 import PdfPageNumbers from '@/components/tools/PdfPageNumbers';
 import ExcelToCsv from '@/components/tools/ExcelToCsv';
+import PdfDiffChecker from '@/components/tools/PdfDiffChecker';
+import ScreenshotToExcel from '@/components/tools/ScreenshotToExcel';
+import BankStatementAnalyzer from '@/components/tools/BankStatementAnalyzer';
+import ScannedPdfToData from '@/components/tools/ScannedPdfToData';
+import ScreenshotToDocument from '@/components/tools/ScreenshotToDocument';
+import PdfToMcq from '@/components/tools/PdfToMcq';
+import LectureToNotes from '@/components/tools/LectureToNotes';
+import DocumentToExcel from '@/components/tools/DocumentToExcel';
 import { notFound } from 'next/navigation';
 import Link from 'next/link';
 
@@ -334,6 +342,22 @@ export default async function ToolPage({ params }) {
           <ExcelToCsv t={t} lang={lang} />
         ) : toolData.slug === 'csv-to-excel' ? (
           <ExcelToCsv t={t} lang={lang} />
+        ) : toolData.slug === 'pdf-diff-checker' ? (
+          <PdfDiffChecker t={t} lang={lang} />
+        ) : toolData.slug === 'screenshot-to-excel' ? (
+          <ScreenshotToExcel t={t} lang={lang} />
+        ) : toolData.slug === 'bank-statement-analyzer' ? (
+          <BankStatementAnalyzer t={t} lang={lang} />
+        ) : toolData.slug === 'scanned-pdf-to-data' ? (
+          <ScannedPdfToData t={t} lang={lang} />
+        ) : toolData.slug === 'screenshot-to-document' ? (
+          <ScreenshotToDocument t={t} lang={lang} />
+        ) : toolData.slug === 'pdf-to-mcq' ? (
+          <PdfToMcq t={t} lang={lang} />
+        ) : toolData.slug === 'lecture-to-notes' ? (
+          <LectureToNotes t={t} lang={lang} />
+        ) : toolData.slug === 'document-to-excel' ? (
+          <DocumentToExcel t={t} lang={lang} />
         ) : (
           <ClientTool categoryId={category.id} toolSlug={toolData.slug} t={t} />
         )}

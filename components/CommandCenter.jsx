@@ -25,8 +25,10 @@ export default function CommandCenter({ categories, lang, t }) {
   return (
     <>
       <section className="command-center">
-        <h1 className="command-title">{t.home.heroTitle || 'Free Online Text Tools: Edit, Convert, and Analyze Text Instantly'}</h1>
-        <p className="command-subtitle">{t.home.heroDesc || 'Search from 100+ free online text tools, formatters, and generators.'}</p>
+        <h1 className="command-title">
+          {t.home.heroTitle || 'Every text tool you need,'} <span className="highlight">{t.home.heroTitleHighlight || 'in one free website.'}</span>
+        </h1>
+        <p className="command-subtitle">{t.home.heroDesc || 'Convert case, count words, format code, encode text, generate passwords, and hash strings — all instantly in your browser.'}</p>
         
         <div className="command-search-wrapper">
           <span className="command-icon" role="img" aria-hidden="true">🔍</span>
@@ -37,7 +39,6 @@ export default function CommandCenter({ categories, lang, t }) {
             value={query}
             onChange={(e) => setQuery(e.target.value)}
             aria-label="Search tools"
-            autoFocus
           />
           <span className="command-shortcut">/</span>
         </div>
