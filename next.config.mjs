@@ -5,12 +5,21 @@ const nextConfig = {
   compress: true,
 
   // Empty turbopack config silences the webpack/turbopack warning.
-  // pdfjs-dist and tesseract.js are only ever imported inside
-  // 'use client' components with dynamic() — they never hit the server bundle.
   turbopack: {},
 
   // Generate trailing slash consistent URLs
   trailingSlash: false,
+
+  // ── Image optimization ───────────────────────────────
+  // Auto-serve WebP/AVIF — major LCP improvement on mobile
+  images: {
+    formats: ['image/avif', 'image/webp'],
+    minimumCacheTTL: 60 * 60 * 24 * 30, // 30 days
+    deviceSizes: [640, 750, 828, 1080, 1200],
+    imageSizes: [16, 32, 48, 64, 96, 128, 256],
+    dangerouslyAllowSVG: true,
+    contentSecurityPolicy: "default-src 'self'; script-src 'none'; sandbox;",
+  },
 
   async headers() {
     return [
@@ -25,14 +34,12 @@ const nextConfig = {
         ],
       },
       {
-        // X-Frame-Options to prevent clickjacking (skipped for embed routes so they can be iframed)
         source: '/((?!embed).*)',
         headers: [
           { key: 'X-Frame-Options', value: 'SAMEORIGIN' },
         ],
       },
       {
-        // Tell Google NOT to index API routes
         source: '/api/(.*)',
         headers: [
           { key: 'X-Robots-Tag', value: 'noindex, nofollow' },
@@ -46,14 +53,14 @@ const nextConfig = {
         ],
       },
       {
-        // Cache static assets aggressively (images, fonts, icons)
+        // Aggressive cache for images/fonts — 1 year immutable
         source: '/:all*(svg|jpg|jpeg|png|webp|avif|gif|woff|woff2|ico|ttf)',
         headers: [
           { key: 'Cache-Control', value: 'public, max-age=31536000, immutable' },
         ],
       },
       {
-        // HTML pages — short cache, always revalidate
+        // HTML pages — short cache + stale-while-revalidate
         source: '/((?!_next|api|static).*)',
         headers: [
           { key: 'Cache-Control', value: 'public, s-maxage=3600, stale-while-revalidate=86400' },
