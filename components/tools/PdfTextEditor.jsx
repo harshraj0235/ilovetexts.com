@@ -678,7 +678,7 @@ export default function PdfTextEditor({ t, lang }) {
             { icon:'📄', title:'Manage Pages',          desc:'Reorder, rotate, delete or merge pages from multiple PDFs' },
             { icon:'🔗', title:'Merge PDFs',            desc:'Combine multiple PDFs in any order — one-click download' },
             { icon:'🔖', title:'Add Watermark',         desc:'Stamp CONFIDENTIAL, DRAFT or any custom text across all pages' },
-            { icon:'🔐', title:'Password Protect',      desc:'Set a password on the exported PDF — optional, free' },pes, arrows — all on your PDF' },
+            { icon:'🔐', title:'Password Protect',      desc:'Set a password on the exported PDF — optional, free' },
             { icon:'✍️', title:'E-Sign Documents',     desc:'Draw or type your signature, place anywhere on any page' },
             { icon:'🖼️', title:'Insert Images',        desc:'Add logos, stamps, photos on top of any page' },
             { icon:'⬛', title:'Redact Sensitive Data', desc:'Permanently black out private information before sharing' },
