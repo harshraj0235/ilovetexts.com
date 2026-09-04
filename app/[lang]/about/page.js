@@ -216,22 +216,6 @@ export default async function AboutPage({ params }) {
                 </svg>
                 GitHub
               </a>
-              <a
-                href="https://github.com/harshraj0235/ilovetexts.com"
-                target="_blank"
-                rel="noopener noreferrer"
-                style={{
-                  display: 'inline-flex', alignItems: 'center', gap: '7px',
-                  padding: '8px 16px', borderRadius: '8px',
-                  background: 'var(--bg-main)',
-                  border: '1px solid var(--border-light)',
-                  color: 'var(--text-primary)',
-                  fontWeight: 600, fontSize: '0.85rem',
-                  textDecoration: 'none',
-                }}
-              >
-                📂 Source Code
-              </a>
             </div>
           </div>
         </div>
@@ -371,20 +355,6 @@ export default async function AboutPage({ params }) {
             </Link>
           ))}
         </div>
-      </section>
-
-      {/* Technology */}
-      <section style={{ marginBottom: '48px' }}>
-        <h2 style={{ fontSize: '1.6rem', marginBottom: '16px' }}>Our Technology</h2>
-        <ul style={{ color: 'var(--text-secondary)', lineHeight: '2', paddingLeft: '24px' }}>
-          <li><strong>Frontend:</strong> Next.js with React — server-side rendered for SEO, client-side for interactivity</li>
-          <li><strong>Text Processing:</strong> 100% client-side JavaScript — no server round-trips</li>
-          <li><strong>Privacy:</strong> Zero server-side text storage. No cookies for tracking text data.</li>
-          <li><strong>PWA:</strong> Progressive Web App with offline support via Service Worker</li>
-          <li><strong>Performance:</strong> Static site generation for instant page loads across all {allToolsCount}+ pages</li>
-          <li><strong>Accessibility:</strong> Semantic HTML, keyboard shortcuts (Ctrl+Enter, Ctrl+S, Ctrl+K), responsive design</li>
-          <li><strong>Open Source:</strong> <a href="https://github.com/harshraj0235/ilovetexts.com" target="_blank" rel="noopener noreferrer" style={{ color: 'var(--brand-color)' }}>View source on GitHub</a></li>
-        </ul>
       </section>
 
       {/* Contact CTA */}
