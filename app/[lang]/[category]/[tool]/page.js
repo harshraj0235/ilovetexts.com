@@ -47,6 +47,14 @@ import OnlineNotepad from '@/components/tools/OnlineNotepad';
 import SpeechToText from '@/components/tools/SpeechToText';
 import AITextHumanizer from '@/components/tools/AITextHumanizer';
 import TextToHandwriting from '@/components/tools/TextToHandwriting';
+import ImageCompressor from '@/components/tools/ImageCompressor';
+import ImageResizer from '@/components/tools/ImageResizer';
+import ImageConverter from '@/components/tools/ImageConverter';
+import JpgToPdf from '@/components/tools/JpgToPdf';
+import PdfToJpg from '@/components/tools/PdfToJpg';
+import SplitPdf from '@/components/tools/SplitPdf';
+import PdfPageNumbers from '@/components/tools/PdfPageNumbers';
+import ExcelToCsv from '@/components/tools/ExcelToCsv';
 import { notFound } from 'next/navigation';
 import Link from 'next/link';
 
@@ -308,6 +316,24 @@ export default async function ToolPage({ params }) {
           <AITextHumanizer t={t} lang={lang} />
         ) : toolData.slug === 'text-to-handwriting' ? (
           <TextToHandwriting t={t} lang={lang} />
+        ) : toolData.slug === 'compress-image' ? (
+          <ImageCompressor t={t} lang={lang} />
+        ) : toolData.slug === 'resize-image' ? (
+          <ImageResizer t={t} lang={lang} />
+        ) : toolData.slug === 'convert-image' ? (
+          <ImageConverter t={t} lang={lang} />
+        ) : toolData.slug === 'jpg-to-pdf' ? (
+          <JpgToPdf t={t} lang={lang} />
+        ) : toolData.slug === 'pdf-to-jpg' ? (
+          <PdfToJpg t={t} lang={lang} />
+        ) : toolData.slug === 'split-pdf' ? (
+          <SplitPdf t={t} lang={lang} />
+        ) : toolData.slug === 'pdf-page-numbers' ? (
+          <PdfPageNumbers t={t} lang={lang} />
+        ) : toolData.slug === 'excel-to-csv' ? (
+          <ExcelToCsv t={t} lang={lang} />
+        ) : toolData.slug === 'csv-to-excel' ? (
+          <ExcelToCsv t={t} lang={lang} />
         ) : (
           <ClientTool categoryId={category.id} toolSlug={toolData.slug} t={t} />
         )}

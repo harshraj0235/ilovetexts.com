@@ -4318,6 +4318,537 @@
         "lock pdf free no signup",
         "secure pdf with password free"
       ]
+    },
+    "compress-image": {
+      "name": "Image Compressor — Compress JPG, PNG, WebP Free",
+      "description": "Compress JPG, PNG and WebP images online free. Reduce file size without losing quality. Batch compress, no upload, no signup.",
+      "metaTitle": "Image Compressor Online Free — Compress JPG PNG WebP No Upload",
+      "metaDescription": "Compress JPG, PNG and WebP images online for free. Reduce file size by up to 80% without losing quality. Batch compress multiple images. No file upload to any server. No signup.",
+      "keywords": "compress image online free, reduce image file size free, jpg compressor online no upload, png compressor free, image size reducer online, compress photo online free no signup, batch image compressor",
+      "whatIs": "Our free Image Compressor reduces the file size of JPG, PNG, WebP and GIF images directly in your browser using the HTML Canvas API. Adjust the quality slider from 10% to 100% to balance file size vs image quality. Batch compress multiple images at once and download them individually or all at once. Unlike TinyPNG or Squoosh, your images are never uploaded to any server — all compression happens locally on your device.",
+      "whyChoose": [
+        {
+          "icon": "📦",
+          "title": "Up to 80% Size Reduction",
+          "description": "Reduce JPG and WebP images by 50-80% with minimal quality loss at medium quality settings."
+        },
+        {
+          "icon": "🔒",
+          "title": "No Upload — 100% Private",
+          "description": "Canvas API processes images locally. Nothing is sent to any server."
+        },
+        {
+          "icon": "⚡",
+          "title": "Batch Compress",
+          "description": "Compress dozens of images at once. All processed in parallel in your browser."
+        },
+        {
+          "icon": "🔄",
+          "title": "Convert Format Too",
+          "description": "Simultaneously compress and convert JPG to WebP for 30% extra savings."
+        }
+      ],
+      "useCases": [
+        "Reduce images before uploading to WordPress or website",
+        "Compress photos before sending by email (10MB limit)",
+        "Reduce image size before sharing on WhatsApp or Telegram",
+        "Optimize product images for e-commerce websites",
+        "Compress screenshots before attaching to bug reports"
+      ],
+      "faqs": [
+        {
+          "question": "How much can I compress an image?",
+          "answer": "JPG and WebP images can typically be reduced by 50-80% at quality 70-80% with barely noticeable quality loss. PNG images are lossless and see less reduction."
+        },
+        {
+          "question": "Are my images uploaded to a server?",
+          "answer": "No. All compression runs in your browser using the Canvas API. Your images never leave your device."
+        },
+        {
+          "question": "Can I compress multiple images at once?",
+          "answer": "Yes. Drop or select multiple images at once and they are all compressed in parallel."
+        },
+        {
+          "question": "What formats are supported?",
+          "answer": "JPG/JPEG, PNG, WebP, GIF and AVIF. You can also convert between formats during compression."
+        }
+      ],
+      "relatedSearches": [
+        "compress image online free",
+        "reduce image size free",
+        "jpg compressor no upload",
+        "png size reducer free",
+        "batch image compressor free",
+        "compress photo online free"
+      ]
+    },
+    "resize-image": {
+      "name": "Image Resizer — Resize Images Online Free",
+      "description": "Resize images by pixels or percentage online free. JPG, PNG, WebP. Lock aspect ratio. Social media presets. No upload.",
+      "metaTitle": "Image Resizer Online Free — Resize JPG PNG WebP by Pixels or %",
+      "metaDescription": "Resize images online for free. Change width, height, or percentage. Lock aspect ratio. 8 social media presets (Instagram, Twitter, Facebook). JPG, PNG, WebP. No upload, no signup.",
+      "keywords": "resize image online free, change image size online, image resizer no signup, resize jpg png free, reduce image dimensions free, photo resizer online, resize image to specific size",
+      "whatIs": "Our free Image Resizer lets you change the dimensions of any image — by exact pixel dimensions or by percentage. Lock the aspect ratio to avoid distortion. Choose from 8 social media presets (Instagram post 1080×1080, Twitter header 1500×500, Facebook cover 851×315, and more) for instant correct sizing. All resizing uses the Canvas API in your browser — no upload required.",
+      "whyChoose": [
+        {
+          "icon": "↔️",
+          "title": "Pixels or Percentage",
+          "description": "Resize by exact pixel dimensions or scale up/down by percentage."
+        },
+        {
+          "icon": "🔗",
+          "title": "Aspect Ratio Lock",
+          "description": "One click to lock or unlock the aspect ratio — prevents stretching."
+        },
+        {
+          "icon": "📱",
+          "title": "Social Media Presets",
+          "description": "8 ready-made presets for Instagram, Twitter, Facebook, YouTube and more."
+        },
+        {
+          "icon": "🔒",
+          "title": "No Upload",
+          "description": "Canvas API resizes images locally. Your photos never leave your device."
+        }
+      ],
+      "useCases": [
+        "Resize product photos to exact pixel dimensions for Shopify or WooCommerce",
+        "Resize images to social media platform sizes before posting",
+        "Reduce large camera photos to smaller sizes for email attachment",
+        "Resize profile pictures to square format for LinkedIn or Twitter",
+        "Scale up small images for print materials"
+      ],
+      "faqs": [
+        {
+          "question": "Can I resize multiple images at once?",
+          "answer": "Currently one image at a time. Use our Image Compressor for batch processing."
+        },
+        {
+          "question": "Does resizing affect quality?",
+          "answer": "Scaling down generally maintains quality. Scaling up (enlarging) may reduce sharpness."
+        },
+        {
+          "question": "What is aspect ratio lock?",
+          "answer": "When locked, changing the width automatically updates the height (and vice versa) to maintain the original proportions."
+        }
+      ],
+      "relatedSearches": [
+        "resize image online free",
+        "change image size pixels",
+        "instagram image size",
+        "photo resizer free",
+        "resize jpg for email",
+        "image dimensions changer"
+      ]
+    },
+    "convert-image": {
+      "name": "Image Converter — JPG to PNG, PNG to JPG, WebP Free",
+      "description": "Convert images between JPG, PNG and WebP free online. Batch convert, no upload, no signup. Instant download.",
+      "metaTitle": "Image Converter Free — JPG to PNG, PNG to JPG, WebP Online",
+      "metaDescription": "Convert images between JPG, PNG and WebP online for free. Batch convert multiple images at once. Adjustable quality. No file upload, no signup, instant download.",
+      "keywords": "jpg to png converter free, png to jpg converter free, webp to jpg converter free, jpg to webp free, image format converter online, convert image format free no signup, batch image converter",
+      "whatIs": "Our Image Converter converts between JPG, PNG and WebP formats entirely in your browser. Convert JPG to PNG (for transparency support), PNG to JPG (for smaller file size), JPG to WebP (for 30% smaller files on websites), or WebP to JPG (for compatibility). Batch convert multiple images at once. Adjust quality for JPG and WebP output. PNG→JPG conversion automatically adds a white background to handle transparency.",
+      "whyChoose": [
+        {
+          "icon": "🔄",
+          "title": "All Format Combinations",
+          "description": "Convert between any combination of JPG, PNG, WebP and GIF."
+        },
+        {
+          "icon": "⚡",
+          "title": "Batch Convert",
+          "description": "Convert dozens of images at once to your chosen format."
+        },
+        {
+          "icon": "🔒",
+          "title": "No Upload",
+          "description": "All conversion uses the Canvas API in your browser. Files never leave your device."
+        },
+        {
+          "icon": "📉",
+          "title": "Size Optimized",
+          "description": "WebP output is typically 25-35% smaller than equivalent JPG at same quality."
+        }
+      ],
+      "useCases": [
+        "Convert PNG screenshots to JPG for smaller file size",
+        "Convert JPG photos to WebP for faster website loading",
+        "Convert WebP to JPG for compatibility with older apps",
+        "Convert PNG with transparency to JPG with white background",
+        "Batch convert a folder of mixed-format images to uniform JPG"
+      ],
+      "faqs": [
+        {
+          "question": "What happens to PNG transparency when converting to JPG?",
+          "answer": "JPG does not support transparency. Our converter adds a white background automatically when converting PNG to JPG."
+        },
+        {
+          "question": "Why convert to WebP?",
+          "answer": "WebP is a modern format that is typically 25-35% smaller than JPG and 26% smaller than PNG at equivalent quality, making it ideal for websites."
+        },
+        {
+          "question": "What is the quality setting for?",
+          "answer": "The quality slider (20-100%) controls the compression of JPG and WebP output. PNG is always lossless (quality 100%)."
+        }
+      ],
+      "relatedSearches": [
+        "jpg to png free online",
+        "png to jpg converter",
+        "webp to jpg free",
+        "jpg to webp converter",
+        "image format converter",
+        "batch image converter free"
+      ]
+    },
+    "jpg-to-pdf": {
+      "name": "JPG to PDF Converter Free Online",
+      "description": "Convert JPG, PNG and any image to PDF online free. Combine multiple images into one PDF. No upload, no signup.",
+      "metaTitle": "JPG to PDF Converter Free Online — No Upload, No Watermark",
+      "metaDescription": "Convert JPG, PNG or any image to PDF online for free. Combine multiple images into one PDF. Choose page size, orientation and image fit. No file upload, no watermark, no signup.",
+      "keywords": "jpg to pdf converter free online, image to pdf converter free, convert jpg to pdf no upload, multiple images to pdf free, photo to pdf online free no signup, png to pdf free",
+      "whatIs": "Our JPG to PDF converter combines one or more images (JPG, PNG, WebP, GIF) into a single PDF document using the jsPDF library — entirely in your browser. Choose page size (A4, A3, Letter, Legal), orientation (portrait or landscape), image fit mode (fit to page proportionally, fill page, or original size) and margin. Each image becomes one PDF page. Drag and drop to reorder images before converting.",
+      "whyChoose": [
+        {
+          "icon": "📄",
+          "title": "Multiple Images → One PDF",
+          "description": "Combine as many images as you need into a single PDF document."
+        },
+        {
+          "icon": "📐",
+          "title": "Page Size & Orientation",
+          "description": "Choose A4, A3, Letter, or Legal in portrait or landscape."
+        },
+        {
+          "icon": "🔒",
+          "title": "No Upload — No Watermark",
+          "description": "jsPDF runs in your browser. No watermarks added, no file size limits."
+        },
+        {
+          "icon": "🔀",
+          "title": "Reorder Before Converting",
+          "description": "Drag images up or down to set the PDF page order before converting."
+        }
+      ],
+      "useCases": [
+        "Convert scanned document photos to a single PDF for email",
+        "Combine receipt photos into one PDF for expense report",
+        "Turn a series of screenshot images into a PDF presentation",
+        "Convert WhatsApp photo documents to PDF for official submission",
+        "Create a photo album PDF from multiple JPG images"
+      ],
+      "faqs": [
+        {
+          "question": "How many images can I convert to PDF?",
+          "answer": "No hard limit. Each image becomes one PDF page. Very large numbers of images may be slow on older devices."
+        },
+        {
+          "question": "Will there be a watermark on the PDF?",
+          "answer": "No. The output PDF is completely clean with no watermarks or branding."
+        },
+        {
+          "question": "What image formats are supported?",
+          "answer": "JPG, PNG, WebP, GIF and any image format supported by your browser."
+        }
+      ],
+      "relatedSearches": [
+        "jpg to pdf free",
+        "image to pdf converter",
+        "convert photos to pdf",
+        "multiple jpg to pdf",
+        "png to pdf online free",
+        "photo to pdf no watermark"
+      ]
+    },
+    "pdf-to-jpg": {
+      "name": "PDF to JPG Converter Free Online",
+      "description": "Convert PDF pages to JPG or PNG images online free. Download each page as a high-quality image. No upload, 100% private.",
+      "metaTitle": "PDF to JPG Converter Free Online — No Upload, High Quality",
+      "metaDescription": "Convert PDF pages to JPG or PNG images online for free. Choose resolution (72-216 DPI). Select specific pages. Download as ZIP. No file upload, no signup, 100% private.",
+      "keywords": "pdf to jpg converter free online, convert pdf to image free, pdf to png online free, extract images from pdf free, pdf page to jpg no signup, pdf to jpeg free browser",
+      "whatIs": "Our PDF to JPG converter renders each page of your PDF as a high-quality JPG or PNG image using PDF.js — the same library that powers Firefox's built-in PDF viewer. Choose output quality from 72 DPI (fast) to 216 DPI (high quality for printing). Select specific pages to convert. Download individual pages or all selected pages as a ZIP file. Your PDF never leaves your browser.",
+      "whyChoose": [
+        {
+          "icon": "🖼️",
+          "title": "Up to 216 DPI Quality",
+          "description": "Choose from 4 quality levels — 72, 108, 144, or 216 DPI for print-ready output."
+        },
+        {
+          "icon": "✅",
+          "title": "Select Specific Pages",
+          "description": "Click to select/deselect individual pages. Download only the ones you need."
+        },
+        {
+          "icon": "📦",
+          "title": "ZIP Download",
+          "description": "Download all selected pages as a single ZIP file with one click."
+        },
+        {
+          "icon": "🔒",
+          "title": "No Upload — 100% Private",
+          "description": "PDF.js renders pages in your browser. Your PDF stays on your device."
+        }
+      ],
+      "useCases": [
+        "Extract a specific page from a PDF as an image for presentations",
+        "Convert PDF certificates to JPG for sharing on social media",
+        "Get a preview image of a PDF document page",
+        "Extract all pages of a scanned PDF as individual images",
+        "Convert PDF slides to images for editing in Photoshop or Canva"
+      ],
+      "faqs": [
+        {
+          "question": "What resolution should I choose?",
+          "answer": "144 DPI (recommended) gives good quality for screen use. Use 216 DPI for print-quality output. 72 DPI is fastest for quick previews."
+        },
+        {
+          "question": "Can I convert a specific page range?",
+          "answer": "Yes. Click on any page thumbnail to select/deselect it. Then click Download Selected to get only those pages."
+        },
+        {
+          "question": "Is my PDF uploaded anywhere?",
+          "answer": "No. PDF.js processes your PDF entirely in your browser. Your document never leaves your device."
+        }
+      ],
+      "relatedSearches": [
+        "pdf to jpg free online",
+        "convert pdf to image browser",
+        "pdf to png free",
+        "extract pdf pages as images",
+        "pdf to jpeg no upload",
+        "pdf image converter free"
+      ]
+    },
+    "split-pdf": {
+      "name": "Split PDF Online Free — Extract Pages",
+      "description": "Split a PDF into multiple files by page range, every N pages, or extract specific pages. Free, no upload, no signup.",
+      "metaTitle": "Split PDF Online Free — By Range, Extract Pages, No Upload",
+      "metaDescription": "Split PDF files online for free. Split by custom page ranges, split every N pages, or extract specific pages. pdf-lib powered, no file upload, no watermark, no signup.",
+      "keywords": "split pdf online free, split pdf into pages free, extract pages from pdf online, divide pdf file free, separate pdf pages online, pdf splitter free no signup, split pdf by range",
+      "whatIs": "Our PDF Splitter divides your PDF into separate files using pdf-lib — entirely in your browser. Three split modes: split by custom page ranges (e.g. \"1-5, 6-10\"), split every N pages (e.g. every 2 pages), or extract specific pages (e.g. pages 1, 3, 5-7). Each split produces clean, separate PDF files with no watermarks. Your PDF is never uploaded to any server.",
+      "whyChoose": [
+        {
+          "icon": "✂️",
+          "title": "3 Split Modes",
+          "description": "By range, every N pages, or extract specific pages — any split pattern you need."
+        },
+        {
+          "icon": "🔒",
+          "title": "No Upload",
+          "description": "pdf-lib splits PDFs entirely in your browser. Your document never leaves your device."
+        },
+        {
+          "icon": "🆓",
+          "title": "No Page Limit",
+          "description": "Split PDFs of any length — no 50-page cap like Sejda or SmallPDF."
+        },
+        {
+          "icon": "💧",
+          "title": "No Watermark",
+          "description": "Output PDFs are clean with no added branding or watermarks."
+        }
+      ],
+      "useCases": [
+        "Extract a specific chapter from a large PDF book",
+        "Split a combined invoice PDF into individual invoice files",
+        "Extract pages 1 and 2 from each section of a report",
+        "Divide a scanned document into separate pages",
+        "Split every 10 pages of a large PDF for easier sharing"
+      ],
+      "faqs": [
+        {
+          "question": "How do I split a PDF by page range?",
+          "answer": "Enter ranges like \"1-5, 6-10, 11-15\" separated by commas. Each range becomes a separate PDF file."
+        },
+        {
+          "question": "Can I extract just one specific page?",
+          "answer": "Yes. Use Extract Pages mode and enter the page number (e.g. \"5\")."
+        },
+        {
+          "question": "Is the output PDF quality the same?",
+          "answer": "Yes. pdf-lib copies pages without re-encoding, preserving original quality and content."
+        }
+      ],
+      "relatedSearches": [
+        "split pdf online free",
+        "extract pages from pdf",
+        "divide pdf into parts free",
+        "pdf page extractor free",
+        "split pdf no upload",
+        "separate pages from pdf free"
+      ]
+    },
+    "pdf-page-numbers": {
+      "name": "Add Page Numbers to PDF Free Online",
+      "description": "Add page numbers to PDF pages online free. Choose position, format, font size, starting number. No upload, no signup.",
+      "metaTitle": "Add Page Numbers to PDF Free Online — No Upload, All Positions",
+      "metaDescription": "Add page numbers to your PDF online for free. Choose from 6 positions, 4 number formats, custom prefix/suffix, font size and margins. pdf-lib powered, no upload, no watermark.",
+      "keywords": "add page numbers to pdf free online, insert page numbers pdf browser, number pdf pages free no signup, pdf page numbering tool, add footer page number pdf free, pdf bates numbering free",
+      "whatIs": "Our Add Page Numbers to PDF tool inserts page numbers on every page of your PDF using pdf-lib, running entirely in your browser. Choose from 6 positions (bottom center, bottom right, bottom left, top center, top right, top left), 4 number formats (1, 1/10, Page 1, 1 of 10), custom prefix and suffix text, font size, starting number, and margin from the page edge. Preview the format before applying.",
+      "whyChoose": [
+        {
+          "icon": "🔢",
+          "title": "6 Positions, 4 Formats",
+          "description": "Place numbers anywhere — bottom center, top right, etc. Format as \"1\", \"1/10\", \"Page 1\" and more."
+        },
+        {
+          "icon": "✏️",
+          "title": "Custom Prefix/Suffix",
+          "description": "Add custom text before/after the number. E.g. \"Exhibit-1\", \"- 1 -\"."
+        },
+        {
+          "icon": "🔒",
+          "title": "No Upload",
+          "description": "pdf-lib adds numbers in your browser. Your PDF never leaves your device."
+        },
+        {
+          "icon": "👁️",
+          "title": "Live Preview",
+          "description": "See exactly how the page number will look before applying it."
+        }
+      ],
+      "useCases": [
+        "Add page numbers to a thesis or dissertation before submission",
+        "Number pages of a legal contract or agreement",
+        "Add \"Page X of Y\" footers to a business report",
+        "Insert page numbers for a booklet or manual",
+        "Add Bates numbering (exhibit numbers) to legal documents"
+      ],
+      "faqs": [
+        {
+          "question": "Can I start page numbering from a number other than 1?",
+          "answer": "Yes. Set any starting number in the \"Start at\" field — useful for documents that are part of a larger series."
+        },
+        {
+          "question": "Can I add \"Page 1 of 10\" format?",
+          "answer": "Yes. Select \"Page n\" or \"n of total\" from the Number Format dropdown."
+        },
+        {
+          "question": "Will the page numbers be permanent?",
+          "answer": "Yes. The numbers are baked into the PDF text layer of the downloaded file."
+        }
+      ],
+      "relatedSearches": [
+        "add page numbers to pdf free",
+        "insert page numbers pdf online",
+        "pdf page numbering",
+        "add footer pdf free",
+        "number pages pdf browser",
+        "bates numbering pdf free"
+      ]
+    },
+    "excel-to-csv": {
+      "name": "Excel to CSV Converter Free Online",
+      "description": "Convert Excel XLSX/XLS files to CSV online free. Choose sheet, delimiter, instant download. No upload, 100% private.",
+      "metaTitle": "Excel to CSV Converter Free Online — XLSX to CSV, No Upload",
+      "metaDescription": "Convert Excel XLSX and XLS files to CSV online for free. Select any sheet, choose comma/semicolon/tab delimiter. Preview data before converting. No file upload, no signup required.",
+      "keywords": "excel to csv converter free online, xlsx to csv online free, convert excel to csv no upload, xls to csv free, excel to csv browser, export excel as csv free no signup",
+      "whatIs": "Our Excel to CSV converter reads your XLSX, XLS or ODS spreadsheet using the xlsx library — entirely in your browser — and exports it as a clean CSV file. Choose which sheet to convert (for multi-sheet files), select the delimiter (comma, semicolon, tab, or pipe), preview the first 8 rows before converting, and download the CSV instantly. Your spreadsheet never leaves your device.",
+      "whyChoose": [
+        {
+          "icon": "📊",
+          "title": "Multi-Sheet Support",
+          "description": "See all sheets in your Excel file and choose which one to convert to CSV."
+        },
+        {
+          "icon": "⚙️",
+          "title": "Custom Delimiter",
+          "description": "Choose comma, semicolon, tab or pipe as the CSV column separator."
+        },
+        {
+          "icon": "👁️",
+          "title": "Data Preview",
+          "description": "See the first 8 rows of your data before converting to verify it looks correct."
+        },
+        {
+          "icon": "🔒",
+          "title": "No Upload",
+          "description": "xlsx library reads and converts entirely in your browser. Your spreadsheet stays on your device."
+        }
+      ],
+      "useCases": [
+        "Export Excel data to CSV for database import",
+        "Convert XLSX to CSV for use with Python pandas or R",
+        "Prepare spreadsheet data for uploading to web applications",
+        "Convert Excel reports to CSV for processing in scripts",
+        "Export a specific sheet from a multi-sheet workbook as CSV"
+      ],
+      "faqs": [
+        {
+          "question": "Can I convert a specific sheet from a multi-sheet Excel file?",
+          "answer": "Yes. All sheet names are displayed as buttons — click the one you want to convert."
+        },
+        {
+          "question": "What delimiter should I use?",
+          "answer": "Comma is the standard CSV format. Use semicolon if your data contains commas (common in European locales). Use tab for TSV format."
+        },
+        {
+          "question": "Is my Excel file uploaded to any server?",
+          "answer": "No. The xlsx library reads and converts your file entirely in your browser. Nothing is uploaded anywhere."
+        }
+      ],
+      "relatedSearches": [
+        "excel to csv free online",
+        "xlsx to csv converter browser",
+        "xls to csv free",
+        "convert excel csv no upload",
+        "spreadsheet to csv free",
+        "export excel as csv online"
+      ]
+    },
+    "csv-to-excel": {
+      "name": "CSV to Excel Converter Free Online",
+      "description": "Convert CSV files to Excel XLSX online free. Instant download, no upload, no signup required.",
+      "metaTitle": "CSV to Excel Converter Free Online — CSV to XLSX, No Upload",
+      "metaDescription": "Convert CSV files to Excel XLSX format online for free. Preview data before converting. Instant download. No file upload to any server, no signup required.",
+      "keywords": "csv to excel converter free online, csv to xlsx free, convert csv to excel no upload, csv to spreadsheet free, open csv in excel format online, csv to xls free",
+      "whatIs": "Our CSV to Excel converter reads your CSV or TSV file using the xlsx library in your browser and exports it as an Excel XLSX file you can open in Microsoft Excel, Google Sheets, or LibreOffice Calc. Preview your data before converting. No file is uploaded to any server.",
+      "whyChoose": [
+        {
+          "icon": "📊",
+          "title": "Opens in All Spreadsheet Apps",
+          "description": "Output XLSX opens in Microsoft Excel, Google Sheets, LibreOffice, and Numbers."
+        },
+        {
+          "icon": "👁️",
+          "title": "Data Preview",
+          "description": "See your CSV data displayed as a table before converting."
+        },
+        {
+          "icon": "🔒",
+          "title": "No Upload",
+          "description": "All processing happens in your browser. Your CSV file never leaves your device."
+        },
+        {
+          "icon": "⚡",
+          "title": "Instant Conversion",
+          "description": "Large CSV files convert in seconds entirely client-side."
+        }
+      ],
+      "useCases": [
+        "Convert database export CSV to Excel for analysis",
+        "Open a CSV report from Google Analytics in Excel format",
+        "Convert API data exports to XLSX for sharing with colleagues",
+        "Transform flat text data into an Excel spreadsheet",
+        "Convert bank statement CSV to Excel for financial analysis"
+      ],
+      "faqs": [
+        {
+          "question": "Can I convert TSV (tab-separated) files too?",
+          "answer": "Yes. The xlsx library auto-detects the delimiter in TSV files."
+        },
+        {
+          "question": "Is the output compatible with all Excel versions?",
+          "answer": "Yes. The output is .xlsx format which works with Excel 2007 and all newer versions, as well as Google Sheets and LibreOffice."
+        }
+      ],
+      "relatedSearches": [
+        "csv to excel free online",
+        "csv to xlsx converter browser",
+        "convert csv to spreadsheet",
+        "csv to excel no upload",
+        "open csv as excel free",
+        "tsv to excel converter"
+      ]
     }
   },
   "ui": {
