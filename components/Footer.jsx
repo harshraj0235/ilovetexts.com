@@ -68,6 +68,22 @@ export default function Footer({ lang, allToolsCount }) {
             <a href="https://www.linkedin.com/in/harshitpatel9/" target="_blank" rel="noopener noreferrer" style={{ color: 'var(--text-tertiary)' }}>Harsh Raj</a>.
           </div>
           <div style={{ display: 'flex', gap: '16px', flexWrap: 'wrap', alignItems: 'center' }}>
+            {/* Product Hunt Badge — real backlink from DR90 domain */}
+            <a
+              href="https://www.producthunt.com/products/ilovetexts?embed=true&utm_source=badge-featured&utm_medium=badge&utm_campaign=badge-ilovetexts"
+              target="_blank"
+              rel="noopener noreferrer"
+              style={{ display: 'inline-block', flexShrink: 0 }}
+            >
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                alt="ilovetexts - 250+ free browser-based text utilities &amp; developer tools | Product Hunt"
+                width="200"
+                height="43"
+                src="https://api.producthunt.com/widgets/embed-image/v1/featured.svg?post_id=1236340&theme=light&t=1788539834184"
+                style={{ display: 'block' }}
+              />
+            </a>
             <Link href={lp('/privacy')} style={{ color: 'var(--text-tertiary)', textDecoration: 'none', fontSize: '0.85rem' }} className="hover-text-primary">Privacy</Link>
             <Link href={lp('/terms')} style={{ color: 'var(--text-tertiary)', textDecoration: 'none', fontSize: '0.85rem' }} className="hover-text-primary">Terms</Link>
             {/* Sitemap link — crawl signal for Googlebot */}
