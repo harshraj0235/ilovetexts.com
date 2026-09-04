@@ -17,16 +17,18 @@ import { ANNOTATION_TOOLS } from './pdf-editor/AnnotationLayer';
 import SaveStatusBadge from './pdf-editor/SaveStatusBadge';
 import { useSaveChanges } from './pdf-editor/useSaveChanges';
 
-const ToolbarTop      = dynamic(() => import('./pdf-editor/ToolbarTop'),      { ssr:false });
-const PageSidebar     = dynamic(() => import('./pdf-editor/PageSidebar'),     { ssr:false });
-const EditorCanvas    = dynamic(() => import('./pdf-editor/EditorCanvas'),    { ssr:false });
-const FindReplacePanel = dynamic(() => import('./pdf-editor/FindReplacePanel'),{ ssr:false });
-const ExportModal     = dynamic(() => import('./pdf-editor/ExportModal'),     { ssr:false });
-const SignaturePad    = dynamic(() => import('./pdf-editor/SignaturePad'),    { ssr:false });
-const WatermarkPanel  = dynamic(() => import('./pdf-editor/WatermarkPanel'), { ssr:false });
-const PageManager     = dynamic(() => import('./pdf-editor/PageManager'),     { ssr:false });
-const LinkInserter    = dynamic(() => import('./pdf-editor/LinkInserter'),    { ssr:false });
-const { ImagePickerButton } = { ImagePickerButton: null }; // loaded inline below
+const ToolbarTop       = dynamic(() => import('./pdf-editor/ToolbarTop'),       { ssr:false });
+const PageSidebar      = dynamic(() => import('./pdf-editor/PageSidebar'),      { ssr:false });
+const EditorCanvas     = dynamic(() => import('./pdf-editor/EditorCanvas'),     { ssr:false });
+const FindReplacePanel = dynamic(() => import('./pdf-editor/FindReplacePanel'), { ssr:false });
+const ExportModal      = dynamic(() => import('./pdf-editor/ExportModal'),      { ssr:false });
+const SignaturePad     = dynamic(() => import('./pdf-editor/SignaturePad'),     { ssr:false });
+const WatermarkPanel   = dynamic(() => import('./pdf-editor/WatermarkPanel'),   { ssr:false });
+const PageManager      = dynamic(() => import('./pdf-editor/PageManager'),      { ssr:false });
+const LinkInserter     = dynamic(() => import('./pdf-editor/LinkInserter'),     { ssr:false });
+const CommentPanel     = dynamic(() => import('./pdf-editor/CommentPanel'),     { ssr:false });
+const PdfMergePanel    = dynamic(() => import('./pdf-editor/PdfMergePanel'),    { ssr:false });
+const { ImagePickerButton } = { ImagePickerButton: null };
 
 const TEXT_EXT = ['txt','csv','md','markdown','html','htm','xml','json','yaml','yml','toml','js','ts','css','sql'];
 const isPdf   = (n) => n?.toLowerCase().endsWith('.pdf');
@@ -59,6 +61,14 @@ export default function PdfTextEditor({ t, lang }) {
   const [showWatermark,   setShowWatermark]   = useState(false);
   const [showPageMgr,     setShowPageMgr]     = useState(false);
   const [showLinkInserter,setShowLinkInserter]= useState(false);
+  const [showCommentPanel,setShowCommentPanel]= useState(false);  // NEW
+  const [showMergePanel,  setShowMergePanel]  = useState(false);  // NEW
+
+  // ── Form fill state ───────────────────────────────────
+  const [formValuesMap, setFormValuesMap] = useState({}); // {[pageIdx]: {[blockId]: value}}
+
+  // ── Find highlight ────────────────────────────────────
+  const [highlightBlockId, setHighlightBlockId] = useState(null); // NEW
 
   // ── Overlays (images, sigs, links, redactions) ───────
   const [imageOverlays, setImageOverlays] = useState([]);  // {id, pageIndex, dataUrl, x,y,w,h}
@@ -555,17 +565,40 @@ export default function PdfTextEditor({ t, lang }) {
     if (m===EDITOR_MODES.ANNOTATE) setActiveTool(ANNOTATION_TOOLS.HIGHLIGHT);
     if (m===EDITOR_MODES.DRAW)     setActiveTool(ANNOTATION_TOOLS.FREEHAND);
     if (m===EDITOR_MODES.REDACT)   setActiveTool('redact-draw');
-    if (m===EDITOR_MODES.IMAGES) {
-      // Trigger image picker via dynamic import
-      import('./pdf-editor/ImageInserter').then(mod => {
-        // Can't imperatively click — handled by toolbar button calling onAddImage
-      });
-    }
+    if (m===EDITOR_MODES.COMMENTS) setShowCommentPanel(true);
   }, []);
 
   const handleAddImageFromToolbar = useCallback(() => {
     if (imagePickerRef.current) imagePickerRef.current.click();
   }, []);
+
+  // ── Form fill handler ────────────────────────────────
+  const handleFormChange = useCallback((pageIdx, blockId, value) => {
+    setFormValuesMap(prev => ({
+      ...prev,
+      [pageIdx]: { ...(prev[pageIdx] || {}), [blockId]: value },
+    }));
+  }, []);
+
+  // ── Comment panel helpers ────────────────────────────
+  const handleUpdateAnnotation = useCallback((pageIdx, annId, changes) => {
+    setAnnotationsMap(prev => ({
+      ...prev,
+      [pageIdx]: (prev[pageIdx] || []).map(a => a.id === annId ? { ...a, ...changes } : a),
+    }));
+  }, []);
+
+  const handleDeleteAnnotationById = useCallback((pageIdx, annId) => {
+    setAnnotationsMap(prev => ({
+      ...prev,
+      [pageIdx]: (prev[pageIdx] || []).filter(a => a.id !== annId),
+    }));
+  }, []);
+
+  // Total comment count for toolbar badge
+  const commentCount = Object.values(annotationsMap).flat().filter(
+    a => a.tool === ANNOTATION_TOOLS.STICKY || a.tool === 'text-ann'
+  ).length;
 
   // ── No file yet ──────────────────────────────────────
   if (pages.length===0 && !loading) {
@@ -629,14 +662,23 @@ export default function PdfTextEditor({ t, lang }) {
           </div>
         )}
 
-        <UploadZone onFile={handleFile} loading={false} />
+        <UploadZone onFile={handleFile} onMergeFiles={(files) => { setShowMergePanel(true); }} loading={false} />
 
         {/* Feature grid */}
         <div style={{ display:'grid', gridTemplateColumns:'repeat(auto-fit,minmax(180px,1fr))', gap:14, marginTop:28 }}>
           {[
-            { icon:'✏️', title:'Edit Any Text',      desc:'Click any word to edit it — works on scanned PDFs with OCR' },
-            { icon:'🖊️', title:'Highlight & Annotate',desc:'Highlight, strikethrough, underline, add comments' },
-            { icon:'🖌️', title:'Draw Freely',         desc:'Freehand pen, shapes, arrows — all on your PDF' },
+            { icon:'✏️', title:'Edit Any Text',       desc:'Click any word to edit it — works on scanned PDFs with OCR' },
+            { icon:'🖊️', title:'Highlight & Annotate', desc:'Highlight, strikethrough, underline, sticky notes, text notes' },
+            { icon:'🖌️', title:'Draw Freely',          desc:'Freehand pen, shapes, arrows — all on your PDF' },
+            { icon:'✍️', title:'E-Sign Documents',     desc:'Draw, type or upload your signature — save it for reuse' },
+            { icon:'🖼️', title:'Insert Images',        desc:'Add logos, stamps, photos on top of any page' },
+            { icon:'⬛', title:'Redact Sensitive Data', desc:'Permanently black out private information before sharing' },
+            { icon:'📋', title:'Form Fill Mode',        desc:'Auto-detects fillable fields — type directly into them' },
+            { icon:'💬', title:'Comments Panel',        desc:'All sticky notes and annotations in a searchable sidebar' },
+            { icon:'📄', title:'Manage Pages',          desc:'Reorder, rotate, delete or merge pages from multiple PDFs' },
+            { icon:'🔗', title:'Merge PDFs',            desc:'Combine multiple PDFs in any order — one-click download' },
+            { icon:'🔖', title:'Add Watermark',         desc:'Stamp CONFIDENTIAL, DRAFT or any custom text across all pages' },
+            { icon:'🔐', title:'Password Protect',      desc:'Set a password on the exported PDF — optional, free' },pes, arrows — all on your PDF' },
             { icon:'✍️', title:'E-Sign Documents',     desc:'Draw or type your signature, place anywhere on any page' },
             { icon:'🖼️', title:'Insert Images',        desc:'Add logos, stamps, photos on top of any page' },
             { icon:'⬛', title:'Redact Sensitive Data', desc:'Permanently black out private information before sharing' },
@@ -651,9 +693,8 @@ export default function PdfTextEditor({ t, lang }) {
           ))}
         </div>
 
-        {/* vs Sejda callout */}
         <div style={{ marginTop:24, padding:'14px 18px', background:'rgba(0,112,243,0.05)', border:'1px solid rgba(0,112,243,0.2)', borderRadius:'var(--radius-md)', fontSize:'0.85rem', color:'var(--text-secondary)' }}>
-          <strong style={{ color:'#0070F3' }}>✓ Better than Sejda:</strong> No 3-task/hour limit · No 50-page limit · No file upload to servers · No signup · No watermark · Completely free forever
+          <strong style={{ color:'#0070F3' }}>✓ Better than Sejda:</strong> No 3-task/hour limit · No 50-page limit · No file upload to servers · No signup · No watermark · Form fill · Comments panel · PDF merge · Password protect · 100% free forever
         </div>
       </div>
     );
@@ -709,6 +750,10 @@ export default function PdfTextEditor({ t, lang }) {
         onExport={() => setShowExport(true)}
         isFullscreen={isFullscreen} onToggleFullscreen={toggleFullscreen}
         fileName={fileName}
+        onOpenMerge={() => setShowMergePanel(true)}
+        commentCount={commentCount}
+        showCommentPanel={showCommentPanel}
+        onToggleComments={() => setShowCommentPanel(v=>!v)}
       />
 
       {/* Body */}
@@ -748,15 +793,37 @@ export default function PdfTextEditor({ t, lang }) {
             onUpdateLink={handleUpdateOverlay}
             onDeleteLink={(id) => setLinks(prev=>prev.filter(l=>l.id!==id))}
             watermark={watermark}
+            formValues={formValuesMap[currentPage]}
+            onFormChange={handleFormChange}
+            highlightBlockId={highlightBlockId}
           />
 
           {/* Find & Replace panel */}
           {showFindReplace && (
             <div style={{ position:'absolute', top:8, right:8, zIndex:100 }} onClick={e=>e.stopPropagation()}>
-              <FindReplacePanel pages={pages} onReplaceAll={handleFindReplaceAll} onClose={()=>setShowFindReplace(false)} />
+              <FindReplacePanel
+                pages={pages}
+                onReplaceAll={handleFindReplaceAll}
+                onClose={()=>setShowFindReplace(false)}
+                currentPage={currentPage}
+                onGoToPage={setCurrentPage}
+                onHighlightBlock={setHighlightBlockId}
+              />
             </div>
           )}
         </div>
+
+        {/* Comment panel (right sidebar) */}
+        {showCommentPanel && (
+          <CommentPanel
+            annotationsMap={annotationsMap}
+            pages={pages}
+            currentPage={currentPage}
+            onGoToPage={setCurrentPage}
+            onUpdateAnnotation={handleUpdateAnnotation}
+            onDeleteAnnotation={handleDeleteAnnotationById}
+          />
+        )}
       </div>
 
       {/* Status bar */}
@@ -812,9 +879,17 @@ export default function PdfTextEditor({ t, lang }) {
           pages={pages}
           fileName={fileName}
           onClose={()=>setShowExport(false)}
-          onExportPdf={doExportPdf}
-          onExportPng={doExportPng}
+          onExportPdf={(opts) => doExportPdf(opts)}
+          onExportPng={(opts) => doExportPng(opts)}
           onExportTxt={doExportTxt}
+        />
+      )}
+
+      {/* Merge PDF modal */}
+      {showMergePanel && (
+        <PdfMergePanel
+          onMerged={(mergedFile) => { handleFile(mergedFile); }}
+          onClose={() => setShowMergePanel(false)}
         />
       )}
 

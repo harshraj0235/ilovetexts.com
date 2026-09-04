@@ -19,6 +19,7 @@ import { ImageOverlay } from './ImageInserter';
 import { RedactOverlay } from './RedactPanel';
 import { LinkOverlay } from './LinkInserter';
 import { EDITOR_MODES } from './ToolbarTop';
+import FormFillMode from './FormFillMode';
 
 // ── Watermark render helper ──────────────────────────
 function WatermarkOverlay({ watermark, canvasWidth, canvasHeight, zoom }) {
@@ -126,11 +127,16 @@ export default function EditorCanvas({
   watermark,
   // Mode
   mode,
+  // Form fill
+  formValues, onFormChange,
+  // Highlight (find) block
+  highlightBlockId,
 }) {
   const containerRef = useRef(null);
 
   const annotationEnabled = mode === EDITOR_MODES.ANNOTATE || mode === EDITOR_MODES.DRAW;
   const redactDrawEnabled  = mode === EDITOR_MODES.REDACT && activeTool === 'redact-draw';
+  const formFillEnabled    = mode === EDITOR_MODES.FORM;
 
   const s = (v) => v * zoom;
 
@@ -204,6 +210,7 @@ export default function EditorCanvas({
           onUpdate={(changes) => onUpdateBlock(pageIndex, block.id, changes)}
           onUpdateText={(text) => onUpdateBlockText(pageIndex, block.id, text)}
           onDelete={() => onDeleteBlock(pageIndex, block.id)}
+          highlightFind={highlightBlockId === block.id}
         />
       ))}
 
@@ -271,6 +278,17 @@ export default function EditorCanvas({
         color={activeColor}
         onAdd={(r) => onAddRedact({ ...r, pageIndex })}
       />
+
+      {/* Layer 10: Form fill inputs */}
+      {formFillEnabled && (
+        <FormFillMode
+          page={page}
+          pageIndex={pageIndex}
+          zoom={zoom}
+          formValues={formValues}
+          onFormChange={onFormChange}
+        />
+      )}
 
       {/* Hint overlay */}
       {mode === EDITOR_MODES.TEXT && (!page.textBlocks || page.textBlocks.length === 0) && (
