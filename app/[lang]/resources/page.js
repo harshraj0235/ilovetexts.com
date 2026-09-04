@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import { SITE } from '@/lib/tools-config';
+import PrintButton from '@/components/PrintButton';
 import { generateAlternates } from '@/lib/seo';
 import { buildCanonical } from '@/lib/i18n';
 
@@ -148,10 +149,7 @@ export default async function ResourcesPage({ params }) {
                   {sheet.tags.map(t => <span key={t} style={{ padding: '1px 8px', borderRadius: 10, background: 'rgba(255,255,255,0.2)', color: '#fff', fontSize: '0.7rem', fontWeight: 600 }}>{t}</span>)}
                 </div>
               </div>
-              <button onClick={() => window.print()}
-                style={{ padding: '6px 13px', background: 'rgba(255,255,255,0.22)', border: '1.5px solid rgba(255,255,255,0.5)', borderRadius: 7, color: '#fff', cursor: 'pointer', fontWeight: 700, fontSize: '0.77rem', flexShrink: 0 }}>
-                🖨️ Print
-              </button>
+              <PrintButton />
             </div>
 
             {/* Content */}

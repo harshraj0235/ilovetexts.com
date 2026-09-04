@@ -1,15 +1,19 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 
-export default function NavBar({ lang, allCategoriesJson }) {
+import { CATEGORIES, getCategory } from '@/lib/tools-config';
+
+export default function NavBar({ lang }) {
   const [theme, setTheme] = useState('light');
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const pathname = usePathname();
   
-  const allCategories = JSON.parse(allCategoriesJson || '[]');
+  const allCategories = useMemo(() => {
+    return CATEGORIES.map(c => getCategory(c.id, lang));
+  }, [lang]);
 
   useEffect(() => {
     if (typeof window !== 'undefined') {

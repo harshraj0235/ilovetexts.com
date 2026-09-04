@@ -3,7 +3,10 @@
 import { useState, useMemo } from 'react';
 import Link from 'next/link';
 
-export default function CommandCenter({ allTools, categories, lang, t }) {
+import { getAllTools } from '@/lib/tools-config';
+
+export default function CommandCenter({ categories, lang, t }) {
+  const allTools = useMemo(() => getAllTools(lang), [lang]);
   const [query, setQuery] = useState('');
 
   const langLink = (path) => lang === 'en' ? path : `/${lang}${path}`;

@@ -71,7 +71,7 @@ export default async function AboutPage({ params }) {
       name: 'Harsh Raj',
       url: 'https://www.linkedin.com/in/harshitpatel9/',
     },
-    foundingDate: '2024',
+    foundingDate: '2026',
     sameAs: ['https://github.com/harshraj0235/ilovetexts.com'],
     logo: `${SITE.url}/favicon.ico`,
     contactPoint: {

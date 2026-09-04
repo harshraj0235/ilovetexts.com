@@ -166,9 +166,6 @@ export default async function LangLayout({ children, params }) {
         {/* Service Worker removed — was being unregistered immediately, causing unnecessary JS execution */}
         <NavBar 
           lang={lang} 
-          navCategoriesJson={JSON.stringify(navCategories)} 
-          allCategoriesJson={JSON.stringify(allLocalizedCategories)} 
-          allToolsJson={JSON.stringify(allTools)} 
         />
         <div className="app-layout">
           <aside className="app-sidebar">
@@ -198,7 +195,6 @@ export default async function LangLayout({ children, params }) {
             <Footer 
               lang={lang} 
               allToolsCount={allTools.length} 
-              allCategoriesJson={JSON.stringify(allLocalizedCategories)} 
             />
           </main>
         </div>

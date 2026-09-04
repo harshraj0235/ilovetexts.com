@@ -31,7 +31,6 @@ export default async function Home({ params }) {
       <script id="schema-org" type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLdOrg) }} />
 
       <CommandCenter 
-        allTools={allTools}
         categories={CATEGORIES}
         lang={lang}
         t={t}
