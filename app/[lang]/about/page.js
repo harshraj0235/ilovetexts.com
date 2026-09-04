@@ -41,6 +41,7 @@ export default async function AboutPage({ params }) {
     '@type': 'Person',
     name: 'Harsh Raj',
     url: 'https://www.linkedin.com/in/harshitpatel9/',
+    image: `${SITE.url}/harsh-raj.png`,
     sameAs: [
       'https://www.linkedin.com/in/harshitpatel9/',
       'https://github.com/harshraj0235',
@@ -113,23 +114,24 @@ export default async function AboutPage({ params }) {
           border: '1px solid var(--border-light)',
           flexWrap: 'wrap',
         }}>
-          {/* Avatar initials */}
+          {/* Avatar — real photo */}
           <div style={{
-            width: 88,
-            height: 88,
+            width: 92,
+            height: 92,
             borderRadius: '50%',
-            background: 'linear-gradient(135deg, #6366f1, #8b5cf6)',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            fontSize: '2rem',
-            fontWeight: 800,
-            color: '#fff',
             flexShrink: 0,
-            boxShadow: '0 4px 20px rgba(99,102,241,0.35)',
-            letterSpacing: '-1px',
+            overflow: 'hidden',
+            boxShadow: '0 4px 20px rgba(99,102,246,0.35)',
+            border: '3px solid rgba(139,92,246,0.4)',
           }}>
-            HR
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src="/harsh-raj.png"
+              alt="Harsh Raj — Founder of ilovetexts.com"
+              width={92}
+              height={92}
+              style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
+            />
           </div>
 
           {/* Info */}
