@@ -24,7 +24,82 @@ function Toast({ message, type, onClose }) {
   );
 }
 
-// ── Embed CTA Banner — shown below every tool, drives backlinks ──────────────
+// ── Related Blog Links — tool → blog internal link map ───────────────────────
+// Maps tool slugs/categories to relevant blog posts.
+// Passes PageRank from 191 high-traffic tool pages into blog posts.
+const TOOL_BLOG_MAP = {
+  // PDF tools
+  'pdf-text-editor':  [{ slug: 'best-free-sejda-alternative', title: 'Best Free Sejda Alternative 2026' }, { slug: 'best-free-ilovepdf-alternative', title: 'Best Free iLovePDF Alternative 2026' }, { slug: 'best-free-smallpdf-alternative', title: 'Best Free SmallPDF Alternative 2026' }],
+  'merge-pdf':        [{ slug: 'best-free-ilovepdf-alternative', title: 'Best Free iLovePDF Alternative 2026' }, { slug: 'best-free-sejda-alternative', title: 'Best Free Sejda Alternative 2026' }],
+  'sign-pdf':         [{ slug: 'best-free-sejda-alternative', title: 'How to Sign a PDF Free — No Upload' }],
+  'compress-pdf':     [{ slug: 'best-free-smallpdf-alternative', title: 'Best Free SmallPDF Alternative 2026' }],
+  'annotate-pdf':     [{ slug: 'best-free-sejda-alternative', title: 'Best Free Sejda Alternative 2026' }],
+  // Grammar
+  'grammar-checker':  [{ slug: 'best-free-grammarly-alternative', title: 'Best Free Grammarly Alternative 2026' }],
+  'spell-checker':    [{ slug: 'best-free-grammarly-alternative', title: 'Best Free Grammarly Alternative 2026' }],
+  'plagiarism-checker':[{ slug: 'best-free-grammarly-alternative', title: 'Best Free Grammarly Alternative 2026' }],
+  // Text tools
+  'word-counter':     [{ slug: 'how-to-count-words-in-any-document', title: 'How to Count Words in Any Document' }, { slug: 'word-counter-online-complete-guide', title: 'Word Count Guide 2026' }],
+  'json-formatter':   [{ slug: 'format-json-online-beautify-validate-minify', title: 'How to Format JSON Online Free' }],
+  'base64-encode-decode': [{ slug: 'base64-encoding-decoding-explained', title: 'Base64 Encoding Explained' }],
+  'regex-tester':     [{ slug: 'regex-tester-online-guide', title: 'How to Test Regex Online' }],
+  'jwt-decoder':      [{ slug: 'jwt-decoder-online-guide', title: 'JWT Token Decoder Guide' }],
+  'ai-text-humanizer':[{ slug: 'best-free-chatgpt-text-humanizer', title: 'Best Free AI Text Humanizer 2026' }],
+  'typing-speed-test':[{ slug: 'best-free-grammarly-alternative', title: 'Best Free Writing Tools 2026' }],
+  'uppercase':        [{ slug: 'convert-text-case-uppercase-lowercase-title-case', title: 'How to Convert Text Case Online' }],
+  'lowercase':        [{ slug: 'convert-text-case-uppercase-lowercase-title-case', title: 'How to Convert Text Case Online' }],
+  'camel-case':       [{ slug: 'convert-text-case-uppercase-lowercase-title-case', title: 'How to Convert Text Case Online' }],
+  'password-generator':[{ slug: 'generate-strong-password-guide', title: 'How to Generate a Strong Password' }],
+  'sha256-hash':      [{ slug: 'sha256-hash-generator-guide', title: 'SHA-256 Hash Generator Guide' }],
+  'csv-to-json':      [{ slug: 'csv-to-json-converter-guide', title: 'How to Convert CSV to JSON Online' }],
+  'pdf-line-break-remover': [{ slug: 'remove-line-breaks-from-pdf-text', title: 'How to Remove Line Breaks from PDF Text' }],
+  'text-to-audio':    [{ slug: 'text-to-speech-online-free-guide', title: 'Best Free Text-to-Speech Tool 2026' }],
+  'speech-to-text':   [{ slug: 'text-to-speech-online-free-guide', title: 'Best Free Speech Tools 2026' }],
+};
+
+// Category-level fallback links
+const CAT_BLOG_MAP = {
+  'writing-grammar-tools': [{ slug: 'best-free-grammarly-alternative', title: 'Best Free Grammarly Alternative 2026' }],
+  'pdf-text-tools':        [{ slug: 'best-free-sejda-alternative', title: 'Best Free Sejda Alternative 2026' }],
+  'word-counting-tools':   [{ slug: 'how-to-count-words-in-any-document', title: 'How to Count Words in Any Document' }],
+  'code-formatter':        [{ slug: 'format-json-online-beautify-validate-minify', title: 'How to Format JSON Online Free' }],
+  'text-case-converter':   [{ slug: 'convert-text-case-uppercase-lowercase-title-case', title: 'How to Convert Text Case Online' }],
+  'text-encoder-decoder':  [{ slug: 'base64-encoding-decoding-explained', title: 'Base64 Encoding Explained' }],
+  'text-hasher-cryptography': [{ slug: 'generate-strong-password-guide', title: 'Strong Password Guide' }],
+};
+
+function RelatedBlogLinks({ toolSlug, categoryId, lp }) {
+  const posts = TOOL_BLOG_MAP[toolSlug] || CAT_BLOG_MAP[categoryId] || [];
+  if (!posts.length) return null;
+  return (
+    <section style={{ marginBottom: '32px' }}>
+      <h2 style={{ fontSize: '1.25rem', fontWeight: 700, marginBottom: '14px' }}>📖 Related Guides</h2>
+      <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+        {posts.map(post => (
+          <Link
+            key={post.slug}
+            href={lp(`/blog/${post.slug}`)}
+            style={{
+              display: 'flex', alignItems: 'center', gap: '10px',
+              padding: '11px 16px',
+              background: 'var(--bg-white)',
+              border: '1px solid var(--border-light)',
+              borderRadius: 'var(--radius-sm)',
+              textDecoration: 'none',
+              transition: 'border-color 0.15s',
+            }}
+          >
+            <span style={{ fontSize: '1.1rem', flexShrink: 0 }}>📄</span>
+            <span style={{ fontSize: '0.88rem', fontWeight: 600, color: 'var(--text-primary)' }}>{post.title}</span>
+            <span style={{ marginLeft: 'auto', color: 'var(--brand-color)', fontSize: '0.82rem', flexShrink: 0 }}>Read →</span>
+          </Link>
+        ))}
+      </div>
+    </section>
+  );
+}
+
+// ── EmbedCTA ─────────────────────────────────────────────────────────────────
 function EmbedCTA({ toolUrl, toolName }) {
   const [open,   setOpen]   = useState(false);
   const [copied, setCopied] = useState(false);
@@ -416,7 +491,7 @@ export default function ToolLayout({
           </section>
         )}
 
-        {/* Related Searches — Link to specific tool pages for proper internal linking */}
+        {/* Related Searches */}
         {relatedSearches && relatedSearches.length > 0 && (
           <section className="related-searches-section">
             <h2>Related Searches</h2>
@@ -429,6 +504,9 @@ export default function ToolLayout({
             </div>
           </section>
         )}
+
+        {/* Related Blog Guides — internal links from tools → blog (PageRank flow) */}
+        <RelatedBlogLinks toolSlug={tool.slug} categoryId={category.id} lp={lp} />
 
         {/* Trust & Privacy Section — Boosts E-E-A-T signals */}
         <section className="trust-section">

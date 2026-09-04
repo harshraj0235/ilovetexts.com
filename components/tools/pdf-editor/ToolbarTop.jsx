@@ -120,21 +120,17 @@ export default function ToolbarTop({
     <div style={{ display:'flex', flexDirection:'column', background:'var(--bg-main)', borderBottom:'1px solid var(--border-light)', flexShrink:0 }}>
 
       {/* ── Tab Row ── */}
-      <div style={{ display:'flex', alignItems:'center', gap:0, padding:'0 10px', borderBottom:'1px solid var(--border-light)', overflowX:'auto' }}>
+      <div className="pdf-toolbar-tabs">
         {TABS.map(tab => (
           <button key={tab.id} onClick={() => onModeChange(tab.id)}
+            className="pdf-toolbar-tab"
             style={{
-              padding:'9px 12px', border:'none', background:'transparent',
               borderBottom:`2px solid ${mode === tab.id ? '#0070F3' : 'transparent'}`,
               color: mode === tab.id ? '#0070F3' : 'var(--text-secondary)',
               fontWeight: mode === tab.id ? 700 : 500,
-              cursor:'pointer', fontSize:'0.78rem',
-              display:'flex', alignItems:'center', gap:4,
-              whiteSpace:'nowrap', flexShrink:0, transition:'all 0.15s',
-              position: 'relative',
             }}>
             <span>{tab.icon}</span>
-            {tab.label}
+            <span className="pdf-toolbar-tab-label">{tab.label}</span>
             {/* Comment count badge */}
             {tab.id === EDITOR_MODES.COMMENTS && commentCount > 0 && (
               <span style={{
@@ -149,7 +145,7 @@ export default function ToolbarTop({
         ))}
 
         {/* Right-side always-visible controls */}
-        <div style={{ marginLeft:'auto', display:'flex', alignItems:'center', gap:4, paddingLeft:8 }}>
+        <div className="pdf-toolbar-right">
           <Btn onClick={onUndo} disabled={!canUndo} title="Undo (Ctrl+Z)">↩</Btn>
           <Btn onClick={onRedo} disabled={!canRedo} title="Redo (Ctrl+Y)">↪</Btn>
           <Sep />
@@ -170,7 +166,7 @@ export default function ToolbarTop({
           )}
           <Btn onClick={onFindReplace} active={showFindReplace} title="Find & Replace (Ctrl+H)">🔎</Btn>
           <Btn onClick={onToggleComments} active={showCommentPanel} title="Toggle comment panel">💬</Btn>
-          {onOpenMerge && <Btn onClick={onOpenMerge} title="Merge PDFs">🔗 Merge</Btn>}
+          {onOpenMerge && <Btn onClick={onOpenMerge} title="Merge PDFs">🔗 <span className="pdf-toolbar-btn-label">Merge</span></Btn>}
           <Sep />
           {/* Save Changes */}
           <button onClick={onSaveChanges} title="Save all text changes (Ctrl+Shift+S)"
@@ -184,7 +180,7 @@ export default function ToolbarTop({
             }}>
             {saveStatus==='saved' ? '✓ Saved' : saveStatus==='saving' ? '⏳' : '💾 Save'}
           </button>
-          <Btn onClick={onExport} accent title="Export (Ctrl+S)">⬇ Export</Btn>
+          <Btn onClick={onExport} accent title="Export (Ctrl+S)">⬇ <span className="pdf-toolbar-btn-label">Export</span></Btn>
           <Btn onClick={onToggleFullscreen} active={isFullscreen} title="Fullscreen">
             {isFullscreen ? '⊡' : '⛶'}
           </Btn>
@@ -192,7 +188,7 @@ export default function ToolbarTop({
       </div>
 
       {/* ── Sub-toolbar per mode ── */}
-      <div style={{ display:'flex', alignItems:'center', gap:4, padding:'5px 12px', minHeight:42, overflowX:'auto', flexWrap:'nowrap' }}>
+      <div className="pdf-subtoolbar">
 
         {/* ── TEXT MODE ── */}
         {mode === EDITOR_MODES.TEXT && (

@@ -1,38 +1,49 @@
 'use client';
 // ═══════════════════════════════════════════════════════
-// PdfMergePanel.jsx v2 — Merge multiple PDFs into one
+// PdfMergePanel.jsx v3 — Merge multiple PDFs into one
 //
-// BUG FIXES vs v1:
-//  1. Store File objects, NOT pre-read ArrayBuffers.
-//     ArrayBuffers stored in React state can be detached/
-//     neutered between renders on some browsers, causing
-//     PDFDocument.load() to fail silently or throw.
-//     Fix: call file.arrayBuffer() fresh at merge time.
+// FIXES vs v2:
+//  1. Removed double-close: onMerged() in parent already
+//     calls setShowMergePanel(false) — calling onClose()
+//     here caused a race condition where the modal would
+//     close before the merged file was fully loaded.
 //
-//  2. Page-count preview now uses a separate ab.slice()
-//     for pdfjs and discards it — the File is kept intact.
+//  2. Fixed stale closure: handleMerge used to depend on
+//     `files` state but was invoked from useEffect during
+//     init with `loaded` — files was still empty. Now we
+//     use a filesRef so handleMerge always sees latest.
 //
-//  3. onMerged() called BEFORE onClose() — the editor
-//     starts loading before the modal disappears.
+//  3. Added drag-and-drop reorder via HTML5 drag API.
 //
-//  4. Errors shown with specific pdf-lib message so users
-//     can understand what went wrong (e.g. encrypted PDF).
+//  4. Added file size display + total size.
 //
-//  5. Encrypted PDF detection: if pdf-lib throws
-//     "encrypted" we show a clear explanation.
+//  5. Better progress reporting with page counts.
 // ═══════════════════════════════════════════════════════
 import { useState, useCallback, useEffect, useRef } from 'react';
 
+function formatSize(bytes) {
+  if (bytes < 1024) return `${bytes} B`;
+  if (bytes < 1024 * 1024) return `${(bytes / 1024).toFixed(1)} KB`;
+  return `${(bytes / (1024 * 1024)).toFixed(1)} MB`;
+}
+
 export default function PdfMergePanel({ initialFiles = [], autoStart = false, onMerged, onClose }) {
   // Store File objects — never pre-read the buffers
-  const [files,    setFiles]    = useState([]); // [{name, file, pageCount}]
+  const [files,    setFiles]    = useState([]); // [{name, file, pageCount, size}]
   const [merging,  setMerging]  = useState(false);
   const [progress, setProgress] = useState('');
   const [error,    setError]    = useState('');
+  const [dragIdx,  setDragIdx]  = useState(null); // drag-and-drop reorder
+  const addInputRef = useRef(null);
 
-  // Auto-start merge if initialFiles are provided and autoStart is true
-  const handleMerge = useCallback(async (filesToMerge = files) => {
-    if (filesToMerge.length < 2) { setError('Add at least 2 PDFs to merge.'); return; }
+  // Always-fresh ref so handleMerge never sees stale files
+  const filesRef = useRef([]);
+  filesRef.current = files;
+
+  const handleMerge = useCallback(async (filesToMerge) => {
+    // Use passed argument or fall back to ref (never stale state)
+    const list = filesToMerge || filesRef.current;
+    if (list.length < 2) { setError('Add at least 2 PDFs to merge.'); return; }
     setMerging(true);
     setError('');
     setProgress('Initialising…');
@@ -40,10 +51,11 @@ export default function PdfMergePanel({ initialFiles = [], autoStart = false, on
     try {
       const { PDFDocument } = await import('pdf-lib');
       const merged = await PDFDocument.create();
+      let totalPagesCopied = 0;
 
-      for (let i = 0; i < filesToMerge.length; i++) {
-        const { name, file } = filesToMerge[i];
-        setProgress(`Reading ${name} (${i + 1}/${filesToMerge.length})…`);
+      for (let i = 0; i < list.length; i++) {
+        const { name, file } = list[i];
+        setProgress(`Reading ${name} (${i + 1}/${list.length})…`);
 
         // Fresh read at merge time — guaranteed non-detached
         const ab = await file.arrayBuffer();
@@ -61,13 +73,15 @@ export default function PdfMergePanel({ initialFiles = [], autoStart = false, on
           throw new Error(`Failed to read "${name}": ${msg}`);
         }
 
-        setProgress(`Copying pages from ${name}…`);
+        const pageCount = src.getPageCount();
+        setProgress(`Copying ${pageCount} page${pageCount !== 1 ? 's' : ''} from ${name}…`);
         const indices = src.getPageIndices();
         const copied  = await merged.copyPages(src, indices);
         copied.forEach(p => merged.addPage(p));
+        totalPagesCopied += pageCount;
       }
 
-      setProgress('Building merged PDF…');
+      setProgress(`Building merged PDF (${totalPagesCopied} pages)…`);
       const bytes = await merged.save();
       const blob  = new Blob([bytes], { type: 'application/pdf' });
 
@@ -80,12 +94,12 @@ export default function PdfMergePanel({ initialFiles = [], autoStart = false, on
       document.body.removeChild(a);
       setTimeout(() => URL.revokeObjectURL(a.href), 5000);
 
-      setProgress('Done! Loading merged PDF into editor…');
+      setProgress(`Done! ${totalPagesCopied} pages merged. Loading into editor…`);
 
-      // Load into editor FIRST, then close the modal
+      // Load into editor — parent's onMerged already handles closing the modal
       const mergedFile = new File([blob], 'merged-document.pdf', { type: 'application/pdf' });
-      await onMerged(mergedFile);   // wait for handleFile to begin
-      onClose();
+      await onMerged(mergedFile);
+      // NOTE: Do NOT call onClose() here — parent handles it in onMerged callback
 
     } catch (e) {
       console.error('PDF merge error:', e);
@@ -94,15 +108,21 @@ export default function PdfMergePanel({ initialFiles = [], autoStart = false, on
       setMerging(false);
       setProgress('');
     }
-  }, [files, onMerged, onClose]);
+  }, [onMerged]);
 
   // Handle initialization on mount
   const initialized = useRef(false);
   useEffect(() => {
     if (!initialized.current && initialFiles && initialFiles.length > 0) {
       initialized.current = true;
-      const loaded = initialFiles.map(file => ({ name: file.name, file, pageCount: '?' }));
+      const loaded = initialFiles.map(file => ({
+        name: file.name,
+        file,
+        pageCount: '?',
+        size: file.size || 0,
+      }));
       setFiles(loaded);
+      filesRef.current = loaded;
       
       // Compute page counts in background without blocking
       Promise.all(initialFiles.map(async (file, idx) => {
@@ -116,13 +136,14 @@ export default function PdfMergePanel({ initialFiles = [], autoStart = false, on
           doc.destroy();
           setFiles(prev => {
             const next = [...prev];
-            if (next[idx]) next[idx].pageCount = count;
+            if (next[idx]) next[idx] = { ...next[idx], pageCount: count };
             return next;
           });
         } catch { /* ignore */ }
       }));
 
       if (autoStart && loaded.length >= 2) {
+        // Pass loaded directly — avoids stale state
         handleMerge(loaded);
       }
     }
@@ -144,7 +165,7 @@ export default function PdfMergePanel({ initialFiles = [], autoStart = false, on
         pageCount = doc.numPages;
         doc.destroy();
       } catch { /* page count stays '?' */ }
-      return { name: file.name, file, pageCount };
+      return { name: file.name, file, pageCount, size: file.size || 0 };
     }));
 
     setFiles(prev => [...prev, ...loaded]);
@@ -163,10 +184,26 @@ export default function PdfMergePanel({ initialFiles = [], autoStart = false, on
     });
   };
 
+  // Drag-and-drop reorder handlers
+  const handleDragStart = (idx) => setDragIdx(idx);
+  const handleDragOver = (e, idx) => {
+    e.preventDefault();
+    if (dragIdx === null || dragIdx === idx) return;
+    setFiles(prev => {
+      const next = [...prev];
+      const [dragged] = next.splice(dragIdx, 1);
+      next.splice(idx, 0, dragged);
+      return next;
+    });
+    setDragIdx(idx);
+  };
+  const handleDragEnd = () => setDragIdx(null);
+
   const totalPages = files.reduce(
     (s, f) => s + (typeof f.pageCount === 'number' ? f.pageCount : 0),
     0
   );
+  const totalSize = files.reduce((s, f) => s + (f.size || 0), 0);
 
   return (
     <div style={{
@@ -209,7 +246,7 @@ export default function PdfMergePanel({ initialFiles = [], autoStart = false, on
             Click to add PDFs
           </span>
           <span style={{ fontSize: '0.78rem', color: 'var(--text-tertiary)' }}>
-            Add multiple PDFs — reorder, then merge
+            Add multiple PDFs — drag to reorder, then merge
           </span>
         </label>
 
@@ -221,29 +258,42 @@ export default function PdfMergePanel({ initialFiles = [], autoStart = false, on
               display: 'flex', justifyContent: 'space-between', alignItems: 'center',
               marginBottom: 8, fontSize: '0.78rem', color: 'var(--text-tertiary)',
             }}>
-              <span>{files.length} file{files.length !== 1 ? 's' : ''}{totalPages > 0 ? ` · ${totalPages} pages total` : ''}</span>
-              <span>Use ↑↓ to reorder</span>
+              <span>
+                {files.length} file{files.length !== 1 ? 's' : ''}
+                {totalPages > 0 ? ` · ${totalPages} pages` : ''}
+                {totalSize > 0 ? ` · ${formatSize(totalSize)}` : ''}
+              </span>
+              <span>Drag to reorder · ↑↓ arrows</span>
             </div>
 
             <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
               {files.map((f, idx) => (
-                <div key={f.name + idx} style={{
-                  display: 'flex', alignItems: 'center', gap: 10,
-                  padding: '10px 12px',
-                  border: '1px solid var(--border-light)',
-                  borderRadius: 'var(--radius-sm)',
-                  background: 'var(--bg-section)',
-                  transition: 'background 0.15s',
-                }}>
-                  <span style={{ fontSize: '1.1rem', flexShrink: 0 }}>📄</span>
+                <div
+                  key={f.name + idx}
+                  draggable
+                  onDragStart={() => handleDragStart(idx)}
+                  onDragOver={(e) => handleDragOver(e, idx)}
+                  onDragEnd={handleDragEnd}
+                  style={{
+                    display: 'flex', alignItems: 'center', gap: 10,
+                    padding: '10px 12px',
+                    border: `1px solid ${dragIdx === idx ? '#0070F3' : 'var(--border-light)'}`,
+                    borderRadius: 'var(--radius-sm)',
+                    background: dragIdx === idx ? 'rgba(0,112,243,0.05)' : 'var(--bg-section)',
+                    transition: 'all 0.15s',
+                    cursor: 'grab',
+                  }}
+                >
+                  <span style={{ fontSize: '1.1rem', flexShrink: 0, cursor: 'grab' }}>📄</span>
                   <div style={{ flex: 1, minWidth: 0 }}>
                     <div style={{
                       fontSize: '0.85rem', fontWeight: 600,
                       overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap',
                       color: 'var(--text-primary)',
                     }}>{f.name}</div>
-                    <div style={{ fontSize: '0.72rem', color: 'var(--text-tertiary)', marginTop: 1 }}>
-                      {f.pageCount === '?' ? 'Counting pages…' : `${f.pageCount} page${f.pageCount !== 1 ? 's' : ''}`}
+                    <div style={{ fontSize: '0.72rem', color: 'var(--text-tertiary)', marginTop: 1, display: 'flex', gap: 8 }}>
+                      <span>{f.pageCount === '?' ? 'Counting…' : `${f.pageCount} page${f.pageCount !== 1 ? 's' : ''}`}</span>
+                      {f.size > 0 && <span>{formatSize(f.size)}</span>}
                     </div>
                   </div>
                   <span style={{
@@ -284,6 +334,27 @@ export default function PdfMergePanel({ initialFiles = [], autoStart = false, on
                 </div>
               ))}
             </div>
+
+            {/* Add more button */}
+            <button
+              onClick={() => addInputRef.current?.click()}
+              style={{
+                marginTop: 8, width: '100%', padding: '8px 14px',
+                border: '1px dashed var(--border-light)', borderRadius: 'var(--radius-sm)',
+                background: 'transparent', cursor: 'pointer',
+                fontSize: '0.82rem', color: '#0070F3', fontWeight: 600,
+                display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6,
+                transition: 'background 0.15s',
+              }}
+            >
+              + Add more PDFs
+            </button>
+            <input
+              ref={addInputRef}
+              type="file" accept=".pdf" multiple
+              style={{ display: 'none' }}
+              onChange={e => { addFiles(e.target.files); e.target.value = ''; }}
+            />
           </div>
         )}
 
@@ -340,7 +411,7 @@ export default function PdfMergePanel({ initialFiles = [], autoStart = false, on
             Cancel
           </button>
           <button
-            onClick={handleMerge}
+            onClick={() => handleMerge()}
             disabled={files.length < 2 || merging}
             style={{
               flex: 1, padding: '10px 16px', borderRadius: 'var(--radius-sm)',

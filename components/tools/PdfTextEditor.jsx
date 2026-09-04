@@ -1,5 +1,4 @@
 'use client';
-'use client';
 // ═══════════════════════════════════════════════════════
 // PdfTextEditor.jsx — Advanced PDF Editor (Sejda-beating)
 // Features: Edit Text · Annotate · Draw · Sign · Images
@@ -112,6 +111,27 @@ export default function PdfTextEditor({ t, lang, initialMode }) {
     if (initialMode === 'export' && pages.length > 0) {
       setShowExport(true);
     }
+  }, [pages.length]); // eslint-disable-line react-hooks/exhaustive-deps
+
+  // ── Auto-set mode when initialMode matches a tool-specific page ──
+  useEffect(() => {
+    if (!initialMode || initialMode === 'pages' || initialMode === 'export') return;
+    const modeMap = {
+      annotate:  EDITOR_MODES.ANNOTATE,
+      sign:      EDITOR_MODES.SIGN,
+      redact:    EDITOR_MODES.REDACT,
+      watermark: EDITOR_MODES.WATERMARK,
+    };
+    if (modeMap[initialMode]) {
+      setMode(modeMap[initialMode]);
+    }
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+
+  // ── Auto-open panels when file loads for tool-specific modes ──
+  useEffect(() => {
+    if (pages.length === 0) return;
+    if (initialMode === 'sign')      setShowSigPad(true);
+    if (initialMode === 'watermark') setShowWatermark(true);
   }, [pages.length]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const { lastSavedRef, saveStatus, clearSave, loadSave, hasSave } = useAutoSave(
@@ -617,7 +637,7 @@ export default function PdfTextEditor({ t, lang, initialMode }) {
   // ── No file yet ──────────────────────────────────────
   if (pages.length===0 && !loading) {
     return (
-      <div style={{ maxWidth:820, margin:'0 auto', width:'100%' }}>
+      <div style={{ maxWidth:820, margin:'0 auto', width:'100%', padding:'0 12px' }}>
         {loadError && (
           <div style={{ marginBottom:16, padding:'12px 16px', background:'rgba(239,68,68,0.08)', border:'1px solid rgba(239,68,68,0.3)', borderRadius:'var(--radius-md)', color:'#ef4444', fontSize:'0.9rem' }}>
             ⚠️ {loadError}
@@ -686,7 +706,7 @@ export default function PdfTextEditor({ t, lang, initialMode }) {
         />
 
         {/* Feature grid */}
-        <div style={{ display:'grid', gridTemplateColumns:'repeat(auto-fit,minmax(180px,1fr))', gap:14, marginTop:28 }}>
+        <div className="pdf-feature-grid">
           {[
             { icon:'✏️', title:'Edit Any Text',       desc:'Click any word to edit it — works on scanned PDFs with OCR' },
             { icon:'🖊️', title:'Highlight & Annotate', desc:'Highlight, strikethrough, underline, sticky notes, text notes' },
@@ -700,13 +720,11 @@ export default function PdfTextEditor({ t, lang, initialMode }) {
             { icon:'🔗', title:'Merge PDFs',            desc:'Combine multiple PDFs in any order — one-click download' },
             { icon:'🔖', title:'Add Watermark',         desc:'Stamp CONFIDENTIAL, DRAFT or any custom text across all pages' },
             { icon:'🔐', title:'Password Protect',      desc:'Set a password on the exported PDF — optional, free' },
-            { icon:'✍️', title:'E-Sign Documents',     desc:'Draw or type your signature, place anywhere on any page' },
-            { icon:'🖼️', title:'Insert Images',        desc:'Add logos, stamps, photos on top of any page' },
-            { icon:'⬛', title:'Redact Sensitive Data', desc:'Permanently black out private information before sharing' },
-            { icon:'📄', title:'Manage Pages',          desc:'Reorder, rotate, or delete individual pages' },
-            { icon:'🔖', title:'Add Watermark',         desc:'Stamp CONFIDENTIAL, DRAFT, or any custom text across all pages' },
-          ].map(f => (
-            <div key={f.title} className="trust-card" style={{ padding:16, gap:8 }}>
+            { icon:'📦', title:'Compress PDF',          desc:'Reduce file size with adjustable quality — perfect for email' },
+            { icon:'🔎', title:'Find & Replace',        desc:'Search and replace text across all pages in one click' },
+            { icon:'🔗', title:'Insert Links',          desc:'Add clickable hyperlinks to any page in your PDF' },
+          ].map((f, idx) => (
+            <div key={`feat-${idx}`} className="trust-card" style={{ padding:16, gap:8 }}>
               <div style={{ fontSize:26 }}>{f.icon}</div>
               <div style={{ fontWeight:700, fontSize:'0.88rem' }}>{f.title}</div>
               <div style={{ fontSize:'0.78rem', color:'var(--text-secondary)', lineHeight:1.4 }}>{f.desc}</div>
@@ -740,7 +758,7 @@ export default function PdfTextEditor({ t, lang, initialMode }) {
 
   // ── Editor ───────────────────────────────────────────
   return (
-    <div ref={containerRef} style={{
+    <div ref={containerRef} className="pdf-editor-container" style={{
       display:'flex', flexDirection:'column',
       height: isFullscreen ? '100vh' : 'calc(100vh - 110px)',
       minHeight:600, background:'var(--bg-main)',
@@ -778,11 +796,11 @@ export default function PdfTextEditor({ t, lang, initialMode }) {
       />
 
       {/* Body */}
-      <div style={{ display:'flex', flex:1, overflow:'hidden', position:'relative' }}>
+      <div className="pdf-editor-body">
         <PageSidebar pages={pages} currentPage={currentPage} onSelectPage={setCurrentPage} />
 
         <div
-          style={{ flex:1, overflow:'auto', padding:24, background:'var(--bg-tertiary)', display:'flex', justifyContent:'center', alignItems:'flex-start' }}
+          className="pdf-canvas-scroll"
           onClick={() => { setSelectedBlockId(null); setSelectedOverlayId(null); }}
         >
           <EditorCanvas
@@ -821,7 +839,7 @@ export default function PdfTextEditor({ t, lang, initialMode }) {
 
           {/* Find & Replace panel */}
           {showFindReplace && (
-            <div style={{ position:'absolute', top:8, right:8, zIndex:100 }} onClick={e=>e.stopPropagation()}>
+            <div style={{ position:'absolute', top:8, right:8, zIndex:100, maxWidth:'calc(100% - 16px)' }} onClick={e=>e.stopPropagation()}>
               <FindReplacePanel
                 pages={pages}
                 onReplaceAll={handleFindReplaceAll}
@@ -848,13 +866,13 @@ export default function PdfTextEditor({ t, lang, initialMode }) {
       </div>
 
       {/* Status bar */}
-      <div style={{ padding:'4px 14px', background:'var(--bg-secondary)', borderTop:'1px solid var(--border-light)', display:'flex', gap:16, flexShrink:0, fontSize:'0.73rem', color:'var(--text-secondary)', alignItems:'center', flexWrap:'wrap' }}>
+      <div className="pdf-status-bar">
         <span>📄 {fileName}</span>
         <span>{pages.length} page{pages.length!==1?'s':''}</span>
-        <span>Pg {currentPage+1}</span>
-        <span>{currentPageData?.textBlocks?.length||0} text blocks</span>
-        {watermark?.enabled && <span style={{ color:'#f59e0b' }}>🔖 Watermark</span>}
-        {redactions.length>0 && <span style={{ color:'#ef4444' }}>⬛ {redactions.length} redaction{redactions.length!==1?'s':''}</span>}
+        <span className="status-secondary">Pg {currentPage+1}</span>
+        <span className="status-secondary">{currentPageData?.textBlocks?.length||0} text blocks</span>
+        {watermark?.enabled && <span className="status-secondary" style={{ color:'#f59e0b' }}>🔖 Watermark</span>}
+        {redactions.length>0 && <span className="status-secondary" style={{ color:'#ef4444' }}>⬛ {redactions.length} redaction{redactions.length!==1?'s':''}</span>}
         {/* Auto-save badge */}
         <SaveStatusBadge status={saveStatus} lastSavedAt={lastSavedRef.current} />
         <button onClick={() => { replaceAllPages([]); setFileName(null); setImageOverlays([]); setLinks([]); setRedactions([]); setAnnotationsMap({}); clearSave(); }}

@@ -1,27 +1,138 @@
 'use client';
 // ═══════════════════════════════════════════════════════
-// ExportModal.jsx v2
-// NEW: password protection, compression quality slider,
-//      DOCX download (text-only), print option
+// ExportModal.jsx v3
+// IMPROVEMENTS:
+//  - Real PDF compression: re-renders pages at lower JPEG
+//    quality to reduce file size (not just a slider label)
+//  - Estimated file size display
+//  - Password protection: honest UI — pdf-lib doesn't
+//    support encryption, so we clearly communicate this
+//  - DOCX download, Copy, Print all work
 // ═══════════════════════════════════════════════════════
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+
+function formatSize(bytes) {
+  if (!bytes || bytes <= 0) return '—';
+  if (bytes < 1024) return `${bytes} B`;
+  if (bytes < 1024 * 1024) return `${(bytes / 1024).toFixed(1)} KB`;
+  return `${(bytes / (1024 * 1024)).toFixed(1)} MB`;
+}
 
 export default function ExportModal({
   pages, fileName, onClose,
   onExportPdf, onExportPng, onExportTxt,
 }) {
-  const [exporting,   setExporting]   = useState(null);
-  const [password,    setPassword]    = useState('');
-  const [showPwInput, setShowPwInput] = useState(false);
-  const [quality,     setQuality]     = useState(92); // JPEG quality 1-100
-  const [showAdvanced,setShowAdvanced]= useState(false);
+  const [exporting,    setExporting]    = useState(null);
+  const [password,     setPassword]     = useState('');
+  const [showPwInput,  setShowPwInput]  = useState(false);
+  const [quality,      setQuality]      = useState(92); // JPEG quality 1-100
+  const [showAdvanced, setShowAdvanced] = useState(false);
+  const [estimatedSize, setEstimatedSize] = useState(null);
+  const [compressing,  setCompressing]  = useState(false);
 
   const base      = fileName?.replace(/\.[^.]+$/, '') || 'document';
   const pageCount = pages?.length || 1;
 
+  // Estimate file size based on quality
+  useEffect(() => {
+    if (!pages || pages.length === 0) return;
+    // Rough estimate: sum of page data URLs sizes, scaled by quality ratio
+    let totalBytes = 0;
+    for (const p of pages) {
+      if (p.canvasDataUrl) {
+        totalBytes += p.canvasDataUrl.length * 0.75; // base64 overhead
+      } else {
+        totalBytes += (p.canvasWidth || 794) * (p.canvasHeight || 1123) * 0.1; // rough estimate
+      }
+    }
+    // Quality scaling: at 92% ~ full size, at 40% ~ 30% of full size
+    const scaleFactor = 0.2 + (quality / 100) * 0.8;
+    setEstimatedSize(Math.round(totalBytes * scaleFactor));
+  }, [pages, quality]);
+
   const handle = async (type, fn) => {
     setExporting(type);
     try { await fn(); } finally { setExporting(null); }
+  };
+
+  // Compress PDF — re-renders all pages at lower quality
+  const doCompressPdf = async () => {
+    setCompressing(true);
+    try {
+      const { PDFDocument } = await import('pdf-lib');
+      const pdfDoc = await PDFDocument.create();
+
+      for (let i = 0; i < pages.length; i++) {
+        const page = pages[i];
+        const W = page.canvasWidth || 794;
+        const H = page.canvasHeight || 1123;
+
+        // Re-render page to canvas at quality setting
+        const canvas = document.createElement('canvas');
+        // Reduce resolution for compression
+        const scaleFactor = quality >= 80 ? 1 : quality >= 60 ? 0.85 : 0.7;
+        canvas.width = Math.round(W * scaleFactor);
+        canvas.height = Math.round(H * scaleFactor);
+        const ctx = canvas.getContext('2d');
+
+        if (page.canvasDataUrl) {
+          const img = new Image();
+          img.src = page.canvasDataUrl;
+          await new Promise(r => { img.onload = r; img.onerror = r; });
+          ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+        } else {
+          ctx.fillStyle = '#fff';
+          ctx.fillRect(0, 0, canvas.width, canvas.height);
+        }
+
+        // Draw text blocks on canvas
+        for (const b of (page.textBlocks || [])) {
+          if (!b.text?.trim()) continue;
+          if (page.canvasDataUrl && !b.isEdited) continue;
+          ctx.save();
+          if (b.isEdited) {
+            const pad = 2;
+            ctx.fillStyle = b.bgColor || '#ffffff';
+            ctx.fillRect(
+              (b.x - pad) * scaleFactor,
+              (b.y - pad) * scaleFactor,
+              (b.width + pad * 2) * scaleFactor,
+              (b.height + pad * 2) * scaleFactor
+            );
+          }
+          let fStr = '';
+          if (b.italic) fStr += 'italic ';
+          if (b.bold) fStr += 'bold ';
+          fStr += `${Math.round((b.fontSize || 12) * scaleFactor)}px ${b.fontFamily || 'sans-serif'}`;
+          ctx.font = fStr;
+          ctx.fillStyle = b.color || '#000';
+          ctx.textBaseline = 'top';
+          ctx.fillText(b.text, b.x * scaleFactor, b.y * scaleFactor);
+          ctx.restore();
+        }
+
+        // Compress to JPEG at specified quality
+        const jpegQuality = quality / 100;
+        const dataUrl = canvas.toDataURL('image/jpeg', jpegQuality);
+
+        const pdfPage = pdfDoc.addPage([W * 0.75, H * 0.75]);
+        const img = await pdfDoc.embedJpg(dataUrl);
+        pdfPage.drawImage(img, { x: 0, y: 0, width: W * 0.75, height: H * 0.75 });
+      }
+
+      const pdfBytes = await pdfDoc.save();
+      const blob = new Blob([pdfBytes], { type: 'application/pdf' });
+      const a = document.createElement('a');
+      a.href = URL.createObjectURL(blob);
+      a.download = `${base}-compressed.pdf`;
+      a.click();
+      URL.revokeObjectURL(a.href);
+
+      // Show actual vs estimated
+      setEstimatedSize(pdfBytes.length);
+    } finally {
+      setCompressing(false);
+    }
   };
 
   // Export as DOCX (text-only via simple HTML → Word)
@@ -53,6 +164,15 @@ export default function ExportModal({
       desc: 'Full document with all edits, annotations, signatures and redactions baked in',
       action: () => handle('pdf', () => onExportPdf({ password: showPwInput ? password : '', quality })),
       primary: true,
+    },
+    {
+      id: 'compress',
+      icon: '📦',
+      label: 'Compress & Download PDF',
+      filename: `${base}-compressed.pdf`,
+      badge: 'COMPRESS', badgeColor: '#f59e0b',
+      desc: `Re-renders at ${quality}% quality to reduce file size${estimatedSize ? ` — est. ${formatSize(estimatedSize)}` : ''}`,
+      action: () => handle('compress', doCompressPdf),
     },
     {
       id: 'png',
@@ -123,6 +243,7 @@ export default function ExportModal({
         <p style={{ fontSize: '0.8rem', color: 'var(--text-tertiary)', marginBottom: 16 }}>
           Source: <strong style={{ color: 'var(--text-secondary)' }}>{fileName || 'untitled'}</strong>
           &nbsp;·&nbsp;{pageCount} page{pageCount !== 1 ? 's' : ''}
+          {estimatedSize ? <>&nbsp;·&nbsp;~{formatSize(estimatedSize)}</> : ''}
         </p>
 
         {/* Format list */}
@@ -177,14 +298,20 @@ export default function ExportModal({
             {/* PDF quality slider */}
             <div>
               <label style={{ fontSize: '0.82rem', fontWeight: 600, color: 'var(--text-secondary)', display: 'flex', justifyContent: 'space-between' }}>
-                <span>Image quality (PNG → JPEG pages)</span>
+                <span>Compression quality</span>
                 <span style={{ color: 'var(--text-primary)' }}>{quality}%</span>
               </label>
-              <input type="range" min={40} max={100} step={2} value={quality} onChange={e => setQuality(+e.target.value)}
+              <input type="range" min={30} max={100} step={2} value={quality} onChange={e => setQuality(+e.target.value)}
                 style={{ width: '100%', marginTop: 6, accentColor: '#0070F3' }} />
               <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.7rem', color: 'var(--text-tertiary)' }}>
-                <span>Smaller file</span><span>Higher quality</span>
+                <span>Smaller file (~{Math.round(30 + (quality / 100) * 70)}%)</span>
+                <span>Higher quality</span>
               </div>
+              {estimatedSize && (
+                <div style={{ fontSize: '0.72rem', color: '#0070F3', marginTop: 4 }}>
+                  📦 Estimated compressed size: ~{formatSize(estimatedSize)}
+                </div>
+              )}
             </div>
 
             {/* Password protect */}
@@ -207,9 +334,15 @@ export default function ExportModal({
                   }} />
               )}
               {showPwInput && (
-                <p style={{ fontSize: '0.72rem', color: 'var(--text-tertiary)', margin: '4px 0 0' }}>
-                  Note: PDF password encryption requires the pdf-lib owner-password feature. The password will be set as the user-open password on export.
-                </p>
+                <div style={{
+                  fontSize: '0.72rem', color: 'var(--text-tertiary)', margin: '6px 0 0',
+                  padding: '6px 10px', background: 'rgba(245,158,11,0.06)',
+                  border: '1px solid rgba(245,158,11,0.2)', borderRadius: 'var(--radius-sm)',
+                }}>
+                  ⚠️ <strong>Limitation:</strong> PDF password encryption requires server-side processing. 
+                  The password will be embedded as metadata — for maximum security, use your OS&apos;s built-in PDF encryption 
+                  (Print → Save as PDF with encryption) or a desktop tool like Adobe Acrobat.
+                </div>
               )}
             </div>
           </div>

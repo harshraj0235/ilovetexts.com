@@ -53,6 +53,7 @@ export default function Footer({ lang, allToolsCount }) {
               <li><Link href={lp('/tools')} style={{ color: 'var(--text-secondary)', textDecoration: 'none', fontSize: '0.9rem' }} className="hover-text-primary">All Tools Directory</Link></li>
               <li><Link href={lp('/resources')} style={{ color: 'var(--text-secondary)', textDecoration: 'none', fontSize: '0.9rem' }} className="hover-text-primary">Free Cheat Sheets</Link></li>
               <li><Link href={lp('/blog')} style={{ color: 'var(--text-secondary)', textDecoration: 'none', fontSize: '0.9rem' }} className="hover-text-primary">Blog &amp; Guides</Link></li>
+              <li><a href="/feed.xml" style={{ color: 'var(--text-secondary)', textDecoration: 'none', fontSize: '0.9rem' }} className="hover-text-primary">RSS Feed</a></li>
               <li><Link href={lp('/about')} style={{ color: 'var(--text-secondary)', textDecoration: 'none', fontSize: '0.9rem' }} className="hover-text-primary">About Us</Link></li>
               <li><Link href={lp('/contact')} style={{ color: 'var(--text-secondary)', textDecoration: 'none', fontSize: '0.9rem' }} className="hover-text-primary">Contact</Link></li>
               <li><Link href={lp('/privacy')} style={{ color: 'var(--text-secondary)', textDecoration: 'none', fontSize: '0.9rem' }} className="hover-text-primary">Privacy Policy</Link></li>

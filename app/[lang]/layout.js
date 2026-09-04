@@ -132,6 +132,8 @@ export default async function LangLayout({ children, params }) {
       <head>
         {/* DNS prefetch for analytics */}
         <link rel="dns-prefetch" href="https://www.googletagmanager.com" />
+        {/* RSS Feed — enables blog aggregators and AI citation engines */}
+        <link rel="alternate" type="application/rss+xml" title="ilovetexts.com Blog" href="/feed.xml" />
         {/* Blocking script to prevent dark mode FOUC */}
         <script
           dangerouslySetInnerHTML={{

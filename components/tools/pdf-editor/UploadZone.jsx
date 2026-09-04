@@ -1,9 +1,19 @@
 'use client';
 // ═══════════════════════════════════════════════════════
-// UploadZone.jsx v2
-// NEW: multi-file merge mode, URL import, sample PDF link
+// UploadZone.jsx v3
+// IMPROVEMENTS:
+//  - Auto-switch to merge mode when 2+ PDFs dropped
+//  - File size display in merge queue
+//  - Better UX guidance
 // ═══════════════════════════════════════════════════════
 import { useState, useCallback, useRef } from 'react';
+
+function formatSize(bytes) {
+  if (!bytes || bytes <= 0) return '';
+  if (bytes < 1024) return `${bytes} B`;
+  if (bytes < 1024 * 1024) return `${(bytes / 1024).toFixed(1)} KB`;
+  return `${(bytes / (1024 * 1024)).toFixed(1)} MB`;
+}
 
 const ACCEPTED = '.pdf,.jpg,.jpeg,.png,.webp,.gif,.txt,.csv,.md,.html,.xml,.json';
 
@@ -12,7 +22,7 @@ export default function UploadZone({ onFile, onMergeFiles, loading }) {
   const [urlInput, setUrlInput] = useState('');
   const [urlError, setUrlError] = useState('');
   const [mergeMode, setMergeMode] = useState(false);
-  const [mergeQueue, setMergeQueue] = useState([]); // [{name, file}]
+  const [mergeQueue, setMergeQueue] = useState([]); // [{name, file, size}]
   const inputRef = useRef(null);
 
   const handleSingleFile = useCallback((file) => {
@@ -22,7 +32,7 @@ export default function UploadZone({ onFile, onMergeFiles, loading }) {
 
   const handleMergeAdd = useCallback((files) => {
     const pdfs = Array.from(files).filter(f => f.name.toLowerCase().endsWith('.pdf'));
-    setMergeQueue(prev => [...prev, ...pdfs.map(f => ({ name: f.name, file: f }))]);
+    setMergeQueue(prev => [...prev, ...pdfs.map(f => ({ name: f.name, file: f, size: f.size || 0 }))]);
   }, []);
 
   const onDrop = useCallback((e) => {
@@ -30,6 +40,15 @@ export default function UploadZone({ onFile, onMergeFiles, loading }) {
     setDragging(false);
     const files = e.dataTransfer.files;
     if (!files?.length) return;
+
+    // Auto-switch to merge mode if user drops 2+ PDFs in single mode
+    const pdfFiles = Array.from(files).filter(f => f.name.toLowerCase().endsWith('.pdf'));
+    if (!mergeMode && pdfFiles.length >= 2) {
+      setMergeMode(true);
+      handleMergeAdd(files);
+      return;
+    }
+
     if (mergeMode) {
       handleMergeAdd(files);
     } else {
@@ -43,6 +62,16 @@ export default function UploadZone({ onFile, onMergeFiles, loading }) {
   const onInputChange = (e) => {
     const files = e.target.files;
     if (!files?.length) return;
+
+    // Auto-switch to merge mode if user selects 2+ PDFs in single mode
+    const pdfFiles = Array.from(files).filter(f => f.name.toLowerCase().endsWith('.pdf'));
+    if (!mergeMode && pdfFiles.length >= 2) {
+      setMergeMode(true);
+      handleMergeAdd(files);
+      e.target.value = '';
+      return;
+    }
+
     if (mergeMode) {
       handleMergeAdd(files);
     } else {
@@ -220,7 +249,10 @@ export default function UploadZone({ onFile, onMergeFiles, loading }) {
                     borderRadius: 'var(--radius-sm)', background: 'var(--bg-main)',
                   }}>
                     <span style={{ fontSize: '1rem' }}>📄</span>
-                    <span style={{ flex: 1, fontSize: '0.85rem', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{q.name}</span>
+                    <div style={{ flex: 1, minWidth: 0 }}>
+                      <span style={{ fontSize: '0.85rem', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', display: 'block' }}>{q.name}</span>
+                      {q.size > 0 && <span style={{ fontSize: '0.7rem', color: 'var(--text-tertiary)' }}>{formatSize(q.size)}</span>}
+                    </div>
                     <span style={{ fontSize: '0.72rem', color: 'var(--text-tertiary)', flexShrink: 0 }}>#{idx + 1}</span>
                     <button onClick={() => moveMergeItem(idx, -1)} disabled={idx === 0}
                       style={{ background: 'none', border: '1px solid var(--border-light)', borderRadius: 4, cursor: 'pointer', padding: '2px 6px', fontSize: '0.8rem', opacity: idx === 0 ? 0.3 : 1 }}>↑</button>

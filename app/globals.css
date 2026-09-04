@@ -1163,3 +1163,279 @@ kbd {
   border-radius: 0 !important;
   height: 100vh !important;
 }
+
+/* ═══════════════════════════════════════════════════════
+   PDF Editor — Mobile Responsive Styles
+   ═══════════════════════════════════════════════════════ */
+
+/* ── PDF Toolbar — scrollable tab row on mobile ── */
+.pdf-toolbar-tabs {
+  display: flex;
+  align-items: center;
+  gap: 0;
+  padding: 0 10px;
+  border-bottom: 1px solid var(--border-light);
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none; /* Firefox */
+}
+.pdf-toolbar-tabs::-webkit-scrollbar { display: none; }
+
+.pdf-toolbar-tab {
+  padding: 9px 12px;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  font-size: 0.78rem;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  white-space: nowrap;
+  flex-shrink: 0;
+  transition: all 0.15s;
+  position: relative;
+}
+
+.pdf-toolbar-right {
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding-left: 8px;
+  flex-shrink: 0;
+}
+
+.pdf-subtoolbar {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 5px 12px;
+  min-height: 42px;
+  overflow-x: auto;
+  flex-wrap: nowrap;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+}
+.pdf-subtoolbar::-webkit-scrollbar { display: none; }
+
+/* ── PDF Editor Body Layout ── */
+.pdf-editor-body {
+  display: flex;
+  flex: 1;
+  overflow: hidden;
+  position: relative;
+}
+
+.pdf-canvas-scroll {
+  flex: 1;
+  overflow: auto;
+  padding: 24px;
+  background: var(--bg-tertiary);
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+}
+
+/* ── PDF Page Sidebar ── */
+.pdf-page-sidebar {
+  width: 100px;
+  flex-shrink: 0;
+  overflow-y: auto;
+  background: var(--bg-secondary);
+  border-right: 1px solid var(--border-light);
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 8px 6px;
+}
+
+/* ── PDF Comment Panel (right sidebar) ── */
+.pdf-comment-panel {
+  width: 280px;
+  flex-shrink: 0;
+  border-left: 1px solid var(--border-light);
+  background: var(--bg-main);
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+}
+
+/* ── PDF Status Bar ── */
+.pdf-status-bar {
+  padding: 4px 14px;
+  background: var(--bg-secondary);
+  border-top: 1px solid var(--border-light);
+  display: flex;
+  gap: 16px;
+  flex-shrink: 0;
+  font-size: 0.73rem;
+  color: var(--text-secondary);
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+/* ── PDF Modals ── */
+.pdf-modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.6);
+  z-index: 500;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+
+.pdf-modal-content {
+  background: var(--bg-main);
+  border-radius: var(--radius-lg);
+  box-shadow: 0 24px 48px rgba(0,0,0,0.22);
+  padding: 28px;
+  max-width: 100%;
+  max-height: 90vh;
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+}
+
+/* ── Feature Grid ── */
+.pdf-feature-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 14px;
+  margin-top: 28px;
+}
+
+/* ═══════════════════════════════════════════════════════
+   MOBILE BREAKPOINTS
+   ═══════════════════════════════════════════════════════ */
+
+/* ── Tablets & below (< 768px) ── */
+@media (max-width: 767px) {
+  /* Hide page sidebar on mobile */
+  .pdf-page-sidebar {
+    display: none;
+  }
+
+  /* Comment panel becomes bottom drawer */
+  .pdf-comment-panel {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    width: 100%;
+    max-height: 50vh;
+    border-left: none;
+    border-top: 1px solid var(--border-light);
+    z-index: 90;
+    border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+    box-shadow: 0 -4px 16px rgba(0,0,0,0.1);
+  }
+
+  /* Compact canvas padding */
+  .pdf-canvas-scroll {
+    padding: 8px;
+  }
+
+  /* Toolbar — hide labels, only show icons on right side */
+  .pdf-toolbar-right .pdf-toolbar-btn-label {
+    display: none;
+  }
+
+  .pdf-toolbar-right {
+    gap: 2px;
+    padding-left: 4px;
+  }
+
+  .pdf-toolbar-tab {
+    padding: 8px 8px;
+    font-size: 0.74rem;
+    gap: 3px;
+  }
+  .pdf-toolbar-tab-label {
+    display: none;
+  }
+
+  .pdf-subtoolbar {
+    padding: 4px 8px;
+    min-height: 38px;
+    gap: 3px;
+  }
+
+  /* Status bar — hide less important info */
+  .pdf-status-bar {
+    padding: 3px 8px;
+    gap: 8px;
+    font-size: 0.68rem;
+  }
+  .pdf-status-bar .status-secondary {
+    display: none;
+  }
+
+  /* Modals — fill more of the screen */
+  .pdf-modal-overlay {
+    padding: 8px;
+    align-items: flex-end;
+  }
+
+  .pdf-modal-content {
+    padding: 18px;
+    border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+    max-height: 92vh;
+    width: 100% !important;
+  }
+
+  /* Feature grid — 2 columns on mobile */
+  .pdf-feature-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+    margin-top: 20px;
+  }
+
+  /* Editor container — use all height */
+  .pdf-editor-container {
+    height: calc(100vh - 60px) !important;
+    min-height: 0 !important;
+    border-radius: 0 !important;
+  }
+}
+
+/* ── Small phones (< 480px) ── */
+@media (max-width: 479px) {
+  .pdf-toolbar-tab {
+    padding: 7px 6px;
+    font-size: 0.72rem;
+  }
+
+  .pdf-subtoolbar {
+    padding: 3px 6px;
+    gap: 2px;
+  }
+
+  .pdf-modal-content {
+    padding: 14px;
+  }
+
+  .pdf-feature-grid {
+    grid-template-columns: 1fr;
+    gap: 8px;
+  }
+
+  .pdf-canvas-scroll {
+    padding: 4px;
+  }
+
+  /* Even more compact status bar */
+  .pdf-status-bar {
+    padding: 2px 6px;
+    gap: 6px;
+    font-size: 0.65rem;
+  }
+}
+
+/* ── Wide screens — ensure editor doesn't spread too wide ── */
+@media (min-width: 1200px) {
+  .pdf-comment-panel {
+    width: 320px;
+  }
+}

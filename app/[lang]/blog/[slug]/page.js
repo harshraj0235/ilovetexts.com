@@ -317,6 +317,35 @@ export default async function BlogPostPage({ params }) {
           <p style={{ color: 'var(--text-muted)', fontSize: '1.05rem', lineHeight: '1.7' }}>{post.description}</p>
         </div>
 
+        {/* Table of Contents — Google uses this for sitelinks in search results */}
+        {(() => {
+          const headings = [...post.content.matchAll(/^##\s+(.+)$/gm)].map(m => ({
+            text: m[1].trim(),
+            id: m[1].trim().toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, ''),
+          }));
+          if (headings.length < 3) return null;
+          return (
+            <nav aria-label="Table of contents" style={{
+              marginBottom: '32px', padding: '18px 22px',
+              background: 'var(--bg-section)', borderRadius: 'var(--radius-md)',
+              border: '1px solid var(--border-light)',
+            }}>
+              <div style={{ fontWeight: 700, fontSize: '0.88rem', marginBottom: '10px', color: 'var(--text-secondary)', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
+                📋 Contents
+              </div>
+              <ol style={{ margin: 0, paddingLeft: '20px', display: 'flex', flexDirection: 'column', gap: '6px' }}>
+                {headings.map((h, i) => (
+                  <li key={i} style={{ fontSize: '0.88rem' }}>
+                    <a href={`#${h.id}`} style={{ color: 'var(--brand-color)', textDecoration: 'none', fontWeight: 500 }}>
+                      {h.text}
+                    </a>
+                  </li>
+                ))}
+              </ol>
+            </nav>
+          );
+        })()}
+
         {/* Content */}
         <div className="blog-content">
           {renderContent(post.content, lp)}

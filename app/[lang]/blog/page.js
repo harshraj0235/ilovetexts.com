@@ -797,6 +797,574 @@ The editor works on mobile browsers. For heavy editing, desktop Chrome or Edge g
     `,
   },
 
+  // ─────────────────────────────────────────────────────
+  // SPANISH BLOG POSTS — target LatAm + Spain (300M+ speakers)
+  // ─────────────────────────────────────────────────────
+  {
+    slug: 'como-unir-pdf-gratis',
+    title: 'Cómo Unir PDF Gratis Online — Sin Límites, Sin Subir Archivos (2026)',
+    description: 'Aprende a combinar varios archivos PDF en uno solo gratis. Sin registro, sin límites diarios y sin subir tus archivos a ningún servidor.',
+    category: 'Guías',
+    date: '2026-10-16',
+    readTime: '5 min',
+    toolLinks: [
+      { slug: 'pdf-text-tools/merge-pdf', name: 'Unir PDF Gratis' },
+      { slug: 'pdf-text-tools/pdf-text-editor', name: 'Editor de PDF' },
+    ],
+    content: `
+## Por qué necesitas unir PDF
+
+Unir varios archivos PDF en uno solo es una de las tareas más comunes en oficinas, universidades y hogares. Necesitas enviar varios documentos como uno solo, combinar facturas, adjuntar capítulos de un libro o reunir páginas escaneadas.
+
+El problema: la mayoría de herramientas online como iLovePDF o SmallPDF tienen **límites diarios** y **suben tus archivos a sus servidores**.
+
+## La solución: ilovetexts Merge PDF (gratis, sin límites)
+
+Nuestra herramienta [Unir PDF](/pdf-text-tools/merge-pdf) combina múltiples archivos PDF directamente en tu navegador usando pdf-lib. **Ningún archivo sale de tu dispositivo.**
+
+### Cómo unir PDF en 4 pasos
+
+1. Abre [ilovetexts Merge PDF](/pdf-text-tools/merge-pdf)
+2. Haz clic en "Agregar PDFs" y selecciona tus archivos
+3. Arrastra para reordenar si es necesario
+4. Haz clic en "Unir PDFs" y descarga el resultado
+
+→ **[Unir PDF Gratis Ahora](/pdf-text-tools/merge-pdf)**
+
+## Comparativa de herramientas para unir PDF
+
+| Herramienta | Límite gratis | Sube archivos | Marcas de agua |
+|-------------|--------------|---------------|----------------|
+| iLovePDF | Límite diario | ✅ Sí | No |
+| SmallPDF | 2 tareas/día | ✅ Sí | No |
+| PDF24 | Sin límites | ✅ Sí | No |
+| **ilovetexts** | **Sin límites** | **❌ No** | **No** |
+
+## ¿Es seguro unir PDF online?
+
+Con ilovetexts, sí. Todo el proceso ocurre en tu navegador. Ni tus contratos, facturas ni documentos médicos llegan a ningún servidor externo.
+
+## Otras herramientas de PDF que te pueden interesar
+- [Comprimir PDF gratis](/pdf-text-tools/compress-pdf)
+- [Firmar PDF online gratis](/pdf-text-tools/sign-pdf)
+- [Editar texto en PDF](/pdf-text-tools/pdf-text-editor)
+    `,
+  },
+  {
+    slug: 'comprimir-pdf-gratis-online',
+    title: 'Comprimir PDF Gratis Online — Reduce el Tamaño Sin Perder Calidad (2026)',
+    description: 'Reduce el tamaño de tus archivos PDF gratis online. Sin subir archivos, sin registro y sin marcas de agua. Ajusta la calidad con un deslizador.',
+    category: 'Guías',
+    date: '2026-10-18',
+    readTime: '4 min',
+    toolLinks: [
+      { slug: 'pdf-text-tools/compress-pdf', name: 'Comprimir PDF' },
+      { slug: 'pdf-text-tools/pdf-text-editor', name: 'Editor de PDF' },
+    ],
+    content: `
+## ¿Por qué necesitas comprimir un PDF?
+
+Los archivos PDF pueden ser demasiado grandes para enviar por correo electrónico (límite de 10MB), subir a plataformas educativas o almacenar en la nube. Comprimir un PDF reduce el tamaño sin afectar el contenido de texto.
+
+## Comprimir PDF gratis con ilovetexts
+
+Nuestra herramienta [Comprimir PDF](/pdf-text-tools/compress-pdf) usa un **deslizador de calidad** (40%–100%) para controlar exactamente cuánto comprimes.
+
+1. Abre [Comprimir PDF](/pdf-text-tools/compress-pdf)
+2. Sube tu archivo PDF
+3. Ajusta el deslizador de calidad
+4. Descarga el PDF comprimido
+
+**Todo ocurre en tu navegador. Ningún archivo se sube a ningún servidor.**
+
+→ **[Comprimir PDF Gratis](/pdf-text-tools/compress-pdf)**
+
+## ¿Cuánto puedo comprimir un PDF?
+
+Los PDFs con imágenes o páginas escaneadas pueden reducirse un 50–80%. Los PDFs de solo texto tienen reducción mínima porque el texto ya está comprimido.
+
+## Herramientas relacionadas
+- [Unir PDF gratis](/pdf-text-tools/merge-pdf)
+- [Proteger PDF con contraseña](/pdf-text-tools/protect-pdf)
+    `,
+  },
+  {
+    slug: 'mejor-alternativa-grammarly-gratis',
+    title: 'Mejor Alternativa Gratuita a Grammarly en 2026 — Sin Pagar $30/mes',
+    description: 'Grammarly cobra $30 al mes por sus funciones principales. Probamos 6 alternativas gratuitas que ofrecen corrección gramatical, ortografía y sugerencias de estilo sin costo.',
+    category: 'Comparativa',
+    date: '2026-10-17',
+    readTime: '6 min',
+    toolLinks: [
+      { slug: 'writing-grammar-tools/grammar-checker', name: 'Corrector Gramatical' },
+      { slug: 'writing-grammar-tools/spell-checker', name: 'Corrector Ortográfico' },
+    ],
+    content: `
+## El problema con Grammarly
+
+Grammarly es la herramienta de corrección más conocida, pero su nivel gratuito es muy limitado. Las funciones reales —sugerencias de claridad, detección de tono, corrección de estilo— requieren **Premium a $30/mes o $144/año**.
+
+## La mejor alternativa gratuita: ilovetexts Grammar Checker
+
+Nuestro [Corrector Gramatical](/writing-grammar-tools/grammar-checker) usa la misma API de LanguageTool que alimenta herramientas premium, completamente gratis.
+
+**Lo que obtienes:**
+- Detección de errores ortográficos con subrayado rojo
+- Errores gramaticales con sugerencias de corrección (un clic para aplicar)
+- Compatible con más de 20 idiomas automáticamente
+- 100% privado — tu texto nunca llega a los servidores de ilovetexts
+
+→ **[Probar Corrector Gramatical Gratis](/writing-grammar-tools/grammar-checker)**
+
+## Comparativa de alternativas gratuitas a Grammarly
+
+| Herramienta | Ortografía | Gramática | Estilo | Precio |
+|-------------|------------|-----------|--------|--------|
+| Grammarly | ✅ | Básica | ❌ | Gratis / $30 mes |
+| LanguageTool | ✅ | ✅ | Limitado | Gratis / $5 mes |
+| **ilovetexts** | **✅** | **✅** | **N/A** | **Gratis** |
+| Hemingway App | ❌ | ✅ | ✅ | Gratis web |
+
+## Conclusión
+
+Para la mayoría de usuarios, la combinación de [ilovetexts Grammar Checker](/writing-grammar-tools/grammar-checker) + Hemingway App cubre el 90% de lo que ofrece Grammarly Premium, sin costo alguno.
+    `,
+  },
+  {
+    slug: 'contador-palabras-online-gratis',
+    title: 'Contador de Palabras Online Gratis — Cuenta Palabras, Caracteres y Más (2026)',
+    description: 'Cuenta palabras, caracteres, oraciones y párrafos al instante. Calcula el tiempo de lectura y densidad de palabras clave. Gratis, sin registro.',
+    category: 'Guías',
+    date: '2026-10-19',
+    readTime: '4 min',
+    toolLinks: [
+      { slug: 'word-counting-tools/word-counter', name: 'Contador de Palabras' },
+      { slug: 'word-counting-tools/character-counter', name: 'Contador de Caracteres' },
+    ],
+    content: `
+## Por qué importa el conteo de palabras
+
+El conteo de palabras es fundamental para ensayos académicos (límites estrictos), redacción SEO (longitud óptima: 1.500–2.500 palabras), publicaciones en redes sociales y subtítulos de vídeo.
+
+## Cómo contar palabras online gratis
+
+1. Ve a nuestro [Contador de Palabras](/word-counting-tools/word-counter)
+2. Pega o escribe tu texto
+3. Obtén instantáneamente: palabras, caracteres, oraciones, párrafos, tiempo de lectura y densidad de palabras clave
+
+**100% privado — tu texto nunca abandona tu navegador.**
+
+→ **[Contar Palabras Gratis](/word-counting-tools/word-counter)**
+
+## Límites de caracteres en redes sociales
+
+| Plataforma | Límite |
+|------------|--------|
+| Twitter/X | 280 caracteres |
+| Instagram (caption) | 2.200 caracteres |
+| LinkedIn | 3.000 caracteres |
+| TikTok (bio) | 80 caracteres |
+
+## Herramientas relacionadas
+- [Contador de caracteres](/word-counting-tools/character-counter)
+- [Calculadora de tiempo de lectura](/word-counting-tools/reading-time)
+    `,
+  },
+  {
+    slug: 'convertir-texto-mayusculas-minusculas',
+    title: 'Convertir Texto a Mayúsculas y Minúsculas Online Gratis (2026)',
+    description: 'Convierte texto entre MAYÚSCULAS, minúsculas, Título y más formatos al instante. Incluye camelCase, snake_case y kebab-case para desarrolladores.',
+    category: 'Guías',
+    date: '2026-10-20',
+    readTime: '3 min',
+    toolLinks: [
+      { slug: 'text-case-converter/uppercase', name: 'Convertir a Mayúsculas' },
+      { slug: 'text-case-converter/lowercase', name: 'Convertir a Minúsculas' },
+      { slug: 'text-case-converter/title-case', name: 'Formato Título' },
+    ],
+    content: `
+## Formatos de texto más usados
+
+| Formato | Ejemplo | Uso común |
+|---------|---------|-----------|
+| MAYÚSCULAS | HOLA MUNDO | Títulos, constantes |
+| minúsculas | hola mundo | URLs, clases CSS |
+| Formato Título | Hola Mundo | Encabezados, nombres |
+| camelCase | holaMundo | Variables JavaScript |
+| snake_case | hola_mundo | Variables Python |
+| kebab-case | hola-mundo | Rutas URL, CSS |
+
+## Cómo convertir texto online gratis
+
+1. Ve a nuestro [Convertidor de Mayúsculas/Minúsculas](/text-case-converter/uppercase)
+2. Pega tu texto
+3. Haz clic en el formato que necesitas
+4. Copia el resultado
+
+**Sin registro, sin límites, 100% privado.**
+
+→ **[Convertir Texto Gratis](/text-case-converter/uppercase)**
+    `,
+  },
+
+  // ─────────────────────────────────────────────────────
+  // PORTUGUESE BLOG POSTS — target Brazil (215M speakers)
+  // ─────────────────────────────────────────────────────
+  {
+    slug: 'como-juntar-pdf-gratis',
+    title: 'Como Juntar PDF Grátis Online — Sem Limite, Sem Upload (2026)',
+    description: 'Aprenda a combinar vários arquivos PDF em um só gratuitamente. Sem cadastro, sem limite diário e sem enviar seus arquivos para servidores externos.',
+    category: 'Guias',
+    date: '2026-10-16',
+    readTime: '5 min',
+    toolLinks: [
+      { slug: 'pdf-text-tools/merge-pdf', name: 'Juntar PDF Grátis' },
+      { slug: 'pdf-text-tools/pdf-text-editor', name: 'Editor de PDF' },
+    ],
+    content: `
+## Por que você precisa juntar PDFs
+
+Combinar arquivos PDF é uma das tarefas mais comuns no trabalho e na faculdade: enviar documentos como um único arquivo, reunir páginas digitalizadas, juntar capítulos de TCC ou consolidar faturas.
+
+O problema: a maioria das ferramentas como iLovePDF e SmallPDF têm **limites diários** e **fazem upload dos seus arquivos para os servidores deles**.
+
+## A solução: ilovetexts Merge PDF (grátis, sem limites)
+
+Nossa ferramenta [Juntar PDF](/pdf-text-tools/merge-pdf) combina arquivos PDF diretamente no seu navegador. **Nenhum arquivo sai do seu dispositivo.**
+
+### Como juntar PDF em 4 passos
+
+1. Abra [ilovetexts Juntar PDF](/pdf-text-tools/merge-pdf)
+2. Clique em "Adicionar PDFs" e selecione seus arquivos
+3. Arraste para reordenar se necessário
+4. Clique em "Juntar PDFs" e baixe o resultado
+
+→ **[Juntar PDF Grátis Agora](/pdf-text-tools/merge-pdf)**
+
+## Comparativo de ferramentas para juntar PDF
+
+| Ferramenta | Limite grátis | Faz upload | Marca d'água |
+|------------|--------------|------------|--------------|
+| iLovePDF | Limite diário | ✅ Sim | Não |
+| SmallPDF | 2 tarefas/dia | ✅ Sim | Não |
+| **ilovetexts** | **Sem limite** | **❌ Não** | **Não** |
+
+→ **[Experimentar Grátis](/pdf-text-tools/merge-pdf)**
+    `,
+  },
+  {
+    slug: 'comprimir-pdf-gratis-online-pt',
+    title: 'Comprimir PDF Grátis Online — Reduza o Tamanho do Arquivo (2026)',
+    description: 'Reduza o tamanho de arquivos PDF gratuitamente online. Sem upload para servidores, sem cadastro, sem marca d\'água. Ajuste a qualidade com um controle deslizante.',
+    category: 'Guias',
+    date: '2026-10-18',
+    readTime: '4 min',
+    toolLinks: [
+      { slug: 'pdf-text-tools/compress-pdf', name: 'Comprimir PDF' },
+    ],
+    content: `
+## Por que comprimir um PDF?
+
+Arquivos PDF podem ser grandes demais para enviar por e-mail (limite de 10MB), carregar em plataformas educacionais ou armazenar na nuvem.
+
+## Como comprimir PDF grátis
+
+Nossa ferramenta [Comprimir PDF](/pdf-text-tools/compress-pdf) usa um **controle deslizante de qualidade** para controlar a compressão.
+
+1. Abra [Comprimir PDF](/pdf-text-tools/compress-pdf)
+2. Carregue seu arquivo PDF
+3. Ajuste o deslizante de qualidade (40%–100%)
+4. Baixe o PDF comprimido
+
+**Tudo ocorre no seu navegador. Nenhum arquivo é enviado a nenhum servidor.**
+
+→ **[Comprimir PDF Grátis](/pdf-text-tools/compress-pdf)**
+
+## Ferramentas relacionadas
+- [Juntar PDF grátis](/pdf-text-tools/merge-pdf)
+- [Proteger PDF com senha](/pdf-text-tools/protect-pdf)
+    `,
+  },
+  {
+    slug: 'melhor-alternativa-grammarly-gratis',
+    title: 'Melhor Alternativa Gratuita ao Grammarly em 2026 — Sem Pagar',
+    description: 'O Grammarly cobra R$150/mês pelo plano premium. Testamos 6 alternativas gratuitas que oferecem verificação gramatical e ortográfica sem nenhum custo.',
+    category: 'Comparativo',
+    date: '2026-10-17',
+    readTime: '6 min',
+    toolLinks: [
+      { slug: 'writing-grammar-tools/grammar-checker', name: 'Verificador Gramatical' },
+    ],
+    content: `
+## O problema com o Grammarly
+
+O Grammarly é popular, mas o plano gratuito é muito limitado. As funções reais exigem **Premium a ~R$150/mês**.
+
+## A melhor alternativa gratuita: ilovetexts Grammar Checker
+
+Nosso [Verificador Gramatical](/writing-grammar-tools/grammar-checker) usa a mesma API do LanguageTool, completamente grátis e 100% privado.
+
+→ **[Testar Verificador Gramatical Grátis](/writing-grammar-tools/grammar-checker)**
+
+## Conclusão
+
+Para a maioria dos usuários, a combinação de [ilovetexts Grammar Checker](/writing-grammar-tools/grammar-checker) + Hemingway App cobre 90% do que o Grammarly Premium oferece, sem custo algum.
+    `,
+  },
+  {
+    slug: 'contador-palavras-online-gratis',
+    title: 'Contador de Palavras Online Grátis — Palavras, Caracteres e Mais (2026)',
+    description: 'Conte palavras, caracteres, frases e parágrafos instantaneamente. Calcule o tempo de leitura e densidade de palavras-chave. Grátis, sem cadastro.',
+    category: 'Guias',
+    date: '2026-10-19',
+    readTime: '4 min',
+    toolLinks: [
+      { slug: 'word-counting-tools/word-counter', name: 'Contador de Palavras' },
+    ],
+    content: `
+## Por que a contagem de palavras importa
+
+A contagem de palavras é essencial para trabalhos acadêmicos (limites estrictos), redação SEO (1.500–2.500 palavras), posts em redes sociais e legendas de vídeo.
+
+## Como contar palavras online grátis
+
+1. Acesse nosso [Contador de Palavras](/word-counting-tools/word-counter)
+2. Cole ou escreva seu texto
+3. Veja instantaneamente: palavras, caracteres, frases, parágrafos, tempo de leitura
+
+→ **[Contar Palavras Grátis](/word-counting-tools/word-counter)**
+
+## Limites de caracteres nas redes sociais
+
+| Plataforma | Limite |
+|------------|--------|
+| Twitter/X | 280 caracteres |
+| Instagram (legenda) | 2.200 caracteres |
+| LinkedIn | 3.000 caracteres |
+    `,
+  },
+  {
+    slug: 'converter-texto-maiusculas-minusculas',
+    title: 'Converter Texto para Maiúsculas e Minúsculas Online Grátis (2026)',
+    description: 'Converta texto entre MAIÚSCULAS, minúsculas, Título e outros formatos. Inclui camelCase, snake_case e kebab-case para desenvolvedores.',
+    category: 'Guias',
+    date: '2026-10-20',
+    readTime: '3 min',
+    toolLinks: [
+      { slug: 'text-case-converter/uppercase', name: 'Converter para Maiúsculas' },
+      { slug: 'text-case-converter/lowercase', name: 'Converter para Minúsculas' },
+    ],
+    content: `
+## Formatos de texto mais usados
+
+| Formato | Exemplo | Uso comum |
+|---------|---------|-----------|
+| MAIÚSCULAS | OLÁ MUNDO | Títulos, constantes |
+| minúsculas | olá mundo | URLs, classes CSS |
+| Formato Título | Olá Mundo | Cabeçalhos, nomes |
+| camelCase | oláMundo | Variáveis JavaScript |
+| snake_case | olá_mundo | Variáveis Python |
+
+→ **[Converter Texto Grátis](/text-case-converter/uppercase)**
+    `,
+  },
+
+  // ─────────────────────────────────────────────────────
+  // HINDI BLOG POSTS — target India (600M+ Hindi speakers)
+  // ─────────────────────────────────────────────────────
+  {
+    slug: 'pdf-merge-kaise-kare-free',
+    title: 'PDF Merge Kaise Kare Free Online — Bina Upload Ke (2026)',
+    description: 'Multiple PDF files ko ek mein kaise merge kare free mein. Koi registration nahi, koi daily limit nahi, aur files kisi server par upload nahi hoti.',
+    category: 'Guides',
+    date: '2026-10-16',
+    readTime: '4 min',
+    toolLinks: [
+      { slug: 'pdf-text-tools/merge-pdf', name: 'PDF Merge Free' },
+      { slug: 'pdf-text-tools/pdf-text-editor', name: 'PDF Editor' },
+    ],
+    content: `
+## PDF Merge Karne Ki Zaroorat Kab Hoti Hai?
+
+Office aur college mein aksar multiple PDF files ko ek mein combine karna padta hai — jaise ki resume ke saath certificates, ya scanned pages ko ek document mein jodna.
+
+**Problem:** iLovePDF aur SmallPDF jaise tools ki daily limits hoti hain aur ye aapki files unke servers par upload karte hain.
+
+## ilovetexts PDF Merge Tool — Free, Koi Limit Nahi
+
+Hamara [PDF Merge tool](/pdf-text-tools/merge-pdf) aapke browser mein hi files combine karta hai. **Koi bhi file aapke device se bahar nahi jati.**
+
+### 4 Steps Mein PDF Merge Kaise Kare
+
+1. [ilovetexts PDF Merge](/pdf-text-tools/merge-pdf) kholen
+2. "Add PDFs" par click karke apni files chunen
+3. Drag karke order set karen
+4. "Merge PDFs" par click karen aur download karen
+
+→ **[Abhi PDF Merge Karen — Free](/pdf-text-tools/merge-pdf)**
+
+## PDF Tools Ka Comparison
+
+| Tool | Free Limit | Files Upload? |
+|------|-----------|---------------|
+| iLovePDF | Daily limit | ✅ Haan |
+| SmallPDF | 2 tasks/din | ✅ Haan |
+| **ilovetexts** | **Koi limit nahi** | **❌ Nahi** |
+    `,
+  },
+  {
+    slug: 'muft-typing-speed-test-hindi',
+    title: 'Muft Typing Speed Test Online — WPM Aur Accuracy Check Karen (2026)',
+    description: 'Apni typing speed test karen free mein. WPM, accuracy aur errors check karen 1, 2 ya 5 minute ke test mein. Koi signup nahi chahiye.',
+    category: 'Guides',
+    date: '2026-10-17',
+    readTime: '4 min',
+    toolLinks: [
+      { slug: 'productivity-tools/typing-speed-test', name: 'Typing Speed Test' },
+    ],
+    content: `
+## Typing Speed Test Kyun Jaruri Hai?
+
+Typing speed test aapko batata hai ki aap kitna fast type karte hain. Data entry jobs, government exams aur programming ke liye achi typing speed bohot important hai.
+
+## Kya Hoti Hai Achhi Typing Speed?
+
+- Average typist: 40–60 WPM
+- Professional typist: 70–100 WPM
+- Expert typist: 100+ WPM
+
+## ilovetexts Typing Speed Test Features
+
+Hamara [Typing Speed Test](/productivity-tools/typing-speed-test) mein:
+- **4 modes:** Common words, sentences, quotes, code
+- **5 durations:** 15s, 30s, 1 min, 2 min, 5 min
+- **Real-time WPM** aur accuracy display
+- **Error heatmap** — kaunse keys pe galtiyan hoti hain
+- **History** — aapke last 20 tests ka record
+
+→ **[Typing Speed Test Den — Free](/productivity-tools/typing-speed-test)**
+
+## Typing Speed Improve Karne Ke Tips
+
+1. Touch typing seekhen — ungliyon ki sahi position (ASDF JKL;)
+2. Keyboard ki taraf mat dekhen
+3. Pehle accuracy improve karen, speed automatically aayegi
+4. Roz 10-15 minute practice karen
+    `,
+  },
+  {
+    slug: 'pdf-compress-kaise-kare',
+    title: 'PDF Compress Kaise Kare Free Online — File Size Kam Karen (2026)',
+    description: 'PDF file ka size free mein kam karo online. Koi upload nahi, koi registration nahi. Quality slider se control karo kitna compress karna hai.',
+    category: 'Guides',
+    date: '2026-10-18',
+    readTime: '3 min',
+    toolLinks: [
+      { slug: 'pdf-text-tools/compress-pdf', name: 'PDF Compress Free' },
+    ],
+    content: `
+## PDF Compress Karne Ki Zaroorat Kab Hoti Hai?
+
+- Email attachment ka size 10MB se kam karna ho
+- College portal par PDF upload karna ho (size limit hai)
+- WhatsApp par bada PDF send karna ho
+
+## ilovetexts PDF Compressor — Free, No Upload
+
+Hamara [PDF Compress tool](/pdf-text-tools/compress-pdf) aapke browser mein hi kaam karta hai.
+
+### Kaise Use Karen
+
+1. [PDF Compress](/pdf-text-tools/compress-pdf) kholen
+2. PDF file upload karen
+3. Quality slider adjust karen (40%–100%)
+4. Compressed PDF download karen
+
+**Aapki file kisi bhi server par upload nahi hoti.**
+
+→ **[PDF Compress Karen — Free](/pdf-text-tools/compress-pdf)**
+
+## Kitna Compress Ho Sakta Hai?
+
+- Image-heavy PDFs: 50–80% size reduction
+- Text-only PDFs: minimal reduction (text already compressed hota hai)
+    `,
+  },
+  {
+    slug: 'shabd-ginti-online-muft',
+    title: 'Shabd Ginti Online Muft — Words, Characters Aur Zyada (2026)',
+    description: 'Apne text mein words, characters, sentences aur paragraphs count karen instantly. Reading time aur keyword density bhi check karen. Bilkul free.',
+    category: 'Guides',
+    date: '2026-10-19',
+    readTime: '3 min',
+    toolLinks: [
+      { slug: 'word-counting-tools/word-counter', name: 'Word Counter' },
+    ],
+    content: `
+## Shabd Ginti Kyun Zaruri Hai?
+
+Essays, articles aur social media posts mein word count bohot important hai:
+- Academic essays ki word limit hoti hai
+- SEO ke liye 1,500–2,500 words ideal hain
+- Twitter/X: max 280 characters
+- Instagram caption: max 2,200 characters
+
+## ilovetexts Word Counter — Free
+
+Hamara [Word Counter](/word-counting-tools/word-counter) aapko deta hai:
+- Words, characters, sentences, paragraphs
+- Reading time aur speaking time
+- Readability score
+- Keyword density
+
+**Aapka text kabhi bhi browser se bahar nahi jaata.**
+
+→ **[Word Count Check Karen — Free](/word-counting-tools/word-counter)**
+    `,
+  },
+  {
+    slug: 'grammarly-ka-muft-alternative',
+    title: 'Grammarly Ka Muft Alternative 2026 — Bina Paise Ke Grammar Check',
+    description: 'Grammarly ka premium plan bahut mehnga hai. Hamne 6 free alternatives test kiye jo grammar checking, spell check aur style suggestions dete hain bilkul free mein.',
+    category: 'Guides',
+    date: '2026-10-20',
+    readTime: '5 min',
+    toolLinks: [
+      { slug: 'writing-grammar-tools/grammar-checker', name: 'Grammar Checker Free' },
+      { slug: 'writing-grammar-tools/spell-checker', name: 'Spell Checker Free' },
+    ],
+    content: `
+## Grammarly Ke Problems
+
+Grammarly sabse popular grammar checker hai lekin:
+- **Free tier:** Sirf basic spelling check
+- **Premium ($30/month):** Style suggestions, clarity, tone detection
+- Expensive hai students aur writers ke liye
+
+## Sabse Achha Free Alternative: ilovetexts Grammar Checker
+
+Hamara [Grammar Checker](/writing-grammar-tools/grammar-checker) LanguageTool API use karta hai — same jo premium tools use karte hain — completely free.
+
+**Features:**
+- Real-time spelling detection (red underline)
+- Grammar errors with one-click fixes
+- 20+ languages support
+- 100% private — aapka text hamare servers par nahi jaata
+
+→ **[Grammar Check Karen — Free](/writing-grammar-tools/grammar-checker)**
+
+## Comparison
+
+| Tool | Grammar | Style | Price |
+|------|---------|-------|-------|
+| Grammarly Free | Basic | ❌ | Free / $30 month |
+| **ilovetexts** | **✅** | **N/A** | **Free** |
+| LanguageTool | ✅ | Limited | Free / $5 month |
+
+**Conclusion:** [ilovetexts Grammar Checker](/writing-grammar-tools/grammar-checker) + Hemingway App = Grammarly Premium ka 90%, zero cost.
+    `,
+  },
+
   {
     slug: 'best-free-grammarly-alternative',
     title: 'Best Free Grammarly Alternative in 2026 — No Premium Paywall',

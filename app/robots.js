@@ -6,13 +6,14 @@ export default function robots() {
     rules: [
       {
         userAgent: 'Googlebot',
-        allow: ['/', '/_next/static/', '/sitemap-api/'],
-        disallow: ['/api/', '/private/'],
+        allow: ['/'],
+        // Block pages that waste crawl budget — not real content
+        disallow: ['/api/', '/private/', '/embed/', '/_next/'],
       },
       {
         userAgent: 'Bingbot',
-        allow: ['/', '/_next/static/', '/sitemap-api/'],
-        disallow: ['/api/', '/private/'],
+        allow: ['/'],
+        disallow: ['/api/', '/private/', '/embed/', '/_next/'],
       },
       // Allow AI search crawlers — critical for GEO (Generative Engine Optimization)
       {
