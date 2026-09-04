@@ -78,11 +78,54 @@ export default function ScreenshotToExcel({ t, lang }) {
     setLoading(true); setOcrProgress(0);
     try {
       const Tesseract = (await import('tesseract.js')).default;
+      // Use TSV output for bounding-box based column detection
       const result = await Tesseract.recognize(image.url, 'eng', {
-        logger: m => { if (m.status === 'recognizing text') setOcrProgress(Math.round(m.progress * 100)); }
+        logger: m => { if (m.status === 'recognizing text') setOcrProgress(Math.round(m.progress * 100)); },
       });
       const text = result.data.text;
       setOcrText(text);
+
+      // Use word-level bounding boxes for accurate column detection
+      const words = result.data.words || [];
+      if (words.length > 0) {
+        // Group words by Y-row (snap to 12px grid for tolerance)
+        const rowMap = {};
+        words.forEach(w => {
+          const yKey = Math.round(w.bbox.y0 / 12) * 12;
+          if (!rowMap[yKey]) rowMap[yKey] = [];
+          rowMap[yKey].push({ x: w.bbox.x0, text: w.text, conf: w.confidence });
+        });
+
+        // Find X-column buckets
+        const allX = Object.values(rowMap).flatMap(cells => cells.map(c => c.x));
+        allX.sort((a, b) => a - b);
+        const xBuckets = [];
+        allX.forEach(x => {
+          const bucket = xBuckets.find(b => Math.abs(b - x) < 40);
+          if (!bucket) xBuckets.push(x);
+        });
+        xBuckets.sort((a, b) => a - b);
+
+        if (xBuckets.length >= 2) {
+          const table = Object.entries(rowMap).sort(([a],[b])=>+a-+b).map(([,cells]) => {
+            const row = new Array(xBuckets.length).fill('');
+            cells.forEach(cell => {
+              const bucketIdx = xBuckets.reduce((bi,bx,i)=>Math.abs(bx-cell.x)<Math.abs(xBuckets[bi]-cell.x)?i:bi,0);
+              row[bucketIdx] = (row[bucketIdx]?row[bucketIdx]+' ':'')+cell.text;
+            });
+            return row.map(c => c.trim());
+          }).filter(row => row.some(c => c.length > 0));
+
+          // Normalize to max columns
+          const maxCols = Math.max(...table.map(r => r.length));
+          const normalized = table.map(r => { while(r.length < maxCols) r.push(''); return r; });
+          setTableData(normalized);
+          showToast(`Extracted ${normalized.length} rows × ${maxCols} columns (bbox method)`);
+          return;
+        }
+      }
+
+      // Fallback: text-based parsing
       const table = parseTable(text);
       setTableData(table);
       showToast(`Extracted ${table.length} rows × ${table[0]?.length || 0} columns`);
