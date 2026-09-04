@@ -195,11 +195,11 @@ export default async function LangLayout({ children, params }) {
           <main className="app-main">
             {children}
           </main>
-          <Footer 
-            lang={lang} 
-            allToolsCount={allTools.length} 
-          />
         </div>
+        <Footer 
+          lang={lang} 
+          allToolsCount={allTools.length} 
+        />
         <InstallPrompt t={t} />
         <RecentTools />
       </body>
