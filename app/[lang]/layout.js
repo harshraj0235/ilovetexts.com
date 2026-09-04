@@ -108,14 +108,18 @@ import '../globals.css';
 
 const inter = Inter({
   subsets: ['latin'],
-  display: 'swap',
+  display: 'optional',  // 'optional' = never blocks rendering, uses system font as fallback
   variable: '--font-sans',
+  preload: true,
+  fallback: ['-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'sans-serif'],
 });
 
 const jetBrainsMono = JetBrains_Mono({
   subsets: ['latin'],
-  display: 'swap',
+  display: 'optional',  // code blocks use system monospace instantly
   variable: '--font-mono',
+  preload: false,        // only loaded when actually needed
+  fallback: ['ui-monospace', 'SFMono-Regular', 'Consolas', 'monospace'],
 });
 
 export default async function LangLayout({ children, params }) {
@@ -130,54 +134,30 @@ export default async function LangLayout({ children, params }) {
   return (
     <html lang={lang} suppressHydrationWarning data-scroll-behavior="smooth" className={`${inter.variable} ${jetBrainsMono.variable}`}>
       <head>
-        {/* DNS prefetch for analytics */}
+        {/* Preconnect for analytics — non-blocking */}
+        <link rel="preconnect" href="https://www.googletagmanager.com" />
         <link rel="dns-prefetch" href="https://www.googletagmanager.com" />
-        {/* RSS Feed — enables blog aggregators and AI citation engines */}
+        {/* RSS Feed */}
         <link rel="alternate" type="application/rss+xml" title="ilovetexts.com Blog" href="/feed.xml" />
-        {/* Blocking script to prevent dark mode FOUC */}
-        <script
-          dangerouslySetInnerHTML={{
-            __html: `
-              (function() {
-                try {
-                  var stored = localStorage.getItem('theme');
-                  if (stored === 'dark') {
-                    document.documentElement.classList.add('dark');
-                  }
-                } catch (e) {}
-              })();
-            `,
-          }}
-        />
+        {/* Blocking script to prevent dark mode FOUC — kept small and inline */}
+        <script dangerouslySetInnerHTML={{ __html: `(function(){try{var s=localStorage.getItem('theme');if(s==='dark')document.documentElement.classList.add('dark');}catch(e){}})();` }} />
       </head>
       <body suppressHydrationWarning={true}>
-        {/* Google tag (gtag.js) */}
-        <Script strategy="afterInteractive" src="https://www.googletagmanager.com/gtag/js?id=G-V7J7BMEGCR" />
-        <Script
-          id="google-analytics"
-          strategy="afterInteractive"
-          dangerouslySetInnerHTML={{
-            __html: `
-              window.dataLayer = window.dataLayer || [];
-              function gtag(){dataLayer.push(arguments);}
-              gtag('js', new Date());
-              gtag('config', 'G-V7J7BMEGCR');
-            `,
-          }}
-        />
-        {/* Service Worker removed — was being unregistered immediately, causing unnecessary JS execution */}
-        <NavBar 
-          lang={lang} 
-        />
+        {/* Google Analytics — deferred, never blocks paint */}
+        <Script strategy="lazyOnload" src="https://www.googletagmanager.com/gtag/js?id=G-V7J7BMEGCR" />
+        <Script id="google-analytics" strategy="lazyOnload" dangerouslySetInnerHTML={{ __html: `window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-V7J7BMEGCR',{send_page_view:true});` }} />
+
+        <NavBar lang={lang} />
         <div className="app-layout">
-          <aside className="app-sidebar">
+          {/* Sidebar — hidden on mobile via CSS, only rendered on desktop */}
+          <aside className="app-sidebar" aria-label="Tool categories">
             <nav className="app-sidebar-nav">
               {allLocalizedCategories.map(cat => (
                 <div key={cat.id} style={{ marginBottom: '24px' }}>
                   <h4>{cat.name}</h4>
                   <div>
                     {cat.tools.map(tool => (
-                      <Link 
+                      <Link
                         key={tool.slug}
                         href={lang === 'en' ? `/${cat.id}/${tool.slug}` : `/${lang}/${cat.id}/${tool.slug}`}
                         prefetch={false}
@@ -196,10 +176,7 @@ export default async function LangLayout({ children, params }) {
             {children}
           </main>
         </div>
-        <Footer 
-          lang={lang} 
-          allToolsCount={allTools.length} 
-        />
+        <Footer lang={lang} allToolsCount={allTools.length} />
         <InstallPrompt t={t} />
         <RecentTools />
       </body>
