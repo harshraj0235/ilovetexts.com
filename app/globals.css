@@ -1250,6 +1250,18 @@ kbd {
   position: relative;
 }
 
+.pdf-toolbar-tabs {
+  display: flex;
+  align-items: center;
+  overflow-x: auto;
+  white-space: nowrap;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+  min-height: 48px;
+  position: relative;
+}
+.pdf-toolbar-tabs::-webkit-scrollbar { display: none; }
+
 .pdf-toolbar-right {
   margin-left: auto;
   display: flex;
@@ -1451,6 +1463,14 @@ kbd {
     height: calc(100vh - 60px) !important;
     min-height: 0 !important;
     border-radius: 0 !important;
+  }
+  /* Responsive tables */
+  .responsive-table-wrapper {
+    width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    margin-bottom: 12px;
+    display: block;
   }
 }
 

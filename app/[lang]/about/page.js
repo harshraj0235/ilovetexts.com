@@ -114,22 +114,21 @@ export default async function AboutPage({ params }) {
           border: '1px solid var(--border-light)',
           flexWrap: 'wrap',
         }}>
-          {/* Avatar — real photo */}
+          {/* Avatar — real photo (WebP for performance) */}
           <div style={{
-            width: 92,
-            height: 92,
-            borderRadius: '50%',
-            flexShrink: 0,
+            width: 92, height: 92, borderRadius: '50%', flexShrink: 0,
             overflow: 'hidden',
             boxShadow: '0 4px 20px rgba(99,102,246,0.35)',
             border: '3px solid rgba(139,92,246,0.4)',
           }}>
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
-              src="/harsh-raj.png"
+              src="/harsh-raj.webp"
               alt="Harsh Raj — Founder of ilovetexts.com"
               width={92}
               height={92}
+              loading="lazy"
+              decoding="async"
               style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
             />
           </div>

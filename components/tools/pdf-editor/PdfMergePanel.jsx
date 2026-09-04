@@ -85,15 +85,6 @@ export default function PdfMergePanel({ initialFiles = [], autoStart = false, on
       const bytes = await merged.save();
       const blob  = new Blob([bytes], { type: 'application/pdf' });
 
-      // Download immediately
-      const a = document.createElement('a');
-      a.href     = URL.createObjectURL(blob);
-      a.download = 'merged-document.pdf';
-      document.body.appendChild(a);
-      a.click();
-      document.body.removeChild(a);
-      setTimeout(() => URL.revokeObjectURL(a.href), 5000);
-
       setProgress(`Done! ${totalPagesCopied} pages merged. Loading into editor…`);
 
       // Load into editor — parent's onMerged already handles closing the modal
