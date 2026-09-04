@@ -7,7 +7,7 @@ export default function Footer({ lang, allToolsCount }) {
 
   return (
     <footer className="app-footer">
-      <div className="container" style={{ paddingTop: '64px', paddingBottom: '32px' }}>
+      <div className="container footer-container">
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '32px', marginBottom: '48px' }}>
           <div>
             <h4 style={{ marginBottom: '16px', color: 'var(--text-primary)', fontSize: '1.1rem' }}>❤️ ilovetexts.com</h4>

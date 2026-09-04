@@ -170,11 +170,15 @@ function EmbedCTA({ toolUrl, toolName }) {
             display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '20px',
           }}
         >
-          <div onClick={e => e.stopPropagation()} style={{
+          <div onClick={e => e.stopPropagation()} className="embed-modal-content" style={{
             background: 'var(--bg-main, #fff)', color: 'var(--text-primary, #111)',
-            borderRadius: '14px', padding: '28px', width: '100%', maxWidth: '620px',
+            borderRadius: '14px', width: '100%', maxWidth: '620px',
             boxShadow: '0 24px 40px rgba(0,0,0,0.18)',
           }}>
+            <style jsx>{`
+              .embed-modal-content { padding: 28px; }
+              @media (max-width: 479px) { .embed-modal-content { padding: 16px; } }
+            `}</style>
             {/* Header */}
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '18px' }}>
               <div>
@@ -408,7 +412,12 @@ export default function ToolLayout({
       </div>
 
       {/* ═══ Keyboard Shortcuts Info ═══ */}
-      <div className="keyboard-shortcuts-bar">
+      <div className="keyboard-shortcuts-bar hide-on-mobile">
+        <style jsx>{`
+          @media (max-width: 767px) {
+            .hide-on-mobile { display: none !important; }
+          }
+        `}</style>
         <div className="container">
           <div className="shortcuts-inner">
             <span className="shortcuts-label">⌨️ Shortcuts:</span>

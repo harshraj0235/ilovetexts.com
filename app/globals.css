@@ -121,6 +121,18 @@ button {
   padding: 0 24px;
 }
 
+.footer-container {
+  padding-top: 64px;
+  padding-bottom: 32px;
+}
+
+@media (max-width: 767px) {
+  .footer-container {
+    padding-top: 32px;
+    padding-bottom: 24px;
+  }
+}
+
 /* ── Navigation (Ultra-Minimal) ── */
 .nav-header {
   position: sticky;
@@ -178,6 +190,12 @@ button {
   line-height: 1.1;
 }
 
+@media (max-width: 767px) {
+  .command-title {
+    font-size: 2rem;
+  }
+}
+
 .command-subtitle {
   font-size: 1.1rem;
   color: var(--text-secondary);
@@ -203,6 +221,13 @@ button {
   box-shadow: var(--shadow-md);
   transition: all 0.2s ease;
   font-family: var(--font-sans);
+}
+
+@media (max-width: 767px) {
+  .command-input {
+    padding: 16px 16px 16px 48px;
+    font-size: 1rem;
+  }
 }
 
 .command-input:focus {
@@ -234,6 +259,12 @@ button {
   color: var(--text-secondary);
   font-family: var(--font-mono);
   pointer-events: none;
+}
+
+@media (max-width: 767px) {
+  .command-shortcut {
+    display: none;
+  }
 }
 
 /* ── Search Results / Grid ── */
@@ -352,6 +383,22 @@ button {
 @media (max-width: 899px) {
   .app-main {
     padding-left: 0;
+    padding-top: 16px;
+    padding-bottom: 32px;
+  }
+}
+
+@media (max-width: 479px) {
+  .app-main {
+    padding-left: 0;
+    padding-top: 8px;
+    padding-bottom: 24px;
+  }
+  .app-container {
+    padding: 0 16px;
+  }
+  .container {
+    padding: 0 16px;
   }
 }
 

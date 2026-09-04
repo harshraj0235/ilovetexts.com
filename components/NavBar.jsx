@@ -152,6 +152,15 @@ export default function NavBar({ lang }) {
             display: block !important;
           }
         }
+        @media (max-width: 479px) {
+          .lang-switcher {
+            padding: 4px 18px 4px 24px;
+            font-size: 0.75rem;
+          }
+          .nav-actions {
+            gap: 8px;
+          }
+        }
         .mobile-sidebar-overlay {
           position: fixed;
           inset: 0;
