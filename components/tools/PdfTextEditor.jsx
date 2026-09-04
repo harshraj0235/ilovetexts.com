@@ -85,19 +85,6 @@ export default function PdfTextEditor({ t, lang, initialMode }) {
   // ── Toast ────────────────────────────────────────────
   const [toast, setToast]           = useState(null);
 
-  // ── Auto-open merge panel when initialMode=pages and no file loaded ──
-  useEffect(() => {
-    if (initialMode === 'pages' && pages.length === 0 && !loading) {
-      setShowMergePanel(true);
-    }
-  }, []); // eslint-disable-line react-hooks/exhaustive-deps
-
-  // ── Auto-open export when initialMode=export and file is loaded ──
-  useEffect(() => {
-    if (initialMode === 'export' && pages.length > 0) {
-      setShowExport(true);
-    }
-  }, [pages.length]); // eslint-disable-line react-hooks/exhaustive-deps
   const [showRestoreBanner, setShowRestoreBanner] = useState(false);
   const [savedMeta, setSavedMeta]   = useState(null); // { fileName, savedAt, pageCount }
   const [mergePanelFiles, setMergePanelFiles] = useState([]);
@@ -112,6 +99,20 @@ export default function PdfTextEditor({ t, lang, initialMode }) {
     updateBlock, updateBlockText, addBlock, deleteBlock,
     replaceAllPages, undo, redo, canUndo, canRedo,
   } = useEditorState([]);
+
+  // ── Auto-open merge panel when initialMode=pages and no file loaded ──
+  useEffect(() => {
+    if (initialMode === 'pages' && pages.length === 0 && !loading) {
+      setShowMergePanel(true);
+    }
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+
+  // ── Auto-open export when initialMode=export and file is loaded ──
+  useEffect(() => {
+    if (initialMode === 'export' && pages.length > 0) {
+      setShowExport(true);
+    }
+  }, [pages.length]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const { lastSavedRef, saveStatus, clearSave, loadSave, hasSave } = useAutoSave(
     pages, fileName,
