@@ -39,10 +39,41 @@ export default async function CategoryPage({ params }) {
     { name: category.name, url: buildCanonical(lang, `/${category.id}`) },
   ]);
 
+  // FAQ schema for category — boosts featured snippets
+  const faqItems = [
+    {
+      question: `Are all ${category.name} tools free?`,
+      answer: `Yes. Every tool in the ${category.name} collection is 100% free with no signup, no limits, and no premium tier. All processing happens in your browser.`,
+    },
+    {
+      question: `Do ${category.name} tools work without uploading files?`,
+      answer: `Yes. All ${category.name} tools process your text or files entirely in your browser using JavaScript. Nothing is uploaded to any server.`,
+    },
+    {
+      question: `How many ${category.name} tools are available?`,
+      answer: `There are ${category.tools.length} tools in the ${category.name} category: ${category.tools.slice(0, 5).map(t => t.name).join(', ')}${category.tools.length > 5 ? ` and ${category.tools.length - 5} more` : ''}.`,
+    },
+    {
+      question: `Do I need to create an account to use ${category.name} tools?`,
+      answer: `No. All tools on ilovetexts.com work instantly without any registration, login, or email address. Open the tool and start using it immediately.`,
+    },
+  ];
+
+  const faqSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: faqItems.map(f => ({
+      '@type': 'Question',
+      name: f.question,
+      acceptedAnswer: { '@type': 'Answer', text: f.answer },
+    })),
+  };
+
   return (
     <div className="hub-page">
       <script id="schema-itemlist" type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(itemListSchema) }} />
       <script id="schema-breadcrumbs" type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }} />
+      <script id="schema-faq" type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }} />
 
       {/* Hero Banner */}
       <div className="hub-hero" style={{ '--tool-color': category.color }}>
@@ -111,6 +142,35 @@ export default async function CategoryPage({ params }) {
               </Link>
             );
           })}
+        </div>
+      </div>
+
+      {/* FAQ Section — Visible + Schema */}
+      <div className="container" style={{ maxWidth: 760, margin: '0 auto', padding: '0 24px 64px' }}>
+        <h2 style={{ fontSize: '1.4rem', fontWeight: 800, marginBottom: '20px' }}>
+          Frequently Asked Questions — {category.name}
+        </h2>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+          {faqItems.map((faq, i) => (
+            <details key={i} style={{
+              background: 'var(--bg-section)', border: '1px solid var(--border-light)',
+              borderRadius: 'var(--radius-md)', padding: '0',
+              overflow: 'hidden',
+            }}>
+              <summary style={{
+                padding: '14px 18px', fontWeight: 600, fontSize: '0.92rem',
+                cursor: 'pointer', listStyle: 'none', display: 'flex',
+                justifyContent: 'space-between', alignItems: 'center',
+                color: 'var(--text-primary)',
+              }}>
+                {faq.question}
+                <span style={{ fontSize: '1.1rem', flexShrink: 0, marginLeft: 12, opacity: 0.5 }}>+</span>
+              </summary>
+              <div style={{ padding: '0 18px 14px', color: 'var(--text-secondary)', fontSize: '0.88rem', lineHeight: 1.7 }}>
+                {faq.answer}
+              </div>
+            </details>
+          ))}
         </div>
       </div>
     </div>

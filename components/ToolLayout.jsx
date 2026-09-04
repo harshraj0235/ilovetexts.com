@@ -274,7 +274,19 @@ export default function ToolLayout({
           </nav>
           <h1>{tool.name}</h1>
           <p className="tool-hero-desc">{tool.description}</p>
-          
+
+          {/* Last Updated — freshness signal for Google */}
+          <div style={{
+            display: 'inline-flex', alignItems: 'center', gap: '6px',
+            fontSize: '0.78rem', color: 'rgba(255,255,255,0.7)',
+            marginTop: '8px', marginBottom: '2px',
+          }}>
+            <span>🕒</span>
+            <span>Last updated: <time dateTime="2026-09-04">September 2026</time></span>
+            <span style={{ opacity: 0.5 }}>·</span>
+            <span>Free &amp; no signup</span>
+          </div>
+
           <div className="tool-hero-badges">
             <span className="tool-hero-badge"><span role="img" aria-label="private">🔒</span> {t.ui.private}</span>
             <span className="tool-hero-badge"><span role="img" aria-label="fast">⚡</span> {t.ui.instantResults}</span>

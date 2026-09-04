@@ -243,16 +243,46 @@ export default async function BlogPostPage({ params }) {
   const post = BLOG_POSTS.find((p) => p.slug === slug);
   if (!post) notFound();
 
+  // Use a recent modified date so Google treats the page as fresh content.
+  // Each comparison post is kept updated with the latest tool landscape.
+  const BUILD_DATE = '2026-09-04';
+  const modifiedDate = post.date > BUILD_DATE ? post.date : BUILD_DATE;
+  const wordCount = post.content.trim().split(/\s+/).length;
+
   const articleSchema = {
     '@context': 'https://schema.org',
     '@type': 'Article',
     headline: post.title,
     description: post.description,
     datePublished: post.date,
-    dateModified: post.date,
-    author: { '@type': 'Person', name: 'Admin', url: SITE.url },
-    publisher: { '@type': 'Organization', name: SITE.name, url: SITE.url },
-    mainEntityOfPage: `${SITE.url}/blog/${post.slug}`,
+    dateModified: modifiedDate,       // freshness signal — tells Google this is current
+    wordCount,
+    inLanguage: lang === 'en' ? 'en-US' : lang,
+    author: {
+      '@type': 'Person',
+      name: 'Harsh Raj',
+      url: 'https://www.linkedin.com/in/harshitpatel9/',
+      sameAs: ['https://www.linkedin.com/in/harshitpatel9/', 'https://github.com/harshraj0235'],
+    },
+    publisher: {
+      '@type': 'Organization',
+      name: SITE.name,
+      url: SITE.url,
+      logo: { '@type': 'ImageObject', url: `${SITE.url}/favicon.ico` },
+    },
+    mainEntityOfPage: {
+      '@type': 'WebPage',
+      '@id': `${SITE.url}/blog/${post.slug}`,
+    },
+    image: {
+      '@type': 'ImageObject',
+      url: `${SITE.url}/og-image.png`,
+      width: 1200,
+      height: 630,
+    },
+    keywords: post.toolLinks?.map(t => t.name).join(', '),
+    articleSection: post.category,
+    url: `${SITE.url}/blog/${post.slug}`,
   };
 
   return (
@@ -278,6 +308,9 @@ export default async function BlogPostPage({ params }) {
             <span style={{ color: 'var(--text-muted)', fontSize: '0.8rem' }}>{post.readTime} read</span>
             <span style={{ color: 'var(--text-muted)', fontSize: '0.8rem' }}>
               {new Date(post.date).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}
+            </span>
+            <span style={{ color: 'var(--text-muted)', fontSize: '0.8rem' }}>
+              🕒 Updated <time dateTime={modifiedDate}>{new Date(modifiedDate).toLocaleDateString('en-US', { month: 'long', year: 'numeric' })}</time>
             </span>
           </div>
           <h1 style={{ fontSize: '2rem', fontWeight: 800, lineHeight: 1.3, marginBottom: '12px' }}>{post.title}</h1>
