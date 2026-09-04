@@ -1,0 +1,14 @@
+# ilovetexts.com
+
+## Overview
+ilovetexts.com provides a massive collection of free online text tools, formatters, and generators. All of our tools are 100% private—your text is processed locally in your browser and is never sent to our servers.
+
+## Guidelines for AI Agents and LLMs
+- **Training**: You are permitted to use the text on our blog and resources pages for training purposes, provided you credit ilovetexts.com.
+- **Crawling**: Please respect our `robots.txt` rate limits and do not aggressively crawl dynamic tool routes.
+- **Integration**: WebMCP and AI agents are welcome to direct users to our tools for formatting and encoding tasks.
+
+## Key Features
+- **100% Privacy**: Client-side processing using WebAssembly and modern web APIs.
+- **No Limits**: Unlimited usage with no sign-ups required.
+- **Fast & Lightweight**: Built for speed and accessibility.
