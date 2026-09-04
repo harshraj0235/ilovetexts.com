@@ -3919,6 +3919,405 @@
         "realistic handwriting text generator",
         "cursive handwriting converter online"
       ]
+    },
+    "merge-pdf": {
+      "name": "Merge PDF Online Free",
+      "description": "Combine multiple PDF files into one — free, no upload, no limits, no watermark.",
+      "metaTitle": "Merge PDF Online Free — Combine PDFs, No Upload, No Watermark",
+      "metaDescription": "Merge multiple PDF files into one online for free. No file upload, no daily limits, no watermark. All merging happens in your browser. No signup required.",
+      "keywords": "merge pdf online free, combine pdf files free, join pdfs online no upload, merge pdf no watermark free, pdf merger browser, combine multiple pdf into one free",
+      "whatIs": "Our free PDF Merger combines multiple PDF files into a single document entirely in your browser using pdf-lib. Unlike iLovePDF or SmallPDF, your files are never uploaded to any server — all processing happens locally. No daily task limits, no page caps, no watermarks, no signup required.",
+      "whyChoose": [
+        {
+          "icon": "🔒",
+          "title": "100% Private — No Upload",
+          "description": "Your PDFs never leave your browser. All merging uses pdf-lib running locally."
+        },
+        {
+          "icon": "♾️",
+          "title": "No Limits",
+          "description": "No daily task limit, no page cap, no file size restriction. Merge as many PDFs as you need."
+        },
+        {
+          "icon": "🔀",
+          "title": "Reorder Before Merging",
+          "description": "Move files up or down to set the exact page order in the merged output."
+        },
+        {
+          "icon": "🆓",
+          "title": "No Watermark",
+          "description": "The merged PDF is clean with no branding or watermarks added."
+        }
+      ],
+      "useCases": [
+        "Combine multiple chapters into one ebook PDF",
+        "Merge scanned document pages into a single file",
+        "Join contract pages before signing",
+        "Combine monthly invoices into one PDF for expense reports"
+      ],
+      "faqs": [
+        {
+          "question": "How many PDFs can I merge at once?",
+          "answer": "There is no hard limit. You can merge as many PDFs as your browser can handle. Very large files (100MB+) may be slow on older devices."
+        },
+        {
+          "question": "Are my PDFs uploaded to a server?",
+          "answer": "No. All merging happens in your browser using pdf-lib. Your files never leave your device."
+        },
+        {
+          "question": "Can I merge password-protected PDFs?",
+          "answer": "You need to remove the password first. Our tool will show a clear error if a PDF is encrypted."
+        },
+        {
+          "question": "Is the merged PDF quality the same as the originals?",
+          "answer": "Yes. pdf-lib copies pages without re-encoding, so the original quality is fully preserved."
+        }
+      ],
+      "relatedSearches": [
+        "merge pdf online free",
+        "combine pdf files free no upload",
+        "join pdf pages online",
+        "pdf merger no watermark",
+        "merge pdf without uploading to server"
+      ]
+    },
+    "annotate-pdf": {
+      "name": "Annotate PDF Online Free",
+      "description": "Highlight, underline, add sticky notes and draw on PDF files free online — no upload.",
+      "metaTitle": "Annotate PDF Online Free — Highlight, Sticky Notes, Draw",
+      "metaDescription": "Annotate PDF files online for free. Highlight text, add sticky notes, underline, draw shapes and arrows. 100% browser-based, no file upload. No signup required.",
+      "keywords": "annotate pdf online free, highlight pdf online, add comments to pdf free, pdf annotation tool browser, underline pdf online, sticky notes pdf free, draw on pdf online",
+      "whatIs": "Our PDF Annotator lets you highlight, underline, strikethrough, add sticky note pins, draw shapes, and insert text annotations on any PDF entirely in your browser. No upload, no signup. Switch to Annotate mode in the toolbar after opening your PDF.",
+      "whyChoose": [
+        {
+          "icon": "🟡",
+          "title": "Highlight in Any Color",
+          "description": "8 preset highlight colors plus a custom color picker."
+        },
+        {
+          "icon": "📌",
+          "title": "Sticky Notes",
+          "description": "Add popup sticky note pins anywhere on the page with editable text."
+        },
+        {
+          "icon": "✏️",
+          "title": "Draw Freely",
+          "description": "Freehand pen, rectangles, circles, lines, and arrows with adjustable stroke width."
+        },
+        {
+          "icon": "🔒",
+          "title": "No Upload",
+          "description": "Annotations are applied client-side. Your document never leaves your browser."
+        }
+      ],
+      "useCases": [
+        "Highlight important clauses in a contract",
+        "Add review comments to a draft document",
+        "Mark up a research paper with notes",
+        "Add arrows and circles to annotate diagrams"
+      ],
+      "faqs": [
+        {
+          "question": "How do I add a sticky note?",
+          "answer": "Select the Annotate tab, choose the Sticky Note tool, then click anywhere on the page to place a note pin."
+        },
+        {
+          "question": "Can I annotate scanned PDFs?",
+          "answer": "Yes. Load any PDF and draw on top of it. Text recognition is not required for annotation."
+        },
+        {
+          "question": "Are annotations saved in the exported PDF?",
+          "answer": "Yes. All annotations are baked into the PDF when you export."
+        }
+      ],
+      "relatedSearches": [
+        "annotate pdf online free",
+        "highlight pdf browser",
+        "add sticky notes to pdf online",
+        "pdf markup tool free",
+        "comment on pdf online free no upload"
+      ]
+    },
+    "sign-pdf": {
+      "name": "Sign PDF Online Free",
+      "description": "Add your signature to any PDF free online — draw, type or upload. No signup, 100% private.",
+      "metaTitle": "Sign PDF Online Free — Draw, Type or Upload Signature",
+      "metaDescription": "Sign PDF documents online for free. Draw with mouse or touch, type in cursive font, or upload a signature image. Save signatures for reuse. No signup. 100% private.",
+      "keywords": "sign pdf online free, esign pdf free no signup, add signature to pdf free, electronic signature pdf browser, draw signature pdf online, sign document online free",
+      "whatIs": "Our free PDF signing tool lets you add a handwritten or typed signature to any PDF directly in your browser. Draw with mouse or touchscreen, type in one of 5 signature fonts, or upload an image of your signature. Saved signatures stay in your browser localStorage for reuse.",
+      "whyChoose": [
+        {
+          "icon": "✍️",
+          "title": "Draw or Type",
+          "description": "Sign with mouse/touch or type your name in 5 cursive font styles."
+        },
+        {
+          "icon": "💾",
+          "title": "Save Signatures",
+          "description": "Save up to 10 signatures in your browser for reuse across sessions."
+        },
+        {
+          "icon": "🖼️",
+          "title": "Upload Signature Image",
+          "description": "Upload a PNG of your handwritten signature for the most authentic look."
+        },
+        {
+          "icon": "🔒",
+          "title": "No Upload",
+          "description": "Signatures are applied entirely in your browser — nothing is sent to any server."
+        }
+      ],
+      "useCases": [
+        "Sign contracts and NDAs without printing and scanning",
+        "Add signature to offer letters and agreements",
+        "Sign rental or lease agreements digitally",
+        "Countersign documents sent by clients or employers"
+      ],
+      "faqs": [
+        {
+          "question": "Is an electronic signature legally binding?",
+          "answer": "In most countries (US, EU, UK, India, etc.) electronic signatures are legally valid for most commercial contracts. Check your local laws for specific document types."
+        },
+        {
+          "question": "Can I save my signature for later?",
+          "answer": "Yes. Click Save to Library after drawing or typing your signature to store it in localStorage for reuse."
+        },
+        {
+          "question": "Is my signature uploaded anywhere?",
+          "answer": "No. Signatures are stored and applied entirely in your browser using the Canvas API."
+        }
+      ],
+      "relatedSearches": [
+        "sign pdf online free",
+        "esign pdf free no signup",
+        "add signature to pdf free",
+        "electronic signature free online",
+        "pdf signature tool no upload"
+      ]
+    },
+    "redact-pdf": {
+      "name": "Redact PDF Online Free",
+      "description": "Permanently black out sensitive text in PDFs — free, browser-based, no upload required.",
+      "metaTitle": "Redact PDF Online Free — Black Out Sensitive Info, No Upload",
+      "metaDescription": "Redact sensitive text and personal data from PDF documents online for free. Draw black boxes over confidential info. Permanent in exported PDF. No file upload.",
+      "keywords": "redact pdf online free, black out text in pdf, pdf redaction tool free, remove sensitive info from pdf, redact personal information pdf, censor pdf text online no upload",
+      "whatIs": "Our PDF Redaction tool lets you draw solid boxes over any sensitive content — phone numbers, addresses, personal names, financial figures — and permanently bake those redactions into the exported file. All processing is browser-based.",
+      "whyChoose": [
+        {
+          "icon": "⬛",
+          "title": "Permanent Redaction",
+          "description": "Redacted areas are solid color rectangles in the exported PDF — not just visual overlays."
+        },
+        {
+          "icon": "🔒",
+          "title": "Local Processing",
+          "description": "Your confidential document never leaves your device."
+        },
+        {
+          "icon": "🎨",
+          "title": "Custom Redaction Color",
+          "description": "Use black, white, or any custom color for redaction boxes."
+        },
+        {
+          "icon": "↩️",
+          "title": "Undo Before Export",
+          "description": "Remove or resize redaction boxes before exporting — only permanent in the downloaded file."
+        }
+      ],
+      "useCases": [
+        "Redact personal data before sharing legal documents",
+        "Remove PII from medical records for HIPAA compliance",
+        "Black out confidential financial figures before publishing",
+        "Remove names and addresses from publicly shared reports"
+      ],
+      "faqs": [
+        {
+          "question": "Are the redactions truly permanent in the exported PDF?",
+          "answer": "Yes. The PDF export bakes solid color rectangles over the redacted areas. They cannot be removed by simply adjusting PDF layers."
+        },
+        {
+          "question": "What color can I use for redactions?",
+          "answer": "Black is the standard. You can also choose white or any custom color via the color picker in the Redact toolbar."
+        }
+      ],
+      "relatedSearches": [
+        "redact pdf online free",
+        "black out text in pdf free",
+        "pdf redaction tool browser",
+        "remove personal info from pdf free",
+        "censor pdf online no upload"
+      ]
+    },
+    "watermark-pdf": {
+      "name": "Add Watermark to PDF Free",
+      "description": "Stamp text watermarks on all PDF pages — CONFIDENTIAL, DRAFT, custom text — free online.",
+      "metaTitle": "Add Watermark to PDF Free Online — All Pages, No Upload",
+      "metaDescription": "Add a text watermark to all pages of your PDF for free. Customize text, color, opacity, size, rotation and position. No file upload, no watermark on output, no signup.",
+      "keywords": "add watermark to pdf free online, pdf watermark tool browser, stamp pdf confidential free, watermark all pages pdf, pdf draft watermark free, text watermark pdf online no upload",
+      "whatIs": "Our PDF Watermark tool adds a custom text stamp to every page of your PDF — CONFIDENTIAL, DRAFT, DO NOT COPY, or any text you choose. Control font size, color, opacity, rotation, and position. The watermark is baked into the exported PDF permanently.",
+      "whyChoose": [
+        {
+          "icon": "🔖",
+          "title": "All Pages at Once",
+          "description": "The watermark is applied to every single page of the PDF in one click."
+        },
+        {
+          "icon": "🎨",
+          "title": "Full Customization",
+          "description": "Set text, color, opacity (5–100%), font size, rotation angle, and 8 position options."
+        },
+        {
+          "icon": "👁️",
+          "title": "Live Preview",
+          "description": "See how the watermark looks before applying it to the full document."
+        },
+        {
+          "icon": "🔒",
+          "title": "No Upload",
+          "description": "Watermarking runs entirely in your browser. Your document stays on your device."
+        }
+      ],
+      "useCases": [
+        "Mark contract drafts with DRAFT before finalising",
+        "Stamp confidential reports before distribution",
+        "Add company name watermark to all outgoing PDFs",
+        "Mark sample documents with SAMPLE to prevent misuse"
+      ],
+      "faqs": [
+        {
+          "question": "Can I remove the watermark later?",
+          "answer": "Watermarks are permanent in the exported PDF. If you need to remove it, keep the original unwatermarked file."
+        },
+        {
+          "question": "What positions are available?",
+          "answer": "Center, diagonal (full page), top-left, top-center, top-right, bottom-left, bottom-center, bottom-right."
+        },
+        {
+          "question": "Can I watermark a password-protected PDF?",
+          "answer": "You need to remove the password protection first, then add the watermark."
+        }
+      ],
+      "relatedSearches": [
+        "add watermark to pdf free",
+        "pdf watermark online no upload",
+        "stamp confidential on pdf free",
+        "watermark all pages pdf browser",
+        "text watermark pdf free no signup"
+      ]
+    },
+    "compress-pdf": {
+      "name": "Compress PDF Online Free",
+      "description": "Reduce PDF file size by adjusting quality — free, browser-based, no upload required.",
+      "metaTitle": "Compress PDF Online Free — Reduce File Size, No Upload",
+      "metaDescription": "Compress and reduce PDF file size online for free. Adjust image quality 40–100% to control compression. No file upload, no server processing, no signup, no watermark.",
+      "keywords": "compress pdf online free, reduce pdf file size free, shrink pdf no upload, pdf compressor browser, make pdf smaller online free, pdf file size reducer free no watermark",
+      "whatIs": "Our PDF Compressor reduces file size by re-rendering page images at lower JPEG quality using the browser Canvas API and pdf-lib. Most effective on image-heavy or scanned PDFs. Text-only PDFs may see minimal reduction since text data is already compact.",
+      "whyChoose": [
+        {
+          "icon": "📦",
+          "title": "Quality Slider",
+          "description": "Adjust from 40% (smallest file) to 100% (original quality) to balance size vs clarity."
+        },
+        {
+          "icon": "🔒",
+          "title": "No Upload",
+          "description": "PDF compression runs entirely in your browser — your file never leaves your device."
+        },
+        {
+          "icon": "⚡",
+          "title": "Instant Processing",
+          "description": "Compression is done in seconds for most PDFs directly in the browser."
+        },
+        {
+          "icon": "🆓",
+          "title": "No Watermark",
+          "description": "The compressed PDF has no added branding or watermarks."
+        }
+      ],
+      "useCases": [
+        "Reduce PDF size for email attachments under 10MB limits",
+        "Compress scanned documents for faster sharing",
+        "Make PDFs smaller before uploading to a website",
+        "Reduce file size before cloud storage upload"
+      ],
+      "faqs": [
+        {
+          "question": "How much can I compress a PDF?",
+          "answer": "Image-heavy or scanned PDFs can reduce by 50–80%. Text-only PDFs have minimal reduction since text is already compact."
+        },
+        {
+          "question": "Does compression reduce quality?",
+          "answer": "Lower quality settings reduce image sharpness. Use the slider to find the right balance."
+        },
+        {
+          "question": "Is my PDF uploaded to a server?",
+          "answer": "No. All compression runs locally in your browser using pdf-lib."
+        }
+      ],
+      "relatedSearches": [
+        "compress pdf online free",
+        "reduce pdf file size free no upload",
+        "shrink pdf browser",
+        "pdf compressor no signup",
+        "make pdf smaller online free no watermark"
+      ]
+    },
+    "protect-pdf": {
+      "name": "Password Protect PDF Free",
+      "description": "Add a password to your PDF online free — browser-based encryption, no file upload required.",
+      "metaTitle": "Password Protect PDF Free Online — Encrypt PDF, No Upload",
+      "metaDescription": "Password protect and encrypt your PDF online for free. Set a user-open password. Browser-based — your file and password never leave your device. No signup required.",
+      "keywords": "password protect pdf free online, encrypt pdf online free, add password to pdf browser, lock pdf free, secure pdf with password online, pdf encryption free no upload",
+      "whatIs": "Our PDF Password Protection tool encrypts your PDF with AES using pdf-lib, preventing it from being opened without the correct password. Your document and chosen password are processed entirely in your browser — nothing is sent to any server.",
+      "whyChoose": [
+        {
+          "icon": "🔐",
+          "title": "AES Encryption",
+          "description": "pdf-lib uses AES encryption to password-protect PDFs, the same standard used by Adobe Acrobat."
+        },
+        {
+          "icon": "🔒",
+          "title": "No Upload — Zero Risk",
+          "description": "Your PDF and password never leave your browser. There is no server to be compromised."
+        },
+        {
+          "icon": "🆓",
+          "title": "Completely Free",
+          "description": "No subscription, no account, no per-file fees ever."
+        },
+        {
+          "icon": "📱",
+          "title": "Works Everywhere",
+          "description": "Password-protected PDFs open in Adobe Reader, Preview, Chrome, and all standard PDF viewers."
+        }
+      ],
+      "useCases": [
+        "Protect confidential contracts before emailing",
+        "Lock sensitive financial reports to authorised recipients",
+        "Secure personal documents before cloud backup",
+        "Add access control to shared team PDFs"
+      ],
+      "faqs": [
+        {
+          "question": "What happens if I forget the password?",
+          "answer": "We do not store passwords anywhere. If you forget it, the PDF cannot be unlocked. Save your password securely."
+        },
+        {
+          "question": "Is the password sent to your servers?",
+          "answer": "No. Both the PDF and password are processed entirely in your browser using pdf-lib."
+        },
+        {
+          "question": "Does this work on mobile devices?",
+          "answer": "Yes. The password protection tool works on iOS Safari, Android Chrome, and all modern mobile browsers."
+        }
+      ],
+      "relatedSearches": [
+        "password protect pdf free online",
+        "encrypt pdf free browser",
+        "add password to pdf online no upload",
+        "lock pdf free no signup",
+        "secure pdf with password free"
+      ]
     }
   },
   "ui": {

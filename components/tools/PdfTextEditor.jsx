@@ -35,7 +35,7 @@ const isPdf   = (n) => n?.toLowerCase().endsWith('.pdf');
 const isImage = (n) => /\.(jpe?g|png|webp|gif|bmp)$/i.test(n || '');
 const isText  = (n) => TEXT_EXT.includes(n?.split('.').pop()?.toLowerCase());
 
-export default function PdfTextEditor({ t, lang }) {
+export default function PdfTextEditor({ t, lang, initialMode }) {
   // ── File ────────────────────────────────────────────
   const [fileName, setFileName]     = useState(null);
   const [loading,  setLoading]      = useState(false);
@@ -43,7 +43,7 @@ export default function PdfTextEditor({ t, lang }) {
   const [ocrProgress,setOcrProgress]= useState(null);
 
   // ── Editor mode ─────────────────────────────────────
-  const [mode, setMode]             = useState(EDITOR_MODES.TEXT);
+  const [mode, setMode] = useState(initialMode || EDITOR_MODES.TEXT);
 
   // ── Active annotation tool ───────────────────────────
   const [activeTool, setActiveTool] = useState(ANNOTATION_TOOLS.HIGHLIGHT);
@@ -85,9 +85,22 @@ export default function PdfTextEditor({ t, lang }) {
   // ── Toast ────────────────────────────────────────────
   const [toast, setToast]           = useState(null);
 
-  // ── Restore session banner ────────────────────────────
+  // ── Auto-open merge panel when initialMode=pages and no file loaded ──
+  useEffect(() => {
+    if (initialMode === 'pages' && pages.length === 0 && !loading) {
+      setShowMergePanel(true);
+    }
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+
+  // ── Auto-open export when initialMode=export and file is loaded ──
+  useEffect(() => {
+    if (initialMode === 'export' && pages.length > 0) {
+      setShowExport(true);
+    }
+  }, [pages.length]); // eslint-disable-line react-hooks/exhaustive-deps
   const [showRestoreBanner, setShowRestoreBanner] = useState(false);
   const [savedMeta, setSavedMeta]   = useState(null); // { fileName, savedAt, pageCount }
+  const [mergePanelFiles, setMergePanelFiles] = useState([]);
 
   const containerRef = useRef(null);
   const imagePickerRef = useRef(null);
@@ -662,7 +675,14 @@ export default function PdfTextEditor({ t, lang }) {
           </div>
         )}
 
-        <UploadZone onFile={handleFile} onMergeFiles={(files) => { setShowMergePanel(true); }} loading={false} />
+        <UploadZone 
+          onFile={handleFile} 
+          onMergeFiles={(files) => { 
+            setMergePanelFiles(files); 
+            setShowMergePanel(true); 
+          }} 
+          loading={false} 
+        />
 
         {/* Feature grid */}
         <div style={{ display:'grid', gridTemplateColumns:'repeat(auto-fit,minmax(180px,1fr))', gap:14, marginTop:28 }}>
@@ -888,12 +908,18 @@ export default function PdfTextEditor({ t, lang }) {
       {/* Merge PDF modal */}
       {showMergePanel && (
         <PdfMergePanel
+          initialFiles={mergePanelFiles}
+          autoStart={mergePanelFiles.length > 0}
           onMerged={(mergedFile) => {
             setShowMergePanel(false); // close modal first
+            setMergePanelFiles([]);
             handleFile(mergedFile);   // then start loading
             return Promise.resolve(); // satisfy await in PdfMergePanel
           }}
-          onClose={() => setShowMergePanel(false)}
+          onClose={() => {
+            setShowMergePanel(false);
+            setMergePanelFiles([]);
+          }}
         />
       )}
 

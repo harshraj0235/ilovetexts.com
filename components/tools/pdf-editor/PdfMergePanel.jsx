@@ -21,55 +21,18 @@
 //  5. Encrypted PDF detection: if pdf-lib throws
 //     "encrypted" we show a clear explanation.
 // ═══════════════════════════════════════════════════════
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useEffect, useRef } from 'react';
 
-export default function PdfMergePanel({ onMerged, onClose }) {
+export default function PdfMergePanel({ initialFiles = [], autoStart = false, onMerged, onClose }) {
   // Store File objects — never pre-read the buffers
   const [files,    setFiles]    = useState([]); // [{name, file, pageCount}]
   const [merging,  setMerging]  = useState(false);
   const [progress, setProgress] = useState('');
   const [error,    setError]    = useState('');
 
-  // Add files: read buffer only for page-count preview, keep the File
-  const addFiles = useCallback(async (fileList) => {
-    const pdfs = Array.from(fileList).filter(f => f.name.toLowerCase().endsWith('.pdf'));
-    if (!pdfs.length) return;
-
-    const loaded = await Promise.all(pdfs.map(async (file) => {
-      let pageCount = '?';
-      try {
-        // Use a fresh ArrayBuffer slice just for pdfjs page count — don't store it
-        const ab = await file.arrayBuffer();
-        const pdfjs = await import('pdfjs-dist');
-        const ver = pdfjs.version;
-        pdfjs.GlobalWorkerOptions.workerSrc =
-          `https://unpkg.com/pdfjs-dist@${ver}/build/pdf.worker.min.mjs`;
-        const doc = await pdfjs.getDocument({ data: new Uint8Array(ab) }).promise;
-        pageCount = doc.numPages;
-        doc.destroy();
-      } catch { /* page count stays '?' */ }
-
-      return { name: file.name, file, pageCount };
-    }));
-
-    setFiles(prev => [...prev, ...loaded]);
-    setError('');
-  }, []);
-
-  const removeFile = (idx) => setFiles(prev => prev.filter((_, i) => i !== idx));
-
-  const moveFile = (idx, dir) => {
-    setFiles(prev => {
-      const next = [...prev];
-      const target = idx + dir;
-      if (target < 0 || target >= next.length) return prev;
-      [next[idx], next[target]] = [next[target], next[idx]];
-      return next;
-    });
-  };
-
-  const handleMerge = useCallback(async () => {
-    if (files.length < 2) { setError('Add at least 2 PDFs to merge.'); return; }
+  // Auto-start merge if initialFiles are provided and autoStart is true
+  const handleMerge = useCallback(async (filesToMerge = files) => {
+    if (filesToMerge.length < 2) { setError('Add at least 2 PDFs to merge.'); return; }
     setMerging(true);
     setError('');
     setProgress('Initialising…');
@@ -78,9 +41,9 @@ export default function PdfMergePanel({ onMerged, onClose }) {
       const { PDFDocument } = await import('pdf-lib');
       const merged = await PDFDocument.create();
 
-      for (let i = 0; i < files.length; i++) {
-        const { name, file } = files[i];
-        setProgress(`Reading ${name} (${i + 1}/${files.length})…`);
+      for (let i = 0; i < filesToMerge.length; i++) {
+        const { name, file } = filesToMerge[i];
+        setProgress(`Reading ${name} (${i + 1}/${filesToMerge.length})…`);
 
         // Fresh read at merge time — guaranteed non-detached
         const ab = await file.arrayBuffer();
@@ -132,6 +95,73 @@ export default function PdfMergePanel({ onMerged, onClose }) {
       setProgress('');
     }
   }, [files, onMerged, onClose]);
+
+  // Handle initialization on mount
+  const initialized = useRef(false);
+  useEffect(() => {
+    if (!initialized.current && initialFiles && initialFiles.length > 0) {
+      initialized.current = true;
+      const loaded = initialFiles.map(file => ({ name: file.name, file, pageCount: '?' }));
+      setFiles(loaded);
+      
+      // Compute page counts in background without blocking
+      Promise.all(initialFiles.map(async (file, idx) => {
+        try {
+          const ab = await file.arrayBuffer();
+          const pdfjs = await import('pdfjs-dist');
+          const ver = pdfjs.version;
+          pdfjs.GlobalWorkerOptions.workerSrc = `https://unpkg.com/pdfjs-dist@${ver}/build/pdf.worker.min.mjs`;
+          const doc = await pdfjs.getDocument({ data: new Uint8Array(ab) }).promise;
+          const count = doc.numPages;
+          doc.destroy();
+          setFiles(prev => {
+            const next = [...prev];
+            if (next[idx]) next[idx].pageCount = count;
+            return next;
+          });
+        } catch { /* ignore */ }
+      }));
+
+      if (autoStart && loaded.length >= 2) {
+        handleMerge(loaded);
+      }
+    }
+  }, [initialFiles, autoStart, handleMerge]);
+
+  // Add files: read buffer only for page-count preview, keep the File
+  const addFiles = useCallback(async (fileList) => {
+    const pdfs = Array.from(fileList).filter(f => f.name.toLowerCase().endsWith('.pdf'));
+    if (!pdfs.length) return;
+
+    const loaded = await Promise.all(pdfs.map(async (file) => {
+      let pageCount = '?';
+      try {
+        const ab = await file.arrayBuffer();
+        const pdfjs = await import('pdfjs-dist');
+        const ver = pdfjs.version;
+        pdfjs.GlobalWorkerOptions.workerSrc = `https://unpkg.com/pdfjs-dist@${ver}/build/pdf.worker.min.mjs`;
+        const doc = await pdfjs.getDocument({ data: new Uint8Array(ab) }).promise;
+        pageCount = doc.numPages;
+        doc.destroy();
+      } catch { /* page count stays '?' */ }
+      return { name: file.name, file, pageCount };
+    }));
+
+    setFiles(prev => [...prev, ...loaded]);
+    setError('');
+  }, []);
+
+  const removeFile = (idx) => setFiles(prev => prev.filter((_, i) => i !== idx));
+
+  const moveFile = (idx, dir) => {
+    setFiles(prev => {
+      const next = [...prev];
+      const target = idx + dir;
+      if (target < 0 || target >= next.length) return prev;
+      [next[idx], next[target]] = [next[target], next[idx]];
+      return next;
+    });
+  };
 
   const totalPages = files.reduce(
     (s, f) => s + (typeof f.pageCount === 'number' ? f.pageCount : 0),

@@ -276,6 +276,20 @@ export default async function ToolPage({ params }) {
           <ExcelEditor t={t} lang={lang} />
         ) : toolData.slug === 'pdf-text-editor' ? (
           <PdfTextEditor t={t} lang={lang} />
+        ) : toolData.slug === 'merge-pdf' ? (
+          <PdfTextEditor t={t} lang={lang} initialMode="pages" />
+        ) : toolData.slug === 'annotate-pdf' ? (
+          <PdfTextEditor t={t} lang={lang} initialMode="annotate" />
+        ) : toolData.slug === 'sign-pdf' ? (
+          <PdfTextEditor t={t} lang={lang} initialMode="sign" />
+        ) : toolData.slug === 'redact-pdf' ? (
+          <PdfTextEditor t={t} lang={lang} initialMode="redact" />
+        ) : toolData.slug === 'watermark-pdf' ? (
+          <PdfTextEditor t={t} lang={lang} initialMode="watermark" />
+        ) : toolData.slug === 'compress-pdf' ? (
+          <PdfTextEditor t={t} lang={lang} initialMode="export" />
+        ) : toolData.slug === 'protect-pdf' ? (
+          <PdfTextEditor t={t} lang={lang} initialMode="export" />
         ) : toolData.slug === 'image-text-editor' ? (
           <ImageTextEditor t={t} lang={lang} />
         ) : toolData.slug === 'word-document-editor' ? (
