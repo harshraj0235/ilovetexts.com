@@ -133,7 +133,7 @@ const nextConfig = {
       },
       // Handle localized old category URLs
       {
-        source: '/:lang/word-counter/:slug*',
+        source: '/:lang(hi|pt|es|de|id)/word-counter/:slug*',
         destination: '/:lang/word-counting-tools/:slug*',
         permanent: true,
       },
@@ -144,7 +144,7 @@ const nextConfig = {
         permanent: true,
       },
       {
-        source: '/:lang/word-counting-tools/word-counting-tools',
+        source: '/:lang(hi|pt|es|de|id)/word-counting-tools/word-counting-tools',
         destination: '/:lang/word-counting-tools/word-counter',
         permanent: true,
       }
