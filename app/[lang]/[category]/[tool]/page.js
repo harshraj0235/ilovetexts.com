@@ -68,6 +68,8 @@ import AgeCalculator from '@/components/tools/AgeCalculator';
 import SalarySlipGenerator from '@/components/tools/SalarySlipGenerator';
 import RtiApplicationGenerator from '@/components/tools/RtiApplicationGenerator';
 import GstInvoiceGenerator from '@/components/tools/GstInvoiceGenerator';
+import GovDocTranslator from '@/components/tools/GovDocTranslator';
+import GovDocExtractor from '@/components/tools/GovDocExtractor';
 import BackgroundRemover from '@/components/tools/BackgroundRemover';
 import ResumeBuilder from '@/components/tools/ResumeBuilder';
 import PdfToWord from '@/components/tools/PdfToWord';
@@ -379,6 +381,10 @@ export default async function ToolPage({ params }) {
           <RtiApplicationGenerator t={t} lang={lang} />
         ) : toolData.slug === 'gst-invoice-generator' ? (
           <GstInvoiceGenerator t={t} lang={lang} />
+        ) : toolData.slug === 'gov-doc-translator' ? (
+          <GovDocTranslator t={t} lang={lang} />
+        ) : toolData.slug === 'gov-doc-extractor' ? (
+          <GovDocExtractor t={t} lang={lang} />
         ) : toolData.slug === 'remove-background' ? (
           <BackgroundRemover t={t} lang={lang} />
         ) : toolData.slug === 'resume-builder' ? (

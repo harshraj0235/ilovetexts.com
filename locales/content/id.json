@@ -4418,6 +4418,132 @@
         "no watermark meme maker",
         "create meme online"
       ]
+    },
+    "gov-doc-translator": {
+      "name": "Penerjemah Dokumen Pemerintah — PDF ke Hindi Gratis",
+      "description": "Terjemahkan PDF pemerintah atau gambar yang dipindai ke Hindi, Marathi, Tamil dan 13 bahasa lainnya. OCR termasuk.",
+      "metaTitle": "Government Document Translator Free — PDF to Hindi Marathi Tamil Telugu OCR",
+      "metaDescription": "Free government document translator — translate any PDF or scanned image to Hindi, Marathi, Tamil, Telugu and 13 more languages. OCR included. Plain Hindi explanation. 100% private.",
+      "keywords": "penerjemah dokumen pemerintah Hindi gratis, terjemahkan PDF Hindi gratis, OCR PDF terjemahan bahasa India",
+      "whatIs": "Our Government Document Translator is the only free, completely private tool that can translate any government PDF, scanned image, or text document to 16 languages — including all major Indian languages (Hindi, Marathi, Bengali, Tamil, Telugu, Gujarati, Kannada, Malayalam, Punjabi, Odia, Urdu) — entirely in your browser. The tool first extracts text from your document (using PDF.js for text PDFs and Tesseract.js OCR for scanned images), then translates it to your chosen language, and additionally provides a plain Hindi simplification so common citizens can understand complex government language. All processing is 100% private — your documents never leave your device.",
+      "whyChoose": [
+        {
+          "icon": "🇮🇳",
+          "title": "16 Indian & World Languages",
+          "description": "Hindi, Marathi, Bengali, Tamil, Telugu, Gujarati, Kannada, Malayalam, Punjabi, Odia, Urdu + English, Spanish, Portuguese, German, Indonesian."
+        },
+        {
+          "icon": "🔍",
+          "title": "OCR for Scanned Docs",
+          "description": "Even scanned, hand-stamped government documents are processed using OCR technology."
+        },
+        {
+          "icon": "💡",
+          "title": "Plain Hindi Explanation",
+          "description": "Complex government language simplified into easy Hindi any citizen can understand."
+        },
+        {
+          "icon": "🔒",
+          "title": "100% Private",
+          "description": "Your sensitive government documents never leave your browser. No server, no cloud."
+        }
+      ],
+      "useCases": [
+        "Gram panchayat workers translating central government scheme documents for villagers",
+        "Legal aid workers helping citizens understand court notices and FIRs in their language",
+        "Government clerks translating official orders for local language communication",
+        "Citizens understanding income certificates, caste certificates, and ration card documents",
+        "Teachers explaining government scholarship scheme documents to students",
+        "NGO workers explaining welfare scheme eligibility in regional languages"
+      ],
+      "faqs": [
+        {
+          "question": "Can it translate scanned government documents?",
+          "answer": "Yes. The tool uses OCR (Optical Character Recognition) to extract text from scanned images and PDFs, then translates the extracted text. Works for stamped certificates, hand-filled forms, and printed orders."
+        },
+        {
+          "question": "Which Indian languages are supported?",
+          "answer": "Hindi, Marathi, Bengali, Tamil, Telugu, Gujarati, Kannada, Malayalam, Punjabi, Odia, and Urdu — plus English, Spanish, Portuguese, German, and Indonesian."
+        },
+        {
+          "question": "What is the \"Plain Hindi Explanation\" feature?",
+          "answer": "Government documents use complex legal and administrative language that is difficult for ordinary citizens to understand. The Plain Hindi explanation rewrites the document content in simple, conversational Hindi that anyone can follow."
+        },
+        {
+          "question": "Is my document uploaded to any server?",
+          "answer": "No. All text extraction and translation happens in your browser. Your government documents — which may contain sensitive personal information — never leave your device."
+        }
+      ],
+      "relatedSearches": [
+        "translate government document Hindi free",
+        "PDF to Hindi translator free",
+        "sarkari dastavez Hindi mein",
+        "government order translate Marathi",
+        "OCR Hindi translation free"
+      ]
+    },
+    "gov-doc-extractor": {
+      "name": "Ekstraktor Data Formulir Pemerintah — OCR ke Excel Gratis",
+      "description": "Ekstrak Nama, TTL, Aadhaar, Kabupaten dari 100 formulir yang dipindai. Ekspor ke Excel/CSV/JSON. Gratis.",
+      "metaTitle": "Government Document Data Extractor Free — OCR Scanned Forms to Excel CSV JSON",
+      "metaDescription": "Free government document data extractor — upload 100s of scanned forms, extract Name, DOB, Aadhaar, District, Certificate No. automatically. Export to Excel, CSV, JSON. Duplicate detection. 100% private.",
+      "keywords": "ekstraktor data formulir pemerintah OCR gratis, ekstrak data formulir pindai Excel, digitalisasi formulir pemerintah",
+      "whatIs": "Our Government Document Data Extractor automates the digitization of scanned government forms, applications, and certificates. Upload up to 100 PDFs or images at once — the tool uses OCR to extract 19 standard government field types: Full Name, Date of Birth, Father's Name, Mother's Name, Address, Village, District, State, PIN Code, Mobile Number, Aadhaar Number, PAN Number, Certificate/Reference Number, Income, Caste/Category, Gender, Age, Issue Date, and Valid Upto. Results are shown in an editable table with duplicate detection, and can be exported to Excel (.xlsx), CSV, or JSON. All processing happens in your browser — sensitive citizen data never leaves your device.",
+      "whyChoose": [
+        {
+          "icon": "📋",
+          "title": "19 Field Types",
+          "description": "Name, DOB, Aadhaar, PAN, Address, Village, District, State, PIN, Mobile, Certificate No., Income, Caste, Gender, Age and more."
+        },
+        {
+          "icon": "📦",
+          "title": "Bulk Processing",
+          "description": "Upload and process 100 files at once — PDF and images mixed. Each file processed independently."
+        },
+        {
+          "icon": "⚠️",
+          "title": "Duplicate Detection",
+          "description": "Automatically flags duplicate records based on Name + DOB + Aadhaar combination."
+        },
+        {
+          "icon": "📊",
+          "title": "Excel/CSV/JSON Export",
+          "description": "Download structured data in any format — ready for database import or further processing."
+        }
+      ],
+      "useCases": [
+        "Data entry teams digitizing 1000s of application forms for government schemes",
+        "Block Development Officers compiling beneficiary lists from paper forms",
+        "Healthcare workers digitizing patient registration forms for PMJAY",
+        "Revenue department clerks extracting land record data from scanned documents",
+        "Panchayat staff digitizing gram sabha survey forms",
+        "NGOs compiling beneficiary data from welfare scheme applications"
+      ],
+      "faqs": [
+        {
+          "question": "How many files can I process at once?",
+          "answer": "The tool supports batch processing of up to 100 files per session. For larger batches, process in multiple rounds and combine the exported Excel files."
+        },
+        {
+          "question": "What if the OCR misreads a field?",
+          "answer": "All extracted data is shown in an editable table before export. Click the edit (✏️) button on any row to correct mistakes before downloading."
+        },
+        {
+          "question": "How does duplicate detection work?",
+          "answer": "The tool compares Name + Date of Birth + Aadhaar Number combination across all records. If two records share the same combination, one is flagged as a potential duplicate with a reference to the original row."
+        },
+        {
+          "question": "Is Aadhaar and personal data safe?",
+          "answer": "All processing happens in your browser using JavaScript. Aadhaar numbers, names, and personal data from the forms never leave your device and are not stored anywhere."
+        }
+      ],
+      "relatedSearches": [
+        "OCR government form Excel free",
+        "extract data scanned form India",
+        "government form digitization tool free",
+        "PDF form data extraction Excel",
+        "bulk OCR forms India free"
+      ]
     }
   },
   "ui": {
