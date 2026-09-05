@@ -47,6 +47,35 @@ export default function CommandCenter({ categories, lang, t }) {
       {!query && (
         <section className="container" style={{ paddingBottom: '24px' }}>
           <PromotedTools lang={lang} />
+          
+          <div style={{ marginBottom: '48px', paddingTop: '12px' }}>
+            <h3 style={{ marginBottom: '24px', color: '#10b981', display: 'flex', alignItems: 'center', gap: '8px' }}>
+              <span style={{ fontSize: '1.4rem' }}>🏛️</span> High Demand: Government & Legal Tools
+            </h3>
+            <div className="tools-grid">
+              {[
+                { name: 'RTI First Appeal', path: '/government-tools/rti-first-appeal', desc: 'Zero dedicated tools exist — only weak DR 15-20 sites', icon: '⚖️' },
+                { name: 'Income Certificate', path: '/government-tools/income-certificate-generator', desc: 'Scattered weak competitors, 500K+ monthly searches', icon: '📄' },
+                { name: 'Rent Agreement', path: '/government-tools/rent-agreement-generator', desc: 'DR 20-30 competitors, 2M+ monthly searches', icon: '🏠' },
+                { name: 'PF Form 19 Filler', path: '/government-tools/pf-withdrawal-form-19', desc: 'No dedicated filler tool exists anywhere', icon: '💼' },
+                { name: 'Form 16 Explainer', path: '/government-tools/form-16-explainer', desc: 'Interactive Form 16 visualizer and explainer.', icon: '🧾' }
+              ].map(tool => (
+                <Link 
+                  key={tool.path} 
+                  href={langLink(tool.path)} 
+                  prefetch={false}
+                  className="tool-card"
+                  style={{ border: '1px solid #10b981', boxShadow: '0 4px 15px rgba(16, 185, 129, 0.1)' }}
+                >
+                  <div className="tool-card-icon" role="img" aria-hidden="true">{tool.icon}</div>
+                  <div className="tool-card-content">
+                    <h3>{tool.name}</h3>
+                    <p>{tool.desc}</p>
+                  </div>
+                </Link>
+              ))}
+            </div>
+          </div>
         </section>
       )}
 
