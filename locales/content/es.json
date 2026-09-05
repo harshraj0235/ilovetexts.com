@@ -4052,6 +4052,380 @@
         "GST bill maker online",
         "GST invoice PDF free download"
       ]
+    },
+    "remove-background": {
+      "name": "Eliminador de Fondo Gratis — Quitar Fondo de Imagen",
+      "description": "Elimina el fondo de cualquier imagen gratis. PNG transparente o color personalizado. Sin subida a servidor.",
+      "metaTitle": "Background Remover Free Online — Remove BG from Image, Transparent PNG",
+      "metaDescription": "Remove background from any image free online — no signup, no server upload. Get transparent PNG or custom background color instantly. Works in browser, 100% private.",
+      "keywords": "eliminar fondo imagen gratis online, quitar fondo foto gratis, png transparente gratis",
+      "whatIs": "Our Background Remover uses advanced edge-detection and flood-fill algorithms running entirely in your browser to remove the background from any image instantly. Unlike remove.bg or other tools that upload your photos to their servers, everything happens locally on your device — your images never leave your browser. The tool samples background color from image corners, performs BFS flood-fill removal with feathering for smooth edges, and lets you replace the background with any color or keep it transparent (PNG). Perfect for product photos, profile pictures, social media graphics, and passport photos.",
+      "whyChoose": [
+        {
+          "icon": "🔒",
+          "title": "100% Private",
+          "description": "Your image never leaves your browser. No server, no cloud, no data collection — ever."
+        },
+        {
+          "icon": "🎨",
+          "title": "Custom Background",
+          "description": "Replace background with transparent PNG, white, black, or any custom color instantly."
+        },
+        {
+          "icon": "🎯",
+          "title": "Color Picker Mode",
+          "description": "Click directly on the background color to remove it — perfect for complex backgrounds."
+        },
+        {
+          "icon": "⚡",
+          "title": "Instant & Free",
+          "description": "No signup, no watermark, no daily limits. Completely free forever."
+        }
+      ],
+      "useCases": [
+        "Product photos for e-commerce (Amazon, Flipkart, Meesho)",
+        "Profile pictures for LinkedIn, ID cards, job applications",
+        "Social media graphics and Instagram posts",
+        "Passport and visa photo background change",
+        "Logo background removal for transparent PNG",
+        "Real estate photos — remove cluttered backgrounds"
+      ],
+      "faqs": [
+        {
+          "question": "Is this background remover really free?",
+          "answer": "Yes, completely free. No signup, no watermark, no daily limit. It runs in your browser using JavaScript — there is no server to pay for."
+        },
+        {
+          "question": "What image formats are supported?",
+          "answer": "JPG, PNG, WebP, GIF, and most common image formats. Output is PNG (for transparency) or JPG (for solid background colors)."
+        },
+        {
+          "question": "Why is my background not fully removed?",
+          "answer": "Increase the \"Edge Sensitivity\" slider for complex or gradual backgrounds. For best results, use images with uniform/solid backgrounds (white, blue, green studio backgrounds)."
+        },
+        {
+          "question": "Does my photo get uploaded to your servers?",
+          "answer": "No. All processing happens in your browser using JavaScript Canvas API. Your image bytes never leave your device. You can verify this in your browser network inspector."
+        }
+      ],
+      "relatedSearches": [
+        "remove background from image free",
+        "transparent background maker",
+        "background eraser online",
+        "remove bg free",
+        "png background remover"
+      ]
+    },
+    "resume-builder": {
+      "name": "Creador de CV Gratis — Constructor de Currículum Online",
+      "description": "Crea un currículum profesional online gratis — 5 plantillas, vista previa en vivo, descarga PDF sin marca de agua.",
+      "metaTitle": "Free Resume Builder Online — Professional CV Maker, PDF Download No Watermark",
+      "metaDescription": "Free online resume builder with 5 professional templates, live preview, and PDF download. No watermark, no signup. ATS-friendly. Perfect for Indian freshers and professionals.",
+      "keywords": "creador CV gratis online, constructor currículum profesional, descargar CV PDF gratis",
+      "whatIs": "Our Free Resume Builder lets you create a professional, ATS-friendly resume in minutes with a live preview that updates as you type. Choose from 5 professional templates (Classic, Modern, Minimal, Creative, Corporate), fill in your details section by section, and download a clean PDF with absolutely no watermarks. Unlike Zety, Resume.io, or Canva which charge ₹500–2,000 to download your resume as PDF, this tool is completely free forever. All data stays in your browser — your personal information, work history, and salary details are never sent to any server.",
+      "whyChoose": [
+        {
+          "icon": "📄",
+          "title": "Free PDF Download",
+          "description": "No watermark, no \"Made with XYZ\" branding. Your resume, your way."
+        },
+        {
+          "icon": "🎨",
+          "title": "5 Professional Templates",
+          "description": "Classic, Modern, Minimal, Creative, Corporate — all ATS-compatible."
+        },
+        {
+          "icon": "⚡",
+          "title": "Live Preview",
+          "description": "See exactly how your resume looks as you type — no refreshing needed."
+        },
+        {
+          "icon": "🔒",
+          "title": "100% Private",
+          "description": "Your personal data, work history and salary never leaves your browser."
+        }
+      ],
+      "useCases": [
+        "Freshers creating first resume for campus placements",
+        "Professionals updating CV for job switch",
+        "Freelancers creating resume for client pitches",
+        "Students applying for internships",
+        "Anyone who needs income proof resume for visa or loan application"
+      ],
+      "faqs": [
+        {
+          "question": "Is the resume PDF really free with no watermark?",
+          "answer": "Yes. Click \"Download PDF\" and get a clean professional resume PDF with zero watermarks, zero branding from us. Completely free."
+        },
+        {
+          "question": "Are these templates ATS-friendly?",
+          "answer": "Yes. All templates use clean formatting that ATS (Applicant Tracking Systems) used by companies like TCS, Infosys, Wipro, and startups can parse correctly."
+        },
+        {
+          "question": "Can I save my resume and edit it later?",
+          "answer": "Currently the resume is session-based — data stays while your browser tab is open. We recommend copying your data before closing. Save to PDF frequently."
+        },
+        {
+          "question": "What format does it download in?",
+          "answer": "Downloads as a PDF file — the standard format for job applications. The PDF is print-ready on A4 paper."
+        }
+      ],
+      "relatedSearches": [
+        "free resume maker India",
+        "CV builder online free",
+        "resume format for freshers",
+        "download resume free PDF",
+        "ATS resume builder free"
+      ]
+    },
+    "pdf-to-word": {
+      "name": "Convertidor PDF a Word Gratis — PDF a DOCX Online",
+      "description": "Convierte PDF a documento Word editable gratis — sin subida, sin límite de páginas, sin registro.",
+      "metaTitle": "PDF to Word Converter Free Online — Convert PDF to DOCX, No Upload, No Signup",
+      "metaDescription": "Free PDF to Word converter — convert PDF to editable .docx or plain text. No server upload, no page limit, no signup, no watermark. Works in browser, 100% private.",
+      "keywords": "convertir pdf a word gratis online, pdf a docx sin registro, extraer texto pdf word",
+      "whatIs": "Our PDF to Word Converter extracts all text from your PDF and creates an editable Word document (.docx) or plain text file — entirely in your browser. Using PDF.js (the same library powering Mozilla Firefox PDF viewer), the tool parses your PDF, preserves text layout across all pages, and packages it as a proper .docx file using OOXML format. Unlike ILovePDF or Smallpdf which limit free users to 2 conversions per day and upload your PDFs to European servers, this tool has no limits and never uploads your file.",
+      "whyChoose": [
+        {
+          "icon": "🔒",
+          "title": "No Server Upload",
+          "description": "Your PDF never leaves your browser. Complete privacy — ideal for confidential documents."
+        },
+        {
+          "icon": "📄",
+          "title": "Real .docx Output",
+          "description": "Downloads as a proper Word document that opens in Microsoft Word, Google Docs, LibreOffice."
+        },
+        {
+          "icon": "∞",
+          "title": "No Page Limit",
+          "description": "Convert PDFs of any length — 1 page or 1000 pages. No daily limit either."
+        },
+        {
+          "icon": "⚡",
+          "title": "Instant & Free",
+          "description": "No signup, no watermark, no subscription. Free forever."
+        }
+      ],
+      "useCases": [
+        "Editing a received PDF contract or agreement",
+        "Converting PDF resume to editable Word format",
+        "Extracting text from PDF textbooks for notes",
+        "Converting government PDF forms to editable format",
+        "Copying text from secured PDFs"
+      ],
+      "faqs": [
+        {
+          "question": "Can it convert scanned PDFs to Word?",
+          "answer": "This tool works with text-based PDFs (PDFs with selectable text). For scanned or image-based PDFs, use our Scanned PDF to Data tool which uses OCR technology."
+        },
+        {
+          "question": "Does the formatting get preserved?",
+          "answer": "Text content and basic layout (paragraphs, line breaks) are preserved. Complex formatting like tables, columns, images, and special fonts may not be preserved — this is a limitation of browser-based PDF parsing."
+        },
+        {
+          "question": "What is the maximum PDF size?",
+          "answer": "There is no hard limit — the tool can handle large PDFs. Very large files (100MB+) may be slow depending on your device."
+        },
+        {
+          "question": "Is my PDF file uploaded to your servers?",
+          "answer": "Absolutely not. The conversion happens entirely in your browser using PDF.js. No data is transmitted anywhere."
+        }
+      ],
+      "relatedSearches": [
+        "pdf to word free online",
+        "convert pdf to docx free",
+        "pdf to editable word",
+        "extract text from pdf free",
+        "pdf to word no upload"
+      ]
+    },
+    "heic-to-jpg": {
+      "name": "Convertidor HEIC a JPG — Fotos iPhone Online Gratis",
+      "description": "Convierte fotos HEIC de iPhone a JPG o PNG gratis — conversión masiva, sin subida al servidor.",
+      "metaTitle": "HEIC to JPG Converter Free Online — Convert iPhone HEIC Photos to JPG/PNG",
+      "metaDescription": "Free HEIC to JPG converter — convert iPhone HEIC/HEIF photos to JPG or PNG. Bulk convert, no server upload, no signup, instant download. Works in browser.",
+      "keywords": "convertir heic a jpg gratis online, fotos iphone heic a jpg, heif a jpeg gratis",
+      "whatIs": "HEIC (High Efficiency Image Container) is the default photo format on iPhones since iOS 11. While HEIC files are 50% smaller than JPG with the same quality, they are not supported by Windows, Android, WhatsApp, most websites, and older software. Our HEIC to JPG Converter converts your iPhone HEIC/HEIF photos to universally compatible JPG or PNG format entirely in your browser — no server upload. Supports bulk conversion (convert multiple files at once) and lets you choose output quality.",
+      "whyChoose": [
+        {
+          "icon": "📱",
+          "title": "iPhone Compatible",
+          "description": "Handles .heic and .heif files from all iPhone models (iPhone 7 and newer)."
+        },
+        {
+          "icon": "📦",
+          "title": "Bulk Convert",
+          "description": "Select multiple HEIC files and convert them all at once — download as ZIP."
+        },
+        {
+          "icon": "🔒",
+          "title": "No Upload",
+          "description": "Your photos never leave your device. 100% private conversion."
+        },
+        {
+          "icon": "⚡",
+          "title": "Free & Instant",
+          "description": "No signup, no watermark, no limit on number of files."
+        }
+      ],
+      "useCases": [
+        "Sharing iPhone photos on WhatsApp (which does not support HEIC)",
+        "Uploading photos to websites and forms that require JPG",
+        "Sending photos to Windows PC users",
+        "Converting photos for passport and visa applications",
+        "Posting on Instagram, Facebook, LinkedIn"
+      ],
+      "faqs": [
+        {
+          "question": "Why can't I open HEIC files on Windows?",
+          "answer": "HEIC is an Apple-proprietary format. Windows needs either the paid HEVC codec (₹60 on Microsoft Store) or a converter like this tool to open HEIC files."
+        },
+        {
+          "question": "Will converting HEIC to JPG reduce quality?",
+          "answer": "At 90%+ quality setting, the difference is invisible to human eyes. HEIC is already compressed — converting to JPG at high quality produces excellent results."
+        },
+        {
+          "question": "How do I stop my iPhone from taking HEIC photos?",
+          "answer": "Go to iPhone Settings → Camera → Formats → Select \"Most Compatible\" to shoot in JPG by default."
+        },
+        {
+          "question": "Can I convert multiple HEIC files at once?",
+          "answer": "Yes. Select multiple files at once and the tool converts all of them. Download individually or as a ZIP file."
+        }
+      ],
+      "relatedSearches": [
+        "heic to jpg free",
+        "convert iphone photos to jpg",
+        "heic converter online",
+        "heif to jpeg free",
+        "bulk heic to jpg"
+      ]
+    },
+    "passport-photo-maker": {
+      "name": "Creador de Foto de Pasaporte Gratis Online",
+      "description": "Crea fotos de pasaporte para múltiples países — tamaño correcto, fondo blanco, 300 DPI. Gratis.",
+      "metaTitle": "Passport Photo Maker Free Online — India Passport Size 35x45mm, US Visa, Schengen",
+      "metaDescription": "Free passport photo maker — India 35x45mm, US 51x51mm, UK, Schengen, UAE. White background, 300 DPI, print 6 photos on 4x6 sheet. No signup, no watermark, instant download.",
+      "keywords": "creador foto pasaporte gratis online, foto tamaño pasaporte online, foto visa gratis",
+      "whatIs": "Our Passport Photo Maker creates government-compliant passport and visa photos for 8 country standards entirely in your browser. Upload any photo, the tool crops it to exact dimensions (35×45mm for India passport at 300 DPI = 413×531 pixels), sets the correct background color, and lets you fine-tune zoom and position. Print layout mode arranges 6 photos on a standard 4×6 inch print sheet — take the downloaded image to any photo studio or printer. All MEA (Ministry of External Affairs) India passport photo requirements are built in.",
+      "whyChoose": [
+        {
+          "icon": "🇮🇳",
+          "title": "India Standards Built In",
+          "description": "35×45mm, white background, 300 DPI — meets MEA India passport requirements exactly."
+        },
+        {
+          "icon": "🖨️",
+          "title": "Print-Ready Layout",
+          "description": "6 photos arranged on 4×6 inch sheet — standard print size at any photo shop."
+        },
+        {
+          "icon": "🌍",
+          "title": "8 Country Standards",
+          "description": "India, US, UK, Schengen, Australia, UAE and custom size — all built in."
+        },
+        {
+          "icon": "🔒",
+          "title": "100% Private",
+          "description": "Your photo never leaves your browser. No facial recognition, no data storage."
+        }
+      ],
+      "useCases": [
+        "India passport application (new and renewal)",
+        "US visa application photos",
+        "Schengen/European visa photos",
+        "Driving licence, Aadhaar, PAN card photos",
+        "Government job application photos",
+        "Student ID and college admission photos"
+      ],
+      "faqs": [
+        {
+          "question": "What size is India passport photo?",
+          "answer": "India passport requires 35mm × 45mm (width × height) with white background. Our tool outputs this at 300 DPI (413×531 pixels) for print quality."
+        },
+        {
+          "question": "Can I print this at home?",
+          "answer": "Yes. Use the print layout (6 photos on 4×6) and print on matte photo paper. Or take the downloaded image to any photo studio — they can print it on 4×6 paper."
+        },
+        {
+          "question": "Do I need to have a white background in my original photo?",
+          "answer": "No. The tool adds the white background automatically. Your original photo can have any background."
+        },
+        {
+          "question": "Is this accepted by the passport office?",
+          "answer": "This tool generates photos matching the official MEA specifications. However, the acceptance depends on the quality of your source photo (clear face, proper lighting). The tool cannot replace professional studio photos if your source image has poor lighting or blur."
+        }
+      ],
+      "relatedSearches": [
+        "passport photo size India 35x45",
+        "passport photo maker online free",
+        "visa photo maker India",
+        "passport size photo free",
+        "print passport photo at home"
+      ]
+    },
+    "meme-generator": {
+      "name": "Generador de Memes Gratis — Crea Memes Online",
+      "description": "Crea memes con cualquier imagen gratis — añade texto arriba y abajo, descarga PNG sin marca de agua.",
+      "metaTitle": "Meme Generator Free Online — Create Memes with Any Image, No Watermark",
+      "metaDescription": "Free meme generator — upload any image, add top/bottom text, customize font size and colors, download PNG. No watermark, no signup. Create viral memes in seconds.",
+      "keywords": "generador memes gratis online, crear memes con mi foto, hacer memes sin marca de agua",
+      "whatIs": "Our Meme Generator lets you create memes using any image you upload or from popular meme templates — entirely in your browser. Add bold Impact-font top and bottom text (the classic meme format), customize font size, text color, and outline color, then download your meme as a high-resolution PNG with no watermarks. The canvas-based tool renders at full image resolution so your memes look sharp everywhere. All popular templates are available: Drake, Distracted Boyfriend, Success Kid, This Is Fine, Two Buttons, and more.",
+      "whyChoose": [
+        {
+          "icon": "🚫",
+          "title": "No Watermark",
+          "description": "Download clean PNG memes with zero watermarks or branding."
+        },
+        {
+          "icon": "🖼️",
+          "title": "Any Image",
+          "description": "Upload any image from your device — no template restrictions."
+        },
+        {
+          "icon": "🎨",
+          "title": "Full Customization",
+          "description": "Font size, text color, outline color, top/bottom text positioning."
+        },
+        {
+          "icon": "⚡",
+          "title": "Live Preview",
+          "description": "See your meme update in real-time as you type."
+        }
+      ],
+      "useCases": [
+        "Creating funny memes for WhatsApp and Telegram groups",
+        "Social media content for Instagram, Twitter, Facebook",
+        "Office humor for team chats",
+        "Educational memes for students",
+        "Marketing memes for brand engagement"
+      ],
+      "faqs": [
+        {
+          "question": "What font does the meme text use?",
+          "answer": "The classic Impact font (with bold black outline) — the standard meme text style used since the early internet era."
+        },
+        {
+          "question": "Can I use my own photo as a meme template?",
+          "answer": "Yes. Click \"Upload Your Own Image\" to use any photo from your device as the meme background."
+        },
+        {
+          "question": "Is there a watermark on downloaded memes?",
+          "answer": "No watermark at all. The downloaded PNG is clean — perfect for sharing anywhere."
+        },
+        {
+          "question": "What resolution is the downloaded meme?",
+          "answer": "The meme is saved at the original image resolution. For most images this is 600×600 pixels or higher — sufficient for all social media platforms."
+        }
+      ],
+      "relatedSearches": [
+        "meme creator free online",
+        "meme generator with my photo",
+        "add text to image free",
+        "no watermark meme maker",
+        "create meme online"
+      ]
     }
   },
   "ui": {

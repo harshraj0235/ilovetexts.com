@@ -68,6 +68,12 @@ import AgeCalculator from '@/components/tools/AgeCalculator';
 import SalarySlipGenerator from '@/components/tools/SalarySlipGenerator';
 import RtiApplicationGenerator from '@/components/tools/RtiApplicationGenerator';
 import GstInvoiceGenerator from '@/components/tools/GstInvoiceGenerator';
+import BackgroundRemover from '@/components/tools/BackgroundRemover';
+import ResumeBuilder from '@/components/tools/ResumeBuilder';
+import PdfToWord from '@/components/tools/PdfToWord';
+import HeicToJpg from '@/components/tools/HeicToJpg';
+import PassportPhotoMaker from '@/components/tools/PassportPhotoMaker';
+import MemeGenerator from '@/components/tools/MemeGenerator';
 import { notFound } from 'next/navigation';
 import Link from 'next/link';
 
@@ -373,6 +379,18 @@ export default async function ToolPage({ params }) {
           <RtiApplicationGenerator t={t} lang={lang} />
         ) : toolData.slug === 'gst-invoice-generator' ? (
           <GstInvoiceGenerator t={t} lang={lang} />
+        ) : toolData.slug === 'remove-background' ? (
+          <BackgroundRemover t={t} lang={lang} />
+        ) : toolData.slug === 'resume-builder' ? (
+          <ResumeBuilder t={t} lang={lang} />
+        ) : toolData.slug === 'pdf-to-word' ? (
+          <PdfToWord t={t} lang={lang} />
+        ) : toolData.slug === 'heic-to-jpg' ? (
+          <HeicToJpg t={t} lang={lang} />
+        ) : toolData.slug === 'passport-photo-maker' ? (
+          <PassportPhotoMaker t={t} lang={lang} />
+        ) : toolData.slug === 'meme-generator' ? (
+          <MemeGenerator t={t} lang={lang} />
         ) : (
           <ClientTool categoryId={category.id} toolSlug={toolData.slug} t={t} />
         )}
