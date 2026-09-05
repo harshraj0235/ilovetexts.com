@@ -70,6 +70,11 @@ import RtiApplicationGenerator from '@/components/tools/RtiApplicationGenerator'
 import GstInvoiceGenerator from '@/components/tools/GstInvoiceGenerator';
 import GovDocTranslator from '@/components/tools/GovDocTranslator';
 import GovDocExtractor from '@/components/tools/GovDocExtractor';
+import RtiFirstAppeal from '@/components/tools/RtiFirstAppeal';
+import IncomeCertificateGenerator from '@/components/tools/IncomeCertificateGenerator';
+import RentAgreementGenerator from '@/components/tools/RentAgreementGenerator';
+import PfWithdrawalForm19 from '@/components/tools/PfWithdrawalForm19';
+import Form16Explainer from '@/components/tools/Form16Explainer';
 import BackgroundRemover from '@/components/tools/BackgroundRemover';
 import ResumeBuilder from '@/components/tools/ResumeBuilder';
 import PdfToWord from '@/components/tools/PdfToWord';
@@ -385,6 +390,16 @@ export default async function ToolPage({ params }) {
           <GovDocTranslator t={t} lang={lang} />
         ) : toolData.slug === 'gov-doc-extractor' ? (
           <GovDocExtractor t={t} lang={lang} />
+        ) : toolData.slug === 'rti-first-appeal' ? (
+          <RtiFirstAppeal t={t} lang={lang} />
+        ) : toolData.slug === 'income-certificate-generator' ? (
+          <IncomeCertificateGenerator t={t} lang={lang} />
+        ) : toolData.slug === 'rent-agreement-generator' ? (
+          <RentAgreementGenerator t={t} lang={lang} />
+        ) : toolData.slug === 'pf-withdrawal-form-19' ? (
+          <PfWithdrawalForm19 t={t} lang={lang} />
+        ) : toolData.slug === 'form-16-explainer' ? (
+          <Form16Explainer t={t} lang={lang} />
         ) : toolData.slug === 'remove-background' ? (
           <BackgroundRemover t={t} lang={lang} />
         ) : toolData.slug === 'resume-builder' ? (
