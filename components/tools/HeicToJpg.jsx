@@ -1,6 +1,17 @@
 'use client';
 import { useState, useRef } from 'react';
 
+const S = {
+  wrap: { maxWidth: 720, margin: '0 auto', width: '100%' },
+  card: { background: 'var(--bg-main)', border: '1px solid var(--border-light)', borderRadius: 'var(--radius-lg)', padding: 24, marginBottom: 16, boxShadow: 'var(--shadow-sm)' },
+  badge: { display: 'inline-flex', alignItems: 'center', gap: 6, padding: '4px 12px', borderRadius: 20, background: 'var(--bg-secondary)', border: '1px solid var(--border-light)', fontSize: '0.78rem', fontWeight: 600, color: 'var(--text-secondary)' },
+  label: { fontSize: '0.8rem', fontWeight: 700, color: 'var(--text-secondary)', display: 'block', marginBottom: 8, textTransform: 'uppercase', letterSpacing: '0.05em' },
+  dropzone: (over) => ({ border: `2px dashed ${over ? '#f97316' : 'var(--border-light)'}`, borderRadius: 'var(--radius-lg)', padding: '48px 24px', textAlign: 'center', cursor: 'pointer', background: over ? 'rgba(249,115,22,0.04)' : 'var(--bg-secondary)', transition: 'all 0.2s' }),
+  fmtBtn: (active) => ({ flex: 1, padding: '10px 8px', borderRadius: 'var(--radius-md)', border: `2px solid ${active ? '#f97316' : 'var(--border-light)'}`, background: active ? 'rgba(249,115,22,0.06)' : 'var(--bg-secondary)', cursor: 'pointer', transition: 'all 0.15s', fontWeight: 600, fontSize: '0.85rem', color: active ? '#f97316' : 'var(--text-primary)' }),
+  progressBar: (pct) => ({ height: 6, borderRadius: 3, background: '#f97316', width: `${pct}%`, transition: 'width 0.3s' }),
+  fileRow: { display: 'flex', alignItems: 'center', gap: 10, background: 'var(--bg-secondary)', border: '1px solid var(--border-light)', borderRadius: 'var(--radius-sm)', padding: '8px 12px', fontSize: '0.85rem' },
+};
+
 export default function HeicToJpg({ t, lang }) {
   const [files, setFiles] = useState([]);
   const [converting, setConverting] = useState(false);
@@ -11,238 +22,157 @@ export default function HeicToJpg({ t, lang }) {
   const fileRef = useRef();
 
   const addFiles = (newFiles) => {
-    const heicFiles = Array.from(newFiles).filter(f =>
-      f.name.toLowerCase().endsWith('.heic') ||
-      f.name.toLowerCase().endsWith('.heif') ||
-      f.type === 'image/heic' ||
-      f.type === 'image/heif' ||
-      f.type.startsWith('image/')  // also accept other image types for demo
-    );
-    setFiles(prev => [...prev, ...heicFiles.map(f => ({ file: f, id: Math.random().toString(36).slice(2) }))]);
+    const valid = Array.from(newFiles).filter(f => f.name.toLowerCase().match(/\.(heic|heif)$/) || f.type.startsWith('image/'));
+    setFiles(prev => [...prev, ...valid.map(f => ({ file: f, id: Math.random().toString(36).slice(2) }))]);
     setResults([]);
   };
 
   const convertAll = async () => {
-    if (files.length === 0) return;
-    setConverting(true);
-    setResults([]);
+    if (!files.length) return;
+    setConverting(true); setResults([]);
     const output = [];
-
     for (const { file, id } of files) {
       try {
-        // Try to use createImageBitmap (works for HEIC in modern Chrome/Safari)
-        // For HEIC files that aren't natively supported, we use a canvas-based approach
-        let blob;
-
-        // Check if browser can handle the format directly
-        const canHandle = await checkBrowserHeicSupport();
-
-        if (canHandle || !file.name.toLowerCase().endsWith('.heic')) {
-          // Browser supports it natively or it's another image type
-          const imageBitmap = await createImageBitmap(file);
-          const canvas = document.createElement('canvas');
-          canvas.width = imageBitmap.width;
-          canvas.height = imageBitmap.height;
-          const ctx = canvas.getContext('2d');
-          ctx.drawImage(imageBitmap, 0, 0);
-          const mimeType = outputFormat === 'jpg' ? 'image/jpeg' : 'image/png';
-          const dataUrl = canvas.toDataURL(mimeType, quality / 100);
-          blob = await (await fetch(dataUrl)).blob();
-        } else {
-          // HEIC not natively supported — use FileReader + Image fallback
-          blob = await convertHeicFallback(file, outputFormat, quality);
-        }
-
+        const blob = await convertFile(file, outputFormat, quality);
         const url = URL.createObjectURL(blob);
-        const ext = outputFormat === 'jpg' ? 'jpg' : 'png';
-        const name = file.name.replace(/\.(heic|heif)$/i, `.${ext}`);
+        const name = file.name.replace(/\.(heic|heif)$/i, `.${outputFormat}`);
         output.push({ id, url, name, size: blob.size, success: true });
-      } catch (err) {
-        output.push({ id, name: file.name, success: false, error: err.message });
-      }
+      } catch (err) { output.push({ id, name: file.name, success: false }); }
     }
-
-    setResults(output);
-    setConverting(false);
+    setResults(output); setConverting(false);
   };
 
-  const checkBrowserHeicSupport = () => {
-    return new Promise(resolve => {
+  const convertFile = (file, fmt, qual) => new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = (e) => {
       const img = new Image();
-      img.onload = () => resolve(true);
-      img.onerror = () => resolve(false);
-      img.src = 'data:image/heic;base64,AAAAHGZ0eXBoZWljAAAAAG1pZjFoZWljAAAA';
-      setTimeout(() => resolve(false), 500);
-    });
-  };
-
-  const convertHeicFallback = (file, format, qual) => {
-    return new Promise((resolve, reject) => {
-      const reader = new FileReader();
-      reader.onload = (e) => {
-        const img = new Image();
-        img.onload = () => {
-          const canvas = document.createElement('canvas');
-          canvas.width = img.width || 800;
-          canvas.height = img.height || 600;
-          const ctx = canvas.getContext('2d');
-          ctx.fillStyle = '#ffffff';
-          ctx.fillRect(0, 0, canvas.width, canvas.height);
-          ctx.drawImage(img, 0, 0);
-          const mimeType = format === 'jpg' ? 'image/jpeg' : 'image/png';
-          canvas.toBlob(blob => blob ? resolve(blob) : reject(new Error('Canvas export failed')), mimeType, qual / 100);
-        };
-        img.onerror = () => reject(new Error('Cannot decode HEIC in this browser. Try Chrome or Safari.'));
-        img.src = e.target.result;
+      img.onload = () => {
+        const canvas = document.createElement('canvas');
+        canvas.width = img.width || 800; canvas.height = img.height || 600;
+        const ctx = canvas.getContext('2d');
+        if (fmt === 'jpg') { ctx.fillStyle = '#fff'; ctx.fillRect(0, 0, canvas.width, canvas.height); }
+        ctx.drawImage(img, 0, 0);
+        canvas.toBlob(blob => blob ? resolve(blob) : reject(new Error('Failed')), fmt === 'jpg' ? 'image/jpeg' : 'image/png', qual / 100);
       };
-      reader.readAsDataURL(file);
-    });
-  };
+      img.onerror = () => reject(new Error('Cannot decode'));
+      img.src = e.target.result;
+    };
+    reader.readAsDataURL(file);
+  });
 
   const downloadAll = async () => {
-    const successful = results.filter(r => r.success);
-    if (successful.length === 1) {
-      const a = document.createElement('a');
-      a.href = successful[0].url;
-      a.download = successful[0].name;
-      a.click();
-    } else if (successful.length > 1) {
+    const ok = results.filter(r => r.success);
+    if (ok.length === 1) {
+      const a = document.createElement('a'); a.href = ok[0].url; a.download = ok[0].name; a.click();
+    } else {
       const JSZip = (await import('jszip')).default;
       const zip = new JSZip();
-      for (const r of successful) {
-        const res = await fetch(r.url);
-        zip.file(r.name, await res.blob());
-      }
+      for (const r of ok) { const res = await fetch(r.url); zip.file(r.name, await res.blob()); }
       const blob = await zip.generateAsync({ type: 'blob' });
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement('a');
-      a.href = url;
-      a.download = `converted-images.zip`;
-      a.click();
+      const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = 'converted-images.zip'; a.click();
     }
   };
 
   const successCount = results.filter(r => r.success).length;
 
   return (
-    <div className="max-w-3xl mx-auto p-4 space-y-6">
-      {/* Header */}
-      <div className="text-center space-y-2">
-        <div className="text-5xl">📱➡️🖼️</div>
-        <h1 className="text-2xl font-bold text-gray-900 dark:text-white">HEIC to JPG Converter</h1>
-        <p className="text-gray-500 dark:text-gray-400">Convert iPhone HEIC photos to JPG or PNG — free, bulk convert, no upload</p>
-        <div className="flex justify-center gap-4 text-sm text-gray-400 flex-wrap">
-          <span>✅ iPhone .heic photos</span>
-          <span>✅ Bulk convert</span>
-          <span>✅ No server upload</span>
-        </div>
+    <div style={S.wrap}>
+      <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap', marginBottom: 20 }}>
+        {['📱 iPhone HEIC photos', '📦 Bulk convert', '🔒 No upload', '⚡ Free forever'].map(b => (
+          <span key={b} style={S.badge}>{b}</span>
+        ))}
       </div>
 
       {/* Settings */}
-      <div className="bg-gray-50 dark:bg-gray-800/50 rounded-2xl p-5 space-y-4">
-        <div className="grid sm:grid-cols-2 gap-4">
+      <div style={S.card}>
+        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 20 }}>
           <div>
-            <label className="text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2 block">Output Format</label>
-            <div className="flex gap-2">
-              {[['jpg', '🖼️ JPG (smaller file)'], ['png', '🖼️ PNG (lossless)']].map(([val, label]) => (
-                <button key={val} onClick={() => setOutputFormat(val)}
-                  className={`flex-1 py-2 px-3 rounded-lg text-sm font-semibold border-2 transition-all
-                    ${outputFormat === val ? 'border-orange-500 bg-orange-50 dark:bg-orange-900/30 text-orange-700 dark:text-orange-300' : 'border-gray-200 dark:border-gray-700 text-gray-600 dark:text-gray-400'}`}>
-                  {label}
-                </button>
+            <label style={S.label}>Output Format</label>
+            <div style={{ display: 'flex', gap: 8 }}>
+              {[['jpg', '🖼️ JPG (smaller)'], ['png', '🖼️ PNG (lossless)']].map(([val, label]) => (
+                <button key={val} onClick={() => setOutputFormat(val)} style={S.fmtBtn(outputFormat === val)}>{label}</button>
               ))}
             </div>
           </div>
           <div>
-            <label className="text-sm font-semibold text-gray-700 dark:text-gray-300 flex justify-between mb-2">
-              <span>Quality</span>
-              <span className="text-orange-600">{quality}%</span>
-            </label>
-            <input type="range" min={60} max={100} value={quality}
-              onChange={e => setQuality(Number(e.target.value))}
-              className="w-full accent-orange-500 mt-1" />
+            <label style={S.label}>Quality: {quality}%</label>
+            <input type="range" min={60} max={100} value={quality} onChange={e => setQuality(Number(e.target.value))}
+              style={{ width: '100%', accentColor: '#f97316', marginTop: 4 }} />
           </div>
         </div>
       </div>
 
       {/* Drop zone */}
-      <div
-        onDrop={(e) => { e.preventDefault(); setDragOver(false); addFiles(e.dataTransfer.files); }}
-        onDragOver={(e) => { e.preventDefault(); setDragOver(true); }}
-        onDragLeave={() => setDragOver(false)}
-        onClick={() => fileRef.current?.click()}
-        className={`border-2 border-dashed rounded-2xl p-10 text-center cursor-pointer transition-all
-          ${dragOver ? 'border-orange-500 bg-orange-50 dark:bg-orange-900/20' : 'border-gray-300 dark:border-gray-600 hover:border-orange-400'}`}
-      >
-        <div className="text-4xl mb-3">📱</div>
-        <p className="font-semibold text-gray-700 dark:text-gray-200">Drop HEIC files here or click to select</p>
-        <p className="text-sm text-gray-400 mt-1">Supports .heic .heif — multiple files at once</p>
-        <input ref={fileRef} type="file" accept=".heic,.heif,image/*" multiple className="hidden" onChange={e => addFiles(e.target.files)} />
+      <div onDrop={e=>{e.preventDefault();setDragOver(false);addFiles(e.dataTransfer.files);}}
+        onDragOver={e=>{e.preventDefault();setDragOver(true);}} onDragLeave={()=>setDragOver(false)}
+        onClick={()=>fileRef.current?.click()} style={S.dropzone(dragOver)}>
+        <div style={{fontSize:48,marginBottom:12}}>📱</div>
+        <h2 style={{fontSize:'1.2rem',fontWeight:700,marginBottom:8}}>Drop HEIC files here or click to select</h2>
+        <p style={{color:'var(--text-secondary)',marginBottom:16,fontSize:'0.88rem'}}>Supports .heic .heif — multiple files at once</p>
+        <button className="btn-primary" style={{padding:'10px 24px',cursor:'pointer',background:'#f97316',borderColor:'#f97316'}} onClick={e=>{e.stopPropagation();fileRef.current?.click();}}>Choose Files</button>
+        <input ref={fileRef} type="file" accept=".heic,.heif,image/*" multiple style={{display:'none'}} onChange={e=>addFiles(e.target.files)} />
       </div>
 
       {/* File list */}
       {files.length > 0 && (
-        <div className="space-y-3">
-          <div className="flex justify-between items-center">
-            <h3 className="font-semibold text-gray-700 dark:text-gray-300">{files.length} file{files.length > 1 ? 's' : ''} selected</h3>
-            <button onClick={() => { setFiles([]); setResults([]); }} className="text-sm text-red-400 hover:text-red-500">Clear all</button>
+        <div style={S.card}>
+          <div style={{display:'flex',justifyContent:'space-between',alignItems:'center',marginBottom:14}}>
+            <span style={{fontWeight:700,fontSize:'0.95rem'}}>{files.length} file{files.length>1?'s':''} selected</span>
+            <button onClick={()=>{setFiles([]);setResults([]);}} style={{background:'none',border:'none',cursor:'pointer',color:'#ef4444',fontSize:'0.82rem',fontWeight:600}}>Clear all</button>
           </div>
 
-          <div className="space-y-2 max-h-64 overflow-y-auto">
-            {files.map(({ file, id }) => {
-              const res = results.find(r => r.id === id);
+          <div style={{maxHeight:240,overflowY:'auto',display:'flex',flexDirection:'column',gap:6,marginBottom:16}}>
+            {files.map(({file,id})=>{
+              const res = results.find(r=>r.id===id);
               return (
-                <div key={id} className="flex items-center gap-3 bg-white dark:bg-gray-800 border border-gray-100 dark:border-gray-700 rounded-xl px-4 py-3">
-                  <div className="text-2xl">📷</div>
-                  <div className="flex-1 min-w-0">
-                    <p className="text-sm font-medium text-gray-700 dark:text-gray-300 truncate">{file.name}</p>
-                    <p className="text-xs text-gray-400">{(file.size / 1024).toFixed(1)} KB</p>
-                  </div>
-                  {res && (
-                    res.success ? (
-                      <div className="flex items-center gap-2">
-                        <span className="text-green-500 text-xs font-semibold">✅ {(res.size / 1024).toFixed(1)} KB</span>
-                        <a href={res.url} download={res.name} className="text-xs text-blue-600 hover:underline">⬇️</a>
-                      </div>
-                    ) : (
-                      <span className="text-red-400 text-xs">❌ Failed</span>
-                    )
-                  )}
-                  {!res && (
-                    <button onClick={() => setFiles(f => f.filter(x => x.id !== id))} className="text-gray-300 hover:text-red-400 text-sm">✕</button>
-                  )}
+                <div key={id} style={S.fileRow}>
+                  <span style={{fontSize:20}}>{file.name.endsWith('.pdf')?'📑':'📷'}</span>
+                  <span style={{flex:1,overflow:'hidden',textOverflow:'ellipsis',whiteSpace:'nowrap'}}>{file.name}</span>
+                  <span style={{color:'var(--text-tertiary)',fontSize:'0.78rem',flexShrink:0}}>{(file.size/1024).toFixed(0)} KB</span>
+                  {res&&(res.success
+                    ? <span style={{color:'#16a34a',fontWeight:600,fontSize:'0.78rem',flexShrink:0}}>✅ {(res.size/1024).toFixed(0)} KB</span>
+                    : <span style={{color:'#dc2626',fontSize:'0.78rem',flexShrink:0}}>❌ Failed</span>)}
+                  {!res&&<button onClick={()=>setFiles(f=>f.filter(x=>x.id!==id))} style={{background:'none',border:'none',cursor:'pointer',color:'var(--text-tertiary)',fontSize:'1rem',flexShrink:0}}>✕</button>}
                 </div>
               );
             })}
           </div>
 
-          {results.length === 0 && (
-            <button onClick={convertAll} disabled={converting}
-              className="w-full bg-orange-500 hover:bg-orange-600 disabled:opacity-50 text-white font-bold py-4 rounded-xl transition-colors">
-              {converting ? '⚙️ Converting...' : `🔄 Convert ${files.length} File${files.length > 1 ? 's' : ''} to ${outputFormat.toUpperCase()}`}
+          {converting && (
+            <div style={{marginBottom:16}}>
+              <div style={{display:'flex',justifyContent:'space-between',fontSize:'0.82rem',color:'var(--text-secondary)',marginBottom:6}}>
+                <span>⚙️ Converting...</span>
+              </div>
+              <div style={{height:6,background:'var(--bg-tertiary)',borderRadius:3,overflow:'hidden'}}>
+                <div style={{height:'100%',background:'#f97316',borderRadius:3,animation:'ilt-pulse 1s ease-in-out infinite'}} />
+              </div>
+            </div>
+          )}
+
+          {!results.length && !converting && (
+            <button onClick={convertAll} style={{width:'100%',padding:'12px',background:'#f97316',color:'#fff',border:'none',borderRadius:'var(--radius-md)',fontWeight:700,cursor:'pointer',fontSize:'1rem'}}>
+              🔄 Convert {files.length} File{files.length>1?'s':''} to {outputFormat.toUpperCase()}
             </button>
           )}
 
           {successCount > 0 && (
-            <div className="space-y-3">
-              <div className="bg-green-50 dark:bg-green-900/20 border border-green-200 rounded-xl p-4 text-center">
-                <p className="font-bold text-green-700 dark:text-green-400">✅ {successCount} file{successCount > 1 ? 's' : ''} converted successfully!</p>
+            <>
+              <div style={{background:'#f0fdf4',border:'1px solid #86efac',borderRadius:'var(--radius-md)',padding:14,textAlign:'center',marginBottom:12}}>
+                <div style={{fontWeight:700,color:'#15803d'}}>✅ {successCount} file{successCount>1?'s':''} converted!</div>
               </div>
-              <button onClick={downloadAll} className="w-full bg-green-600 hover:bg-green-700 text-white font-bold py-4 rounded-xl transition-colors">
-                ⬇️ Download {successCount > 1 ? `All as ZIP` : outputFormat.toUpperCase()}
+              <button onClick={downloadAll} style={{width:'100%',padding:'12px',background:'#16a34a',color:'#fff',border:'none',borderRadius:'var(--radius-md)',fontWeight:700,cursor:'pointer',marginBottom:8,fontSize:'0.95rem'}}>
+                ⬇️ Download {successCount>1?'All as ZIP':outputFormat.toUpperCase()}
               </button>
-              <button onClick={() => { setFiles([]); setResults([]); }} className="w-full border border-gray-200 dark:border-gray-700 rounded-xl py-3 text-sm text-gray-500 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors">
-                🔄 Convert more files
+              <button onClick={()=>{setFiles([]);setResults([]);}} style={{width:'100%',padding:'10px',borderRadius:'var(--radius-md)',border:'1px solid var(--border-light)',background:'var(--bg-secondary)',cursor:'pointer',fontSize:'0.85rem'}}>
+                🔄 Convert More Files
               </button>
-            </div>
+            </>
           )}
         </div>
       )}
 
-      {/* Browser note */}
-      <div className="bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-800 rounded-xl p-4 text-sm text-amber-800 dark:text-amber-300">
-        <strong>📱 iPhone users:</strong> HEIC is the default iPhone photo format. This tool converts them to JPG/PNG so they work everywhere — WhatsApp, email, websites, Windows PCs.
-        <br /><strong>Note:</strong> HEIC conversion works natively on Safari/Chrome. If it fails, try a different browser.
+      <div style={{background:'#fffbeb',border:'1px solid #fde68a',borderRadius:'var(--radius-md)',padding:14,fontSize:'0.83rem',color:'#92400e'}}>
+        <strong>📱 iPhone users:</strong> HEIC is the default iPhone photo format since iOS 11. Convert to JPG so photos work on Windows, WhatsApp, websites, and forms.
       </div>
     </div>
   );

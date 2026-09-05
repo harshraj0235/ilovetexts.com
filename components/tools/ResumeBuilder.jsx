@@ -9,7 +9,7 @@ const TEMPLATES = [
   { id: 'corporate', name: 'Corporate', accent: '#0369a1' },
 ];
 
-const EMPTY_RESUME = {
+const EMPTY = {
   personal: { name: '', title: '', email: '', phone: '', location: '', linkedin: '', website: '' },
   summary: '',
   experience: [{ company: '', role: '', duration: '', points: [''] }],
@@ -17,53 +17,63 @@ const EMPTY_RESUME = {
   skills: [''],
   projects: [{ name: '', desc: '', tech: '' }],
   certifications: [''],
-  languages: [''],
 };
 
+const S = {
+  wrap: { maxWidth: 1100, margin: '0 auto', width: '100%' },
+  card: { background: 'var(--bg-main)', border: '1px solid var(--border-light)', borderRadius: 'var(--radius-lg)', padding: 20, marginBottom: 14, boxShadow: 'var(--shadow-sm)' },
+  badge: { display: 'inline-flex', alignItems: 'center', gap: 6, padding: '4px 12px', borderRadius: 20, background: 'var(--bg-secondary)', border: '1px solid var(--border-light)', fontSize: '0.78rem', fontWeight: 600, color: 'var(--text-secondary)' },
+  label: { fontSize: '0.75rem', fontWeight: 700, color: 'var(--text-secondary)', display: 'block', marginBottom: 5, textTransform: 'uppercase', letterSpacing: '0.05em' },
+  input: { width: '100%', padding: '8px 10px', border: '1px solid var(--border-light)', borderRadius: 'var(--radius-sm)', background: 'var(--bg-main)', color: 'var(--text-primary)', fontSize: '0.85rem', outline: 'none', boxSizing: 'border-box' },
+  textarea: { width: '100%', padding: '8px 10px', border: '1px solid var(--border-light)', borderRadius: 'var(--radius-sm)', background: 'var(--bg-main)', color: 'var(--text-primary)', fontSize: '0.85rem', outline: 'none', resize: 'vertical', fontFamily: 'var(--font-sans)', boxSizing: 'border-box' },
+  tabBtn: (active) => ({ padding: '6px 12px', borderRadius: 'var(--radius-sm)', border: 'none', background: active ? 'var(--accent)' : 'var(--bg-secondary)', color: active ? 'var(--accent-text)' : 'var(--text-secondary)', cursor: 'pointer', fontSize: '0.78rem', fontWeight: 600, transition: 'all 0.15s' }),
+  removeBtn: { background: 'none', border: 'none', cursor: 'pointer', color: '#ef4444', fontSize: '0.8rem', fontWeight: 600 },
+  addBtn: { background: 'none', border: 'none', cursor: 'pointer', color: 'var(--highlight)', fontSize: '0.82rem', fontWeight: 600, padding: 0 },
+};
+
+function Field({ label, value, onChange, placeholder, type = 'text' }) {
+  return (
+    <div>
+      <label style={S.label}>{label}</label>
+      <input type={type} value={value} onChange={e => onChange(e.target.value)} placeholder={placeholder} style={S.input} />
+    </div>
+  );
+}
+
+function PrevSection({ title, accent, children }) {
+  return (
+    <div style={{ marginBottom: 14 }}>
+      <div style={{ fontSize: 9, fontWeight: 800, color: accent, letterSpacing: '1.5px', borderBottom: `1px solid ${accent}30`, paddingBottom: 3, marginBottom: 6 }}>{title}</div>
+      {children}
+    </div>
+  );
+}
+
 export default function ResumeBuilder({ t, lang }) {
-  const [resume, setResume] = useState(EMPTY_RESUME);
+  const [resume, setResume] = useState(EMPTY);
   const [template, setTemplate] = useState('classic');
-  const [activeTab, setActiveTab] = useState('personal');
-  const [preview, setPreview] = useState(false);
+  const [tab, setTab] = useState('personal');
   const previewRef = useRef();
 
   const accent = TEMPLATES.find(t => t.id === template)?.accent || '#1e3a5f';
 
-  // Generic updaters
-  const setField = (section, field, value) => setResume(r => ({ ...r, [section]: { ...r[section], [field]: value } }));
-  const setSummary = (v) => setResume(r => ({ ...r, summary: v }));
-  const addItem = (section) => setResume(r => ({ ...r, [section]: [...r[section], section === 'experience' ? { company: '', role: '', duration: '', points: [''] } : section === 'education' ? { institution: '', degree: '', year: '', gpa: '' } : section === 'projects' ? { name: '', desc: '', tech: '' } : ''] }));
-  const removeItem = (section, idx) => setResume(r => ({ ...r, [section]: r[section].filter((_, i) => i !== idx) }));
-  const updateItem = (section, idx, field, value) => setResume(r => {
-    const arr = [...r[section]];
-    if (typeof arr[idx] === 'string') arr[idx] = value;
-    else arr[idx] = { ...arr[idx], [field]: value };
-    return { ...r, [section]: arr };
-  });
-  const addExpPoint = (idx) => setResume(r => {
-    const exp = [...r.experience];
-    exp[idx] = { ...exp[idx], points: [...exp[idx].points, ''] };
-    return { ...r, experience: exp };
-  });
-  const updateExpPoint = (idx, pi, val) => setResume(r => {
-    const exp = [...r.experience];
-    const pts = [...exp[idx].points];
-    pts[pi] = val;
-    exp[idx] = { ...exp[idx], points: pts };
-    return { ...r, experience: exp };
-  });
+  const setPersonal = (f, v) => setResume(r => ({ ...r, personal: { ...r.personal, [f]: v } }));
+  const setSummary = v => setResume(r => ({ ...r, summary: v }));
+  const addItem = (s) => setResume(r => ({ ...r, [s]: [...r[s], s === 'experience' ? { company: '', role: '', duration: '', points: [''] } : s === 'education' ? { institution: '', degree: '', year: '', gpa: '' } : s === 'projects' ? { name: '', desc: '', tech: '' } : ''] }));
+  const removeItem = (s, i) => setResume(r => ({ ...r, [s]: r[s].filter((_, idx) => idx !== i) }));
+  const updateItem = (s, i, f, v) => setResume(r => { const a = [...r[s]]; if (typeof a[i] === 'string') a[i] = v; else a[i] = { ...a[i], [f]: v }; return { ...r, [s]: a }; });
+  const addExpPoint = i => setResume(r => { const e = [...r.experience]; e[i] = { ...e[i], points: [...e[i].points, ''] }; return { ...r, experience: e }; });
+  const updateExpPoint = (i, pi, v) => setResume(r => { const e = [...r.experience]; const pts = [...e[i].points]; pts[pi] = v; e[i] = { ...e[i], points: pts }; return { ...r, experience: e }; });
 
   const downloadPDF = async () => {
     const { jsPDF } = await import('jspdf');
-    const { default: html2canvas } = await import('html2canvas');
+    const html2canvas = (await import('html2canvas')).default;
     const el = previewRef.current;
     if (!el) return;
     const canvas = await html2canvas(el, { scale: 2, useCORS: true, backgroundColor: '#ffffff' });
-    const imgData = canvas.toDataURL('image/png');
     const pdf = new jsPDF({ orientation: 'portrait', unit: 'mm', format: 'a4' });
-    const pdfW = pdf.internal.pageSize.getWidth();
-    const pdfH = (canvas.height * pdfW) / canvas.width;
-    pdf.addImage(imgData, 'PNG', 0, 0, pdfW, pdfH);
+    const pW = pdf.internal.pageSize.getWidth();
+    pdf.addImage(canvas.toDataURL('image/png'), 'PNG', 0, 0, pW, (canvas.height * pW) / canvas.width);
     pdf.save(`${resume.personal.name || 'resume'}.pdf`);
   };
 
@@ -78,211 +88,173 @@ export default function ResumeBuilder({ t, lang }) {
   ];
 
   return (
-    <div className="max-w-7xl mx-auto p-4">
-      {/* Header */}
-      <div className="text-center mb-6">
-        <div className="text-4xl mb-2">📄</div>
-        <h1 className="text-2xl font-bold text-gray-900 dark:text-white">Free Resume Builder</h1>
-        <p className="text-gray-500 dark:text-gray-400">Professional resume in minutes — free PDF download, no watermark, no signup</p>
-      </div>
-
-      {/* Template selector */}
-      <div className="flex gap-3 mb-6 overflow-x-auto pb-2">
-        {TEMPLATES.map(tmpl => (
-          <button
-            key={tmpl.id}
-            onClick={() => setTemplate(tmpl.id)}
-            className={`flex-shrink-0 px-4 py-2 rounded-xl text-sm font-semibold border-2 transition-all
-              ${template === tmpl.id ? 'border-purple-500 bg-purple-50 dark:bg-purple-900/30 text-purple-700 dark:text-purple-300' : 'border-gray-200 dark:border-gray-700 text-gray-600 dark:text-gray-400 hover:border-purple-300'}`}
-            style={template === tmpl.id ? { borderColor: tmpl.accent } : {}}
-          >
-            <span className="w-3 h-3 rounded-full inline-block mr-2" style={{ backgroundColor: tmpl.accent }} />
-            {tmpl.name}
-          </button>
+    <div style={S.wrap}>
+      <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap', marginBottom: 20 }}>
+        {['📄 Free PDF download', '🚫 No watermark', '5 templates', '🔒 No signup required'].map(b => (
+          <span key={b} style={S.badge}>{b}</span>
         ))}
       </div>
 
-      <div className="grid lg:grid-cols-2 gap-6">
+      {/* Template selector */}
+      <div style={S.card}>
+        <div style={S.label}>Template</div>
+        <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
+          {TEMPLATES.map(tmpl => (
+            <button key={tmpl.id} onClick={() => setTemplate(tmpl.id)}
+              style={{ padding: '7px 16px', borderRadius: 'var(--radius-sm)', border: `2px solid ${template === tmpl.id ? tmpl.accent : 'var(--border-light)'}`, background: template === tmpl.id ? `${tmpl.accent}15` : 'var(--bg-secondary)', cursor: 'pointer', fontSize: '0.85rem', fontWeight: 600, color: template === tmpl.id ? tmpl.accent : 'var(--text-secondary)', transition: 'all 0.15s' }}>
+              <span style={{ width: 8, height: 8, borderRadius: '50%', background: tmpl.accent, display: 'inline-block', marginRight: 6 }} />
+              {tmpl.name}
+            </button>
+          ))}
+        </div>
+      </div>
+
+      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16 }}>
         {/* Form */}
-        <div className="space-y-4">
-          {/* Tab nav */}
-          <div className="flex gap-1 flex-wrap">
-            {TABS.map(tab => (
-              <button key={tab.id} onClick={() => setActiveTab(tab.id)}
-                className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition-colors
-                  ${activeTab === tab.id ? 'bg-purple-600 text-white' : 'bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-700'}`}>
-                {tab.label}
-              </button>
-            ))}
+        <div>
+          {/* Tabs */}
+          <div style={{ display: 'flex', gap: 5, flexWrap: 'wrap', marginBottom: 12 }}>
+            {TABS.map(t => <button key={t.id} onClick={() => setTab(t.id)} style={S.tabBtn(tab === t.id)}>{t.label}</button>)}
           </div>
 
-          <div className="bg-white dark:bg-gray-900 rounded-2xl border border-gray-200 dark:border-gray-700 p-5 space-y-4">
-
+          <div style={S.card}>
             {/* Personal */}
-            {activeTab === 'personal' && (
-              <div className="grid sm:grid-cols-2 gap-3">
-                {[
-                  ['name', 'Full Name *', 'Harsh Raj'],
-                  ['title', 'Job Title', 'Software Engineer'],
-                  ['email', 'Email *', 'harsh@example.com'],
-                  ['phone', 'Phone', '+91 98765 43210'],
-                  ['location', 'Location', 'Mumbai, India'],
-                  ['linkedin', 'LinkedIn URL', 'linkedin.com/in/harshitpatel9'],
-                  ['website', 'Website / Portfolio', 'ilovetexts.com'],
-                ].map(([field, label, placeholder]) => (
-                  <div key={field} className={field === 'name' || field === 'title' ? 'sm:col-span-2' : ''}>
-                    <label className="text-xs font-semibold text-gray-600 dark:text-gray-400 mb-1 block">{label}</label>
-                    <input
-                      value={resume.personal[field]}
-                      onChange={e => setField('personal', field, e.target.value)}
-                      placeholder={placeholder}
-                      className="w-full border border-gray-200 dark:border-gray-700 rounded-lg px-3 py-2 text-sm bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:outline-none focus:border-purple-400"
-                    />
-                  </div>
-                ))}
+            {tab === 'personal' && (
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10 }}>
+                <div style={{ gridColumn: '1/-1' }}><Field label="Full Name *" value={resume.personal.name} onChange={v => setPersonal('name', v)} placeholder="Harsh Raj" /></div>
+                <div style={{ gridColumn: '1/-1' }}><Field label="Job Title" value={resume.personal.title} onChange={v => setPersonal('title', v)} placeholder="Software Engineer" /></div>
+                <Field label="Email *" value={resume.personal.email} onChange={v => setPersonal('email', v)} placeholder="harsh@example.com" />
+                <Field label="Phone" value={resume.personal.phone} onChange={v => setPersonal('phone', v)} placeholder="+91 98765 43210" />
+                <Field label="Location" value={resume.personal.location} onChange={v => setPersonal('location', v)} placeholder="Mumbai, India" />
+                <Field label="LinkedIn" value={resume.personal.linkedin} onChange={v => setPersonal('linkedin', v)} placeholder="linkedin.com/in/..." />
+                <div style={{ gridColumn: '1/-1' }}><Field label="Website" value={resume.personal.website} onChange={v => setPersonal('website', v)} placeholder="yourwebsite.com" /></div>
               </div>
             )}
 
             {/* Summary */}
-            {activeTab === 'summary' && (
+            {tab === 'summary' && (
               <div>
-                <label className="text-xs font-semibold text-gray-600 dark:text-gray-400 mb-1 block">Professional Summary</label>
-                <textarea
-                  value={resume.summary}
-                  onChange={e => setSummary(e.target.value)}
-                  rows={6}
-                  placeholder="Passionate software engineer with 3+ years experience building scalable web applications..."
-                  className="w-full border border-gray-200 dark:border-gray-700 rounded-lg px-3 py-2 text-sm bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:outline-none focus:border-purple-400 resize-none"
-                />
-                <p className="text-xs text-gray-400 mt-1">{resume.summary.length} characters</p>
+                <label style={S.label}>Professional Summary</label>
+                <textarea value={resume.summary} onChange={e => setSummary(e.target.value)} rows={6} placeholder="Passionate software engineer with 3+ years experience..." style={S.textarea} />
+                <p style={{ fontSize: '0.72rem', color: 'var(--text-tertiary)', marginTop: 4 }}>{resume.summary.length} characters</p>
               </div>
             )}
 
             {/* Experience */}
-            {activeTab === 'experience' && (
-              <div className="space-y-4">
-                {resume.experience.map((exp, idx) => (
-                  <div key={idx} className="border border-gray-200 dark:border-gray-700 rounded-xl p-4 space-y-3">
-                    <div className="flex justify-between items-center">
-                      <span className="text-xs font-bold text-gray-500 uppercase">Experience {idx + 1}</span>
-                      {resume.experience.length > 1 && (
-                        <button onClick={() => removeItem('experience', idx)} className="text-red-400 hover:text-red-500 text-xs">✕ Remove</button>
-                      )}
+            {tab === 'experience' && (
+              <div style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
+                {resume.experience.map((exp, i) => (
+                  <div key={i} style={{ border: '1px solid var(--border-light)', borderRadius: 'var(--radius-md)', padding: 14 }}>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 10 }}>
+                      <span style={{ fontSize: '0.75rem', fontWeight: 700, color: 'var(--text-tertiary)', textTransform: 'uppercase' }}>Experience {i + 1}</span>
+                      {resume.experience.length > 1 && <button onClick={() => removeItem('experience', i)} style={S.removeBtn}>✕ Remove</button>}
                     </div>
-                    <div className="grid sm:grid-cols-2 gap-3">
-                      {[['company', 'Company Name', 'Google India'], ['role', 'Job Title', 'Senior Engineer'], ['duration', 'Duration', 'Jan 2023 – Present']].map(([f, l, p]) => (
-                        <input key={f} value={exp[f]} onChange={e => updateItem('experience', idx, f, e.target.value)}
-                          placeholder={`${l} e.g. ${p}`}
-                          className="border border-gray-200 dark:border-gray-700 rounded-lg px-3 py-2 text-sm bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:outline-none focus:border-purple-400" />
+                    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 8, marginBottom: 8 }}>
+                      {[['Company', 'company', 'Google India'], ['Role', 'role', 'Senior Engineer'], ['Duration', 'duration', 'Jan 2023 – Present']].map(([l, f, p]) => (
+                        <div key={f}><label style={S.label}>{l}</label><input value={exp[f]} onChange={e => updateItem('experience', i, f, e.target.value)} placeholder={p} style={S.input} /></div>
                       ))}
                     </div>
-                    <div className="space-y-2">
-                      <label className="text-xs font-semibold text-gray-500">Responsibilities / Achievements</label>
+                    <label style={S.label}>Achievements</label>
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: 5 }}>
                       {exp.points.map((pt, pi) => (
-                        <input key={pi} value={pt} onChange={e => updateExpPoint(idx, pi, e.target.value)}
-                          placeholder={`• Achievement ${pi + 1}`}
-                          className="w-full border border-gray-200 dark:border-gray-700 rounded-lg px-3 py-2 text-sm bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:outline-none focus:border-purple-400" />
+                        <input key={pi} value={pt} onChange={e => updateExpPoint(i, pi, e.target.value)} placeholder={`• Point ${pi + 1}`} style={S.input} />
                       ))}
-                      <button onClick={() => addExpPoint(idx)} className="text-xs text-purple-600 hover:underline">+ Add point</button>
                     </div>
+                    <button onClick={() => addExpPoint(i)} style={{ ...S.addBtn, marginTop: 6 }}>+ Add point</button>
                   </div>
                 ))}
-                <button onClick={() => addItem('experience')} className="w-full border-2 border-dashed border-gray-300 dark:border-gray-600 rounded-xl py-3 text-sm text-gray-500 hover:border-purple-400 hover:text-purple-500 transition-colors">+ Add Experience</button>
+                <button onClick={() => addItem('experience')} style={{ border: '2px dashed var(--border-light)', borderRadius: 'var(--radius-md)', padding: '10px', background: 'none', cursor: 'pointer', color: 'var(--text-secondary)', fontSize: '0.85rem' }}>+ Add Experience</button>
               </div>
             )}
 
             {/* Education */}
-            {activeTab === 'education' && (
-              <div className="space-y-4">
-                {resume.education.map((edu, idx) => (
-                  <div key={idx} className="border border-gray-200 dark:border-gray-700 rounded-xl p-4 space-y-3">
-                    <div className="flex justify-between">
-                      <span className="text-xs font-bold text-gray-500 uppercase">Education {idx + 1}</span>
-                      {resume.education.length > 1 && <button onClick={() => removeItem('education', idx)} className="text-red-400 text-xs">✕</button>}
+            {tab === 'education' && (
+              <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
+                {resume.education.map((edu, i) => (
+                  <div key={i} style={{ border: '1px solid var(--border-light)', borderRadius: 'var(--radius-md)', padding: 12 }}>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 8 }}>
+                      <span style={{ fontSize: '0.72rem', fontWeight: 700, color: 'var(--text-tertiary)', textTransform: 'uppercase' }}>Education {i + 1}</span>
+                      {resume.education.length > 1 && <button onClick={() => removeItem('education', i)} style={S.removeBtn}>✕</button>}
                     </div>
-                    <div className="grid sm:grid-cols-2 gap-3">
-                      {[['institution', 'Institution', 'IIT Bombay'], ['degree', 'Degree', 'B.Tech Computer Science'], ['year', 'Year', '2020 – 2024'], ['gpa', 'GPA / %', '8.5 / 10']].map(([f, l, p]) => (
-                        <input key={f} value={edu[f]} onChange={e => updateItem('education', idx, f, e.target.value)}
-                          placeholder={`${l} e.g. ${p}`}
-                          className="border border-gray-200 dark:border-gray-700 rounded-lg px-3 py-2 text-sm bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:outline-none focus:border-purple-400" />
+                    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 8 }}>
+                      {[['Institution', 'institution', 'IIT Bombay'], ['Degree', 'degree', 'B.Tech CS'], ['Year', 'year', '2020–2024'], ['GPA / %', 'gpa', '8.5/10']].map(([l, f, p]) => (
+                        <div key={f}><label style={S.label}>{l}</label><input value={edu[f]} onChange={e => updateItem('education', i, f, e.target.value)} placeholder={p} style={S.input} /></div>
                       ))}
                     </div>
                   </div>
                 ))}
-                <button onClick={() => addItem('education')} className="w-full border-2 border-dashed border-gray-300 dark:border-gray-600 rounded-xl py-3 text-sm text-gray-500 hover:border-purple-400 hover:text-purple-500 transition-colors">+ Add Education</button>
+                <button onClick={() => addItem('education')} style={{ border: '2px dashed var(--border-light)', borderRadius: 'var(--radius-md)', padding: '10px', background: 'none', cursor: 'pointer', color: 'var(--text-secondary)', fontSize: '0.85rem' }}>+ Add Education</button>
               </div>
             )}
 
             {/* Skills */}
-            {activeTab === 'skills' && (
-              <div className="space-y-3">
-                <label className="text-xs font-semibold text-gray-600 dark:text-gray-400 block">Skills (one per line or comma separated)</label>
-                {resume.skills.map((skill, idx) => (
-                  <div key={idx} className="flex gap-2">
-                    <input value={skill} onChange={e => updateItem('skills', idx, null, e.target.value)}
-                      placeholder={`Skill ${idx + 1} e.g. React.js`}
-                      className="flex-1 border border-gray-200 dark:border-gray-700 rounded-lg px-3 py-2 text-sm bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:outline-none focus:border-purple-400" />
-                    {resume.skills.length > 1 && <button onClick={() => removeItem('skills', idx)} className="text-red-400 hover:text-red-500 px-2">✕</button>}
-                  </div>
-                ))}
-                <button onClick={() => addItem('skills')} className="text-sm text-purple-600 hover:underline">+ Add skill</button>
+            {tab === 'skills' && (
+              <div>
+                <label style={S.label}>Skills (one per field)</label>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
+                  {resume.skills.map((s, i) => (
+                    <div key={i} style={{ display: 'flex', gap: 6 }}>
+                      <input value={s} onChange={e => updateItem('skills', i, null, e.target.value)} placeholder={`Skill ${i + 1} e.g. React.js`} style={{ ...S.input, flex: 1 }} />
+                      {resume.skills.length > 1 && <button onClick={() => removeItem('skills', i)} style={S.removeBtn}>✕</button>}
+                    </div>
+                  ))}
+                </div>
+                <button onClick={() => addItem('skills')} style={{ ...S.addBtn, marginTop: 8 }}>+ Add skill</button>
               </div>
             )}
 
             {/* Projects */}
-            {activeTab === 'projects' && (
-              <div className="space-y-4">
-                {resume.projects.map((proj, idx) => (
-                  <div key={idx} className="border border-gray-200 dark:border-gray-700 rounded-xl p-4 space-y-3">
-                    <div className="flex justify-between">
-                      <span className="text-xs font-bold text-gray-500 uppercase">Project {idx + 1}</span>
-                      {resume.projects.length > 1 && <button onClick={() => removeItem('projects', idx)} className="text-red-400 text-xs">✕</button>}
+            {tab === 'projects' && (
+              <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
+                {resume.projects.map((proj, i) => (
+                  <div key={i} style={{ border: '1px solid var(--border-light)', borderRadius: 'var(--radius-md)', padding: 12 }}>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 8 }}>
+                      <span style={{ fontSize: '0.72rem', fontWeight: 700, color: 'var(--text-tertiary)', textTransform: 'uppercase' }}>Project {i + 1}</span>
+                      {resume.projects.length > 1 && <button onClick={() => removeItem('projects', i)} style={S.removeBtn}>✕</button>}
                     </div>
-                    <input value={proj.name} onChange={e => updateItem('projects', idx, 'name', e.target.value)} placeholder="Project Name" className="w-full border border-gray-200 dark:border-gray-700 rounded-lg px-3 py-2 text-sm bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:outline-none focus:border-purple-400" />
-                    <textarea value={proj.desc} onChange={e => updateItem('projects', idx, 'desc', e.target.value)} placeholder="Brief description of the project..." rows={2} className="w-full border border-gray-200 dark:border-gray-700 rounded-lg px-3 py-2 text-sm bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:outline-none focus:border-purple-400 resize-none" />
-                    <input value={proj.tech} onChange={e => updateItem('projects', idx, 'tech', e.target.value)} placeholder="Tech stack e.g. React, Node.js, MongoDB" className="w-full border border-gray-200 dark:border-gray-700 rounded-lg px-3 py-2 text-sm bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:outline-none focus:border-purple-400" />
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
+                      <input value={proj.name} onChange={e => updateItem('projects', i, 'name', e.target.value)} placeholder="Project Name" style={S.input} />
+                      <textarea value={proj.desc} onChange={e => updateItem('projects', i, 'desc', e.target.value)} placeholder="Brief description..." rows={2} style={S.textarea} />
+                      <input value={proj.tech} onChange={e => updateItem('projects', i, 'tech', e.target.value)} placeholder="Tech: React, Node.js..." style={S.input} />
+                    </div>
                   </div>
                 ))}
-                <button onClick={() => addItem('projects')} className="w-full border-2 border-dashed border-gray-300 dark:border-gray-600 rounded-xl py-3 text-sm text-gray-500 hover:border-purple-400 transition-colors">+ Add Project</button>
+                <button onClick={() => addItem('projects')} style={{ border: '2px dashed var(--border-light)', borderRadius: 'var(--radius-md)', padding: '10px', background: 'none', cursor: 'pointer', color: 'var(--text-secondary)', fontSize: '0.85rem' }}>+ Add Project</button>
               </div>
             )}
 
             {/* Certifications */}
-            {activeTab === 'certifications' && (
-              <div className="space-y-3">
-                {resume.certifications.map((cert, idx) => (
-                  <div key={idx} className="flex gap-2">
-                    <input value={cert} onChange={e => updateItem('certifications', idx, null, e.target.value)}
-                      placeholder={`Certification e.g. AWS Solutions Architect 2024`}
-                      className="flex-1 border border-gray-200 dark:border-gray-700 rounded-lg px-3 py-2 text-sm bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:outline-none focus:border-purple-400" />
-                    {resume.certifications.length > 1 && <button onClick={() => removeItem('certifications', idx)} className="text-red-400 px-2">✕</button>}
-                  </div>
-                ))}
-                <button onClick={() => addItem('certifications')} className="text-sm text-purple-600 hover:underline">+ Add certification</button>
+            {tab === 'certifications' && (
+              <div>
+                <label style={S.label}>Certifications</label>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
+                  {resume.certifications.map((c, i) => (
+                    <div key={i} style={{ display: 'flex', gap: 6 }}>
+                      <input value={c} onChange={e => updateItem('certifications', i, null, e.target.value)} placeholder="AWS Solutions Architect 2024" style={{ ...S.input, flex: 1 }} />
+                      {resume.certifications.length > 1 && <button onClick={() => removeItem('certifications', i)} style={S.removeBtn}>✕</button>}
+                    </div>
+                  ))}
+                </div>
+                <button onClick={() => addItem('certifications')} style={{ ...S.addBtn, marginTop: 8 }}>+ Add</button>
               </div>
             )}
           </div>
 
-          <button onClick={downloadPDF} className="w-full bg-green-600 hover:bg-green-700 text-white font-bold py-4 rounded-xl transition-colors text-lg">
+          <button onClick={downloadPDF} className="btn-primary" style={{ width: '100%', padding: '13px', cursor: 'pointer', fontSize: '1rem', marginTop: 4 }}>
             ⬇️ Download PDF — Free, No Watermark
           </button>
         </div>
 
         {/* Live Preview */}
-        <div className="space-y-3">
-          <h3 className="font-bold text-gray-700 dark:text-gray-300 text-sm">Live Preview</h3>
-          <div className="border border-gray-200 dark:border-gray-700 rounded-2xl overflow-hidden shadow-lg bg-white">
-            <div ref={previewRef} className="bg-white text-gray-900 font-sans" style={{ minHeight: '297mm', padding: '20mm 16mm' }}>
-
+        <div>
+          <div style={S.label}>Live Preview</div>
+          <div style={{ border: '1px solid var(--border-light)', borderRadius: 'var(--radius-lg)', overflow: 'auto', boxShadow: 'var(--shadow-sm)', maxHeight: 700 }}>
+            <div ref={previewRef} style={{ background: '#fff', color: '#111', fontFamily: 'Arial, sans-serif', padding: '18mm 14mm', minHeight: '297mm', fontSize: 11 }}>
               {/* Header */}
-              <div style={{ borderBottom: `3px solid ${accent}`, paddingBottom: '12px', marginBottom: '16px' }}>
-                <h1 style={{ fontSize: '26px', fontWeight: '800', color: accent, margin: 0 }}>
-                  {resume.personal.name || 'Your Name'}
-                </h1>
-                {resume.personal.title && (
-                  <p style={{ fontSize: '14px', color: '#6b7280', margin: '4px 0 0' }}>{resume.personal.title}</p>
-                )}
-                <div style={{ display: 'flex', flexWrap: 'wrap', gap: '12px', marginTop: '8px', fontSize: '11px', color: '#374151' }}>
+              <div style={{ borderBottom: `3px solid ${accent}`, paddingBottom: 10, marginBottom: 14 }}>
+                <div style={{ fontSize: 22, fontWeight: 800, color: accent }}>{resume.personal.name || 'Your Name'}</div>
+                {resume.personal.title && <div style={{ fontSize: 12, color: '#6b7280', marginTop: 3 }}>{resume.personal.title}</div>}
+                <div style={{ display: 'flex', flexWrap: 'wrap', gap: 10, marginTop: 6, fontSize: 9, color: '#374151' }}>
                   {resume.personal.email && <span>✉ {resume.personal.email}</span>}
                   {resume.personal.phone && <span>📞 {resume.personal.phone}</span>}
                   {resume.personal.location && <span>📍 {resume.personal.location}</span>}
@@ -290,98 +262,60 @@ export default function ResumeBuilder({ t, lang }) {
                   {resume.personal.website && <span>🌐 {resume.personal.website}</span>}
                 </div>
               </div>
-
-              {/* Summary */}
-              {resume.summary && (
-                <Section title="PROFESSIONAL SUMMARY" accent={accent}>
-                  <p style={{ fontSize: '11px', color: '#374151', lineHeight: '1.6' }}>{resume.summary}</p>
-                </Section>
-              )}
-
-              {/* Experience */}
+              {resume.summary && <PrevSection title="PROFESSIONAL SUMMARY" accent={accent}><p style={{ fontSize: 10, lineHeight: 1.6, color: '#374151' }}>{resume.summary}</p></PrevSection>}
               {resume.experience.some(e => e.company) && (
-                <Section title="WORK EXPERIENCE" accent={accent}>
+                <PrevSection title="WORK EXPERIENCE" accent={accent}>
                   {resume.experience.filter(e => e.company).map((exp, i) => (
-                    <div key={i} style={{ marginBottom: '12px' }}>
-                      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline' }}>
-                        <strong style={{ fontSize: '12px', color: '#111827' }}>{exp.role}</strong>
-                        <span style={{ fontSize: '10px', color: '#9ca3af' }}>{exp.duration}</span>
+                    <div key={i} style={{ marginBottom: 10 }}>
+                      <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                        <strong style={{ fontSize: 11 }}>{exp.role}</strong>
+                        <span style={{ fontSize: 9, color: '#9ca3af' }}>{exp.duration}</span>
                       </div>
-                      <div style={{ fontSize: '11px', color: accent, fontWeight: '600' }}>{exp.company}</div>
-                      {exp.points.filter(Boolean).map((pt, pi) => (
-                        <div key={pi} style={{ fontSize: '10px', color: '#4b5563', marginTop: '3px' }}>• {pt}</div>
-                      ))}
+                      <div style={{ fontSize: 10, color: accent, fontWeight: 600 }}>{exp.company}</div>
+                      {exp.points.filter(Boolean).map((pt, pi) => <div key={pi} style={{ fontSize: 9, color: '#4b5563', marginTop: 2 }}>• {pt}</div>)}
                     </div>
                   ))}
-                </Section>
+                </PrevSection>
               )}
-
-              {/* Education */}
               {resume.education.some(e => e.institution) && (
-                <Section title="EDUCATION" accent={accent}>
+                <PrevSection title="EDUCATION" accent={accent}>
                   {resume.education.filter(e => e.institution).map((edu, i) => (
-                    <div key={i} style={{ marginBottom: '8px', display: 'flex', justifyContent: 'space-between', alignItems: 'baseline' }}>
-                      <div>
-                        <strong style={{ fontSize: '12px', color: '#111827' }}>{edu.degree}</strong>
-                        <div style={{ fontSize: '11px', color: accent }}>{edu.institution}</div>
-                      </div>
-                      <div style={{ textAlign: 'right' }}>
-                        <div style={{ fontSize: '10px', color: '#9ca3af' }}>{edu.year}</div>
-                        {edu.gpa && <div style={{ fontSize: '10px', color: '#6b7280' }}>{edu.gpa}</div>}
-                      </div>
+                    <div key={i} style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 6 }}>
+                      <div><strong style={{ fontSize: 11 }}>{edu.degree}</strong><div style={{ fontSize: 10, color: accent }}>{edu.institution}</div></div>
+                      <div style={{ textAlign: 'right' }}><div style={{ fontSize: 9, color: '#9ca3af' }}>{edu.year}</div>{edu.gpa && <div style={{ fontSize: 9, color: '#6b7280' }}>{edu.gpa}</div>}</div>
                     </div>
                   ))}
-                </Section>
+                </PrevSection>
               )}
-
-              {/* Skills */}
               {resume.skills.some(Boolean) && (
-                <Section title="SKILLS" accent={accent}>
-                  <div style={{ display: 'flex', flexWrap: 'wrap', gap: '6px' }}>
-                    {resume.skills.filter(Boolean).map((skill, i) => (
-                      <span key={i} style={{ fontSize: '10px', background: accent + '15', color: accent, padding: '3px 8px', borderRadius: '20px', fontWeight: '600' }}>{skill}</span>
+                <PrevSection title="SKILLS" accent={accent}>
+                  <div style={{ display: 'flex', flexWrap: 'wrap', gap: 5 }}>
+                    {resume.skills.filter(Boolean).map((s, i) => (
+                      <span key={i} style={{ fontSize: 9, background: `${accent}18`, color: accent, padding: '2px 7px', borderRadius: 20, fontWeight: 600 }}>{s}</span>
                     ))}
                   </div>
-                </Section>
+                </PrevSection>
               )}
-
-              {/* Projects */}
               {resume.projects.some(p => p.name) && (
-                <Section title="PROJECTS" accent={accent}>
+                <PrevSection title="PROJECTS" accent={accent}>
                   {resume.projects.filter(p => p.name).map((proj, i) => (
-                    <div key={i} style={{ marginBottom: '8px' }}>
-                      <strong style={{ fontSize: '12px', color: '#111827' }}>{proj.name}</strong>
-                      {proj.tech && <span style={{ fontSize: '10px', color: accent, marginLeft: '8px' }}>({proj.tech})</span>}
-                      {proj.desc && <div style={{ fontSize: '10px', color: '#4b5563', marginTop: '2px' }}>{proj.desc}</div>}
+                    <div key={i} style={{ marginBottom: 6 }}>
+                      <strong style={{ fontSize: 11 }}>{proj.name}</strong>
+                      {proj.tech && <span style={{ fontSize: 9, color: accent, marginLeft: 6 }}>({proj.tech})</span>}
+                      {proj.desc && <div style={{ fontSize: 9, color: '#4b5563', marginTop: 2 }}>{proj.desc}</div>}
                     </div>
                   ))}
-                </Section>
+                </PrevSection>
               )}
-
-              {/* Certifications */}
               {resume.certifications.some(Boolean) && (
-                <Section title="CERTIFICATIONS" accent={accent}>
-                  {resume.certifications.filter(Boolean).map((cert, i) => (
-                    <div key={i} style={{ fontSize: '11px', color: '#374151', marginBottom: '3px' }}>• {cert}</div>
-                  ))}
-                </Section>
+                <PrevSection title="CERTIFICATIONS" accent={accent}>
+                  {resume.certifications.filter(Boolean).map((c, i) => <div key={i} style={{ fontSize: 10, color: '#374151', marginBottom: 2 }}>• {c}</div>)}
+                </PrevSection>
               )}
-
             </div>
           </div>
         </div>
       </div>
-    </div>
-  );
-}
-
-function Section({ title, accent, children }) {
-  return (
-    <div style={{ marginBottom: '16px' }}>
-      <h2 style={{ fontSize: '11px', fontWeight: '800', color: accent, letterSpacing: '1.5px', borderBottom: `1px solid ${accent}30`, paddingBottom: '4px', marginBottom: '8px' }}>
-        {title}
-      </h2>
-      {children}
     </div>
   );
 }

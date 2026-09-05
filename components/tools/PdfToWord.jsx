@@ -1,280 +1,200 @@
 'use client';
 import { useState, useRef } from 'react';
 
+const S = {
+  wrap: { maxWidth: 720, margin: '0 auto', width: '100%' },
+  card: { background: 'var(--bg-main)', border: '1px solid var(--border-light)', borderRadius: 'var(--radius-lg)', padding: 24, marginBottom: 16, boxShadow: 'var(--shadow-sm)' },
+  badge: { display: 'inline-flex', alignItems: 'center', gap: 6, padding: '4px 12px', borderRadius: 20, background: 'var(--bg-secondary)', border: '1px solid var(--border-light)', fontSize: '0.78rem', fontWeight: 600, color: 'var(--text-secondary)' },
+  label: { fontSize: '0.8rem', fontWeight: 700, color: 'var(--text-secondary)', display: 'block', marginBottom: 8, textTransform: 'uppercase', letterSpacing: '0.05em' },
+  dropzone: (over) => ({ border: `2px dashed ${over ? 'var(--highlight)' : 'var(--border-light)'}`, borderRadius: 'var(--radius-lg)', padding: '52px 24px', textAlign: 'center', cursor: 'pointer', background: over ? 'rgba(0,112,243,0.04)' : 'var(--bg-secondary)', transition: 'all 0.2s' }),
+  fmtBtn: (active) => ({ flex: 1, padding: '12px 8px', borderRadius: 'var(--radius-md)', border: `2px solid ${active ? 'var(--highlight)' : 'var(--border-light)'}`, background: active ? 'rgba(0,112,243,0.06)' : 'var(--bg-secondary)', cursor: 'pointer', textAlign: 'left', transition: 'all 0.15s' }),
+  progressBar: (pct) => ({ height: 6, borderRadius: 3, background: 'var(--highlight)', width: `${pct}%`, transition: 'width 0.3s' }),
+  successBox: { background: '#f0fdf4', border: '1px solid #86efac', borderRadius: 'var(--radius-md)', padding: 16, textAlign: 'center' },
+  textarea: { width: '100%', border: '1px solid var(--border-light)', borderRadius: 'var(--radius-md)', padding: '10px 12px', fontSize: '0.8rem', fontFamily: 'var(--font-mono, monospace)', color: 'var(--text-secondary)', background: 'var(--bg-secondary)', resize: 'vertical', outline: 'none', boxSizing: 'border-box' },
+};
+
 export default function PdfToWord({ t, lang }) {
   const [file, setFile] = useState(null);
-  const [status, setStatus] = useState('idle'); // idle | extracting | converting | done | error
+  const [status, setStatus] = useState('idle');
   const [progress, setProgress] = useState(0);
   const [wordContent, setWordContent] = useState('');
   const [pageCount, setPageCount] = useState(0);
   const [dragOver, setDragOver] = useState(false);
-  const [outputFormat, setOutputFormat] = useState('docx'); // docx | txt
+  const [outputFormat, setOutputFormat] = useState('docx');
   const fileRef = useRef();
 
   const handleFile = (f) => {
-    if (!f || f.type !== 'application/pdf') {
-      alert('Please upload a PDF file.');
-      return;
-    }
-    setFile(f);
-    setStatus('idle');
-    setWordContent('');
-    setProgress(0);
+    if (!f || f.type !== 'application/pdf') { alert('Please upload a PDF file.'); return; }
+    setFile(f); setStatus('idle'); setWordContent(''); setProgress(0);
   };
 
   const convert = async () => {
     if (!file) return;
-    setStatus('extracting');
-    setProgress(10);
-
+    setStatus('extracting'); setProgress(10);
     try {
-      // Load PDF.js
       const pdfjsLib = await import('pdfjs-dist');
       pdfjsLib.GlobalWorkerOptions.workerSrc = '/pdf.worker.min.js';
-
-      const arrayBuffer = await file.arrayBuffer();
+      const ab = await file.arrayBuffer();
       setProgress(20);
-
-      const pdf = await pdfjsLib.getDocument({ data: arrayBuffer }).promise;
-      setPageCount(pdf.numPages);
-      setProgress(30);
-
+      const pdf = await pdfjsLib.getDocument({ data: ab }).promise;
+      setPageCount(pdf.numPages); setProgress(30);
       let fullText = '';
-      const totalPages = pdf.numPages;
-
-      for (let i = 1; i <= totalPages; i++) {
+      for (let i = 1; i <= pdf.numPages; i++) {
         const page = await pdf.getPage(i);
-        const textContent = await page.getTextContent();
-
-        // Reconstruct text with layout preservation
-        let pageText = '';
-        let lastY = null;
-        const items = textContent.items;
-
-        for (const item of items) {
-          if (item.str === '') continue;
-          const y = item.transform ? item.transform[5] : 0;
-          if (lastY !== null && Math.abs(lastY - y) > 5) {
-            pageText += '\n';
-          }
+        const content = await page.getTextContent();
+        let pageText = '', lastY = null;
+        for (const item of content.items) {
+          if (!item.str) continue;
+          const y = item.transform?.[5] || 0;
+          if (lastY !== null && Math.abs(lastY - y) > 5) pageText += '\n';
           pageText += item.str + (item.hasEOL ? '\n' : ' ');
           lastY = y;
         }
-
         fullText += `\n\n--- Page ${i} ---\n\n${pageText.trim()}`;
-        setProgress(30 + Math.round((i / totalPages) * 50));
+        setProgress(30 + Math.round((i / pdf.numPages) * 50));
       }
-
       setWordContent(fullText.trim());
-      setProgress(85);
-      setStatus('converting');
-
-      if (outputFormat === 'docx') {
-        await generateDocx(fullText.trim());
-      } else {
-        downloadTxt(fullText.trim());
-      }
-
-      setProgress(100);
-      setStatus('done');
-    } catch (err) {
-      console.error(err);
-      setStatus('error');
-    }
+      setProgress(85); setStatus('converting');
+      if (outputFormat === 'docx') await generateDocx(fullText.trim());
+      else downloadTxt(fullText.trim());
+      setProgress(100); setStatus('done');
+    } catch (err) { setStatus('error'); console.error(err); }
   };
 
   const generateDocx = async (text) => {
-    // Build a minimal .docx using JSZip with proper OOXML structure
     const JSZip = (await import('jszip')).default;
-
     const paragraphs = text.split('\n').map(line => {
-      const isPageHeader = line.startsWith('--- Page');
-      const escaped = line.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
-      if (isPageHeader) {
-        return `<w:p><w:pPr><w:pStyle w:val="Heading1"/></w:pPr><w:r><w:t xml:space="preserve">${escaped}</w:t></w:r></w:p>`;
-      }
+      const escaped = line.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+      if (line.startsWith('--- Page')) return `<w:p><w:r><w:rPr><w:b/></w:rPr><w:t xml:space="preserve">${escaped}</w:t></w:r></w:p>`;
       return `<w:p><w:r><w:t xml:space="preserve">${escaped}</w:t></w:r></w:p>`;
     }).join('');
-
-    const docXml = `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<w:document xmlns:wpc="http://schemas.microsoft.com/office/word/2010/wordprocessingCanvas"
-  xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main"
-  xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships">
-  <w:body>
-    ${paragraphs}
-    <w:sectPr>
-      <w:pgSz w:w="12240" w:h="15840"/>
-      <w:pgMar w:top="1440" w:right="1440" w:bottom="1440" w:left="1440"/>
-    </w:sectPr>
-  </w:body>
-</w:document>`;
-
-    const relsXml = `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships">
-  <Relationship Id="rId1" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/officeDocument" Target="word/document.xml"/>
-</Relationships>`;
-
-    const wordRelsXml = `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships">
-</Relationships>`;
-
-    const contentTypesXml = `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<Types xmlns="http://schemas.openxmlformats.org/package/2006/content-types">
-  <Default Extension="rels" ContentType="application/vnd.openxmlformats-package.relationships+xml"/>
-  <Default Extension="xml" ContentType="application/xml"/>
-  <Override PartName="/word/document.xml" ContentType="application/vnd.openxmlformats-officedocument.wordprocessingml.document.main+xml"/>
-</Types>`;
-
+    const docXml = `<?xml version="1.0" encoding="UTF-8" standalone="yes"?><w:document xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main"><w:body>${paragraphs}<w:sectPr><w:pgSz w:w="12240" w:h="15840"/><w:pgMar w:top="1440" w:right="1440" w:bottom="1440" w:left="1440"/></w:sectPr></w:body></w:document>`;
+    const relsXml = `<?xml version="1.0" encoding="UTF-8" standalone="yes"?><Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships"><Relationship Id="rId1" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/officeDocument" Target="word/document.xml"/></Relationships>`;
+    const contentTypes = `<?xml version="1.0" encoding="UTF-8" standalone="yes"?><Types xmlns="http://schemas.openxmlformats.org/package/2006/content-types"><Default Extension="rels" ContentType="application/vnd.openxmlformats-package.relationships+xml"/><Default Extension="xml" ContentType="application/xml"/><Override PartName="/word/document.xml" ContentType="application/vnd.openxmlformats-officedocument.wordprocessingml.document.main+xml"/></Types>`;
     const zip = new JSZip();
-    zip.file('[Content_Types].xml', contentTypesXml);
+    zip.file('[Content_Types].xml', contentTypes);
     zip.file('_rels/.rels', relsXml);
     zip.file('word/document.xml', docXml);
-    zip.file('word/_rels/document.xml.rels', wordRelsXml);
-
-    const blob = await zip.generateAsync({ type: 'blob', mimeType: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document' });
+    zip.file('word/_rels/document.xml.rels', `<?xml version="1.0" encoding="UTF-8" standalone="yes"?><Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships"></Relationships>`);
+    const blob = await zip.generateAsync({ type: 'blob' });
     const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = file.name.replace('.pdf', '.docx');
-    a.click();
+    const a = document.createElement('a'); a.href = url; a.download = file.name.replace('.pdf', '.docx'); a.click();
     URL.revokeObjectURL(url);
   };
 
   const downloadTxt = (text) => {
-    const blob = new Blob([text], { type: 'text/plain' });
-    const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
-    a.href = url;
-    a.download = file.name.replace('.pdf', '.txt');
-    a.click();
-    URL.revokeObjectURL(url);
-  };
-
-  const copyText = () => {
-    navigator.clipboard.writeText(wordContent);
+    a.href = URL.createObjectURL(new Blob([text], { type: 'text/plain' }));
+    a.download = file.name.replace('.pdf', '.txt'); a.click();
   };
 
   return (
-    <div className="max-w-3xl mx-auto p-4 space-y-6">
-      {/* Header */}
-      <div className="text-center space-y-2">
-        <div className="text-5xl">📄➡️📝</div>
-        <h1 className="text-2xl font-bold text-gray-900 dark:text-white">PDF to Word Converter</h1>
-        <p className="text-gray-500 dark:text-gray-400">Convert PDF to editable Word document or text — free, no upload, 100% private</p>
-        <div className="flex justify-center gap-4 text-sm text-gray-400 flex-wrap">
-          <span>✅ No server upload</span>
-          <span>✅ Preserves text layout</span>
-          <span>✅ No page limit</span>
-        </div>
+    <div style={S.wrap}>
+      <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap', marginBottom: 20 }}>
+        {['🔒 No server upload', '∞ No page limit', '📄 Real .docx output', '⚡ Free forever'].map(b => (
+          <span key={b} style={S.badge}>{b}</span>
+        ))}
       </div>
 
-      {/* Upload */}
       {!file && (
-        <div
-          onDrop={(e) => { e.preventDefault(); setDragOver(false); handleFile(e.dataTransfer.files[0]); }}
-          onDragOver={(e) => { e.preventDefault(); setDragOver(true); }}
-          onDragLeave={() => setDragOver(false)}
-          onClick={() => fileRef.current?.click()}
-          className={`border-2 border-dashed rounded-2xl p-14 text-center cursor-pointer transition-all
-            ${dragOver ? 'border-blue-500 bg-blue-50 dark:bg-blue-900/20' : 'border-gray-300 dark:border-gray-600 hover:border-blue-400'}`}
-        >
-          <div className="text-5xl mb-3">📑</div>
-          <p className="text-lg font-semibold text-gray-700 dark:text-gray-200">Drop your PDF here or click to upload</p>
-          <p className="text-sm text-gray-400 mt-1">PDF files only — processed entirely in your browser</p>
-          <input ref={fileRef} type="file" accept=".pdf,application/pdf" className="hidden" onChange={e => handleFile(e.target.files[0])} />
+        <div onDrop={e=>{e.preventDefault();setDragOver(false);handleFile(e.dataTransfer.files[0]);}}
+          onDragOver={e=>{e.preventDefault();setDragOver(true);}} onDragLeave={()=>setDragOver(false)}
+          onClick={()=>fileRef.current?.click()} style={S.dropzone(dragOver)}>
+          <div style={{fontSize:52,marginBottom:16}}>📑</div>
+          <h2 style={{fontSize:'1.3rem',fontWeight:700,marginBottom:8}}>Drop PDF here or click to upload</h2>
+          <p style={{color:'var(--text-secondary)',marginBottom:16,fontSize:'0.9rem'}}>PDF files only — processed entirely in your browser</p>
+          <button className="btn-primary" style={{padding:'10px 28px',cursor:'pointer'}} onClick={e=>{e.stopPropagation();fileRef.current?.click();}}>Choose PDF</button>
+          <input ref={fileRef} type="file" accept=".pdf,application/pdf" style={{display:'none'}} onChange={e=>handleFile(e.target.files[0])} />
         </div>
       )}
 
-      {/* File loaded */}
       {file && (
-        <div className="bg-blue-50 dark:bg-blue-900/20 rounded-2xl p-5 space-y-5">
-          <div className="flex items-center gap-3">
-            <div className="text-3xl">📑</div>
-            <div className="flex-1 min-w-0">
-              <p className="font-semibold text-gray-800 dark:text-gray-200 truncate">{file.name}</p>
-              <p className="text-sm text-gray-500">{(file.size / 1024).toFixed(1)} KB {pageCount > 0 && `• ${pageCount} pages extracted`}</p>
+        <div style={S.card}>
+          {/* File info */}
+          <div style={{display:'flex',alignItems:'center',gap:12,marginBottom:20,padding:'12px 16px',background:'var(--bg-secondary)',borderRadius:'var(--radius-md)',border:'1px solid var(--border-light)'}}>
+            <div style={{fontSize:32}}>📑</div>
+            <div style={{flex:1,minWidth:0}}>
+              <div style={{fontWeight:700,fontSize:'0.95rem',marginBottom:2,overflow:'hidden',textOverflow:'ellipsis',whiteSpace:'nowrap'}}>{file.name}</div>
+              <div style={{color:'var(--text-secondary)',fontSize:'0.8rem'}}>{(file.size/1024).toFixed(1)} KB {pageCount>0&&`• ${pageCount} pages extracted`}</div>
             </div>
-            <button onClick={() => { setFile(null); setStatus('idle'); setWordContent(''); }} className="text-gray-400 hover:text-red-500 text-xl">✕</button>
+            <button onClick={()=>{setFile(null);setStatus('idle');setWordContent('');}} style={{background:'none',border:'none',cursor:'pointer',color:'var(--text-tertiary)',fontSize:'1.2rem',padding:4}}>✕</button>
           </div>
 
-          {/* Output format */}
-          <div>
-            <label className="text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2 block">Output Format</label>
-            <div className="flex gap-3">
-              {[['docx', '📝 Word (.docx)', 'Best for editing'], ['txt', '📃 Plain Text (.txt)', 'Just the raw text']].map(([val, label, desc]) => (
-                <button key={val} onClick={() => setOutputFormat(val)}
-                  className={`flex-1 p-3 rounded-xl border-2 text-left transition-all ${outputFormat === val ? 'border-blue-500 bg-blue-50 dark:bg-blue-900/30' : 'border-gray-200 dark:border-gray-700 hover:border-blue-300'}`}>
-                  <div className="font-semibold text-sm text-gray-800 dark:text-gray-200">{label}</div>
-                  <div className="text-xs text-gray-400">{desc}</div>
+          {/* Format choice */}
+          <div style={{marginBottom:20}}>
+            <label style={S.label}>Output Format</label>
+            <div style={{display:'flex',gap:10}}>
+              {[['docx','📝 Word (.docx)','Best for editing in MS Word / Google Docs'],['txt','📃 Plain Text (.txt)','Raw extracted text']].map(([val,label,desc])=>(
+                <button key={val} onClick={()=>setOutputFormat(val)} style={S.fmtBtn(outputFormat===val)}>
+                  <div style={{fontWeight:700,fontSize:'0.88rem',marginBottom:2,color:'var(--text-primary)'}}>{label}</div>
+                  <div style={{fontSize:'0.75rem',color:'var(--text-secondary)'}}>{desc}</div>
                 </button>
               ))}
             </div>
           </div>
 
           {/* Progress */}
-          {(status === 'extracting' || status === 'converting') && (
-            <div className="space-y-2">
-              <div className="flex justify-between text-sm text-gray-600 dark:text-gray-400">
-                <span>{status === 'extracting' ? '📖 Extracting text from PDF...' : '⚙️ Building document...'}</span>
+          {(status==='extracting'||status==='converting') && (
+            <div style={{marginBottom:16}}>
+              <div style={{display:'flex',justifyContent:'space-between',fontSize:'0.82rem',color:'var(--text-secondary)',marginBottom:6}}>
+                <span>{status==='extracting'?'📖 Extracting text...':'⚙️ Building document...'}</span>
                 <span>{progress}%</span>
               </div>
-              <div className="w-full h-3 bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden">
-                <div className="h-full bg-blue-500 rounded-full transition-all duration-300" style={{ width: `${progress}%` }} />
+              <div style={{height:6,background:'var(--bg-tertiary)',borderRadius:3,overflow:'hidden'}}>
+                <div style={S.progressBar(progress)} />
               </div>
             </div>
           )}
 
           {/* Action */}
-          {(status === 'idle' || status === 'error') && (
-            <button onClick={convert} className="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-4 rounded-xl transition-colors text-lg">
-              🔄 Convert to {outputFormat === 'docx' ? 'Word (.docx)' : 'Text (.txt)'}
+          {status==='idle' && (
+            <button onClick={convert} className="btn-primary" style={{width:'100%',padding:'12px',cursor:'pointer',fontSize:'1rem'}}>
+              🔄 Convert to {outputFormat==='docx'?'Word (.docx)':'Text (.txt)'}
             </button>
           )}
 
-          {status === 'error' && (
-            <p className="text-red-500 text-sm text-center">Conversion failed. The PDF may be encrypted or image-only. Try the OCR tool for scanned PDFs.</p>
+          {status==='error' && (
+            <div style={{...S.card,background:'#fef2f2',border:'1px solid #fca5a5',textAlign:'center'}}>
+              <p style={{color:'#dc2626',marginBottom:8}}>❌ Conversion failed. The PDF may be encrypted or image-only.</p>
+              <button onClick={()=>setStatus('idle')} style={{color:'var(--highlight)',background:'none',border:'none',cursor:'pointer',fontSize:'0.85rem'}}>Try again</button>
+            </div>
           )}
 
-          {status === 'done' && (
-            <div className="space-y-3">
-              <div className="bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 rounded-xl p-4 text-center">
-                <div className="text-2xl mb-1">✅</div>
-                <p className="font-semibold text-green-700 dark:text-green-400">Download started!</p>
-                <p className="text-sm text-green-600 dark:text-green-500">{pageCount} pages converted — check your downloads folder</p>
+          {status==='done' && (
+            <>
+              <div style={S.successBox}>
+                <div style={{fontSize:28,marginBottom:4}}>✅</div>
+                <div style={{fontWeight:700,color:'#15803d',marginBottom:4}}>Download started!</div>
+                <div style={{fontSize:'0.82rem',color:'#16a34a'}}>{pageCount} pages converted — check your downloads</div>
               </div>
               {wordContent && (
-                <div>
-                  <div className="flex justify-between items-center mb-2">
-                    <label className="text-sm font-semibold text-gray-700 dark:text-gray-300">Extracted Text Preview</label>
-                    <button onClick={copyText} className="text-xs text-blue-600 hover:underline">📋 Copy All</button>
+                <div style={{marginTop:16}}>
+                  <div style={{display:'flex',justifyContent:'space-between',alignItems:'center',marginBottom:8}}>
+                    <span style={S.label}>Extracted Text Preview</span>
+                    <button onClick={()=>navigator.clipboard.writeText(wordContent)} style={{fontSize:'0.78rem',color:'var(--highlight)',background:'none',border:'none',cursor:'pointer'}}>📋 Copy All</button>
                   </div>
-                  <textarea
-                    readOnly value={wordContent}
-                    rows={10}
-                    className="w-full border border-gray-200 dark:border-gray-700 rounded-xl px-3 py-2 text-xs bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 resize-none font-mono"
-                  />
+                  <textarea style={S.textarea} readOnly value={wordContent} rows={10} />
                 </div>
               )}
-              <button onClick={() => { setFile(null); setStatus('idle'); setWordContent(''); }}
-                className="w-full border border-gray-200 dark:border-gray-700 rounded-xl py-3 text-sm text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors">
-                🔄 Convert another PDF
+              <button onClick={()=>{setFile(null);setStatus('idle');setWordContent('');}}
+                style={{marginTop:12,width:'100%',padding:'10px',borderRadius:'var(--radius-md)',border:'1px solid var(--border-light)',background:'var(--bg-secondary)',cursor:'pointer',fontSize:'0.85rem'}}>
+                🔄 Convert Another PDF
               </button>
-            </div>
+            </>
           )}
         </div>
       )}
 
-      {/* Info cards */}
-      <div className="grid sm:grid-cols-3 gap-4 text-sm">
+      <div style={{display:'grid',gridTemplateColumns:'repeat(auto-fit,minmax(200px,1fr))',gap:12,marginTop:8}}>
         {[
-          { icon: '🔒', title: 'Fully private', desc: 'PDF never leaves your browser. No server, no cloud.' },
-          { icon: '📖', title: 'Text PDF', desc: 'Works with any PDF that has selectable text.' },
-          { icon: '🖼️', title: 'Scanned PDF?', desc: 'Use our Scanned PDF to Data tool with OCR instead.' },
-        ].map(c => (
-          <div key={c.title} className="bg-white dark:bg-gray-800 rounded-xl p-4 border border-gray-100 dark:border-gray-700">
-            <div className="text-2xl mb-1">{c.icon}</div>
-            <div className="font-semibold text-gray-800 dark:text-gray-200 mb-1">{c.title}</div>
-            <div className="text-gray-500 dark:text-gray-400">{c.desc}</div>
+          {icon:'🔒',title:'Fully private',desc:'PDF never leaves your browser. No server, no cloud.'},
+          {icon:'📖',title:'Text PDFs',desc:'Works with any PDF that has selectable text.'},
+          {icon:'🖼️',title:'Scanned PDF?',desc:'Use our Scanned PDF to Data tool with OCR instead.'},
+        ].map(c=>(
+          <div key={c.title} style={{background:'var(--bg-secondary)',border:'1px solid var(--border-light)',borderRadius:'var(--radius-md)',padding:16}}>
+            <div style={{fontSize:24,marginBottom:6}}>{c.icon}</div>
+            <div style={{fontWeight:700,fontSize:'0.9rem',marginBottom:4}}>{c.title}</div>
+            <div style={{color:'var(--text-secondary)',fontSize:'0.82rem'}}>{c.desc}</div>
           </div>
         ))}
       </div>
