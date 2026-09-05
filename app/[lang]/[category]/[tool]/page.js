@@ -63,6 +63,11 @@ import ScreenshotToDocument from '@/components/tools/ScreenshotToDocument';
 import PdfToMcq from '@/components/tools/PdfToMcq';
 import LectureToNotes from '@/components/tools/LectureToNotes';
 import DocumentToExcel from '@/components/tools/DocumentToExcel';
+import RupeesToWords from '@/components/tools/RupeesToWords';
+import AgeCalculator from '@/components/tools/AgeCalculator';
+import SalarySlipGenerator from '@/components/tools/SalarySlipGenerator';
+import RtiApplicationGenerator from '@/components/tools/RtiApplicationGenerator';
+import GstInvoiceGenerator from '@/components/tools/GstInvoiceGenerator';
 import { notFound } from 'next/navigation';
 import Link from 'next/link';
 
@@ -358,6 +363,16 @@ export default async function ToolPage({ params }) {
           <LectureToNotes t={t} lang={lang} />
         ) : toolData.slug === 'document-to-excel' ? (
           <DocumentToExcel t={t} lang={lang} />
+        ) : toolData.slug === 'rupees-to-words' ? (
+          <RupeesToWords t={t} lang={lang} />
+        ) : toolData.slug === 'age-calculator' ? (
+          <AgeCalculator t={t} lang={lang} />
+        ) : toolData.slug === 'salary-slip-generator' ? (
+          <SalarySlipGenerator t={t} lang={lang} />
+        ) : toolData.slug === 'rti-application-generator' ? (
+          <RtiApplicationGenerator t={t} lang={lang} />
+        ) : toolData.slug === 'gst-invoice-generator' ? (
+          <GstInvoiceGenerator t={t} lang={lang} />
         ) : (
           <ClientTool categoryId={category.id} toolSlug={toolData.slug} t={t} />
         )}
