@@ -27,10 +27,6 @@ export default function PromotedTools({ lang }) {
               {promo.icon}
             </div>
             <h3 className="promo-title">{promo.name}</h3>
-            <div className="promo-stats">
-              <span className="promo-check">✓</span>
-              <span>{promo.count} Uses</span>
-            </div>
             <div className="promo-arrow">→</div>
           </Link>
         ))}
