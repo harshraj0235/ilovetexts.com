@@ -4,6 +4,7 @@ import { generateWebSiteSchema, generateOrganizationSchema, generateAlternates }
 import Script from 'next/script';
 import CommandCenter from '@/components/CommandCenter';
 import HtmlDirectory from '@/components/HtmlDirectory';
+import PromotedTools from '@/components/PromotedTools';
 
 export async function generateMetadata({ params }) {
   const { lang } = await params;
@@ -35,6 +36,8 @@ export default async function Home({ params }) {
         lang={lang}
         t={t}
       />
+
+      <PromotedTools lang={lang} />
 
       <HtmlDirectory categories={CATEGORIES} lang={lang} />
     </>
