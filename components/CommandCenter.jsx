@@ -2,8 +2,8 @@
 
 import { useState, useMemo } from 'react';
 import Link from 'next/link';
-
 import { getAllTools } from '@/lib/tools-config';
+import PromotedTools from '@/components/PromotedTools';
 
 export default function CommandCenter({ categories, lang, t }) {
   const allTools = useMemo(() => getAllTools(lang), [lang]);
@@ -43,6 +43,12 @@ export default function CommandCenter({ categories, lang, t }) {
           <span className="command-shortcut">/</span>
         </div>
       </section>
+      
+      {!query && (
+        <section className="container" style={{ paddingBottom: '24px' }}>
+          <PromotedTools lang={lang} />
+        </section>
+      )}
 
       <section className="container" style={{ paddingBottom: '100px' }}>
         {query && <h3 style={{ marginBottom: '24px', color: 'var(--text-secondary)' }}>Search Results ({filteredTools.length})</h3>}
