@@ -4,7 +4,16 @@ export default function HtmlDirectory({ categories, lang }) {
   const lp = (path) => (lang === 'en' ? path : `/${lang}${path}`);
 
   return (
-    <section className="container" style={{ paddingBottom: '100px', borderTop: '1px solid var(--border-light)', paddingTop: '64px' }}>
+    <section
+      className="container"
+      style={{
+        paddingBottom: '100px',
+        borderTop: '1px solid var(--border-light)',
+        paddingTop: '64px',
+        contentVisibility: 'auto',
+        containIntrinsicSize: '0 800px',
+      }}
+    >
       <h2 style={{ marginBottom: '32px', textAlign: 'center', fontSize: '2rem' }}>Browse All Tools</h2>
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))', gap: '32px' }}>
         {categories.map((cat) => (
@@ -18,7 +27,7 @@ export default function HtmlDirectory({ categories, lang }) {
             <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'flex', flexDirection: 'column', gap: '8px' }}>
               {cat.tools.map((tool) => (
                 <li key={tool.slug}>
-                  <Link 
+                  <Link
                     href={lp(`/${cat.id}/${tool.slug}`)}
                     prefetch={false}
                     style={{ color: 'var(--text-secondary)', textDecoration: 'none', display: 'block', padding: '4px 0', transition: 'color 0.2s ease', fontSize: '0.95rem' }}

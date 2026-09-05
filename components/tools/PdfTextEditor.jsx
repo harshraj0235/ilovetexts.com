@@ -705,6 +705,23 @@ export default function PdfTextEditor({ t, lang, initialMode }) {
           loading={false} 
         />
 
+        {showMergePanel && (
+          <PdfMergePanel
+            initialFiles={mergePanelFiles}
+            autoStart={mergePanelFiles.length > 0}
+            onMerged={(mergedFile) => {
+              setShowMergePanel(false);
+              setMergePanelFiles([]);
+              handleFile(mergedFile);
+              return Promise.resolve();
+            }}
+            onClose={() => {
+              setShowMergePanel(false);
+              setMergePanelFiles([]);
+            }}
+          />
+        )}
+
         {/* Feature grid */}
         <div className="pdf-feature-grid">
           {[

@@ -41,7 +41,7 @@ export default async function AboutPage({ params }) {
     '@type': 'Person',
     name: 'Harsh Raj',
     url: 'https://www.linkedin.com/in/harshitpatel9/',
-    image: `${SITE.url}/harsh-raj.png`,
+    image: `${SITE.url}/harsh-raj.webp`,
     sameAs: [
       'https://www.linkedin.com/in/harshitpatel9/',
       'https://github.com/harshraj0235',

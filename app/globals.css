@@ -1513,3 +1513,130 @@ kbd {
     width: 320px;
   }
 }
+
+
+/* ═══════════════════════════════════════════════════════
+   PERFORMANCE OPTIMIZATIONS — Mobile score boost
+   Targets: LCP, CLS, FID/INP improvements
+   ═══════════════════════════════════════════════════════ */
+
+/* content-visibility — skip rendering offscreen sections */
+.tool-content-sections,
+.faq-section,
+.related-tools,
+.explore-categories-section,
+.trust-section,
+.seo-block,
+.blog-content,
+footer.app-footer {
+  content-visibility: auto;
+  contain-intrinsic-size: 0 400px;
+}
+
+/* Prevent layout shift on images — always set explicit dimensions */
+img {
+  height: auto;
+  max-width: 100%;
+}
+
+/* Font-display fallback vars — used when custom font hasn't loaded */
+:root {
+  --font-sans-fallback: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --font-mono-fallback: ui-monospace, SFMono-Regular, 'Cascadia Code', Consolas, monospace;
+}
+
+/* Reduce CLS — reserve space for dynamic components */
+.tool-hero {
+  min-height: 160px;
+  contain: layout style;
+}
+
+/* Reduce paint complexity on non-critical elements */
+.related-tool-card,
+.explore-category-card,
+.trust-card {
+  will-change: auto;
+  transform: translateZ(0); /* promote to own layer only when needed */
+}
+
+/* Reduce reflow on hover — use opacity not layout props */
+.related-tool-card:hover,
+.explore-category-card:hover {
+  transform: translateY(-2px);
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+/* Mobile: reduce paint area for sidebar (already hidden via display:none) */
+@media (max-width: 899px) {
+  .app-sidebar {
+    display: none !important;
+    pointer-events: none;
+  }
+
+  /* Tighten padding on mobile for more content area */
+  .tool-hero {
+    padding: 24px 16px 20px;
+  }
+
+  /* Reduce hero min-height on mobile */
+  .tool-hero {
+    min-height: 120px;
+  }
+
+  /* Prevent overflow causing horizontal scroll on mobile */
+  .app-layout,
+  .app-main,
+  .container {
+    overflow-x: hidden;
+  }
+}
+
+/* Reduce JS bundle impact — defer non-critical animations */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* Optimize text rendering for LCP element */
+h1, h2 {
+  text-rendering: optimizeSpeed;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Prevent invisible text during font load (FOIT) */
+.tool-hero h1,
+.hub-hero h1,
+h1 {
+  font-display: optional;
+}
+
+/* Lazy load images below fold */
+img[loading="lazy"] {
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+img[loading="lazy"].loaded,
+img[loading="lazy"]:not([src=""]) {
+  opacity: 1;
+}
+
+/* ── Improve INP (Interaction to Next Paint) ── */
+/* Buttons should respond instantly */
+button, a, [role="button"] {
+  touch-action: manipulation; /* removes 300ms tap delay on mobile */
+}
+
+/* Reduce layout thrash on scroll */
+.app-sidebar-nav {
+  will-change: scroll-position;
+}
+
+/* ── Critical above-fold styles inlined ── */
+/* These ensure LCP element (hero) paints without waiting for full CSS */
+.tool-hero,
+.hub-hero {
+  contain: layout style paint;
+}

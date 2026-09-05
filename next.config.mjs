@@ -4,21 +4,71 @@ const nextConfig = {
   poweredByHeader: false,
   compress: true,
 
-  // Empty turbopack config silences the webpack/turbopack warning.
+  // Turbopack config
   turbopack: {},
 
-  // Generate trailing slash consistent URLs
   trailingSlash: false,
 
-  // ── Image optimization ───────────────────────────────
-  // Auto-serve WebP/AVIF — major LCP improvement on mobile
+  // ── Image optimization — serves WebP/AVIF automatically ──
   images: {
     formats: ['image/avif', 'image/webp'],
-    minimumCacheTTL: 60 * 60 * 24 * 30, // 30 days
+    minimumCacheTTL: 60 * 60 * 24 * 30,
     deviceSizes: [640, 750, 828, 1080, 1200],
     imageSizes: [16, 32, 48, 64, 96, 128, 256],
     dangerouslyAllowSVG: true,
     contentSecurityPolicy: "default-src 'self'; script-src 'none'; sandbox;",
+  },
+
+  // ── Package import optimization — tree-shake large libs ──
+  // Prevents entire library loading when only one function is used
+  experimental: {
+    optimizePackageImports: [
+      'lucide-react',
+      '@radix-ui/react-icons',
+    ],
+  },
+
+  // ── Webpack optimizations ────────────────────────────
+  webpack: (config, { isServer }) => {
+    if (!isServer) {
+      // Split large vendor chunks for better caching
+      config.optimization.splitChunks = {
+        ...config.optimization.splitChunks,
+        chunks: 'all',
+        cacheGroups: {
+          ...(config.optimization.splitChunks?.cacheGroups || {}),
+          // Keep pdfjs in its own chunk — only loaded on PDF tool pages
+          pdfjs: {
+            test: /[\\/]node_modules[\\/]pdfjs-dist[\\/]/,
+            name: 'pdfjs',
+            chunks: 'async',
+            priority: 30,
+          },
+          // Keep tesseract in its own chunk — only loaded on OCR tool pages
+          tesseract: {
+            test: /[\\/]node_modules[\\/]tesseract\.js[\\/]/,
+            name: 'tesseract',
+            chunks: 'async',
+            priority: 30,
+          },
+          // Keep xlsx in its own chunk
+          xlsx: {
+            test: /[\\/]node_modules[\\/]xlsx[\\/]/,
+            name: 'xlsx',
+            chunks: 'async',
+            priority: 30,
+          },
+          // Keep pdf-lib in its own chunk
+          pdflib: {
+            test: /[\\/]node_modules[\\/]pdf-lib[\\/]/,
+            name: 'pdf-lib',
+            chunks: 'async',
+            priority: 30,
+          },
+        },
+      };
+    }
+    return config;
   },
 
   async headers() {

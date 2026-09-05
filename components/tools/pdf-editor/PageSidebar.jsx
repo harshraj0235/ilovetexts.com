@@ -48,6 +48,8 @@ export default function PageSidebar({ pages, currentPage, onSelectPage }) {
             <img
               src={page.thumbDataUrl}
               alt={`Page ${idx + 1}`}
+              loading="lazy"
+              decoding="async"
               style={{ width: '100%', display: 'block' }}
             />
           ) : (
