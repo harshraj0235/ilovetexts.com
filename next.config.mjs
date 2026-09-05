@@ -136,6 +136,17 @@ const nextConfig = {
         source: '/:lang/word-counter/:slug*',
         destination: '/:lang/word-counting-tools/:slug*',
         permanent: true,
+      },
+      // Fix broken 404 URLs reported by users/crawlers
+      {
+        source: '/word-counting-tools/word-counting-tools',
+        destination: '/word-counting-tools/word-counter',
+        permanent: true,
+      },
+      {
+        source: '/:lang/word-counting-tools/word-counting-tools',
+        destination: '/:lang/word-counting-tools/word-counter',
+        permanent: true,
       }
     ];
   },
