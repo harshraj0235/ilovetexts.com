@@ -94,7 +94,7 @@ export default function MemeGenerator({ t, lang }) {
     }
     if (cur) lines.push(cur);
     const lh = fontSize * 1.15;
-    let sy = y > canvas.height / 2 ? y - (lines.length - 1) * lh : y;
+    let sy = y > ctx.canvas.height / 2 ? y - (lines.length - 1) * lh : y;
     lines.forEach((line, i) => {
       ctx.strokeText(line, x, sy + i * lh);
       ctx.fillText(line, x, sy + i * lh);
