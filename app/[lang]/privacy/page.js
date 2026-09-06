@@ -1,18 +1,24 @@
 import { SITE } from '@/lib/tools-config';
-
+import { buildCanonical } from '@/lib/i18n';
 import { generateAlternates } from '@/lib/seo';
 
 export async function generateMetadata({ params }) {
   const { lang } = await params;
+  const alternates = generateAlternates(lang, '/privacy');
+  // Privacy policy is English-only content — point all language variants to English canonical
+  // prevents 6 near-duplicate thin pages from competing with each other
+  if (lang !== 'en') {
+    alternates.canonical = buildCanonical('en', '/privacy');
+  }
   return {
     title: `Privacy Policy | ${SITE.name}`,
     description: `Privacy Policy for ${SITE.name}. Learn how we protect your data and why our tools are 100% private.`,
-    alternates: generateAlternates(lang, '/privacy'),
+    alternates,
     robots: {
-      index: true,
+      index: lang === 'en', // Only index English version
       follow: true,
       googleBot: {
-        index: true,
+        index: lang === 'en',
         follow: true,
         'max-snippet': -1,
         'max-image-preview': 'large',

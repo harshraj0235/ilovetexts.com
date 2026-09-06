@@ -1,8 +1,10 @@
 import { getAllTools, CATEGORIES, SITE } from '@/lib/tools-config';
 import { LANG_CODES, buildCanonical } from '@/lib/i18n';
 
-// ─── Blog post slugs ───
-const BLOG_SLUGS = [
+// ─── English-only blog post slugs (only include slugs that actually exist in BLOG_POSTS) ───
+// These are served at /blog/[slug] in English only.
+// Non-English URLs for blog are canonicalized to English in generateMetadata.
+const EN_BLOG_SLUGS = [
   { slug: 'how-to-count-words-in-any-document', date: '2026-08-20' },
   { slug: 'convert-text-case-uppercase-lowercase-title-case', date: '2026-08-18' },
   { slug: 'format-json-online-beautify-validate-minify', date: '2026-08-15' },
@@ -16,34 +18,34 @@ const BLOG_SLUGS = [
   { slug: 'csv-to-json-converter-guide', date: '2026-09-20' },
   { slug: 'jwt-decoder-online-guide', date: '2026-09-25' },
   { slug: 'word-counter-online-complete-guide', date: '2026-10-01' },
-  // Comparison posts
   { slug: 'best-free-sejda-alternative', date: '2026-10-05' },
   { slug: 'best-free-grammarly-alternative', date: '2026-10-08' },
   { slug: 'best-free-ilovepdf-alternative', date: '2026-10-10' },
   { slug: 'best-free-chatgpt-text-humanizer', date: '2026-10-12' },
   { slug: 'best-free-smallpdf-alternative', date: '2026-10-14' },
-  // Multilingual posts (es)
-  { slug: 'como-unir-pdf-gratis', date: '2026-10-16' },
-  { slug: 'mejor-alternativa-grammarly-gratis', date: '2026-10-17' },
-  { slug: 'comprimir-pdf-gratis-online', date: '2026-10-18' },
-  { slug: 'contador-palabras-online-gratis', date: '2026-10-19' },
-  { slug: 'convertir-texto-mayusculas-minusculas', date: '2026-10-20' },
-  // Multilingual posts (pt)
-  { slug: 'como-juntar-pdf-gratis', date: '2026-10-16' },
-  { slug: 'melhor-alternativa-grammarly-gratis', date: '2026-10-17' },
-  { slug: 'comprimir-pdf-gratis-online-pt', date: '2026-10-18' },
-  { slug: 'contador-palavras-online-gratis', date: '2026-10-19' },
-  { slug: 'converter-texto-maiusculas-minusculas', date: '2026-10-20' },
-  // Multilingual posts (hi)
-  { slug: 'pdf-merge-kaise-kare-free', date: '2026-10-16' },
-  { slug: 'muft-typing-speed-test-hindi', date: '2026-10-17' },
-  { slug: 'pdf-compress-kaise-kare', date: '2026-10-18' },
-  { slug: 'shabd-ginti-online-muft', date: '2026-10-19' },
-  { slug: 'grammarly-ka-muft-alternative', date: '2026-10-20' },
+  // Multilingual blog posts — only served at their language URL, canonical → /blog/[slug]
+  { slug: 'como-unir-pdf-gratis', date: '2026-10-16', lang: 'es' },
+  { slug: 'mejor-alternativa-grammarly-gratis', date: '2026-10-17', lang: 'es' },
+  { slug: 'comprimir-pdf-gratis-online', date: '2026-10-18', lang: 'es' },
+  { slug: 'contador-palabras-online-gratis', date: '2026-10-19', lang: 'es' },
+  { slug: 'convertir-texto-mayusculas-minusculas', date: '2026-10-20', lang: 'es' },
+  { slug: 'como-juntar-pdf-gratis', date: '2026-10-16', lang: 'pt' },
+  { slug: 'melhor-alternativa-grammarly-gratis', date: '2026-10-17', lang: 'pt' },
+  { slug: 'comprimir-pdf-gratis-online-pt', date: '2026-10-18', lang: 'pt' },
+  { slug: 'contador-palavras-online-gratis', date: '2026-10-19', lang: 'pt' },
+  { slug: 'converter-texto-maiusculas-minusculas', date: '2026-10-20', lang: 'pt' },
+  { slug: 'pdf-merge-kaise-kare-free', date: '2026-10-16', lang: 'hi' },
+  { slug: 'muft-typing-speed-test-hindi', date: '2026-10-17', lang: 'hi' },
+  { slug: 'pdf-compress-kaise-kare', date: '2026-10-18', lang: 'hi' },
+  { slug: 'shabd-ginti-online-muft', date: '2026-10-19', lang: 'hi' },
+  { slug: 'grammarly-ka-muft-alternative', date: '2026-10-20', lang: 'hi' },
 ];
 
+// Stable dates — only update when content actually changes
+// Using a fixed deploy date prevents "everything changed today" signal to Google
 const SITE_LAUNCH = '2025-08-01';
-const BUILD_DATE = new Date().toISOString().split('T')[0]; // Always today
+const TOOLS_LAST_UPDATED = '2026-09-04';  // Update this when you add/update tools
+const CONTENT_LAST_UPDATED = '2026-09-04'; // Update this when you update content
 
 function getAlternatesXml(path) {
   let xml = `  <xhtml:link rel="alternate" hreflang="x-default" href="${buildCanonical('en', path)}" />\n`;
@@ -52,6 +54,9 @@ function getAlternatesXml(path) {
   });
   return xml;
 }
+
+export const dynamic = 'force-static'; // Cache sitemap — only regenerate on redeploy
+export const revalidate = 86400; // 24h cache
 
 export async function GET(request, { params }) {
   const { lang } = await params;
@@ -67,23 +72,39 @@ export async function GET(request, { params }) {
   };
 
   // Home
-  addUrl('/', '1.0', 'daily', BUILD_DATE);
+  addUrl('/', '1.0', 'daily', CONTENT_LAST_UPDATED);
 
   // Category Pages
-  CATEGORIES.forEach((cat) => addUrl(`/${cat.id}`, '0.9', 'weekly', BUILD_DATE));
+  CATEGORIES.forEach((cat) => addUrl(`/${cat.id}`, '0.9', 'weekly', TOOLS_LAST_UPDATED));
 
-  // Tool Pages
-  allTools.forEach((tool) => addUrl(`/${tool.categoryId}/${tool.slug}`, '0.85', 'weekly', BUILD_DATE));
+  // Tool Pages — all tools, all languages
+  allTools.forEach((tool) => addUrl(`/${tool.categoryId}/${tool.slug}`, '0.85', 'weekly', TOOLS_LAST_UPDATED));
 
-  // Blog index
-  addUrl('/blog', '0.7', 'weekly', BUILD_DATE);
+  // Blog index — only once (not in static pages loop below)
+  addUrl('/blog', '0.7', 'weekly', CONTENT_LAST_UPDATED);
 
-  // Blog Posts
-  BLOG_SLUGS.forEach((post) => addUrl(`/blog/${post.slug}`, '0.7', 'monthly', post.date));
+  // Blog Posts — only include for the correct language (or English for en-only posts)
+  EN_BLOG_SLUGS.forEach((post) => {
+    // Language-specific post: only include in that language's sitemap
+    if (post.lang) {
+      if (lang === post.lang) {
+        addUrl(`/blog/${post.slug}`, '0.6', 'monthly', post.date);
+      }
+    } else {
+      // English-only posts: only include in English sitemap
+      if (lang === 'en') {
+        addUrl(`/blog/${post.slug}`, '0.7', 'monthly', post.date);
+      }
+    }
+  });
 
-  // Static Pages
-  ['about', 'privacy', 'terms', 'contact', 'tools', 'resources', 'blog'].forEach((page) =>
-    addUrl(`/${page}`, page === 'tools' ? '0.8' : '0.4', page === 'tools' ? 'weekly' : 'yearly', page === 'tools' ? BUILD_DATE : SITE_LAUNCH)
+  // Static pages — NOT including 'blog' (already added above)
+  ['about', 'privacy', 'terms', 'contact', 'tools', 'resources'].forEach((page) =>
+    addUrl(`/${page}`,
+      page === 'tools' ? '0.8' : '0.4',
+      page === 'tools' ? 'weekly' : 'yearly',
+      page === 'tools' ? TOOLS_LAST_UPDATED : SITE_LAUNCH
+    )
   );
 
   const xml = `<?xml version="1.0" encoding="UTF-8"?>
@@ -94,7 +115,7 @@ ${urlsXml}</urlset>`;
   return new Response(xml, {
     headers: {
       'Content-Type': 'application/xml',
-      'Cache-Control': 'public, max-age=3600, s-maxage=3600, stale-while-revalidate=86400',
+      'Cache-Control': 'public, max-age=86400, s-maxage=86400, stale-while-revalidate=604800',
     },
   });
 }

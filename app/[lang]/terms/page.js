@@ -1,19 +1,23 @@
 import { SITE } from '@/lib/tools-config';
 import Link from 'next/link';
-
+import { buildCanonical } from '@/lib/i18n';
 import { generateAlternates } from '@/lib/seo';
 
 export async function generateMetadata({ params }) {
   const { lang } = await params;
+  const alternates = generateAlternates(lang, '/terms');
+  if (lang !== 'en') {
+    alternates.canonical = buildCanonical('en', '/terms');
+  }
   return {
     title: `Terms of Service | ${SITE.name}`,
     description: `Terms of Service and usage guidelines for ${SITE.name}.`,
-    alternates: generateAlternates(lang, '/terms'),
+    alternates,
     robots: {
-      index: true,
+      index: lang === 'en', // Only index English version — same content across all languages
       follow: true,
       googleBot: {
-        index: true,
+        index: lang === 'en',
         follow: true,
         'max-snippet': -1,
         'max-image-preview': 'large',

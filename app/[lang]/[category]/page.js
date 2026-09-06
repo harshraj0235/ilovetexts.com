@@ -8,9 +8,8 @@ export async function generateStaticParams() {
   return []; // Dynamic rendering at edge to prevent ENOSPC on Cloudflare
 }
 
-// Force dynamic rendering with proper cache headers for Google indexing
+// Edge SSR — renders fresh on every request, proper cache headers
 export const dynamic = 'force-dynamic';
-export const revalidate = 3600; // Revalidate every hour — tells Google content is fresh
 
 
 export async function generateMetadata({ params }) {

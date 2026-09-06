@@ -89,7 +89,6 @@ export async function generateStaticParams() {
 }
 
 export const dynamic = 'force-dynamic';
-export const revalidate = 3600;
 
 export async function generateMetadata({ params }) {
   const { lang, category, tool } = await params;
@@ -324,9 +323,9 @@ export default async function ToolPage({ params }) {
         ) : toolData.slug === 'watermark-pdf' ? (
           <PdfTextEditor t={t} lang={lang} initialMode="watermark" />
         ) : toolData.slug === 'compress-pdf' ? (
-          <PdfTextEditor t={t} lang={lang} initialMode="export" />
+          <PdfTextEditor t={t} lang={lang} initialMode="compress" />
         ) : toolData.slug === 'protect-pdf' ? (
-          <PdfTextEditor t={t} lang={lang} initialMode="export" />
+          <PdfTextEditor t={t} lang={lang} initialMode="protect" />
         ) : toolData.slug === 'image-text-editor' ? (
           <ImageTextEditor t={t} lang={lang} />
         ) : toolData.slug === 'word-document-editor' ? (

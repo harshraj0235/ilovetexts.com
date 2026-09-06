@@ -4,9 +4,12 @@
   "private": true,
   "scripts": {
     "dev": "next dev -p 4000",
+    "prebuild": "node seo-audit.js",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "seo-check": "node seo-audit.js",
+    "ping-search": "node ping-google.js"
   },
   "dependencies": {
     "@iarna/toml": "^2.2.5",
