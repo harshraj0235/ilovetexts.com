@@ -2,7 +2,9 @@ import { SITE } from '@/lib/tools-config';
 import { LANG_CODES } from '@/lib/i18n';
 
 export async function GET() {
-  const now = new Date().toISOString().split('T')[0]; // YYYY-MM-DD
+  // Fixed deploy date — only update when content actually changes
+  // Using new Date() causes daily lastmod changes which Google penalizes
+  const lastmod = '2026-09-06';
   const sitemaps = LANG_CODES.map(lang => `${SITE.url}/sitemap/${lang}.xml`);
 
   let xml = `<?xml version="1.0" encoding="UTF-8"?>\n`;
@@ -11,7 +13,7 @@ export async function GET() {
   for (const sitemapUrl of sitemaps) {
     xml += `  <sitemap>\n`;
     xml += `    <loc>${sitemapUrl}</loc>\n`;
-    xml += `    <lastmod>${now}</lastmod>\n`;
+    xml += `    <lastmod>${lastmod}</lastmod>\n`;
     xml += `  </sitemap>\n`;
   }
   

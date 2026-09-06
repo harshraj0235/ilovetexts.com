@@ -11,25 +11,24 @@ export default function robots() {
           '/api/',
           '/private/',
           '/embed/',
-          '/*?*',           // Block query string URLs — prevents duplicate crawling
-          '/_next/',        // Block Next.js internals
+          '/_next/image',   // Block image optimization API only (CSS/JS must be accessible)
         ],
       },
       {
         userAgent: 'Bingbot',
         allow: ['/'],
-        disallow: ['/api/', '/private/', '/embed/', '/*?*', '/_next/'],
+        disallow: ['/api/', '/private/', '/embed/', '/_next/image'],
       },
       // Allow AI search crawlers — critical for GEO (Generative Engine Optimization)
       {
         userAgent: 'GPTBot',
         allow: '/',
-        disallow: ['/api/', '/_next/'],
+        disallow: ['/api/', '/_next/image'],
       },
       {
         userAgent: 'Google-Extended',
         allow: '/',
-        disallow: ['/api/', '/_next/'],
+        disallow: ['/api/', '/_next/image'],
       },
       {
         userAgent: 'PerplexityBot',
@@ -50,7 +49,7 @@ export default function robots() {
         // All other bots — allow everything except API and private routes
         userAgent: '*',
         allow: ['/'],
-        disallow: ['/api/', '/private/', '/_next/'],
+        disallow: ['/api/', '/private/', '/_next/image'],
       },
     ],
     sitemap: [

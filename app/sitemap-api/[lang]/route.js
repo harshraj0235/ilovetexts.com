@@ -44,8 +44,8 @@ const EN_BLOG_SLUGS = [
 // Stable dates — only update when content actually changes
 // Using a fixed deploy date prevents "everything changed today" signal to Google
 const SITE_LAUNCH = '2025-08-01';
-const TOOLS_LAST_UPDATED = '2026-09-04';  // Update this when you add/update tools
-const CONTENT_LAST_UPDATED = '2026-09-04'; // Update this when you update content
+const TOOLS_LAST_UPDATED = '2026-09-06';  // Update this when you add/update tools
+const CONTENT_LAST_UPDATED = '2026-09-06'; // Update this when you update content
 
 function getAlternatesXml(path) {
   let xml = `  <xhtml:link rel="alternate" hreflang="x-default" href="${buildCanonical('en', path)}" />\n`;
@@ -56,7 +56,6 @@ function getAlternatesXml(path) {
 }
 
 export const dynamic = 'force-static'; // Cache sitemap — only regenerate on redeploy
-export const revalidate = 86400; // 24h cache
 
 export async function GET(request, { params }) {
   const { lang } = await params;

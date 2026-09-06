@@ -8,8 +8,7 @@ export async function generateStaticParams() {
   return []; // Dynamic rendering at edge to prevent ENOSPC on Cloudflare
 }
 
-// Edge SSR — renders fresh on every request, proper cache headers
-export const dynamic = 'force-dynamic';
+
 
 
 export async function generateMetadata({ params }) {
@@ -43,22 +42,36 @@ export default async function CategoryPage({ params }) {
   ]);
 
   // FAQ schema for category — boosts featured snippets
+  const cFaq = t.categoryFaq || {
+    q1: "Are all {category} tools free?",
+    a1: "Yes. Every tool in the {category} collection is 100% free with no signup, no limits, and no premium tier. All processing happens in your browser.",
+    q2: "Do {category} tools work without uploading files?",
+    a2: "Yes. All {category} tools process your text or files entirely in your browser using JavaScript. Nothing is uploaded to any server.",
+    q3: "How many {category} tools are available?",
+    a3: "There are {count} tools in the {category} category: {toolsList}{moreText}.",
+    q4: "Do I need to create an account to use {category} tools?",
+    a4: "No. All tools on ilovetexts.com work instantly without any registration, login, or email address. Open the tool and start using it immediately."
+  };
+
   const faqItems = [
     {
-      question: `Are all ${category.name} tools free?`,
-      answer: `Yes. Every tool in the ${category.name} collection is 100% free with no signup, no limits, and no premium tier. All processing happens in your browser.`,
+      question: cFaq.q1.replace(/\{category\}/g, category.name),
+      answer: cFaq.a1.replace(/\{category\}/g, category.name),
     },
     {
-      question: `Do ${category.name} tools work without uploading files?`,
-      answer: `Yes. All ${category.name} tools process your text or files entirely in your browser using JavaScript. Nothing is uploaded to any server.`,
+      question: cFaq.q2.replace(/\{category\}/g, category.name),
+      answer: cFaq.a2.replace(/\{category\}/g, category.name),
     },
     {
-      question: `How many ${category.name} tools are available?`,
-      answer: `There are ${category.tools.length} tools in the ${category.name} category: ${category.tools.slice(0, 5).map(t => t.name).join(', ')}${category.tools.length > 5 ? ` and ${category.tools.length - 5} more` : ''}.`,
+      question: cFaq.q3.replace(/\{category\}/g, category.name).replace('{count}', category.tools.length),
+      answer: cFaq.a3.replace(/\{category\}/g, category.name)
+                     .replace('{count}', category.tools.length)
+                     .replace('{toolsList}', category.tools.slice(0, 5).map(tool => tool.name).join(', '))
+                     .replace('{moreText}', category.tools.length > 5 ? ` and ${category.tools.length - 5} more` : ''),
     },
     {
-      question: `Do I need to create an account to use ${category.name} tools?`,
-      answer: `No. All tools on ilovetexts.com work instantly without any registration, login, or email address. Open the tool and start using it immediately.`,
+      question: cFaq.q4.replace(/\{category\}/g, category.name),
+      answer: cFaq.a4.replace(/\{category\}/g, category.name),
     },
   ];
 

@@ -6,13 +6,10 @@ export default function NotFound() {
       <head>
         <title>Page Not Found | ilovetexts</title>
         <meta name="robots" content="noindex, nofollow" />
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
-        <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&display=swap" rel="stylesheet" />
         <style>{`
           * { box-sizing: border-box; margin: 0; padding: 0; }
           body {
-            font-family: 'Inter', system-ui, -apple-system, sans-serif;
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
             background: #F8F9FC;
             color: #111827;
             display: flex;

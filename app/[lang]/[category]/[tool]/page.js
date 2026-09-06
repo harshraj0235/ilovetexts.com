@@ -75,6 +75,7 @@ import IncomeCertificateGenerator from '@/components/tools/IncomeCertificateGene
 import RentAgreementGenerator from '@/components/tools/RentAgreementGenerator';
 import PfWithdrawalForm19 from '@/components/tools/PfWithdrawalForm19';
 import Form16Explainer from '@/components/tools/Form16Explainer';
+import BankStatementConverter from '@/components/tools/BankStatementConverter';
 import BackgroundRemover from '@/components/tools/BackgroundRemover';
 import ResumeBuilder from '@/components/tools/ResumeBuilder';
 import PdfToWord from '@/components/tools/PdfToWord';
@@ -202,7 +203,7 @@ export default async function ToolPage({ params }) {
 
   // Generate all structured data schemas
   const faqSchema = generateFAQSchema(faqs);
-  const toolSchema = generateToolSchema(toolData, category, t);
+  const toolSchema = generateToolSchema(toolData, category, t, lang);
   const howToSchema = generateHowToSchema(toolData, howToSteps, t);
   const breadcrumbSchema = generateBreadcrumbSchema([
     { name: t.nav.home, url: buildCanonical(lang, '/') },
@@ -402,6 +403,8 @@ export default async function ToolPage({ params }) {
           <PfWithdrawalForm19 t={t} lang={lang} />
         ) : toolData.slug === 'form-16-explainer' ? (
           <Form16Explainer t={t} lang={lang} />
+        ) : toolData.slug === 'bank-statement-converter' ? (
+          <BankStatementConverter t={t} lang={lang} />
         ) : toolData.slug === 'remove-background' ? (
           <BackgroundRemover t={t} lang={lang} />
         ) : toolData.slug === 'resume-builder' ? (
