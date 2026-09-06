@@ -46,6 +46,29 @@ export default function CommandCenter({ categories, lang, t }) {
       
       {!query && (
         <section className="container" style={{ paddingBottom: '24px' }}>
+          <div style={{ marginBottom: '32px', paddingTop: '12px' }}>
+            <h3 style={{ marginBottom: '24px', color: '#10b981', display: 'flex', alignItems: 'center', gap: '8px' }}>
+              <span style={{ fontSize: '1.4rem' }}>💰</span> Trending: Finance Tools
+            </h3>
+            <div className="tools-grid">
+              {allTools.filter(t => ['bank-statement-converter', 'contract-analyzer'].includes(t.slug)).map(tool => (
+                <Link 
+                  key={tool.slug} 
+                  href={langLink(`/${tool.categoryId}/${tool.slug}`)} 
+                  prefetch={false}
+                  className="tool-card"
+                  style={{ border: '1px solid #10b981', boxShadow: '0 4px 15px rgba(16, 185, 129, 0.1)' }}
+                >
+                  <div className="tool-card-icon" role="img" aria-hidden="true">{tool.icon}</div>
+                  <div className="tool-card-content">
+                    <h3>{tool.name}</h3>
+                    <p>{tool.description.length > 60 ? tool.description.substring(0, 60) + '...' : tool.description}</p>
+                  </div>
+                </Link>
+              ))}
+            </div>
+          </div>
+
           <PromotedTools lang={lang} />
           
           <div style={{ marginBottom: '48px', paddingTop: '12px' }}>
