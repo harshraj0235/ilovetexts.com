@@ -43,7 +43,7 @@ const BLOG_SLUGS = [
 ];
 
 const SITE_LAUNCH = '2025-08-01';
-const BUILD_DATE = '2026-09-01';
+const BUILD_DATE = new Date().toISOString().split('T')[0]; // Always today
 
 function getAlternatesXml(path) {
   let xml = `  <xhtml:link rel="alternate" hreflang="x-default" href="${buildCanonical('en', path)}" />\n`;

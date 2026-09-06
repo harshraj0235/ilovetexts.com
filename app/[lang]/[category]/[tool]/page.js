@@ -88,6 +88,9 @@ export async function generateStaticParams() {
   return []; // Dynamic rendering at edge to prevent ENOSPC on Cloudflare
 }
 
+export const dynamic = 'force-dynamic';
+export const revalidate = 3600;
+
 export async function generateMetadata({ params }) {
   const { lang, category, tool } = await params;
   const toolData = getTool(category, tool, lang);
