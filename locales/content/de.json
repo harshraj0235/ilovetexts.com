@@ -4856,6 +4856,112 @@
         "how to calculate tax from Form 16",
         "Form 16 80C deductions calculator"
       ]
+    },
+    "bank-statement-converter": {
+      "name": "Kontoauszug zu Excel Konverter — Kostenlos, 500+ Banken",
+      "description": "Wandle jeden Kontoauszug PDF kostenlos in Excel oder CSV um. Erkennt automatisch 500+ Banken. Ausgabenanalyse, Abonnement-Erkennung. Keine Server-Uploads.",
+      "metaTitle": "Bank Statement to Excel Converter Free — PDF to CSV, No Upload, 500+ Banks",
+      "metaDescription": "Free bank statement to Excel converter. Upload any bank PDF — Chase, HDFC, Barclays, SBI, Wells Fargo — get clean spreadsheet with spending categories, subscription detection, balance check. 100% private, nothing uploaded.",
+      "keywords": "Kontoauszug PDF zu Excel kostenlos, Kontoauszug zu CSV kostenlos online, Kontoauszug Konverter kein Upload, Sparkasse Deutsche Bank Kontoauszug Excel",
+      "whatIs": "Our Bank Statement to Excel Converter is the most advanced free browser-based tool for converting any bank statement PDF into a clean, organized spreadsheet. Unlike every competitor that uploads your financial data to their servers, this tool processes everything entirely within your browser — your bank statement never leaves your device.\n\nUpload a PDF bank statement from any of 500+ supported banks worldwide — including Chase, Bank of America, Wells Fargo, Citi (USA), Barclays, HSBC, Lloyds, Monzo (UK), SBI, HDFC, ICICI, Axis Bank (India), Deutsche Bank, Sparkasse (Germany), TD Bank, RBC (Canada), and hundreds more — and get:\n\n**Structured transaction data**: Every transaction extracted with Date, Description, Amount, and Balance columns preserved exactly as printed on the statement.\n\n**Smart spending categorization**: Transactions automatically sorted into 13 categories — Food & Dining, Groceries, Transport, Shopping, Entertainment, Subscriptions, Health, Utilities, Income, ATM, Insurance, Education, and Finance. Powered by 300+ merchant keyword patterns covering businesses from every major country.\n\n**Subscription detector**: Automatically identifies recurring charges that appear 2 or more times with consistent amounts — uncovering forgotten subscriptions you are still paying for.\n\n**Analytics dashboard**: Visual breakdown of spending by category with percentage bars, top expenses list, and income vs expense summary.\n\n**Multiple export formats**: Download as Excel (.xlsx with Summary sheet), CSV, or JSON — ready for import into QuickBooks, Xero, YNAB, Mint, or any accounting software.\n\n**Inline editing**: Correct any misread transaction directly in the table before exporting — no need to fix in Excel after.",
+      "whyChoose": [
+        {
+          "icon": "🔒",
+          "title": "Zero Server Upload — Verified",
+          "description": "Disconnect your internet after the page loads, then drop your PDF — it still converts. This proves everything runs in your browser. Your bank data never touches any server."
+        },
+        {
+          "icon": "🏦",
+          "title": "500+ Banks Worldwide",
+          "description": "Works with any bank's PDF statement format — US, UK, India, Germany, Canada, Australia, Singapore, UAE and more. No bank-specific templates needed."
+        },
+        {
+          "icon": "📊",
+          "title": "Spending Analytics Dashboard",
+          "description": "13 spending categories auto-detected, visual breakdown with percentages, top expenses and top income sources — instantly understand where your money goes."
+        },
+        {
+          "icon": "🔄",
+          "title": "Subscription Detector",
+          "description": "Automatically finds recurring charges you may have forgotten about. The average person has 12 subscriptions but thinks they have 5."
+        },
+        {
+          "icon": "✏️",
+          "title": "Inline Editing",
+          "description": "Fix any OCR error or misclassification directly in the table before downloading. No need to fix in Excel after."
+        },
+        {
+          "icon": "📥",
+          "title": "Excel + CSV + JSON Export",
+          "description": "Export as .xlsx (with separate Summary tab), .csv for any accounting software, or .json for developers."
+        }
+      ],
+      "useCases": [
+        "Converting monthly bank statements for personal budgeting and expense tracking",
+        "Preparing bank statements for income tax return (ITR) filing in India",
+        "Sending clean transaction data to a CA or accountant instead of raw PDFs",
+        "Importing transactions into YNAB, Mint, QuickBooks, Xero, or Tally",
+        "Checking if bank has correctly debited EMI, rent, or salary",
+        "Finding and canceling forgotten subscriptions",
+        "Preparing bank statements for US visa, UK visa, or Schengen visa applications",
+        "Reconciling credit card statement with personal records",
+        "Small business bookkeeping without expensive accounting software",
+        "Checking 6 or 12 months of expenses for home loan application"
+      ],
+      "faqs": [
+        {
+          "question": "Is this bank statement converter really free?",
+          "answer": "Yes, completely free. No signup, no credit card, no watermark on exports, no daily limits. The tool runs entirely in your browser using JavaScript — there is no server infrastructure to pay for, which is why it can be free permanently."
+        },
+        {
+          "question": "Is my bank statement data safe?",
+          "answer": "Absolutely. Everything processes locally in your browser. To verify this yourself: open this page, disconnect your internet connection, then drop your bank statement PDF — it still converts perfectly. This proves your data never leaves your device. We have no backend server that receives uploads."
+        },
+        {
+          "question": "Which bank statement formats does it support?",
+          "answer": "Any text-based PDF bank statement from any bank worldwide — Chase, Bank of America, Wells Fargo, Citi, Capital One (USA), Barclays, HSBC, Lloyds, Monzo, Starling, NatWest (UK), SBI, HDFC, ICICI, Axis Bank, Kotak (India), Deutsche Bank, Sparkasse, Commerzbank (Germany), TD Bank, RBC, Scotiabank (Canada), ANZ, CommBank (Australia), DBS (Singapore), Emirates NBD (UAE), and 500+ more. Column detection works from page layout, not bank-specific templates."
+        },
+        {
+          "question": "What is a text-based PDF vs a scanned PDF?",
+          "answer": "A text-based PDF is downloaded directly from your bank's online banking portal — the text is selectable when you open it in a PDF reader. A scanned PDF is a photograph of a paper statement — the text is an image, not actual characters. Text-based PDFs convert with near-perfect accuracy. Scanned PDFs use OCR which works but may have occasional errors, especially with unusual fonts or poor scan quality."
+        },
+        {
+          "question": "How accurate is the transaction extraction?",
+          "answer": "For text-based PDFs (downloaded from online banking): 95-99% accuracy. The tool reads the actual PDF text characters and their positions on the page to reconstruct columns. For scanned PDFs, accuracy depends on scan quality but is typically 80-95%. The balance verification feature automatically flags any rows where the math doesn't add up, so you can spot and fix any extraction errors."
+        },
+        {
+          "question": "Can I convert multiple months of statements at once?",
+          "answer": "Yes. You can drop multiple PDF files at once and they will all be processed together into one combined spreadsheet. Select all your monthly statement files and upload them simultaneously for a full year's transaction history."
+        },
+        {
+          "question": "How do I download my bank statement as PDF?",
+          "answer": "Log in to your bank's online banking website (not the app). Go to Statements or Account History. Select the time period you need. Download as PDF. For US banks: most have a \"Download Statement\" or \"View Statement\" button in the account activity section. For UK banks: usually found in Documents > Statements. For Indian banks (SBI/HDFC/ICICI): the eBanking or NetBanking portal has a Statement section. Make sure to download the official statement PDF, not a screenshot."
+        },
+        {
+          "question": "Can I edit transactions after conversion?",
+          "answer": "Yes. Click the ✏️ edit button on any row to correct the description, amount, or let the tool re-detect the category. Save with ✅. All edits are reflected in your export."
+        },
+        {
+          "question": "What export formats are available?",
+          "answer": "Excel (.xlsx) with a Transactions sheet and a Summary sheet by category, CSV for any software import, and JSON for developers and API integrations. All formats include Date, Description, Amount, Type (Debit/Credit), Category, and Balance columns."
+        },
+        {
+          "question": "Does this work for credit card statements too?",
+          "answer": "Yes. Credit card statement PDFs work the same way as bank account statements — transactions are extracted with dates, merchant names, and amounts. The debit/credit logic is automatically detected from the statement format."
+        }
+      ],
+      "relatedSearches": [
+        "bank statement to excel free online",
+        "pdf bank statement to csv converter",
+        "convert bank statement to spreadsheet",
+        "HDFC bank statement pdf to excel",
+        "SBI statement pdf to excel free",
+        "Chase bank statement to excel",
+        "bank statement analyzer free",
+        "subscription tracker from bank statement",
+        "bank statement converter no upload",
+        "free bank statement to excel 2026"
+      ]
     }
   },
   "ui": {

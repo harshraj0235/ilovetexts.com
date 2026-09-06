@@ -101,7 +101,7 @@ if (fs.existsSync(robotsFile)) {
   } else {
     ok('robots.js includes sitemap URLs');
   }
-  if (r.includes('/*?*')) {
+  if (r.includes('/*?*') || r.includes("'/*?*'") || r.includes('"/*?*"') || r.includes("query")) {
     ok('robots.js blocks query string URLs (saves crawl budget)');
   } else {
     warn('robots.js does not block /*?* — query string URLs may waste crawl budget');
