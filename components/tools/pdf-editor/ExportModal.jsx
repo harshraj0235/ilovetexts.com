@@ -55,81 +55,13 @@ export default function ExportModal({
     try { await fn(); } finally { setExporting(null); }
   };
 
-  // Compress PDF — re-renders all pages at lower quality
+  // Compress PDF — delegates to main export with compression flags
   const doCompressPdf = async () => {
     setCompressing(true);
     try {
-      const { PDFDocument } = await import('pdf-lib');
-      const pdfDoc = await PDFDocument.create();
-
-      for (let i = 0; i < pages.length; i++) {
-        const page = pages[i];
-        const W = page.canvasWidth || 794;
-        const H = page.canvasHeight || 1123;
-
-        // Re-render page to canvas at quality setting
-        const canvas = document.createElement('canvas');
-        // Reduce resolution for compression
-        const scaleFactor = quality >= 80 ? 1 : quality >= 60 ? 0.85 : 0.7;
-        canvas.width = Math.round(W * scaleFactor);
-        canvas.height = Math.round(H * scaleFactor);
-        const ctx = canvas.getContext('2d');
-
-        if (page.canvasDataUrl) {
-          const img = new Image();
-          img.src = page.canvasDataUrl;
-          await new Promise(r => { img.onload = r; img.onerror = r; });
-          ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
-        } else {
-          ctx.fillStyle = '#fff';
-          ctx.fillRect(0, 0, canvas.width, canvas.height);
-        }
-
-        // Draw text blocks on canvas
-        for (const b of (page.textBlocks || [])) {
-          if (!b.text?.trim()) continue;
-          if (page.canvasDataUrl && !b.isEdited) continue;
-          ctx.save();
-          if (b.isEdited) {
-            const pad = 2;
-            ctx.fillStyle = b.bgColor || '#ffffff';
-            ctx.fillRect(
-              (b.x - pad) * scaleFactor,
-              (b.y - pad) * scaleFactor,
-              (b.width + pad * 2) * scaleFactor,
-              (b.height + pad * 2) * scaleFactor
-            );
-          }
-          let fStr = '';
-          if (b.italic) fStr += 'italic ';
-          if (b.bold) fStr += 'bold ';
-          fStr += `${Math.round((b.fontSize || 12) * scaleFactor)}px ${b.fontFamily || 'sans-serif'}`;
-          ctx.font = fStr;
-          ctx.fillStyle = b.color || '#000';
-          ctx.textBaseline = 'top';
-          ctx.fillText(b.text, b.x * scaleFactor, b.y * scaleFactor);
-          ctx.restore();
-        }
-
-        // Compress to JPEG at specified quality
-        const jpegQuality = quality / 100;
-        const dataUrl = canvas.toDataURL('image/jpeg', jpegQuality);
-
-        const pdfPage = pdfDoc.addPage([W * 0.75, H * 0.75]);
-        const img = await pdfDoc.embedJpg(dataUrl);
-        pdfPage.drawImage(img, { x: 0, y: 0, width: W * 0.75, height: H * 0.75 });
-      }
-
-      const pdfBytes = await pdfDoc.save();
-      const blob = new Blob([pdfBytes], { type: 'application/pdf' });
-      const a = document.createElement('a');
-      a.href = URL.createObjectURL(blob);
-      a.download = `${base}-compressed.pdf`;
-      a.click();
-      URL.revokeObjectURL(a.href);
-
-      // Show actual vs estimated
-      setEstimatedSize(pdfBytes.length);
+      // We pass the quality setting so the main exporter can apply useObjectStreams
+      // and strip metadata for lossless compression.
+      await onExportPdf({ compress: true, quality });
     } finally {
       setCompressing(false);
     }

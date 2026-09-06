@@ -4964,6 +4964,100 @@
         "bank statement converter no upload",
         "free bank statement to excel 2026"
       ]
+    },
+    "contract-analyzer": {
+      "name": "Analisador de Contratos — Explicação em Linguagem Simples Grátis",
+      "description": "Analise qualquer contrato em linguagem simples grátis. Detecta cláusulas de alto risco em aluguéis, contratos de trabalho, NDAs. 200+ padrões, 100% privado.",
+      "metaTitle": "Contract Analyzer Free — Lease & Employment Contract Red Flag Checker, Plain English",
+      "metaDescription": "Free contract analyzer. Upload or paste any lease, employment contract, or NDA — get instant plain English explanation of risky clauses, red flags, and what to negotiate. 200+ patterns. 100% private, no AI server.",
+      "keywords": "analisador contratos grátis online, explicar contrato linguagem simples, cláusulas risco contrato aluguel grátis, revisar contrato emprego grátis",
+      "whatIs": "Our Contract Analyzer is the only free, fully browser-based tool that reads any legal contract and explains every important clause in plain, simple language without requiring an AI server, account, or fee. Lawyers charge $200–500 per hour to review contracts. Our tool does the same pattern-based analysis in under 1 second, entirely within your browser.\n\n**For renters and tenants:** Paste your lease agreement text and instantly see which clauses are unfair, which require negotiation, and which are standard. The tool checks for 14+ common lease red flags: landlord entry without notice, automatic rent increases, broad damage liability, professional cleaning requirements, no-pets clauses, subletting restrictions, and more. Country-specific advice is included for UK (Assured Shorthold Tenancy rules), Germany (Mietrecht and Mietpreisbremse), India (Rent Control Acts), USA (state-specific tenant rights), and Canada (provincial tenancy acts).\n\n**For employees and job seekers:** Paste your employment contract or job offer letter and see risks including: broad non-compete clauses (unenforceable in California and many other jurisdictions), overly wide IP assignment that claims your personal projects, mandatory arbitration clauses that waive your court rights, garden leave and long notice periods, discretionary bonuses, clawback provisions, and more.\n\n**For any contract:** NDAs, freelance agreements, service contracts, and general business contracts are also analyzed for unlimited liability clauses, unilateral modification rights, automatic renewal traps, unfavorable jurisdiction clauses, and force majeure provisions.\n\nAll analysis runs using 200+ keyword pattern rules built into the tool — no text is sent to any server, no AI API is called, and your contract contents remain completely private.",
+      "whyChoose": [
+        {
+          "icon": "🔒",
+          "title": "Zero Server — Verified Private",
+          "description": "No text is sent to any AI service or server. Your contract stays on your device. Disconnect your internet and it still works — proving complete privacy."
+        },
+        {
+          "icon": "⚖️",
+          "title": "200+ Risk Patterns",
+          "description": "Covers lease agreements, employment contracts, NDAs, service agreements — 200+ clause patterns from real-world legal templates."
+        },
+        {
+          "icon": "🌍",
+          "title": "12-Country Specific Advice",
+          "description": "Adds jurisdiction-specific guidance for US, UK, India, Germany, Canada, Australia — because tenant and employment rights vary dramatically by country."
+        },
+        {
+          "icon": "📄",
+          "title": "PDF Report Download",
+          "description": "Download a full PDF analysis report to review offline, share with a lawyer, or keep for your records."
+        },
+        {
+          "icon": "💡",
+          "title": "Plain English + Action Steps",
+          "description": "Every clause explained in plain language plus a specific \"what to do\" action — not just flagging problems but telling you how to address them."
+        },
+        {
+          "icon": "🔍",
+          "title": "Risk Score",
+          "description": "Overall contract risk score from 0-100 so you can quickly compare contracts or prioritize which clauses need attention."
+        }
+      ],
+      "useCases": [
+        "Reviewing a rental agreement before signing — catching hidden fees and unfair clauses",
+        "Checking an employment contract for non-compete scope and IP assignment breadth",
+        "Understanding a job offer letter before accepting",
+        "Reviewing an NDA to understand what you cannot share",
+        "Checking a freelance service agreement for unlimited liability clauses",
+        "Identifying automatic renewal traps in subscription or service contracts",
+        "Understanding garden leave and notice period implications before resigning",
+        "Checking if a bonus clawback provision affects your career flexibility"
+      ],
+      "faqs": [
+        {
+          "question": "Is this a replacement for a lawyer?",
+          "answer": "No. This tool identifies common risk patterns based on keyword matching and provides educational information. It does not give legal advice and cannot replace a qualified lawyer for important contracts. Use it as a first pass to identify which clauses you should ask a lawyer about — which saves you money on legal fees."
+        },
+        {
+          "question": "Is my contract text private?",
+          "answer": "Yes, completely. The analysis uses pattern matching that runs entirely in JavaScript within your browser. No text is sent to any server, AI API, or third party. You can verify this: disconnect your internet after the page loads and analyze a contract — it works perfectly offline."
+        },
+        {
+          "question": "What contract types does it analyze?",
+          "answer": "Lease and rental agreements (residential and commercial), employment contracts and job offer letters, NDAs (non-disclosure agreements), freelance and service contracts, and general business contracts. Select the appropriate type for more specific analysis."
+        },
+        {
+          "question": "Why is the country selection important?",
+          "answer": "Employment and tenant rights vary dramatically by jurisdiction. A non-compete clause that is unenforceable in California may be fully enforceable in Florida. Tenant notice requirements differ between UK (48 hours), Germany (24 hours), and India (varies by state). Country selection adds jurisdiction-specific context to generic clause analysis."
+        },
+        {
+          "question": "What does the risk score mean?",
+          "answer": "The risk score (0-100) reflects the balance of high-risk (red) versus normal (green) clauses detected. Below 40 means significant unfavorable terms worth negotiating or rejecting. 40-70 is moderate — standard clauses with some watch-out items. Above 70 means mostly fair terms with few concerns. The score is indicative, not a legal determination."
+        },
+        {
+          "question": "How accurate is the clause detection?",
+          "answer": "The tool uses keyword pattern matching, not legal interpretation. It detects the presence of specific clause types based on 200+ patterns from real contracts. It will miss clauses phrased unusually, and may flag standard clauses in context-specific contracts. Use it as a starting point, not a comprehensive legal review."
+        },
+        {
+          "question": "Can I analyze a scanned or image PDF?",
+          "answer": "Text-based PDFs (downloaded from document creation software) work directly. Scanned image PDFs require OCR — upload them and the tool will use Tesseract.js OCR to extract text first, though accuracy on scanned documents varies with scan quality."
+        },
+        {
+          "question": "How do I get my contract text from a PDF?",
+          "answer": "Open the PDF in any PDF reader, press Ctrl+A to select all text, Ctrl+C to copy, then paste into the text box. Alternatively, upload the PDF directly using the upload button and the tool will extract the text automatically."
+        }
+      ],
+      "relatedSearches": [
+        "lease agreement analyzer free online",
+        "employment contract red flags checker",
+        "understand my rental agreement",
+        "non-compete clause checker free",
+        "contract plain english translator",
+        "lease agreement explained simply",
+        "job offer contract analyzer",
+        "NDA analyzer free online"
+      ]
     }
   },
   "ui": {

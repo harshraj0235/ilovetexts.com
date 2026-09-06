@@ -424,7 +424,7 @@ export default function PdfTextEditor({ t, lang, initialMode }) {
     showToast('PNG exported!');
   }, [pages, redactions, imageOverlays, watermark, fileName, showToast, annotationsMap]); // eslint-disable-line
 
-  const doExportPdf = useCallback(async () => {
+  const doExportPdf = useCallback(async (opts = {}) => {
     try {
       const { PDFDocument, rgb, StandardFonts, degrees } = await import('pdf-lib');
       let pdfDoc;
@@ -581,12 +581,17 @@ export default function PdfTextEditor({ t, lang, initialMode }) {
         }
       }
 
-      const pdfBytes = await pdfDoc.save();
+      const pdfBytes = await pdfDoc.save({ useObjectStreams: true });
       const blob = new Blob([pdfBytes], { type: 'application/pdf' });
       const a = document.createElement('a'); a.href = URL.createObjectURL(blob);
-      a.download = (fileName?.replace(/\.[^.]+$/,'') || 'document') + '-edited.pdf';
+      const suffix = opts.compress ? '-compressed.pdf' : '-edited.pdf';
+      a.download = (fileName?.replace(/\.[^.]+$/,'') || 'document') + suffix;
       a.click();
-      showToast('PDF downloaded!');
+      if (opts.compress) {
+        showToast('PDF compressed losslessly!');
+      } else {
+        showToast('PDF downloaded!');
+      }
     } catch (e) {
       console.error('PDF-lib export failed:', e); 
       await doExportPng();

@@ -76,6 +76,7 @@ import RentAgreementGenerator from '@/components/tools/RentAgreementGenerator';
 import PfWithdrawalForm19 from '@/components/tools/PfWithdrawalForm19';
 import Form16Explainer from '@/components/tools/Form16Explainer';
 import BankStatementConverter from '@/components/tools/BankStatementConverter';
+import ContractAnalyzer from '@/components/tools/ContractAnalyzer';
 import BackgroundRemover from '@/components/tools/BackgroundRemover';
 import ResumeBuilder from '@/components/tools/ResumeBuilder';
 import PdfToWord from '@/components/tools/PdfToWord';
@@ -405,6 +406,8 @@ export default async function ToolPage({ params }) {
           <Form16Explainer t={t} lang={lang} />
         ) : toolData.slug === 'bank-statement-converter' ? (
           <BankStatementConverter t={t} lang={lang} />
+        ) : toolData.slug === 'contract-analyzer' ? (
+          <ContractAnalyzer t={t} lang={lang} />
         ) : toolData.slug === 'remove-background' ? (
           <BackgroundRemover t={t} lang={lang} />
         ) : toolData.slug === 'resume-builder' ? (
