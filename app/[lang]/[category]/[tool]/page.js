@@ -79,6 +79,8 @@ import BankStatementConverter from '@/components/tools/BankStatementConverter';
 import ContractAnalyzer from '@/components/tools/ContractAnalyzer';
 import BackgroundRemover from '@/components/tools/BackgroundRemover';
 import ResumeBuilder from '@/components/tools/ResumeBuilder';
+import JobApplicationAutoPack from '@/components/tools/JobApplicationAutoPack';
+import BankStatementReport from '@/components/tools/BankStatementReport';
 import PdfToWord from '@/components/tools/PdfToWord';
 import HeicToJpg from '@/components/tools/HeicToJpg';
 import PassportPhotoMaker from '@/components/tools/PassportPhotoMaker';
@@ -412,6 +414,10 @@ export default async function ToolPage({ params }) {
           <BackgroundRemover t={t} lang={lang} />
         ) : toolData.slug === 'resume-builder' ? (
           <ResumeBuilder t={t} lang={lang} />
+        ) : toolData.slug === 'job-application-pack' ? (
+          <JobApplicationAutoPack t={t} lang={lang} />
+        ) : toolData.slug === 'bank-statement-financial-report' ? (
+          <BankStatementReport t={t} lang={lang} />
         ) : toolData.slug === 'pdf-to-word' ? (
           <PdfToWord t={t} lang={lang} />
         ) : toolData.slug === 'heic-to-jpg' ? (

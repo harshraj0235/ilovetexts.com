@@ -51,7 +51,7 @@ export default function CommandCenter({ categories, lang, t }) {
               <span style={{ fontSize: '1.4rem' }}>💰</span> Trending: Finance Tools
             </h3>
             <div className="tools-grid">
-              {allTools.filter(t => ['bank-statement-converter', 'contract-analyzer'].includes(t.slug)).map(tool => (
+              {allTools.filter(t => ['bank-statement-converter', 'contract-analyzer', 'bank-statement-financial-report', 'job-application-pack'].includes(t.slug)).map(tool => (
                 <Link 
                   key={tool.slug} 
                   href={langLink(`/${tool.categoryId}/${tool.slug}`)} 
