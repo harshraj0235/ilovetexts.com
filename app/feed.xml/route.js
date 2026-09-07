@@ -20,14 +20,32 @@ export async function GET() {
     const url = `${siteUrl}/blog/${post.slug}`;
     const pubDate = new Date(post.date).toUTCString();
     // Escape XML special chars
-    const title   = post.title.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
-    const desc    = post.description.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+    const escapeXml = (str) => str
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;')
+      .replace(/'/g, '&apos;');
+    const title   = escapeXml(post.title);
+    const desc    = escapeXml(post.description);
+    // Full article content in <content:encoded> — required by Google News,
+    // feed aggregators (Feedly, Inoreader), and AI citation engines.
+    // Strip markdown syntax for clean HTML in the feed.
+    const fullContent = post.content
+      ? `<![CDATA[${post.content
+          .replace(/#{1,6}\s(.+)/g, (_, h) => `<strong>${h}</strong>`)
+          .replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>')
+          .replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2">$1</a>')
+          .replace(/\n\n/g, '<br/><br/>')
+          .trim()}]]>`
+      : `<![CDATA[${post.description}]]>`;
     return `
     <item>
       <title>${title}</title>
       <link>${url}</link>
       <guid isPermaLink="true">${url}</guid>
       <description>${desc}</description>
+      <content:encoded>${fullContent}</content:encoded>
       <pubDate>${pubDate}</pubDate>
       <category>${post.category}</category>
       <author>harshraj@ilovetexts.com (Harsh Raj)</author>

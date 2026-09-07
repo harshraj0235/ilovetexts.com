@@ -6,55 +6,55 @@ export default function robots() {
       {
         userAgent: 'Googlebot',
         allow: ['/'],
-        // Block pages that waste crawl budget — not real content
         disallow: [
           '/api/',
           '/private/',
-          '/embed/',
-          '/_next/image',   // Block image optimization API only (CSS/JS must be accessible)
+          '/embed/',          // Embed pages are UI-only, not indexable content
+          '/_next/image',
+          '/*?*',             // Block ALL query-string URLs — saves crawl budget,
+                              // prevents ?ref=, ?utm_*, ?fbclid= from being crawled
         ],
       },
       {
         userAgent: 'Bingbot',
         allow: ['/'],
-        disallow: ['/api/', '/private/', '/embed/', '/_next/image'],
+        disallow: ['/api/', '/private/', '/embed/', '/_next/image', '/*?*'],
       },
-      // Allow AI search crawlers — critical for GEO (Generative Engine Optimization)
+      // AI search crawlers — allow content, block embed widgets and API
       {
         userAgent: 'GPTBot',
         allow: '/',
-        disallow: ['/api/', '/_next/image'],
+        disallow: ['/api/', '/_next/image', '/embed/', '/*?*'],
       },
       {
         userAgent: 'Google-Extended',
         allow: '/',
-        disallow: ['/api/', '/_next/image'],
+        disallow: ['/api/', '/_next/image', '/embed/', '/*?*'],
       },
       {
         userAgent: 'PerplexityBot',
         allow: '/',
-        disallow: ['/api/'],
+        disallow: ['/api/', '/embed/', '/*?*'],
       },
       {
         userAgent: 'ClaudeBot',
         allow: '/',
-        disallow: ['/api/'],
+        disallow: ['/api/', '/embed/', '/*?*'],
       },
       {
         userAgent: 'OAI-SearchBot',
         allow: '/',
-        disallow: ['/api/'],
+        disallow: ['/api/', '/embed/', '/*?*'],
       },
       {
-        // All other bots — allow everything except API and private routes
+        // All other bots — same restrictions
         userAgent: '*',
         allow: ['/'],
-        disallow: ['/api/', '/private/', '/_next/image'],
+        disallow: ['/api/', '/private/', '/embed/', '/_next/image', '/*?*'],
       },
     ],
     sitemap: [
       // Only reference the sitemap index — it already lists all per-language sitemaps.
-      // Listing individual sitemaps here too causes Google to process them twice.
       `${SITE.url}/sitemap_index.xml`,
     ],
     host: SITE.url,

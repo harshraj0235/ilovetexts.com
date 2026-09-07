@@ -62,7 +62,7 @@ export default function CommandCenter({ categories, lang, t }) {
                   <div className="tool-card-icon" role="img" aria-hidden="true">{tool.icon}</div>
                   <div className="tool-card-content">
                     <h3>{tool.name}</h3>
-                    <p>{tool.description.length > 60 ? tool.description.substring(0, 60) + '...' : tool.description}</p>
+                    <p>{tool.description}</p>
                   </div>
                 </Link>
               ))}
@@ -122,7 +122,7 @@ export default function CommandCenter({ categories, lang, t }) {
                   <div className="tool-card-icon" role="img" aria-hidden="true">{tool.icon}</div>
                   <div className="tool-card-content">
                     <h3>{tool.name}</h3>
-                    <p>{tool.description.length > 60 ? tool.description.substring(0, 60) + '...' : tool.description}</p>
+                    <p>{tool.description}</p>
                   </div>
                 </Link>
               ))}
@@ -147,7 +147,7 @@ export default function CommandCenter({ categories, lang, t }) {
                   <div className="tool-card-icon" role="img" aria-hidden="true">{tool.icon}</div>
                   <div className="tool-card-content">
                     <h3>{tool.name}</h3>
-                    <p>{tool.description.length > 60 ? tool.description.substring(0, 60) + '...' : tool.description}</p>
+                    <p>{tool.description}</p>
                   </div>
                 </Link>
               ))}
@@ -173,7 +173,7 @@ export default function CommandCenter({ categories, lang, t }) {
                 <div className="tool-card-icon" role="img" aria-hidden="true">{tool.icon}</div>
                 <div className="tool-card-content">
                   <h3>{tool.name}</h3>
-                  <p>{tool.description.length > 60 ? tool.description.substring(0, 60) + '...' : tool.description}</p>
+                  <p>{tool.description}</p>
                 </div>
               </Link>
             ))}

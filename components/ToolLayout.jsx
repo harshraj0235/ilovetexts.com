@@ -1,5 +1,10 @@
 'use client';
 
+// Build date constant — update this when deploying new content.
+// Hard-coding prevents "updated today" signal spam to Google on every deploy.
+const BUILD_DATE = '2026-09-06';
+const BUILD_DATE_DISPLAY = 'September 2026';
+
 import Link from 'next/link';
 import { useState, useEffect } from 'react';
 import { getTranslations } from '@/lib/i18n';
@@ -361,7 +366,7 @@ export default function ToolLayout({
             marginTop: '8px', marginBottom: '2px',
           }}>
             <span>🕒</span>
-            <span>Last updated: <time dateTime="2026-09-04">September 2026</time></span>
+            <span>Last updated: <time dateTime={BUILD_DATE}>{BUILD_DATE_DISPLAY}</time></span>
             <span style={{ opacity: 0.5 }}>·</span>
             <span>Free &amp; no signup</span>
           </div>
@@ -615,17 +620,19 @@ export default function ToolLayout({
 }
 
 function FAQItem({ question, answer }) {
-  const [isOpen, setIsOpen] = useState(false);
-  
+  // Use native <details>/<summary> — Googlebot reads the content regardless
+  // of open/closed state, and screenreaders handle it correctly too.
+  // CSS in globals.css styles .faq-item details/summary to match the design.
   return (
-    <div className={`faq-item ${isOpen ? 'open' : ''}`}>
-      <button className="faq-question" onClick={() => setIsOpen(!isOpen)} aria-expanded={isOpen}>
+    <details className="faq-item">
+      <summary className="faq-question">
         {question}
         <span className="chevron" aria-hidden="true">▼</span>
-      </button>
+      </summary>
+      {/* Answer is always in the DOM — Googlebot reads it even when collapsed */}
       <div className="faq-answer">
         <div className="faq-answer-content">{answer}</div>
       </div>
-    </div>
+    </details>
   );
 }

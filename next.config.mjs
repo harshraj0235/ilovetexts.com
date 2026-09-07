@@ -81,12 +81,42 @@ const nextConfig = {
           { key: 'Referrer-Policy', value: 'strict-origin-when-cross-origin' },
           { key: 'Permissions-Policy', value: 'camera=(), microphone=(), geolocation=()' },
           { key: 'X-DNS-Prefetch-Control', value: 'on' },
+          // CSP: allow same-origin scripts + Google Analytics + GTM only.
+          // unsafe-inline is required for Next.js inline scripts (theme FOUC fix, JSON-LD).
+          // Note: frame-ancestors is set separately per route below.
+          {
+            key: 'Content-Security-Policy',
+            value: [
+              "default-src 'self'",
+              "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://www.googletagmanager.com https://www.google-analytics.com https://api.producthunt.com",
+              "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
+              "font-src 'self' https://fonts.gstatic.com",
+              "img-src 'self' data: blob: https://api.producthunt.com https://www.google-analytics.com https://www.googletagmanager.com",
+              "connect-src 'self' https://www.google-analytics.com https://analytics.google.com https://www.googletagmanager.com https://translate.googleapis.com https://texttospeech.googleapis.com",
+              "worker-src 'self' blob:",
+              "frame-src 'self'",
+              "object-src 'none'",
+              "base-uri 'self'",
+              "form-action 'self'",
+              "upgrade-insecure-requests",
+            ].join('; '),
+          },
         ],
       },
       {
+        // Non-embed pages: block framing (prevents clickjacking)
         source: '/((?!embed).*)',
         headers: [
           { key: 'X-Frame-Options', value: 'SAMEORIGIN' },
+        ],
+      },
+      {
+        // Embed pages: allow cross-origin framing so third-party sites can embed tools
+        source: '/embed/(.*)',
+        headers: [
+          { key: 'X-Frame-Options', value: 'ALLOWALL' },
+          // Override CSP frame-ancestors to allow all origins for embeds
+          { key: 'Content-Security-Policy', value: "frame-ancestors *; upgrade-insecure-requests" },
         ],
       },
       {

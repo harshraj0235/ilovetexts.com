@@ -165,6 +165,118 @@ if (nextConfig.includes('X-Robots-Tag')) {
   warn('next.config.mjs: X-Robots-Tag header not set — add { key: "X-Robots-Tag", value: "index, follow" } to headers');
 }
 
+// ── 11. Home page must have OG image ─────────────────────
+try {
+  const homePage = fs.readFileSync('app/[lang]/page.js', 'utf8');
+  if (!homePage.includes('og-image') && !homePage.includes('openGraph')) {
+    error('app/[lang]/page.js: home page missing openGraph.images — social previews will be blank, hurting click-through rate from social shares');
+  } else {
+    ok('app/[lang]/page.js: home page has openGraph metadata with image');
+  }
+} catch (e) { warn('Could not check home page OG image: ' + e.message); }
+
+// ── 12. Tool schema must NOT use new Date() for datePublished ─
+try {
+  const seoJs = fs.readFileSync('lib/seo.js', 'utf8');
+  if (seoJs.includes("datePublished: '2025-01-15'")) {
+    error("lib/seo.js: generateToolSchema uses stale datePublished '2025-01-15'. Use the actual site launch date '2025-08-01'.");
+  } else if (seoJs.match(/datePublished:\s*new Date\(\)/)) {
+    error('lib/seo.js: generateToolSchema uses new Date() for datePublished — this tells Google every tool was published today on every deploy. Use a fixed launch date string instead.');
+  } else {
+    ok('lib/seo.js: generateToolSchema datePublished is correctly set');
+  }
+} catch (e) { warn('Could not check tool schema datePublished: ' + e.message); }
+
+// ── 13. robots.js must block query strings ────────────────
+try {
+  const robotsJs = fs.readFileSync('app/robots.js', 'utf8');
+  if (!robotsJs.includes('/*?*')) {
+    error('app/robots.js: does not block /*?* — query-string URLs like ?ref=peerlist and ?utm_source=twitter will be crawled, wasting crawl budget and creating "Alternate page with proper canonical" entries in GSC');
+  } else {
+    ok('app/robots.js: query-string URLs blocked via /*?* disallow');
+  }
+} catch (e) { warn('Could not check robots.js query string blocking: ' + e.message); }
+
+// ── 14. robots.js must block /embed/ for all bots ─────────
+try {
+  const robotsJs = fs.readFileSync('app/robots.js', 'utf8');
+  // Count how many disallow arrays contain /embed/
+  const embedDisallowCount = (robotsJs.match(/\/embed\//g) || []).length;
+  // We have 8 bot rules — embed should appear in all of them
+  if (embedDisallowCount < 3) {
+    warn('app/robots.js: /embed/ may not be blocked for all bots — verify each userAgent rule includes /embed/ in its disallow list');
+  } else {
+    ok(`app/robots.js: /embed/ blocked in ${embedDisallowCount} bot rules`);
+  }
+} catch (e) { warn('Could not check robots.js embed blocking: ' + e.message); }
+
+// ── 15. hreflang must cover all 6 languages ───────────────
+try {
+  const seoJs = fs.readFileSync('lib/seo.js', 'utf8');
+  // Check that generateAlternates explicitly iterates over LANG_CODES
+  // which is imported from i18n.js and contains all 6 language codes
+  if (!seoJs.includes('generateAlternates') || !seoJs.includes('LANG_CODES')) {
+    error('lib/seo.js: generateAlternates does not use LANG_CODES — hreflang may be missing languages');
+  } else {
+    const i18nJs = fs.existsSync('lib/i18n.js') ? fs.readFileSync('lib/i18n.js', 'utf8') : '';
+    const requiredLangs = ['en', 'hi', 'pt', 'es', 'de', 'id'];
+    const missingFromI18n = requiredLangs.filter(l => !i18nJs.includes(`code: '${l}'`) && !i18nJs.includes(`code: "${l}"`));
+    if (missingFromI18n.length > 0) {
+      error(`lib/i18n.js: LANGUAGES array missing language codes: ${missingFromI18n.join(', ')}`);
+    } else {
+      ok(`lib/seo.js: hreflang via LANG_CODES covers all ${requiredLangs.length} languages (${requiredLangs.join(', ')})`);
+    }
+  }
+} catch (e) { warn('Could not check hreflang completeness: ' + e.message); }
+
+// ── 16. FAQs must be non-empty on tool pages ──────────────
+try {
+  const toolPage = fs.readFileSync('app/[lang]/[category]/[tool]/page.js', 'utf8');
+  if (!toolPage.includes('generateFAQs') && !toolPage.includes('faqs')) {
+    warn('app/[lang]/[category]/[tool]/page.js: tool pages may not be generating FAQs — FAQPage schema requires non-empty FAQ items for rich snippet eligibility');
+  } else {
+    ok('app/[lang]/[category]/[tool]/page.js: FAQ generation present');
+  }
+} catch (e) { warn('Could not check FAQ generation: ' + e.message); }
+
+// ── 17. No JS truncation of tool descriptions ─────────────
+try {
+  const commandCenter = fs.readFileSync('components/CommandCenter.jsx', 'utf8');
+  if (commandCenter.includes('description.length > 60') || commandCenter.includes('substring(0, 60)')) {
+    error('components/CommandCenter.jsx: tool descriptions are truncated in JS before rendering — Google reads the rendered HTML and sees cut-off descriptions, which hurts content quality signals. Remove JS truncation; use CSS line-clamp instead.');
+  } else {
+    ok('components/CommandCenter.jsx: tool descriptions not JS-truncated (full text in DOM)');
+  }
+} catch (e) { warn('Could not check CommandCenter truncation: ' + e.message); }
+
+// ── 18. Organization schema must have correct foundingDate ─
+try {
+  const seoJs = fs.readFileSync('lib/seo.js', 'utf8');
+  if (seoJs.includes("foundingDate: '2024'")) {
+    error("lib/seo.js: Organization foundingDate is '2024' but site launched in 2025 — incorrect E-E-A-T signal");
+  } else {
+    ok('lib/seo.js: Organization foundingDate is correct');
+  }
+} catch (e) { warn('Could not check Organization foundingDate: ' + e.message); }
+
+// ── 19. Content-Security-Policy header must be set ────────
+if (nextConfig.includes('Content-Security-Policy')) {
+  ok('next.config.mjs: Content-Security-Policy header set');
+} else {
+  warn('next.config.mjs: Content-Security-Policy header not set — add CSP to prevent XSS and signal site quality to Google');
+}
+
+// ── 20. FAQ answers must be in DOM (not JS-hidden) ────────
+try {
+  const toolLayout = fs.readFileSync('components/ToolLayout.jsx', 'utf8');
+  // The old pattern used useState + CSS to hide answers from crawlers
+  if (toolLayout.includes("useState(false)") && toolLayout.includes('faq-answer') && !toolLayout.includes('<details')) {
+    warn('components/ToolLayout.jsx: FAQ answers use JS toggle (useState) — Google may not read collapsed accordion content. Use native <details>/<summary> instead.');
+  } else if (toolLayout.includes('<details')) {
+    ok('components/ToolLayout.jsx: FAQs use native <details>/<summary> — Googlebot reads content regardless of open/closed state');
+  }
+} catch (e) { warn('Could not check FAQ DOM visibility: ' + e.message); }
+
 // ── Summary ───────────────────────────────────────────────
 console.log('\n' + '='.repeat(50));
 if (errors > 0) {
