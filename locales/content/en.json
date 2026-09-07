@@ -6952,99 +6952,167 @@
     ]
   },
   "pdf-text-editor": {
-    "name": "PDF Text Editor — Edit, Annotate, Sign & More",
-    "description": "Edit text in any PDF, annotate, draw, e-sign, add images, redact, watermark — all free, no watermark, no signup, works on scanned PDFs",
-    "metaTitle": "Free PDF Editor Online — Edit, Annotate, Sign, Redact | Better than Sejda",
-    "metaDescription": "Edit PDF text, highlight, draw, e-sign, insert images, add watermark, redact sensitive data — all free, no watermark, no upload to servers. Better than Sejda & Smallpdf.",
-    "keywords": "edit text in pdf online free no watermark, free pdf text editor no signup, how to edit scanned pdf online free, change text in pdf without adobe acrobat, online pdf editor no download, pdf text editor browser based, edit pdf file free online, pdf editor no watermark free, best free online pdf editor, edit pdf without software",
-    "whatIs": "Our free PDF Text Editor is a powerful browser-based tool that lets you open any PDF file and edit every text element directly — no Adobe Acrobat, no downloads, no signup required. For scanned PDFs, our built-in OCR (Optical Character Recognition) technology extracts and recognizes all text automatically, making it fully editable. Every word on every page becomes a clickable, editable text block. Change fonts, resize text, reposition elements, add new text, delete unwanted content, then export your edited PDF back — all 100% privately in your browser. Your file never touches our servers.",
+    "name": "PDF Editor — Edit, Sign, Annotate, Merge & More",
+    "description": "Edit text in any PDF, annotate, draw, e-sign, insert images, redact, merge, compress, watermark, password-protect — all free, no watermark, no signup. Works on scanned PDFs with built-in OCR. Better than Sejda, Smallpdf & iLovePDF.",
+    "metaTitle": "Free PDF Editor Online — Edit, Sign, Annotate, Merge, Redact | No Watermark, No Signup",
+    "metaDescription": "Edit PDF text, sign, annotate, merge, compress, add watermark, redact — all 100% free in your browser. No watermark, no upload, no signup. Better than Sejda, Smallpdf & iLovePDF. Works on scanned PDFs with OCR.",
+    "keywords": "edit pdf online free no watermark, free pdf editor no signup, pdf editor online free, edit text in pdf online free, best free pdf editor online, pdf editor without adobe acrobat, edit pdf in browser without download, free pdf editor no watermark no signup, how to edit text in pdf file online for free, best free pdf editor without adobe, edit scanned pdf online free with ocr, pdf editor that works in browser, free pdf editor for students, how to sign pdf online free, edit pdf on chromebook free, pdf editor online free unlimited pages, how to redact pdf online free, best free alternative to adobe acrobat, edit pdf without uploading to server, secure pdf editor online, free pdf editor no file size limit, how to merge pdf files online free, pdf form filler online free, compress pdf online free, smallpdf alternative free, sejda alternative free, ilovepdf alternative free, edit pdf invoice resume free, pdf editor with find and replace, edit pdf text font size color free, browser based pdf editor, pdf editor with ocr free, edit pdf on ipad iphone phone free, pdf editor with e-sign free, online pdf editor no download no registration, free pdf annotator online, pdf editor for students free, add watermark to pdf free, password protect pdf free, pdf editor free unlimited pages, edit pdf without software, best pdf editor privacy secure",
+    "whatIs": "The ilovetexts.com Free PDF Editor is the most powerful browser-based PDF editing tool available online — completely free, with no watermarks, no file size limits, no upload to servers, and no signup required. Unlike cloud-based editors like Sejda, Smallpdf, or iLovePDF that upload your confidential documents to their servers and impose daily task limits, our editor processes everything 100% locally in your browser using PDF.js and pdf-lib. Your files never leave your device.\n\nOur editor supports a full suite of professional features that rival paid desktop applications like Adobe Acrobat Pro: edit existing text in any PDF (click any word to modify it), add new text blocks anywhere on the page, annotate with highlights, underlines, sticky notes and freehand drawing, e-sign documents with draw/type/upload signatures, insert images and company logos, redact sensitive information permanently, manage pages (reorder, rotate, delete), merge multiple PDFs into one, add watermarks across all pages, password-protect your exported PDF, compress file size for email, and use find & replace across all pages.\n\nFor scanned PDFs and image-based documents, our built-in OCR engine (powered by Tesseract.js) automatically detects and extracts all text, making it fully editable — a feature that even Sejda and most paid editors do not offer for free. The OCR supports English text and can recognize text in photographs, receipts, invoices, government documents, and scanned legal papers.\n\nEvery edit you make is automatically saved to your browser using dual-layer auto-save (localStorage + sessionStorage), so you never lose work even if you accidentally close the tab. You can restore your session and continue where you left off. Export your finished document as a high-quality PDF file (preserving all edits, annotations, and signatures), as PNG images (one per page), or copy all extracted text as plain text.\n\nThe editor works on all devices and browsers — Chrome, Firefox, Safari, Edge — on desktop, laptop, tablet, and mobile phone. Full-screen mode makes editing comfortable on any screen size, and keyboard shortcuts (Ctrl+Z for undo, Ctrl+S for export, Ctrl+H for find & replace) make you productive instantly.\n\nWhether you need to edit a legal contract, sign a rental agreement, fill out a government form, redact confidential data from a business document, merge multiple PDFs for submission, or simply fix a typo in your resume — our PDF editor handles it all, completely free, completely private, and completely without limits.",
     "whyChoose": [
       {
         "icon": "🔒",
-        "title": "100% Private — Files Stay on Your Device",
-        "description": "Your PDF is never uploaded to any server. All editing happens entirely in your browser using JavaScript. Zero data privacy risk."
+        "title": "100% Private — Files Never Leave Your Device",
+        "description": "Unlike Smallpdf, iLovePDF, and Adobe Acrobat Online, your PDF is never uploaded to any server. All processing happens locally in your browser using JavaScript. Zero data privacy risk — perfect for confidential contracts, medical records, tax returns, and legal documents."
       },
       {
         "icon": "🆓",
-        "title": "Completely Free — No Watermarks Ever",
-        "description": "Unlike Smallpdf, Adobe, or Sejda, we add zero watermarks and have zero file limits — completely free forever."
+        "title": "Completely Free — No Watermarks, No Limits",
+        "description": "Sejda limits you to 3 tasks per hour and 200 pages. Smallpdf allows only 2 free tasks per day. iLovePDF restricts file sizes. Our tool has ZERO limits — unlimited pages, unlimited file size, unlimited daily tasks, and never adds a watermark to your document. Free forever."
       },
       {
         "icon": "🔍",
-        "title": "OCR for Scanned PDFs",
-        "description": "Our built-in Tesseract OCR engine reads text from scanned or image-based PDFs, making them fully editable just like regular PDFs."
+        "title": "OCR for Scanned PDFs — Edit Any Document",
+        "description": "Upload a scanned PDF or photo of a document, and our built-in Tesseract OCR engine automatically detects all text, making it fully editable. This is a premium feature that Sejda, Smallpdf, and iLovePDF charge for — we offer it completely free."
       },
       {
         "icon": "⚡",
-        "title": "Instant — No Signup, No Waiting",
-        "description": "Open your PDF in seconds. No account creation, no email verification, no upload queue. Just instant editing."
+        "title": "Instant — No Signup, No Download, No Waiting",
+        "description": "Drop your PDF and start editing in under 3 seconds. No account creation, no email verification, no software download, no browser extension needed. Just pure instant editing in your browser."
+      },
+      {
+        "icon": "✍️",
+        "title": "Full E-Sign Support — Draw, Type, or Upload",
+        "description": "Sign any PDF for free. Draw your signature with mouse or finger, type your name in signature fonts, or upload a signature image. Position and resize anywhere. No DocuSign or HelloSign subscription needed."
+      },
+      {
+        "icon": "📋",
+        "title": "Professional Features — Form Fill, Find & Replace, Comments",
+        "description": "Auto-detect fillable form fields, use Find & Replace across all pages, add searchable comments and sticky notes — features you normally only find in Adobe Acrobat Pro, here completely free."
       },
       {
         "icon": "📱",
-        "title": "Works on Any Device",
-        "description": "Fully responsive editor that works on desktop, tablet, and mobile browsers — Chrome, Firefox, Safari, Edge."
+        "title": "Works on Every Device — Desktop, Tablet, Phone",
+        "description": "Fully responsive editor works on Chrome, Firefox, Safari, Edge — desktop, laptop, iPad, iPhone, Android. Full-screen mode for comfortable editing on any screen size."
       },
       {
         "icon": "💾",
-        "title": "Export to PDF, PNG, or TXT",
-        "description": "Download your edited document as a PDF file, export individual pages as images, or copy all text to clipboard."
+        "title": "Auto-Save & Session Restore",
+        "description": "Your edits are automatically saved to your browser with dual-layer persistence. If you accidentally close the tab, your work is preserved and you can restore it when you return. No cloud account needed."
       }
     ],
     "useCases": [
-      "Edit a PDF contract or legal document without paying for Adobe Acrobat Pro",
-      "Fix a typo in a scanned invoice or receipt",
-      "Update an old PDF form that you cannot re-generate",
-      "Add your name and date to a PDF agreement",
-      "Remove sensitive text or redact information from a PDF",
-      "Edit a PDF resume or CV to update job experience",
-      "Correct OCR errors in a digitized book or article",
-      "Translate or rewrite content in a PDF for a different audience"
+      "Edit a PDF contract or legal agreement without paying for Adobe Acrobat Pro",
+      "Fix a typo or update information in a scanned invoice or receipt using OCR",
+      "Add your electronic signature to a rental agreement, NDA, or consent form online",
+      "Merge multiple PDF files into a single document for university or job submission",
+      "Redact sensitive personal information (SSN, bank details, addresses) from a PDF before sharing",
+      "Edit and update your PDF resume or CV to add new job experience and skills",
+      "Add page numbers to a multi-page PDF thesis, report, or manuscript",
+      "Fill out a government form, tax form, or application PDF that doesn't have fillable fields",
+      "Compress a large PDF file (50MB+) to reduce size for email attachment or upload",
+      "Add a CONFIDENTIAL, DRAFT, or APPROVED watermark to all pages of a business document",
+      "Highlight, underline, and annotate a research paper or textbook PDF for studying",
+      "Convert a scanned document or photographed paper to editable text using free OCR",
+      "Correct OCR errors in a digitized book, journal article, or historical document",
+      "Password-protect a confidential PDF before sending it via email or Slack",
+      "Add your company logo, stamp, or seal image to each page of an official PDF document",
+      "Use Find & Replace to update names, dates, or repeated terms across a 100+ page PDF"
     ],
     "faqs": [
       {
-        "question": "Can I edit text in a scanned PDF for free?",
-        "answer": "Yes. Our tool uses built-in OCR (Optical Character Recognition) powered by Tesseract.js to detect and extract all text from scanned or image-based PDFs. Once extracted, every word becomes an editable text block you can click and modify directly."
-      },
-      {
-        "question": "Does editing a PDF online add a watermark?",
-        "answer": "No — never. Our PDF Text Editor is completely free with no watermarks, no file size limits, and no signup required. Unlike Smallpdf or iLovePDF's free tiers, we add nothing to your document."
+        "question": "Is this PDF editor really 100% free with no watermarks?",
+        "answer": "Yes, absolutely. Our PDF editor is completely free — no watermarks on your exported PDFs, no file size limits, no daily task caps, and no signup required. Unlike Smallpdf (2 free tasks/day), Sejda (3 tasks/hour and 200-page limit), or iLovePDF (file size restrictions on free tier), we impose zero limitations. The tool is funded by non-intrusive ads, never by restricting your editing workflow."
       },
       {
         "question": "Is my PDF uploaded to your servers?",
-        "answer": "Absolutely not. All processing happens 100% in your browser using JavaScript (PDF.js and Tesseract.js). Your file is never sent to any server. This makes our tool safer than any cloud-based PDF editor."
+        "answer": "No — never. All processing happens 100% in your browser using JavaScript (PDF.js for rendering, pdf-lib for PDF export, Tesseract.js for OCR). Your file is never sent to any server, never stored, and never visible to us. This makes our tool significantly more private and secure than cloud-based editors like Smallpdf, iLovePDF, or Adobe Acrobat Online, which all require uploading your documents to their servers."
       },
       {
-        "question": "What is the best free PDF editor that works without Adobe Acrobat?",
-        "answer": "Our ilovetexts.com PDF Text Editor runs entirely in your browser — no Adobe account, no downloads, no installation needed. It supports both regular and scanned PDFs, works on all devices, and is completely free."
+        "question": "Can I edit text in a scanned PDF for free?",
+        "answer": "Yes. Our built-in OCR (Optical Character Recognition) engine, powered by Tesseract.js, automatically detects and extracts all text from scanned or image-based PDFs. Once extracted, every word becomes an editable text block you can click and modify directly in the editor. This is a premium feature that Sejda, Smallpdf, and most paid editors charge for — we offer it completely free with no limits."
+      },
+      {
+        "question": "How is this better than Sejda, Smallpdf, or iLovePDF?",
+        "answer": "Our editor beats all three on every dimension: (1) No task limits — Sejda allows only 3 tasks/hour, Smallpdf caps at 2/day; (2) No watermarks — competitors add watermarks on free tiers; (3) No upload — your files stay on your device, unlike all cloud-based competitors; (4) Free OCR — scanned PDF editing is a paid feature elsewhere; (5) More features — Find & Replace, Comments panel, Merge PDFs, Password protect, Form fill — all free; (6) No signup required — start editing instantly without creating any account."
+      },
+      {
+        "question": "Can I edit a PDF without Adobe Acrobat?",
+        "answer": "Yes. Our browser-based PDF editor provides most of the same features as Adobe Acrobat Pro — edit existing text, add new text, annotate, e-sign, fill forms, merge PDFs, redact sensitive data, add watermarks, compress, and more — all completely free. No Adobe account, no $22.99/month subscription, no software download needed."
+      },
+      {
+        "question": "Can I sign a PDF for free online?",
+        "answer": "Yes. Our PDF editor includes a full e-sign feature. You can: (1) Draw your signature using your mouse, trackpad, or finger on touchscreen devices; (2) Type your name and choose from multiple signature-style fonts; (3) Upload an image of your existing handwritten signature. Position it anywhere on any page, resize it to fit, and export the signed PDF. No DocuSign ($10/month) or HelloSign subscription required."
+      },
+      {
+        "question": "How to merge PDF files online for free?",
+        "answer": "Open our PDF editor, click the 'Merge PDFs' button or simply drag-and-drop multiple PDF files onto the upload area. The tool lets you preview all pages, reorder the files by dragging, remove unwanted pages, and combine everything into a single PDF document. Download instantly — no upload to servers, no watermarks, no page limits. Works with any number of PDF files."
       },
       {
         "question": "Can I edit a PDF on my phone or tablet?",
-        "answer": "Yes. The editor is fully responsive and works on iOS Safari, Android Chrome, and all modern mobile browsers. The full-screen mode makes it especially comfortable on smaller screens."
+        "answer": "Yes. Our editor is fully responsive and works beautifully on iOS Safari, Android Chrome, Samsung Internet, and all modern mobile and tablet browsers. The full-screen mode makes it especially comfortable on smaller screens. Touch gestures work for drawing signatures, making freehand annotations, and positioning text blocks."
       },
       {
         "question": "What file formats can I export after editing?",
-        "answer": "You can export your edited document as a PDF file (preserving all your edits), as PNG images (one per page), or copy all extracted text to your clipboard for pasting into Word, Google Docs, or ChatGPT."
+        "answer": "You can export your edited document as: (1) PDF file — preserving all your text edits, annotations, signatures, watermarks, and redactions in a standard PDF; (2) PNG images — one high-quality image per page, perfect for sharing or embedding; (3) Plain text — copy all extracted text to clipboard for pasting into Word, Google Docs, ChatGPT, or email."
       },
       {
-        "question": "How is this different from Smallpdf or Adobe Acrobat Online?",
-        "answer": "Smallpdf limits free users to 2 tasks per day and shows watermarks without a subscription. Adobe Acrobat Online requires an Adobe account. Our tool has no limits, no watermarks, no account — and is faster because everything runs locally in your browser."
+        "question": "Does this work offline (without internet)?",
+        "answer": "Once the editor page has loaded in your browser, the core editing features work without an internet connection. Since everything runs locally in JavaScript, you can edit text, add annotations, sign, and export your PDF even if your WiFi drops. OCR for scanned PDFs requires the initial download of the Tesseract language data (~10MB), but once cached by your browser, OCR also works offline."
       },
       {
-        "question": "Can I edit multiple pages in a PDF?",
-        "answer": "Yes. Multi-page PDFs are fully supported. A page thumbnail sidebar lets you navigate between pages, and each page's text is independently editable."
+        "question": "Can I password-protect my edited PDF?",
+        "answer": "Yes. When exporting your edited PDF, you can optionally set a password. The PDF will be encrypted with industry-standard AES encryption so that only people with the correct password can open it. All encryption happens in your browser using the pdf-lib library — your password is never sent to any server."
+      },
+      {
+        "question": "Is there a file size or page limit?",
+        "answer": "No. Unlike competitors that limit free users to small files (Smallpdf: 5MB, some editors: 50 pages), our PDF editor handles any file size and any number of pages. We have tested with PDFs exceeding 500 pages and 100MB+. The only limit is your device's available RAM, since all processing happens locally in your browser."
+      },
+      {
+        "question": "Can I use Find and Replace in a PDF?",
+        "answer": "Yes — this is a unique feature that 95% of online PDF editors lack. Press Ctrl+H (or Cmd+H on Mac) or click the Find & Replace button to search for any text across all pages of your PDF. Replace individual occurrences or all of them at once with a single click. Perfect for bulk-updating names, dates, company names, or repeated terms throughout a long document."
+      },
+      {
+        "question": "How to redact sensitive information in a PDF?",
+        "answer": "Switch to Redact mode in the editor toolbar, then draw rectangles over the text or areas you want to permanently black out. The redacted areas are permanently baked into the exported PDF — the underlying text is completely removed, not just visually covered. This ensures that sensitive information like Social Security numbers, bank account details, medical records, or personal addresses cannot be recovered or selected by anyone."
+      },
+      {
+        "question": "Is this PDF editor safe and secure?",
+        "answer": "Our editor is one of the safest ways to edit a PDF online because your file never leaves your device. Unlike cloud-based tools (Smallpdf uploads to AWS, iLovePDF to their EU servers, Adobe to Adobe Cloud), there is zero risk of data breach, server hack, employee access, or unauthorized third-party access. Everything runs locally in your browser — we physically cannot see, access, or store your documents."
+      },
+      {
+        "question": "What keyboard shortcuts does the PDF editor support?",
+        "answer": "Our editor supports a full set of productivity shortcuts: Ctrl+Z (Undo), Ctrl+Y (Redo), Ctrl+S (Export/Download), Ctrl+Shift+S (Save text changes), Ctrl+H (Find & Replace), 1-4 keys (switch between Edit/Annotate/Draw/Sign modes), Escape (close panels), and Ctrl+Enter (copy result). These shortcuts work on both Windows and Mac (using Cmd instead of Ctrl)."
       }
     ],
     "relatedSearches": [
-      "edit text in pdf online free no watermark",
-      "free pdf editor no signup no watermark",
-      "how to edit a scanned pdf online",
-      "change text in pdf without adobe",
-      "best free online pdf text editor",
-      "edit pdf in browser without downloading",
-      "pdf editor that works on mobile",
-      "ocr pdf editor free online"
+      "edit pdf online free no watermark",
+      "free pdf editor no signup",
+      "best free pdf editor 2026",
+      "edit pdf without adobe acrobat",
+      "how to edit scanned pdf free",
+      "pdf editor browser based free",
+      "sign pdf online free",
+      "merge pdf files free online",
+      "compress pdf online free",
+      "add watermark to pdf free",
+      "redact pdf online free",
+      "pdf form filler free online",
+      "best free alternative to sejda",
+      "best free alternative to smallpdf",
+      "edit pdf on chromebook free",
+      "edit pdf on iphone ipad free",
+      "pdf editor with ocr free online",
+      "edit pdf text color font size free",
+      "password protect pdf free online",
+      "find and replace in pdf online free",
+      "pdf editor free unlimited pages no limit",
+      "edit pdf without uploading to server",
+      "free pdf annotator highlighter online",
+      "pdf editor for students free online",
+      "best pdf editor for privacy and security"
     ]
   },
+
   "image-text-editor": {
     "name": "Image Text Editor",
     "description": "Edit text in JPG, PNG, WEBP and any image online free — OCR-powered, instant, 100% private",
