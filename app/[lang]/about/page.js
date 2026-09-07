@@ -5,9 +5,11 @@ import { SITE, CATEGORIES, getAllTools } from '@/lib/tools-config';
 const allToolsCount = getAllTools().length;
 
 import { generateAlternates } from '@/lib/seo';
+import { buildCanonical } from '@/lib/i18n';
 
 export async function generateMetadata({ params }) {
   const { lang } = await params;
+  const canonical = buildCanonical(lang, '/about');
   return {
     title: `About ilovetexts — Built by Harsh Raj | ${SITE.name}`,
     description: `ilovetexts.com is a free, privacy-first online text processing platform with ${allToolsCount}+ tools built by Harsh Raj, Software Engineer and IT undergraduate. Learn about our mission, privacy commitment, and the person behind the tools.`,
@@ -26,7 +28,7 @@ export async function generateMetadata({ params }) {
       title: `About ilovetexts — Built by Harsh Raj`,
       description: `Free, privacy-first online text tools built by Harsh Raj, Software Engineer passionate about scalable tech. ${allToolsCount}+ tools, 100% private, no signup.`,
       type: 'profile',
-      url: `${SITE.url}/about`,
+      url: canonical,
     },
   };
 }

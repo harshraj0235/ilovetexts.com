@@ -7,9 +7,18 @@ import { LANG_CODES, buildCanonical } from '@/lib/i18n';
 
 export async function generateStaticParams() {
   const params = [];
-  for (const lang of LANG_CODES) {
-    for (const post of BLOG_POSTS) {
-      params.push({ lang, slug: post.slug });
+  for (const post of BLOG_POSTS) {
+    if (post.lang) {
+      // Language-specific post — only generate for its own language
+      params.push({ lang: post.lang, slug: post.slug });
+      // Also generate the English route so the slug renders for /en/blog/... if visited
+      // (though canonical points to post.lang URL, having a valid EN page avoids 404)
+      params.push({ lang: 'en', slug: post.slug });
+    } else {
+      // English-only post — generate for all languages (they all point canonical → English)
+      for (const lang of LANG_CODES) {
+        params.push({ lang, slug: post.slug });
+      }
     }
   }
   return params;
@@ -24,8 +33,21 @@ export async function generateMetadata({ params }) {
 
   const path = `/blog/${post.slug}`;
   const alternates = generateAlternates(lang, path);
+
+  // Canonical strategy:
+  // - English-only posts (no post.lang): all lang variants point to the English canonical,
+  //   because the English version is the real page.
+  // - Language-specific posts (post.lang set): the canonical is the post's own locale URL.
+  //   Pointing these to an English URL that doesn't exist causes Google to override the
+  //   canonical ("Duplicate, Google chose different canonical" in GSC).
   if (lang !== 'en') {
-    alternates.canonical = buildCanonical('en', path);
+    if (post.lang) {
+      // Language-specific post — its own locale URL IS the canonical
+      alternates.canonical = buildCanonical(lang, path);
+    } else {
+      // English-only post — all translated variants point to the English canonical
+      alternates.canonical = buildCanonical('en', path);
+    }
   }
 
   return {

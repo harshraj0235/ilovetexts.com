@@ -802,7 +802,7 @@ The editor works on mobile browsers. For heavy editing, desktop Chrome or Edge g
   // ─────────────────────────────────────────────────────
   {
     slug: 'como-unir-pdf-gratis',
-    title: 'Cómo Unir PDF Gratis Online — Sin Límites, Sin Subir Archivos (2026)',
+    lang: 'es', — Sin Límites, Sin Subir Archivos (2026)',
     description: 'Aprende a combinar varios archivos PDF en uno solo gratis. Sin registro, sin límites diarios y sin subir tus archivos a ningún servidor.',
     category: 'Guías',
     date: '2026-10-16',
@@ -852,6 +852,7 @@ Con ilovetexts, sí. Todo el proceso ocurre en tu navegador. Ni tus contratos, f
   },
   {
     slug: 'comprimir-pdf-gratis-online',
+    lang: 'es',
     title: 'Comprimir PDF Gratis Online — Reduce el Tamaño Sin Perder Calidad (2026)',
     description: 'Reduce el tamaño de tus archivos PDF gratis online. Sin subir archivos, sin registro y sin marcas de agua. Ajusta la calidad con un deslizador.',
     category: 'Guías',
@@ -890,7 +891,7 @@ Los PDFs con imágenes o páginas escaneadas pueden reducirse un 50–80%. Los P
   },
   {
     slug: 'mejor-alternativa-grammarly-gratis',
-    title: 'Mejor Alternativa Gratuita a Grammarly en 2026 — Sin Pagar $30/mes',
+    lang: 'es', — Sin Pagar $30/mes',
     description: 'Grammarly cobra $30 al mes por sus funciones principales. Probamos 6 alternativas gratuitas que ofrecen corrección gramatical, ortografía y sugerencias de estilo sin costo.',
     category: 'Comparativa',
     date: '2026-10-17',
@@ -932,6 +933,7 @@ Para la mayoría de usuarios, la combinación de [ilovetexts Grammar Checker](/w
   },
   {
     slug: 'contador-palabras-online-gratis',
+    lang: 'es',
     title: 'Contador de Palabras Online Gratis — Cuenta Palabras, Caracteres y Más (2026)',
     description: 'Cuenta palabras, caracteres, oraciones y párrafos al instante. Calcula el tiempo de lectura y densidad de palabras clave. Gratis, sin registro.',
     category: 'Guías',
@@ -972,6 +974,7 @@ El conteo de palabras es fundamental para ensayos académicos (límites estricto
   },
   {
     slug: 'convertir-texto-mayusculas-minusculas',
+    lang: 'es',
     title: 'Convertir Texto a Mayúsculas y Minúsculas Online Gratis (2026)',
     description: 'Convierte texto entre MAYÚSCULAS, minúsculas, Título y más formatos al instante. Incluye camelCase, snake_case y kebab-case para desarrolladores.',
     category: 'Guías',
@@ -1012,6 +1015,7 @@ El conteo de palabras es fundamental para ensayos académicos (límites estricto
   // ─────────────────────────────────────────────────────
   {
     slug: 'como-juntar-pdf-gratis',
+    lang: 'pt',
     title: 'Como Juntar PDF Grátis Online — Sem Limite, Sem Upload (2026)',
     description: 'Aprenda a combinar vários arquivos PDF em um só gratuitamente. Sem cadastro, sem limite diário e sem enviar seus arquivos para servidores externos.',
     category: 'Guias',
@@ -1054,6 +1058,7 @@ Nossa ferramenta [Juntar PDF](/pdf-text-tools/merge-pdf) combina arquivos PDF di
   },
   {
     slug: 'comprimir-pdf-gratis-online-pt',
+    lang: 'pt',
     title: 'Comprimir PDF Grátis Online — Reduza o Tamanho do Arquivo (2026)',
     description: 'Reduza o tamanho de arquivos PDF gratuitamente online. Sem upload para servidores, sem cadastro, sem marca d\'água. Ajuste a qualidade com um controle deslizante.',
     category: 'Guias',
@@ -1087,6 +1092,7 @@ Nossa ferramenta [Comprimir PDF](/pdf-text-tools/compress-pdf) usa um **controle
   },
   {
     slug: 'melhor-alternativa-grammarly-gratis',
+    lang: 'pt',
     title: 'Melhor Alternativa Gratuita ao Grammarly em 2026 — Sem Pagar',
     description: 'O Grammarly cobra R$150/mês pelo plano premium. Testamos 6 alternativas gratuitas que oferecem verificação gramatical e ortográfica sem nenhum custo.',
     category: 'Comparativo',
@@ -1113,6 +1119,7 @@ Para a maioria dos usuários, a combinação de [ilovetexts Grammar Checker](/wr
   },
   {
     slug: 'contador-palavras-online-gratis',
+    lang: 'pt',
     title: 'Contador de Palavras Online Grátis — Palavras, Caracteres e Mais (2026)',
     description: 'Conte palavras, caracteres, frases e parágrafos instantaneamente. Calcule o tempo de leitura e densidade de palavras-chave. Grátis, sem cadastro.',
     category: 'Guias',
@@ -1145,6 +1152,7 @@ A contagem de palavras é essencial para trabalhos acadêmicos (limites estricto
   },
   {
     slug: 'converter-texto-maiusculas-minusculas',
+    lang: 'pt',
     title: 'Converter Texto para Maiúsculas e Minúsculas Online Grátis (2026)',
     description: 'Converta texto entre MAIÚSCULAS, minúsculas, Título e outros formatos. Inclui camelCase, snake_case e kebab-case para desenvolvedores.',
     category: 'Guias',
@@ -1174,6 +1182,7 @@ A contagem de palavras é essencial para trabalhos acadêmicos (limites estricto
   // ─────────────────────────────────────────────────────
   {
     slug: 'pdf-merge-kaise-kare-free',
+    lang: 'hi',
     title: 'PDF Merge Kaise Kare Free Online — Bina Upload Ke (2026)',
     description: 'Multiple PDF files ko ek mein kaise merge kare free mein. Koi registration nahi, koi daily limit nahi, aur files kisi server par upload nahi hoti.',
     category: 'Guides',
@@ -1214,6 +1223,7 @@ Hamara [PDF Merge tool](/pdf-text-tools/merge-pdf) aapke browser mein hi files c
   },
   {
     slug: 'muft-typing-speed-test-hindi',
+    lang: 'hi',
     title: 'Muft Typing Speed Test Online — WPM Aur Accuracy Check Karen (2026)',
     description: 'Apni typing speed test karen free mein. WPM, accuracy aur errors check karen 1, 2 ya 5 minute ke test mein. Koi signup nahi chahiye.',
     category: 'Guides',
@@ -1254,6 +1264,7 @@ Hamara [Typing Speed Test](/productivity-tools/typing-speed-test) mein:
   },
   {
     slug: 'pdf-compress-kaise-kare',
+    lang: 'hi',
     title: 'PDF Compress Kaise Kare Free Online — File Size Kam Karen (2026)',
     description: 'PDF file ka size free mein kam karo online. Koi upload nahi, koi registration nahi. Quality slider se control karo kitna compress karna hai.',
     category: 'Guides',
@@ -1292,6 +1303,7 @@ Hamara [PDF Compress tool](/pdf-text-tools/compress-pdf) aapke browser mein hi k
   },
   {
     slug: 'shabd-ginti-online-muft',
+    lang: 'hi',
     title: 'Shabd Ginti Online Muft — Words, Characters Aur Zyada (2026)',
     description: 'Apne text mein words, characters, sentences aur paragraphs count karen instantly. Reading time aur keyword density bhi check karen. Bilkul free.',
     category: 'Guides',
@@ -1324,6 +1336,7 @@ Hamara [Word Counter](/word-counting-tools/word-counter) aapko deta hai:
   },
   {
     slug: 'grammarly-ka-muft-alternative',
+    lang: 'hi',
     title: 'Grammarly Ka Muft Alternative 2026 — Bina Paise Ke Grammar Check',
     description: 'Grammarly ka premium plan bahut mehnga hai. Hamne 6 free alternatives test kiye jo grammar checking, spell check aur style suggestions dete hain bilkul free mein.',
     category: 'Guides',

@@ -53,6 +53,14 @@ export function proxy(request) {
     return NextResponse.next();
   }
 
+  // Skip paths that contain a known static filename anywhere in them.
+  // Malformed crawler URLs like /favicon.ico/category/tool would otherwise
+  // be rewritten to /en/favicon.ico/... and produce confusing 404s in GSC.
+  const pathSegments = pathname.split('/').filter(Boolean);
+  if (pathSegments.some(seg => SKIP_FILES.has(seg.split('?')[0]))) {
+    return NextResponse.next();
+  }
+
   // Skip file extensions (images, css, js, etc.)
   if (fileName && fileName.includes('.')) {
     return NextResponse.next();

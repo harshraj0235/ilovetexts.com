@@ -1,4 +1,4 @@
-import { LANGUAGES, LANG_CODES, getTranslations, buildCanonical } from '@/lib/i18n';
+import { LANGUAGES, LANG_CODES, getTranslations } from '@/lib/i18n';
 import { SITE } from '@/lib/tools-config';
 
 // ═══════════════════════════════════════════════════════
@@ -17,7 +17,6 @@ export async function generateMetadata({ params }) {
   const { lang } = await params;
   const t = getTranslations(lang);
   const langConfig = LANGUAGES.find(l => l.code === lang) || LANGUAGES[0];
-  const canonical = buildCanonical(lang, '/');
 
   return {
     title: {
@@ -36,7 +35,7 @@ export async function generateMetadata({ params }) {
     openGraph: {
       title: t.siteTitle,
       description: t.siteDescription,
-      url: canonical,
+      url: `${SITE.url}/`,
       siteName: SITE.name,
       type: 'website',
       locale: { en: 'en_US', hi: 'hi_IN', pt: 'pt_BR', es: 'es_ES', de: 'de_DE', id: 'id_ID' }[lang] || 'en_US',
@@ -69,18 +68,11 @@ export async function generateMetadata({ params }) {
         'max-video-preview': -1,
       },
     },
-    alternates: {
-      canonical: canonical,
-      languages: {
-        'x-default': `${SITE.url}/`,
-        en: buildCanonical('en', '/'),
-        hi: buildCanonical('hi', '/'),
-        pt: buildCanonical('pt', '/'),
-        es: buildCanonical('es', '/'),
-        de: buildCanonical('de', '/'),
-        id: buildCanonical('id', '/'),
-      }
-    },
+    // NOTE: Do NOT set `alternates` here. Every child page (tool, category,
+    // blog, static) sets its own canonical + hreflang via generateAlternates().
+    // If a layout-level alternates is present it would emit the homepage
+    // canonical on every page that forgets to override it, creating widespread
+    // canonical conflicts in Google Search Console.
     verification: {
       google: '65jWt9Q3M5QH-VLidXzWHfk0RGTeq_t70bJTnKShmOw',
     },

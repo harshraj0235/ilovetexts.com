@@ -126,19 +126,29 @@ const nextConfig = {
         destination: '/sitemap_index.xml',
         permanent: true,
       },
-      // Redirect old category URL structure to new category structure
+
+      // ── favicon.ico mis-crawled paths ──────────────────────────────────────
+      // Malformed crawler URLs like /favicon.ico/category/tool — strip the
+      // leading /favicon.ico segment and redirect to the real page.
+      {
+        source: '/favicon.ico/:rest*',
+        destination: '/:rest*',
+        permanent: true,
+      },
+
+      // ── word-counter → word-counting-tools (category rename) ──────────────
       {
         source: '/word-counter/:slug*',
         destination: '/word-counting-tools/:slug*',
         permanent: true,
       },
-      // Handle localized old category URLs
       {
         source: '/:lang(hi|pt|es|de|id)/word-counter/:slug*',
         destination: '/:lang/word-counting-tools/:slug*',
         permanent: true,
       },
-      // Fix broken 404 URLs reported by users/crawlers
+
+      // ── Self-referencing slug typo ─────────────────────────────────────────
       {
         source: '/word-counting-tools/word-counting-tools',
         destination: '/word-counting-tools/word-counter',
@@ -148,7 +158,22 @@ const nextConfig = {
         source: '/:lang(hi|pt|es|de|id)/word-counting-tools/word-counting-tools',
         destination: '/:lang/word-counting-tools/word-counter',
         permanent: true,
-      }
+      },
+
+      // ── Old /word-counter/ category pages (no tool slug) ──────────────────
+      // Google has indexed /word-counter, /de/word-counter etc from old sitemaps.
+      // The :slug* above covers /word-counter/anything; these cover bare /word-counter.
+      {
+        source: '/word-counter',
+        destination: '/word-counting-tools',
+        permanent: true,
+      },
+      {
+        source: '/:lang(hi|pt|es|de|id)/word-counter',
+        destination: '/:lang/word-counting-tools',
+        permanent: true,
+      },
+
     ];
   },
   async rewrites() {

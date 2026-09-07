@@ -82,15 +82,23 @@ export async function GET(request, { params }) {
   // Blog index — only once (not in static pages loop below)
   addUrl('/blog', '0.7', 'weekly', CONTENT_LAST_UPDATED);
 
-  // Blog Posts — only include for the correct language (or English for en-only posts)
+  // Blog Posts — language-aware inclusion
   EN_BLOG_SLUGS.forEach((post) => {
-    // Language-specific post: only include in that language's sitemap
     if (post.lang) {
+      // Language-specific post: only emit in that language's sitemap,
+      // using the post's own locale URL as <loc> (it IS the canonical).
       if (lang === post.lang) {
         addUrl(`/blog/${post.slug}`, '0.6', 'monthly', post.date);
       }
+      // Also emit in the English sitemap so Google can find the English variant
+      // (page exists at /en/blog/slug, canonical = post.lang URL).
+      if (lang === 'en') {
+        addUrl(`/blog/${post.slug}`, '0.5', 'monthly', post.date);
+      }
     } else {
-      // English-only posts: only include in English sitemap
+      // English-only post: only include in English sitemap — canonical is /blog/slug.
+      // Non-English pages for these posts point canonical → English, so they don't
+      // need separate sitemap entries (they are duplicates, not canonical URLs).
       if (lang === 'en') {
         addUrl(`/blog/${post.slug}`, '0.7', 'monthly', post.date);
       }

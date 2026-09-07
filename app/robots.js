@@ -53,13 +53,9 @@ export default function robots() {
       },
     ],
     sitemap: [
+      // Only reference the sitemap index — it already lists all per-language sitemaps.
+      // Listing individual sitemaps here too causes Google to process them twice.
       `${SITE.url}/sitemap_index.xml`,
-      `${SITE.url}/sitemap/en.xml`,
-      `${SITE.url}/sitemap/hi.xml`,
-      `${SITE.url}/sitemap/es.xml`,
-      `${SITE.url}/sitemap/pt.xml`,
-      `${SITE.url}/sitemap/de.xml`,
-      `${SITE.url}/sitemap/id.xml`,
     ],
     host: SITE.url,
   };
