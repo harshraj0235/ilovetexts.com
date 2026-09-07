@@ -1,8 +1,8 @@
 import { NextResponse } from 'next/server';
 
 // ═══════════════════════════════════════════════════════
-// MIDDLEWARE — URL Rewriting for Internationalization
-// 
+// PROXY — URL Rewriting for Internationalization
+//
 // How it works:
 //   /word-counting-tools/word-counter     → rewrite to /en/word-counting-tools/word-counter (invisible)
 //   /hi/word-counting-tools/word-counter  → pass through (already correct)
@@ -13,9 +13,23 @@ import { NextResponse } from 'next/server';
 //   ✅ New language URLs work natively
 //   ✅ No routing conflict between [lang] and [category]
 //   ✅ Googlebot sees clean URLs
+//   ✅ Tracking/referral query params stripped before Google indexes them
 // ═══════════════════════════════════════════════════════
 
 const LANG_CODES = new Set(['hi', 'pt', 'es', 'de', 'id']);
+
+// Query parameters that are pure tracking noise and should never appear
+// in Google's index. We 301-redirect to the clean URL so they are never
+// crawled as separate pages, which prevents "Alternate page with proper
+// canonical tag" entries in Google Search Console.
+const TRACKING_PARAMS = new Set([
+  'ref', 'source', 'medium', 'campaign',         // generic referral
+  'utm_source', 'utm_medium', 'utm_campaign',     // UTM
+  'utm_term', 'utm_content', 'utm_id',
+  'fbclid', 'gclid', 'msclkid', 'ttclid',        // ad click IDs
+  'mc_cid', 'mc_eid',                             // Mailchimp
+  '_ga', '_gl',                                   // Google Analytics linker
+]);
 
 // Paths that should NEVER be rewritten
 const SKIP_PREFIXES = ['_next', 'api', 'sitemap', 'embed'];
@@ -39,6 +53,24 @@ export function proxy(request) {
   if (host.startsWith('www.')) {
     const canonicalHost = host.replace(/^www\./, '');
     return NextResponse.redirect(`https://${canonicalHost}${pathname}${request.nextUrl.search}`, 301);
+  }
+
+  // Strip tracking/referral query parameters — 301 redirect to clean URL.
+  // This prevents GSC from accumulating "Alternate page with proper canonical"
+  // entries for ?ref=peerlist, ?utm_source=twitter, ?fbclid=xxx etc.
+  // Only fires when at least one tracking param is present.
+  const searchParams = request.nextUrl.searchParams;
+  const hasTrackingParam = [...searchParams.keys()].some(k => TRACKING_PARAMS.has(k));
+  if (hasTrackingParam) {
+    const cleanUrl = request.nextUrl.clone();
+    for (const key of TRACKING_PARAMS) {
+      cleanUrl.searchParams.delete(key);
+    }
+    // If other (non-tracking) params remain, keep them; otherwise clear the search entirely
+    if ([...cleanUrl.searchParams.keys()].length === 0) {
+      cleanUrl.search = '';
+    }
+    return NextResponse.redirect(cleanUrl, 301);
   }
 
   // Skip static assets and Next.js internals

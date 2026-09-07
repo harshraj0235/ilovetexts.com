@@ -802,7 +802,8 @@ The editor works on mobile browsers. For heavy editing, desktop Chrome or Edge g
   // ─────────────────────────────────────────────────────
   {
     slug: 'como-unir-pdf-gratis',
-    lang: 'es', — Sin Límites, Sin Subir Archivos (2026)',
+    lang: 'es',
+    title: 'Cómo Unir PDF Gratis Online — Sin Límites, Sin Subir Archivos (2026)',
     description: 'Aprende a combinar varios archivos PDF en uno solo gratis. Sin registro, sin límites diarios y sin subir tus archivos a ningún servidor.',
     category: 'Guías',
     date: '2026-10-16',
@@ -891,7 +892,8 @@ Los PDFs con imágenes o páginas escaneadas pueden reducirse un 50–80%. Los P
   },
   {
     slug: 'mejor-alternativa-grammarly-gratis',
-    lang: 'es', — Sin Pagar $30/mes',
+    lang: 'es',
+    title: 'Mejor Alternativa Gratuita a Grammarly en 2026 — Sin Pagar $30/mes',
     description: 'Grammarly cobra $30 al mes por sus funciones principales. Probamos 6 alternativas gratuitas que ofrecen corrección gramatical, ortografía y sugerencias de estilo sin costo.',
     category: 'Comparativa',
     date: '2026-10-17',
