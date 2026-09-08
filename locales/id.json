@@ -58,7 +58,10 @@
       "howToType": "Cara Mengetik",
       "howToTypeDesc": "Ketik huruf bahasa Inggris persis seperti kedengarannya secara fonetik. Tekan Spasi atau Enter untuk mengonversi.",
       "noteDesc": "Catatan: Peta menunjukkan contoh untuk bahasa Hindi, tetapi aturan fonetik yang sama berlaku untuk semua bahasa yang didukung."
-    }
+    },
+    "pastePdf": "Rekatkan teks PDF di sini, atau seret & lepas file .pdf...",
+    "shortcutHint": "Tekan Ctrl+Enter untuk menyalin hasil. Seret & lepas file untuk memuatnya.",
+    "livePreview": "Pratinjau Langsung:"
   },
   "home": {
     "heroBadge": "{count}+ Alat Teks Online Gratis",

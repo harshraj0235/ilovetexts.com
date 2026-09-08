@@ -58,7 +58,10 @@
       "howToType": "How to Type",
       "howToTypeDesc": "Type the English letters exactly as they sound phonetically. Press Space or Enter to convert.",
       "noteDesc": "Note: The map shows examples for Hindi, but the same phonetic rules apply across all supported languages."
-    }
+    },
+    "pastePdf": "Paste PDF text here, or drag & drop a .pdf file...",
+    "shortcutHint": "Press Ctrl+Enter to copy result. Drag & drop files to load them.",
+    "livePreview": "Live Preview:"
   },
   "home": {
     "heroBadge": "{count}+ Free Online Text Tools",

@@ -3,12 +3,15 @@
 import React, { useState, useEffect } from 'react';
 import JsonView from '@uiw/react-json-view';
 import { jsonrepair } from 'jsonrepair';
+import { JSONPath } from 'jsonpath-plus';
 
 export default function JsonFormatter({ t, lang }) {
   const [input, setInput] = useState('');
   const [parsedJson, setParsedJson] = useState(null);
   const [error, setError] = useState(null);
   const [viewMode, setViewMode] = useState('tree'); // 'tree', 'text', 'minified'
+  const [jsonPathQuery, setJsonPathQuery] = useState('');
+  const [filteredJson, setFilteredJson] = useState(null);
 
   useEffect(() => {
     if (!input.trim()) {
@@ -26,6 +29,26 @@ export default function JsonFormatter({ t, lang }) {
       setError(err.message);
     }
   }, [input]);
+
+  useEffect(() => {
+    if (!parsedJson) {
+      setFilteredJson(null);
+      return;
+    }
+    
+    if (!jsonPathQuery.trim()) {
+      setFilteredJson(parsedJson);
+      return;
+    }
+
+    try {
+      const result = JSONPath({ path: jsonPathQuery, json: parsedJson });
+      setFilteredJson(result);
+    } catch (err) {
+      // If path is invalid, just show the original or maybe a soft error
+      setFilteredJson({ _error: "Invalid JSONPath query", _details: err.message });
+    }
+  }, [parsedJson, jsonPathQuery]);
 
   const handlePaste = async () => {
     try {
@@ -66,11 +89,11 @@ export default function JsonFormatter({ t, lang }) {
   };
 
   const handleCopyResult = () => {
-    if (parsedJson) {
+    if (filteredJson) {
       if (viewMode === 'minified') {
-        navigator.clipboard.writeText(JSON.stringify(parsedJson));
+        navigator.clipboard.writeText(JSON.stringify(filteredJson));
       } else {
-        navigator.clipboard.writeText(JSON.stringify(parsedJson, null, 2));
+        navigator.clipboard.writeText(JSON.stringify(filteredJson, null, 2));
       }
     }
   };
@@ -131,25 +154,36 @@ export default function JsonFormatter({ t, lang }) {
 
       {/* Output Area */}
       <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-          <h3 style={{ fontSize: '1.1rem', fontWeight: 600 }}>Result</h3>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', flexWrap: 'wrap', gap: '12px' }}>
+          <div style={{ flexGrow: 1, minWidth: '200px' }}>
+            <div style={{ fontSize: '0.85rem', fontWeight: 600, marginBottom: '6px', color: 'var(--text-secondary)' }}>JSONPath Filter:</div>
+            <input 
+              type="text" 
+              className="tool-input" 
+              placeholder="e.g. $.address.city or $..name" 
+              value={jsonPathQuery}
+              onChange={(e) => setJsonPathQuery(e.target.value)}
+              style={{ width: '100%' }}
+              disabled={!parsedJson}
+            />
+          </div>
           <div className="tool-actions" style={{ marginTop: 0, gap: '8px' }}>
             <button 
               className={`btn ${viewMode === 'tree' ? 'btn-primary' : 'btn-secondary'}`}
               onClick={() => setViewMode('tree')}
-              disabled={!parsedJson}
+              disabled={!filteredJson}
             >🌳 Tree</button>
             <button 
               className={`btn ${viewMode === 'text' ? 'btn-primary' : 'btn-secondary'}`}
               onClick={() => setViewMode('text')}
-              disabled={!parsedJson}
+              disabled={!filteredJson}
             >📄 Format</button>
             <button 
               className={`btn ${viewMode === 'minified' ? 'btn-primary' : 'btn-secondary'}`}
               onClick={() => setViewMode('minified')}
-              disabled={!parsedJson}
+              disabled={!filteredJson}
             >📦 Minify</button>
-            <button className="btn btn-secondary" onClick={handleCopyResult} disabled={!parsedJson}>📑 Copy</button>
+            <button className="btn btn-secondary" onClick={handleCopyResult} disabled={!filteredJson}>📑 Copy</button>
           </div>
         </div>
         
@@ -162,30 +196,30 @@ export default function JsonFormatter({ t, lang }) {
           padding: '16px',
           boxShadow: 'inset 0 1px 3px rgba(0,0,0,0.05)'
         }}>
-          {!parsedJson && !error && (
+          {!filteredJson && !error && (
             <div style={{ color: 'var(--text-tertiary)', display: 'flex', height: '100%', alignItems: 'center', justifyContent: 'center' }}>
               Valid JSON will appear here...
             </div>
           )}
-          {!parsedJson && error && (
+          {!filteredJson && error && (
             <div style={{ color: '#ef4444', display: 'flex', height: '100%', alignItems: 'center', justifyContent: 'center', opacity: 0.5 }}>
               Waiting for valid JSON...
             </div>
           )}
           
-          {parsedJson && viewMode === 'tree' && (
-            <JsonView value={parsedJson} displayDataTypes={false} displayObjectSize={true} style={{ background: 'transparent' }} />
+          {filteredJson && viewMode === 'tree' && (
+            <JsonView value={filteredJson} displayDataTypes={false} displayObjectSize={true} style={{ background: 'transparent' }} />
           )}
           
-          {parsedJson && viewMode === 'text' && (
+          {filteredJson && viewMode === 'text' && (
             <pre style={{ fontFamily: 'var(--font-mono)', fontSize: '0.9rem', margin: 0, color: 'var(--text-primary)' }}>
-              {JSON.stringify(parsedJson, null, 2)}
+              {JSON.stringify(filteredJson, null, 2)}
             </pre>
           )}
 
-          {parsedJson && viewMode === 'minified' && (
+          {filteredJson && viewMode === 'minified' && (
             <pre style={{ fontFamily: 'var(--font-mono)', fontSize: '0.9rem', margin: 0, color: 'var(--text-primary)', whiteSpace: 'pre-wrap', wordBreak: 'break-all' }}>
-              {JSON.stringify(parsedJson)}
+              {JSON.stringify(filteredJson)}
             </pre>
           )}
         </div>

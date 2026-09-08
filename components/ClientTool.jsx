@@ -1404,7 +1404,7 @@ export default function ClientTool({ categoryId, toolSlug, t = {} }) {
             <div className="tool-panel-header"><div className="tool-panel-title">HTML OUTPUT & PREVIEW</div></div>
             <textarea className="tool-textarea" value={output} readOnly placeholder="HTML code will appear here..." style={{ height: '150px', fontFamily: 'var(--font-mono)', marginBottom: 'var(--space-4)' }} />
             <div>
-              <div style={{ fontWeight: 600, marginBottom: 'var(--space-2)' }}>Live Preview:</div>
+              <div style={{ fontWeight: 600, marginBottom: 'var(--space-2)' }}>{t.ui?.livePreview || "Live Preview:"}</div>
               <div style={{ padding: 'var(--space-3)', background: 'var(--bg-white)', border: '1px solid var(--border-dark)', borderRadius: 'var(--radius-sm)', overflowX: 'auto', minHeight: '150px' }} dangerouslySetInnerHTML={{ __html: output || '<span style="color:#888;">Preview will appear here...</span>' }} />
             </div>
           </div>
@@ -1440,7 +1440,7 @@ export default function ClientTool({ categoryId, toolSlug, t = {} }) {
             </div>
             <textarea className="tool-textarea" value={output} readOnly placeholder="HTML output will appear here..." style={{ height: '150px', fontFamily: 'var(--font-mono)' }} />
             <div style={{ marginTop: 'var(--space-4)' }}>
-              <div style={{ fontWeight: 600, marginBottom: 'var(--space-2)' }}>Live Preview:</div>
+              <div style={{ fontWeight: 600, marginBottom: 'var(--space-2)' }}>{t.ui?.livePreview || "Live Preview:"}</div>
               <div style={{ padding: 'var(--space-3)', background: 'var(--bg-white)', border: '1px solid var(--border-dark)', borderRadius: 'var(--radius-sm)', overflowX: 'auto', minHeight: '100px' }} dangerouslySetInnerHTML={{ __html: output || '<span style="color:#888;">Table preview will appear here...</span>' }} />
             </div>
           </div>
@@ -1470,7 +1470,7 @@ export default function ClientTool({ categoryId, toolSlug, t = {} }) {
             <div className="tool-panel-header"><div className="tool-panel-title">HTML OUTPUT & PREVIEW</div></div>
             <textarea className="tool-textarea" value={output} readOnly placeholder="HTML code will appear here..." style={{ height: '150px', fontFamily: 'var(--font-mono)', marginBottom: 'var(--space-4)' }} />
             <div>
-              <div style={{ fontWeight: 600, marginBottom: 'var(--space-2)' }}>Live Preview:</div>
+              <div style={{ fontWeight: 600, marginBottom: 'var(--space-2)' }}>{t.ui?.livePreview || "Live Preview:"}</div>
               <div style={{ padding: 'var(--space-3)', background: 'var(--bg-white)', border: '1px solid var(--border-dark)', borderRadius: 'var(--radius-sm)', overflowX: 'auto', minHeight: '150px' }} dangerouslySetInnerHTML={{ __html: output || '<span style="color:#888;">Preview will appear here...</span>' }} />
             </div>
           </div>
@@ -1556,9 +1556,9 @@ export default function ClientTool({ categoryId, toolSlug, t = {} }) {
       )}
 
       <div className="tool-actions">
-        <button className="btn btn-secondary" onClick={handleClear}>🗑️ {t.clear || "Clear"}</button>
-        <button className="btn btn-primary" onClick={handleCopy}>📋 {t.copyResult || "Copy Result"}</button>
-        <button className="btn btn-secondary" onClick={handleDownload}>💾 {t.download || "Download"}</button>
+        <button className="btn btn-secondary" onClick={handleClear}>🗑️ {t.ui?.clear || "Clear"}</button>
+        <button className="btn btn-primary" onClick={handleCopy}>📋 {t.ui?.copyResult || "Copy Result"}</button>
+        <button className="btn btn-secondary" onClick={handleDownload}>💾 {t.ui?.download || "Download"}</button>
       </div>
 
       <div className="tool-container">
@@ -1567,29 +1567,29 @@ export default function ClientTool({ categoryId, toolSlug, t = {} }) {
           onDragLeave={handleDragLeave}
           onDrop={handleDrop}
         >
-          <div className="tool-panel-header"><div className="tool-panel-title">{t.input || "INPUT"}</div></div>
+          <div className="tool-panel-header"><div className="tool-panel-title">{t.ui?.input || "INPUT"}</div></div>
           <InputHelperBar />
           <textarea 
             ref={inputRef}
             className={`tool-textarea ${isDragging ? 'dragging' : ''}`} 
-            placeholder={categoryId === 'pdf-text-tools' ? (t.pastePdf || "Paste PDF text here, or drag & drop a .pdf file...") : (t.pasteText || "Type or paste your text here... (or drag & drop a .txt file)")} 
+            placeholder={categoryId === 'pdf-text-tools' ? (t.ui?.pastePdf || "Paste PDF text here, or drag & drop a .pdf file...") : (t.ui?.pasteText || "Type or paste your text here... (or drag & drop a .txt file)")} 
             value={input} 
             onChange={(e) => setInput(e.target.value)} 
             spellCheck="false" 
           />
         </div>
         <div className="tool-panel">
-          <div className="tool-panel-header"><div className="tool-panel-title">{t.result || "RESULT"}</div></div>
+          <div className="tool-panel-header"><div className="tool-panel-title">{t.ui?.result || "RESULT"}</div></div>
           {output ? (
             <div className="tool-output">{output}</div>
           ) : (
-            <div className="tool-output empty">{t.resultPlaceholder || "Your result will appear here..."}</div>
+            <div className="tool-output empty">{t.ui?.resultPlaceholder || "Your result will appear here..."}</div>
           )}
         </div>
       </div>
       
       <div className="tool-shortcut-hint">
-        💡 <strong>Tip:</strong> Press <kbd>Ctrl</kbd>+<kbd>Enter</kbd> to copy result. Drag & drop {categoryId === 'pdf-text-tools' ? '.pdf' : '.txt'} files to load them.
+        💡 <strong>{t.ui?.tip || "Tip"}:</strong> {t.ui?.shortcutHint || "Press Ctrl+Enter to copy result. Drag & drop files to load them."}
       </div>
 
       {toast && <Toast message={toast.message} type={toast.type} onClose={() => setToast(null)} />}

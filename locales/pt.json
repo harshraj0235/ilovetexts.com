@@ -58,7 +58,10 @@
       "howToType": "Como Digitar",
       "howToTypeDesc": "Digite as letras em inglês exatamente como soam foneticamente. Pressione Espaço ou Enter para converter.",
       "noteDesc": "Nota: O mapa mostra exemplos para hindi, mas as mesmas regras fonéticas se aplicam a todos os idiomas suportados."
-    }
+    },
+    "pastePdf": "Cole o texto do PDF aqui ou arraste e solte um arquivo .pdf...",
+    "shortcutHint": "Pressione Ctrl+Enter para copiar o resultado. Arraste e solte arquivos para carregá-los.",
+    "livePreview": "Pré-visualização ao vivo:"
   },
   "home": {
     "heroBadge": "{count}+ Ferramentas de texto on-line gratuitas",

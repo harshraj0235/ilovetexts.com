@@ -58,7 +58,10 @@
       "howToType": "Cómo Escribir",
       "howToTypeDesc": "Escriba las letras en inglés exactamente como suenan fonéticamente. Presione Espacio o Enter para convertir.",
       "noteDesc": "Nota: El mapa muestra ejemplos para hindi, pero las mismas reglas fonéticas se aplican a todos los idiomas admitidos."
-    }
+    },
+    "pastePdf": "Pegue el texto del PDF aquí o arrastre y suelte un archivo .pdf...",
+    "shortcutHint": "Presione Ctrl+Enter para copiar el resultado. Arrastre y suelte archivos para cargarlos.",
+    "livePreview": "Vista Previa en Vivo:"
   },
   "home": {
     "heroBadge": "{count}+ Herramientas de texto en línea gratuitas",

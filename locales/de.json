@@ -58,7 +58,10 @@
       "howToType": "Wie man tippt",
       "howToTypeDesc": "Tippen Sie die englischen Buchstaben genau so, wie sie phonetisch klingen. Drücken Sie die Leertaste oder die Eingabetaste zum Konvertieren.",
       "noteDesc": "Hinweis: Die Karte zeigt Beispiele für Hindi, aber die gleichen phonetischen Regeln gelten für alle unterstützten Sprachen."
-    }
+    },
+    "pastePdf": "Fügen Sie hier PDF-Text ein oder ziehen Sie eine .pdf-Datei per Drag & Drop...",
+    "shortcutHint": "Drücken Sie Strg+Eingabe, um das Ergebnis zu kopieren. Ziehen Sie Dateien per Drag & Drop, um sie zu laden.",
+    "livePreview": "Live-Vorschau:"
   },
   "home": {
     "heroBadge": "{count}+ Kostenlose Online-Texttools",

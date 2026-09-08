@@ -5,7 +5,7 @@ import {
   countWords, countCharacters, countCharactersNoSpaces, 
   countSentences, countParagraphs, countSyllables, 
   getWordFrequency, getReadingTime, getSpeakingTime, 
-  getReadabilityScore, getKeywordDensity 
+  getReadabilityScore, getKeywordDensity, getSentimentAnalysis
 } from '@/lib/text-processors';
 
 export default function WordCounter({ t, lang }) {
@@ -16,7 +16,8 @@ export default function WordCounter({ t, lang }) {
     readingTime: { minutes: 0, seconds: 0 },
     speakingTime: { minutes: 0, seconds: 0 },
     readability: { score: 0, level: 'N/A' },
-    density: []
+    density: { single: [], biGrams: [], triGrams: [] },
+    sentiment: { sentiment: 'Neutral', score: 0, emoji: '😐' }
   });
 
   useEffect(() => {
@@ -28,23 +29,25 @@ export default function WordCounter({ t, lang }) {
     const syllables = countSyllables(text);
     
     // Only compute heavy stats if there is text
-    let density = [];
+    let density = { single: [], biGrams: [], triGrams: [] };
     let readingTime = { minutes: 0, seconds: 0 };
     let speakingTime = { minutes: 0, seconds: 0 };
     let readability = { score: 0, level: 'N/A' };
+    let sentiment = { sentiment: 'Neutral', score: 0, emoji: '😐' };
     
     if (text.trim().length > 0) {
       density = getKeywordDensity(text, 10);
       readingTime = getReadingTime(text);
       speakingTime = getSpeakingTime(text);
       readability = getReadabilityScore(text);
+      sentiment = getSentimentAnalysis(text);
     }
 
     setStats({
       words, chars, charsNoSpaces,
       sentences, paragraphs, syllables,
       readingTime, speakingTime,
-      readability, density
+      readability, density, sentiment
     });
   }, [text]);
 
@@ -177,22 +180,67 @@ export default function WordCounter({ t, lang }) {
             <ProgressBar value={stats.chars} max={3000} label="LinkedIn" color="#0A66C2" />
           </div>
 
+          {/* Sentiment Analysis */}
+          <div className="trust-card" style={{ padding: '24px' }}>
+            <h3 style={{ marginBottom: '20px', paddingBottom: '12px', borderBottom: '1px solid var(--border-light)' }}>Sentiment Analysis</h3>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
+              <div style={{ fontSize: '3rem', lineHeight: 1 }}>{stats.sentiment.emoji}</div>
+              <div>
+                <div style={{ fontSize: '1.2rem', fontWeight: 700 }}>{stats.sentiment.sentiment}</div>
+                <div style={{ fontSize: '0.9rem', color: 'var(--text-secondary)' }}>Score: {stats.sentiment.score > 0 ? `+${stats.sentiment.score}` : stats.sentiment.score}</div>
+              </div>
+            </div>
+          </div>
+
           {/* Keyword Density */}
           <div className="trust-card" style={{ padding: '24px' }}>
             <h3 style={{ marginBottom: '20px', paddingBottom: '12px', borderBottom: '1px solid var(--border-light)' }}>Keyword Density</h3>
-            {stats.density.length > 0 ? (
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
-                {stats.density.map((item, index) => (
-                  <div key={index}>
-                    <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.85rem', marginBottom: '4px' }}>
-                      <span style={{ fontWeight: 500, color: 'var(--text-primary)' }}>{item.word}</span>
-                      <span style={{ color: 'var(--text-secondary)' }}>{item.count}x ({item.density}%)</span>
-                    </div>
-                    <div style={{ height: '4px', background: 'var(--bg-secondary)', borderRadius: '2px' }}>
-                      <div style={{ height: '100%', width: `${Math.min(100, item.density * 5)}%`, background: 'var(--accent)', borderRadius: '2px' }}></div>
+            {stats.density.single.length > 0 ? (
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
+                <div>
+                  <h4 style={{ fontSize: '0.9rem', color: 'var(--text-secondary)', marginBottom: '12px', textTransform: 'uppercase', letterSpacing: '0.5px' }}>Top Words</h4>
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                    {stats.density.single.slice(0, 5).map((item, index) => (
+                      <div key={index}>
+                        <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.85rem', marginBottom: '4px' }}>
+                          <span style={{ fontWeight: 500, color: 'var(--text-primary)' }}>{item.word}</span>
+                          <span style={{ color: 'var(--text-secondary)' }}>{item.count}x ({item.density}%)</span>
+                        </div>
+                        <div style={{ height: '4px', background: 'var(--bg-secondary)', borderRadius: '2px' }}>
+                          <div style={{ height: '100%', width: `${Math.min(100, item.density * 5)}%`, background: 'var(--accent)', borderRadius: '2px' }}></div>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+                {stats.density.biGrams.length > 0 && (
+                  <div>
+                    <h4 style={{ fontSize: '0.9rem', color: 'var(--text-secondary)', marginBottom: '12px', textTransform: 'uppercase', letterSpacing: '0.5px' }}>2-Word Phrases</h4>
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                      {stats.density.biGrams.slice(0, 5).map((item, index) => (
+                        <div key={index} style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.85rem' }}>
+                          <span style={{ fontWeight: 500, color: 'var(--text-primary)' }}>{item.word}</span>
+                          <span style={{ color: 'var(--text-secondary)' }}>{item.count}x</span>
+                        </div>
+                      ))}
                     </div>
                   </div>
-                ))}
+                )}
+                
+                {stats.density.triGrams.length > 0 && (
+                  <div>
+                    <h4 style={{ fontSize: '0.9rem', color: 'var(--text-secondary)', marginBottom: '12px', textTransform: 'uppercase', letterSpacing: '0.5px' }}>3-Word Phrases</h4>
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                      {stats.density.triGrams.slice(0, 5).map((item, index) => (
+                        <div key={index} style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.85rem' }}>
+                          <span style={{ fontWeight: 500, color: 'var(--text-primary)' }}>{item.word}</span>
+                          <span style={{ color: 'var(--text-secondary)' }}>{item.count}x</span>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
               </div>
             ) : (
               <div style={{ fontSize: '0.85rem', color: 'var(--text-tertiary)', textAlign: 'center', padding: '20px 0' }}>

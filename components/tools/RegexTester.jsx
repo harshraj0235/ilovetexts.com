@@ -239,6 +239,52 @@ export default function RegexTester({ t, lang }) {
         </div>
       )}
 
+      {/* REGEX CHEATSHEET */}
+      <div style={{ marginTop: '24px', background: 'var(--bg-section)', borderRadius: 'var(--radius-lg)', border: '1px solid var(--border-light)', overflow: 'hidden' }}>
+        <div style={{ padding: '16px 24px', background: 'var(--bg-white)', borderBottom: '1px solid var(--border-light)', fontWeight: '600' }}>
+          Regex Cheatsheet
+        </div>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', gap: '24px', padding: '24px' }}>
+          <div>
+            <h4 style={{ color: 'var(--text-secondary)', marginBottom: '12px', fontSize: '0.9rem', textTransform: 'uppercase' }}>Character Classes</h4>
+            <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'flex', flexDirection: 'column', gap: '8px', fontSize: '0.95rem' }}>
+              <li><code style={{ background: 'var(--bg-main)', padding: '2px 6px', borderRadius: '4px' }}>.</code> any character except newline</li>
+              <li><code style={{ background: 'var(--bg-main)', padding: '2px 6px', borderRadius: '4px' }}>\w\d\s</code> word, digit, whitespace</li>
+              <li><code style={{ background: 'var(--bg-main)', padding: '2px 6px', borderRadius: '4px' }}>\W\D\S</code> not word, digit, whitespace</li>
+              <li><code style={{ background: 'var(--bg-main)', padding: '2px 6px', borderRadius: '4px' }}>[abc]</code> any of a, b, or c</li>
+              <li><code style={{ background: 'var(--bg-main)', padding: '2px 6px', borderRadius: '4px' }}>[^abc]</code> not a, b, or c</li>
+              <li><code style={{ background: 'var(--bg-main)', padding: '2px 6px', borderRadius: '4px' }}>[a-g]</code> character between a & g</li>
+            </ul>
+          </div>
+          <div>
+            <h4 style={{ color: 'var(--text-secondary)', marginBottom: '12px', fontSize: '0.9rem', textTransform: 'uppercase' }}>Anchors</h4>
+            <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'flex', flexDirection: 'column', gap: '8px', fontSize: '0.95rem' }}>
+              <li><code style={{ background: 'var(--bg-main)', padding: '2px 6px', borderRadius: '4px' }}>^abc$</code> start / end of the string</li>
+              <li><code style={{ background: 'var(--bg-main)', padding: '2px 6px', borderRadius: '4px' }}>\b</code> word boundary</li>
+              <li><code style={{ background: 'var(--bg-main)', padding: '2px 6px', borderRadius: '4px' }}>\B</code> not a word boundary</li>
+            </ul>
+          </div>
+          <div>
+            <h4 style={{ color: 'var(--text-secondary)', marginBottom: '12px', fontSize: '0.9rem', textTransform: 'uppercase' }}>Quantifiers</h4>
+            <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'flex', flexDirection: 'column', gap: '8px', fontSize: '0.95rem' }}>
+              <li><code style={{ background: 'var(--bg-main)', padding: '2px 6px', borderRadius: '4px' }}>a*a+a?</code> 0 or more, 1 or more, 0 or 1</li>
+              <li><code style={{ background: 'var(--bg-main)', padding: '2px 6px', borderRadius: '4px' }}>a{'{'}5{'}'}a{'{'}2,{'}'}</code> exactly five, two or more</li>
+              <li><code style={{ background: 'var(--bg-main)', padding: '2px 6px', borderRadius: '4px' }}>a{'{'}1,3{'}'}</code> between one & three</li>
+              <li><code style={{ background: 'var(--bg-main)', padding: '2px 6px', borderRadius: '4px' }}>a+?a{'{'}2,{'}'}?</code> match as few as possible</li>
+            </ul>
+          </div>
+          <div>
+            <h4 style={{ color: 'var(--text-secondary)', marginBottom: '12px', fontSize: '0.9rem', textTransform: 'uppercase' }}>Groups & Lookaround</h4>
+            <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'flex', flexDirection: 'column', gap: '8px', fontSize: '0.95rem' }}>
+              <li><code style={{ background: 'var(--bg-main)', padding: '2px 6px', borderRadius: '4px' }}>(abc)</code> capture group</li>
+              <li><code style={{ background: 'var(--bg-main)', padding: '2px 6px', borderRadius: '4px' }}>(?:abc)</code> non-capturing group</li>
+              <li><code style={{ background: 'var(--bg-main)', padding: '2px 6px', borderRadius: '4px' }}>(?=abc)</code> positive lookahead</li>
+              <li><code style={{ background: 'var(--bg-main)', padding: '2px 6px', borderRadius: '4px' }}>(?!abc)</code> negative lookahead</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
       {toast && (
         <div className={`toast ${toast.type}`} style={{ position: 'fixed', bottom: '24px', right: '24px', padding: '12px 24px', background: toast.type === 'error' ? '#ef4444' : 'var(--brand-color)', color: '#fff', borderRadius: 'var(--radius-md)', zIndex: 9999, boxShadow: '0 4px 12px rgba(0,0,0,0.15)' }}>
           {toast.message}
