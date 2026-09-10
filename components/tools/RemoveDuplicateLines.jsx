@@ -8,6 +8,7 @@ export default function RemoveDuplicateLines({ t, lang }) {
   const [caseSensitive, setCaseSensitive] = useState(false);
   const [trimWhitespace, setTrimWhitespace] = useState(true);
   const [ignoreEmpty, setIgnoreEmpty] = useState(true);
+  const [sortOrder, setSortOrder] = useState('none');
 
   useEffect(() => {
     if (typeof window !== 'undefined') {
@@ -36,6 +37,8 @@ export default function RemoveDuplicateLines({ t, lang }) {
     const result = [];
     let removedCount = 0;
 
+    let emptyRemovedCount = 0;
+
     for (let line of lines) {
       let processedLine = line;
       
@@ -44,8 +47,7 @@ export default function RemoveDuplicateLines({ t, lang }) {
       }
       
       if (ignoreEmpty && processedLine === '') {
-        // Skip entirely, but don't count as "removed duplicate" necessarily, 
-        // though technically it is removed. Let's just not add it to result.
+        emptyRemovedCount++;
         continue;
       }
       
@@ -53,18 +55,26 @@ export default function RemoveDuplicateLines({ t, lang }) {
       
       if (!seen.has(comparisonLine)) {
         seen.add(comparisonLine);
-        result.push(line); // Keep original casing if requested, or trimmed if requested
+        result.push(line);
       } else {
         removedCount++;
       }
     }
 
+    if (sortOrder === 'asc') {
+      result.sort((a, b) => a.localeCompare(b));
+    } else if (sortOrder === 'desc') {
+      result.sort((a, b) => b.localeCompare(a));
+    }
+
     return {
       lines: result,
       removedCount,
-      originalCount
+      originalCount,
+      emptyRemovedCount,
+      finalCount: result.length
     };
-  }, [input, caseSensitive, trimWhitespace, ignoreEmpty]);
+  }, [input, caseSensitive, trimWhitespace, ignoreEmpty, sortOrder]);
 
   const getOutputText = () => {
     return processedData.lines.join('\n');
@@ -128,6 +138,39 @@ export default function RemoveDuplicateLines({ t, lang }) {
             />
             Remove Empty Lines
           </label>
+          <div style={{ width: '1px', height: '20px', background: 'var(--border-light)', margin: '0 8px' }}></div>
+          <label style={{ fontSize: '0.9rem', color: 'var(--text-secondary)', display: 'flex', alignItems: 'center', gap: '6px' }}>
+            Sort:
+            <select 
+              value={sortOrder} 
+              onChange={(e) => setSortOrder(e.target.value)}
+              style={{ padding: '4px 8px', borderRadius: '4px', border: '1px solid var(--border-light)', background: 'var(--bg-main)', color: 'var(--text-primary)' }}
+            >
+              <option value="none">None</option>
+              <option value="asc">A-Z</option>
+              <option value="desc">Z-A</option>
+            </select>
+          </label>
+        </div>
+      </div>
+
+      {/* Dashboard Stats */}
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(150px, 1fr))', gap: '16px', marginBottom: '24px' }}>
+        <div style={{ background: 'var(--bg-section)', padding: '16px', borderRadius: 'var(--radius-md)', border: '1px solid var(--border-light)', textAlign: 'center' }}>
+          <div style={{ fontSize: '1.8rem', fontWeight: 'bold', color: 'var(--text-primary)' }}>{processedData.originalCount}</div>
+          <div style={{ fontSize: '0.85rem', color: 'var(--text-secondary)' }}>Original Lines</div>
+        </div>
+        <div style={{ background: 'var(--bg-section)', padding: '16px', borderRadius: 'var(--radius-md)', border: '1px solid var(--border-light)', textAlign: 'center' }}>
+          <div style={{ fontSize: '1.8rem', fontWeight: 'bold', color: '#ef4444' }}>{processedData.removedCount}</div>
+          <div style={{ fontSize: '0.85rem', color: 'var(--text-secondary)' }}>Duplicates Removed</div>
+        </div>
+        <div style={{ background: 'var(--bg-section)', padding: '16px', borderRadius: 'var(--radius-md)', border: '1px solid var(--border-light)', textAlign: 'center' }}>
+          <div style={{ fontSize: '1.8rem', fontWeight: 'bold', color: '#f59e0b' }}>{processedData.emptyRemovedCount}</div>
+          <div style={{ fontSize: '0.85rem', color: 'var(--text-secondary)' }}>Empty Lines Removed</div>
+        </div>
+        <div style={{ background: 'var(--bg-section)', padding: '16px', borderRadius: 'var(--radius-md)', border: '1px solid var(--border-light)', textAlign: 'center' }}>
+          <div style={{ fontSize: '1.8rem', fontWeight: 'bold', color: '#10b981' }}>{processedData.finalCount}</div>
+          <div style={{ fontSize: '0.85rem', color: 'var(--text-secondary)' }}>Final Lines</div>
         </div>
       </div>
 
@@ -151,11 +194,6 @@ export default function RemoveDuplicateLines({ t, lang }) {
           <div className="pane-header" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '8px' }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
               <span style={{ fontWeight: '600' }}>Cleaned List</span>
-              {processedData.removedCount > 0 && (
-                <span style={{ fontSize: '0.8rem', background: 'var(--brand-color)', color: '#fff', padding: '2px 8px', borderRadius: '12px' }}>
-                  Removed {processedData.removedCount} Duplicates
-                </span>
-              )}
             </div>
             <div style={{ display: 'flex', gap: '8px' }}>
               <button onClick={handleDownload} className="action-btn" title="Download TXT">⬇️ TXT</button>

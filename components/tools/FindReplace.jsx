@@ -71,6 +71,23 @@ export default function FindReplace({ t, lang }) {
     }
   };
 
+  const handleDownload = () => {
+    if (!resultText) {
+      showToast('Nothing to download!', 'warning');
+      return;
+    }
+    const blob = new Blob([resultText], { type: 'text/plain;charset=utf-8' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.href = url;
+    link.download = `replaced_text_${Date.now()}.txt`;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    URL.revokeObjectURL(url);
+    showToast('File downloaded!');
+  };
+
   return (
     <div className="tool-workspace">
       
@@ -159,6 +176,7 @@ export default function FindReplace({ t, lang }) {
               )}
             </div>
             <div style={{ display: 'flex', gap: '8px' }}>
+              <button onClick={handleDownload} className="action-btn" title="Download TXT">⬇️ TXT</button>
               <button onClick={handleCopy} className="action-btn primary">📋 Copy</button>
             </div>
           </div>

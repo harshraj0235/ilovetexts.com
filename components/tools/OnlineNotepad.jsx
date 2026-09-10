@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect, useRef, useCallback } from 'react';
+import JSZip from 'jszip';
 
 // ─── Simple Markdown renderer (no external dep) ───────────────────────────────
 function renderMarkdown(text) {
@@ -244,6 +245,27 @@ export default function OnlineNotepad({ t, lang }) {
     showToast('Downloaded as Markdown');
   };
 
+  const downloadAllZip = async () => {
+    try {
+      const zip = new JSZip();
+      tabs.forEach((tab, idx) => {
+        const title = tab.title.trim() || `Note-${idx + 1}`;
+        const safeTitle = title.replace(/[^\w\s-]/g, '').replace(/\s+/g, '-');
+        zip.file(`${safeTitle}.txt`, tab.content || '');
+      });
+      const blob = await zip.generateAsync({ type: 'blob' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'all-notes.zip';
+      a.click();
+      URL.revokeObjectURL(url);
+      showToast('Downloaded all as ZIP');
+    } catch (err) {
+      showToast('Failed to create ZIP', 'error');
+    }
+  };
+
   const handleCopy = () => {
     navigator.clipboard.writeText(content);
     showToast('Copied to clipboard!');
@@ -352,6 +374,7 @@ export default function OnlineNotepad({ t, lang }) {
             { label: '⬇ TXT', action: downloadTxt },
             { label: '⬇ HTML', action: downloadHtml },
             { label: '⬇ MD', action: downloadMarkdown },
+            { label: '📦 ZIP All', action: downloadAllZip },
           ].map(btn => (
             <button key={btn.label} onClick={btn.action}
               style={{ padding: '5px 10px', borderRadius: 'var(--radius-sm)', border: `1px solid ${borderColor}`, background: 'transparent', color: textColor, cursor: 'pointer', fontSize: '0.78rem', fontWeight: 600 }}>

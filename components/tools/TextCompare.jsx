@@ -8,6 +8,17 @@ export default function TextCompare({ t, lang }) {
   const [modifiedText, setModifiedText] = useState('');
   const [isComparing, setIsComparing] = useState(false);
   const [splitView, setSplitView] = useState(true);
+  const [ignoreCase, setIgnoreCase] = useState(false);
+  const [ignoreWhitespace, setIgnoreWhitespace] = useState(false);
+
+  const getProcessedText = (txt) => {
+    let res = txt;
+    if (ignoreCase) res = res.toLowerCase();
+    if (ignoreWhitespace) {
+      res = res.split('\n').map(line => line.trim().replace(/[ \t]+/g, ' ')).join('\n');
+    }
+    return res;
+  };
 
   const handlePasteOriginal = async () => {
     try {
@@ -93,20 +104,40 @@ export default function TextCompare({ t, lang }) {
           <div className="tool-panel" style={{ width: '100%', gridColumn: '1 / -1' }}>
             <div className="tool-panel-header" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
               <div className="tool-panel-title">COMPARISON RESULT</div>
-              <label style={{ display: 'flex', alignItems: 'center', gap: '8px', cursor: 'pointer', fontSize: '0.9rem' }}>
-                <input 
-                  type="checkbox" 
-                  checked={splitView} 
-                  onChange={(e) => setSplitView(e.target.checked)} 
-                  style={{ width: '16px', height: '16px', accentColor: 'var(--brand-color)' }}
-                />
-                Split View
-              </label>
+              <div style={{ display: 'flex', gap: '16px', flexWrap: 'wrap' }}>
+                <label style={{ display: 'flex', alignItems: 'center', gap: '6px', cursor: 'pointer', fontSize: '0.9rem' }}>
+                  <input 
+                    type="checkbox" 
+                    checked={ignoreCase} 
+                    onChange={(e) => setIgnoreCase(e.target.checked)} 
+                    style={{ width: '16px', height: '16px', accentColor: 'var(--brand-color)' }}
+                  />
+                  Ignore Case
+                </label>
+                <label style={{ display: 'flex', alignItems: 'center', gap: '6px', cursor: 'pointer', fontSize: '0.9rem' }}>
+                  <input 
+                    type="checkbox" 
+                    checked={ignoreWhitespace} 
+                    onChange={(e) => setIgnoreWhitespace(e.target.checked)} 
+                    style={{ width: '16px', height: '16px', accentColor: 'var(--brand-color)' }}
+                  />
+                  Ignore Whitespace
+                </label>
+                <label style={{ display: 'flex', alignItems: 'center', gap: '6px', cursor: 'pointer', fontSize: '0.9rem' }}>
+                  <input 
+                    type="checkbox" 
+                    checked={splitView} 
+                    onChange={(e) => setSplitView(e.target.checked)} 
+                    style={{ width: '16px', height: '16px', accentColor: 'var(--brand-color)' }}
+                  />
+                  Split View
+                </label>
+              </div>
             </div>
             <div style={{ background: '#fff', borderRadius: '4px', overflow: 'hidden', border: '1px solid var(--border-light)' }}>
               <ReactDiffViewer
-                oldValue={originalText}
-                newValue={modifiedText}
+                oldValue={getProcessedText(originalText)}
+                newValue={getProcessedText(modifiedText)}
                 splitView={splitView}
                 hideLineNumbers={false}
                 useDarkTheme={false}
