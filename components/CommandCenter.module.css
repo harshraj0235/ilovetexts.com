@@ -1,0 +1,631 @@
+.hero {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  padding: clamp(3.5rem, 8vw, 7.25rem) 1.5rem clamp(3rem, 6vw, 5.5rem);
+  background:
+    radial-gradient(circle at 12% 20%, rgba(255, 176, 131, 0.24), transparent 30rem),
+    radial-gradient(circle at 88% 12%, rgba(133, 210, 190, 0.22), transparent 28rem),
+    linear-gradient(140deg, #fffaf5 0%, #ffffff 45%, #f5fffc 100%);
+  border-bottom: 1px solid #eee6dc;
+}
+
+:global(html.dark) .hero {
+  background:
+    radial-gradient(circle at 12% 20%, rgba(155, 78, 47, 0.24), transparent 30rem),
+    radial-gradient(circle at 88% 12%, rgba(35, 124, 100, 0.24), transparent 28rem),
+    linear-gradient(140deg, #10100f 0%, #070807 48%, #07100d 100%);
+  border-color: #292d29;
+}
+
+.heroGlow {
+  position: absolute;
+  inset: auto 10% -18rem;
+  z-index: -1;
+  height: 24rem;
+  border-radius: 50%;
+  background: rgba(255, 207, 169, 0.2);
+  filter: blur(50px);
+}
+
+.heroContent {
+  width: 100%;
+  max-width: 53rem;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.eyebrow,
+.kicker {
+  color: #a64c24;
+  font-size: 0.79rem;
+  font-weight: 800;
+  letter-spacing: 0.075em;
+  line-height: 1.35;
+  text-transform: uppercase;
+}
+
+.eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  padding: 0.47rem 0.78rem;
+  margin-bottom: 1.25rem;
+  border: 1px solid rgba(166, 76, 36, 0.18);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.68);
+}
+
+:global(html.dark) .eyebrow,
+:global(html.dark) .kicker {
+  color: #ffb58e;
+}
+
+:global(html.dark) .eyebrow {
+  border-color: rgba(255, 181, 142, 0.25);
+  background: rgba(10, 11, 10, 0.6);
+}
+
+.title {
+  max-width: 50rem;
+  margin: 0 auto;
+  color: #17211c;
+  font-size: clamp(2.35rem, 6vw, 4.9rem);
+  font-weight: 800;
+  letter-spacing: -0.065em;
+  line-height: 0.98;
+  text-wrap: balance;
+}
+
+.title span {
+  color: #cb5b2d;
+}
+
+:global(html.dark) .title {
+  color: #f4f8f3;
+}
+
+:global(html.dark) .title span {
+  color: #ffad82;
+}
+
+.subtitle {
+  max-width: 42rem;
+  margin: 1.3rem auto 2rem;
+  color: #526057;
+  font-size: clamp(1rem, 2vw, 1.16rem);
+  line-height: 1.65;
+  text-wrap: balance;
+}
+
+:global(html.dark) .subtitle {
+  color: #b9c4bb;
+}
+
+.searchForm {
+  position: relative;
+  display: flex;
+  align-items: center;
+  min-height: 4.35rem;
+  padding: 0.45rem;
+  border: 1px solid #ded8d0;
+  border-radius: 1rem;
+  background: #ffffff;
+  box-shadow: 0 1.1rem 2.7rem rgba(54, 50, 44, 0.12), 0 2px 4px rgba(54, 50, 44, 0.04);
+  transition: border-color 180ms ease, box-shadow 180ms ease;
+}
+
+.searchForm:focus-within {
+  border-color: #c95b31;
+  box-shadow: 0 0 0 4px rgba(201, 91, 49, 0.14), 0 1.1rem 2.7rem rgba(54, 50, 44, 0.12);
+}
+
+:global(html.dark) .searchForm {
+  border-color: #3b423d;
+  background: #151a16;
+  box-shadow: 0 1.1rem 2.7rem rgba(0, 0, 0, 0.36);
+}
+
+.searchIcon {
+  flex: 0 0 auto;
+  margin: 0 0.72rem 0 0.52rem;
+  color: #9a4b2a;
+  font-family: Arial, sans-serif;
+  font-size: 2rem;
+  line-height: 1;
+  transform: rotate(-20deg);
+}
+
+.searchInput {
+  width: 100%;
+  min-width: 0;
+  border: 0;
+  outline: 0;
+  color: var(--text-primary);
+  background: transparent;
+  font: inherit;
+  font-size: 1rem;
+}
+
+.searchInput::placeholder {
+  color: #7a817d;
+  opacity: 1;
+}
+
+.searchButton,
+.secondaryButton {
+  flex: 0 0 auto;
+  border: 0;
+  border-radius: 0.68rem;
+  background: #1f3027;
+  color: #ffffff;
+  font: inherit;
+  font-size: 0.92rem;
+  font-weight: 750;
+  transition: background 160ms ease, transform 160ms ease;
+}
+
+.searchButton {
+  min-height: 3.15rem;
+  padding: 0.7rem 1rem;
+}
+
+.searchButton:hover,
+.searchButton:focus-visible,
+.secondaryButton:hover,
+.secondaryButton:focus-visible {
+  background: #c2542b;
+  transform: translateY(-1px);
+}
+
+:global(html.dark) .searchButton,
+:global(html.dark) .secondaryButton {
+  background: #eec9b6;
+  color: #1c2520;
+}
+
+.clearButton,
+.textButton {
+  flex: 0 0 auto;
+  padding: 0.45rem;
+  color: #626a64;
+  font: inherit;
+  font-size: 0.8rem;
+  font-weight: 700;
+  text-decoration: underline;
+  text-underline-offset: 0.18rem;
+}
+
+.clearButton:hover,
+.textButton:hover {
+  color: #a34724;
+}
+
+.shortcutHint {
+  flex: 0 0 auto;
+  margin: 0 0.55rem;
+  padding: 0.25rem 0.45rem;
+  border: 1px solid #e2e4e0;
+  border-radius: 0.35rem;
+  color: #777e79;
+  background: #f7f8f6;
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  white-space: nowrap;
+}
+
+:global(html.dark) .shortcutHint {
+  border-color: #354039;
+  color: #b2bdb4;
+  background: #222a24;
+}
+
+.quickSearches {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.5rem;
+  margin-top: 1rem;
+  color: #6c746e;
+  font-size: 0.8rem;
+}
+
+.quickSearches > span {
+  align-self: center;
+  font-weight: 650;
+}
+
+.quickSearches button {
+  padding: 0.32rem 0.6rem;
+  border: 1px solid #e3ded7;
+  border-radius: 999px;
+  color: #3e5145;
+  background: rgba(255, 255, 255, 0.72);
+  font: inherit;
+  font-size: inherit;
+  transition: border-color 160ms ease, background 160ms ease;
+}
+
+.quickSearches button:hover,
+.quickSearches button:focus-visible {
+  border-color: #e4a083;
+  background: #fff4ee;
+}
+
+:global(html.dark) .quickSearches {
+  color: #aeb9b0;
+}
+
+:global(html.dark) .quickSearches button {
+  border-color: #3d463f;
+  color: #d8e0d8;
+  background: rgba(21, 26, 22, 0.75);
+}
+
+.trustLine {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.45rem 1.1rem;
+  margin-top: 1.35rem;
+  color: #516159;
+  font-size: 0.79rem;
+  font-weight: 650;
+  list-style: none;
+}
+
+.trustLine li {
+  display: inline-flex;
+  gap: 0.3rem;
+  align-items: center;
+}
+
+.trustLine li span {
+  color: #5c966e;
+  font-size: 0.9rem;
+}
+
+:global(html.dark) .trustLine {
+  color: #b1c0b4;
+}
+
+.toolFinder {
+  padding-top: clamp(2.5rem, 5vw, 4.5rem);
+  padding-bottom: clamp(4rem, 7vw, 7rem);
+  scroll-margin-top: calc(var(--nav-height) + 1rem);
+}
+
+.sectionHeading {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 1.6rem;
+}
+
+.sectionHeading h2,
+.categoryStrip h2 {
+  margin-top: 0.3rem;
+  color: var(--text-primary);
+  font-size: clamp(1.55rem, 3vw, 2.25rem);
+  letter-spacing: -0.045em;
+  line-height: 1.08;
+}
+
+.allToolsLink,
+.textButton {
+  color: #9f4424;
+  font-size: 0.88rem;
+  font-weight: 750;
+  white-space: nowrap;
+}
+
+.allToolsLink span {
+  display: inline-block;
+  margin-left: 0.2rem;
+  transition: transform 160ms ease;
+}
+
+.allToolsLink:hover span {
+  transform: translateX(3px);
+}
+
+.featuredGrid,
+.resultsGrid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.9rem;
+}
+
+.compactToolCard,
+.toolCard {
+  position: relative;
+  display: flex;
+  gap: 0.85rem;
+  min-width: 0;
+  padding: 1rem;
+  border: 1px solid var(--border-light);
+  border-radius: 0.9rem;
+  background: var(--bg-main);
+  box-shadow: 0 1px 0 rgba(20, 30, 23, 0.02);
+  transition: border-color 160ms ease, box-shadow 160ms ease, transform 160ms ease;
+}
+
+.compactToolCard:hover,
+.compactToolCard:focus-visible,
+.toolCard:hover,
+.toolCard:focus-visible {
+  border-color: #d89a80;
+  box-shadow: 0 0.75rem 1.75rem rgba(54, 47, 39, 0.09);
+  transform: translateY(-2px);
+}
+
+.toolIcon {
+  display: grid;
+  flex: 0 0 auto;
+  width: 2.65rem;
+  height: 2.65rem;
+  place-items: center;
+  border-radius: 0.75rem;
+  background: #fff4ed;
+  font-size: 1.35rem;
+}
+
+:global(html.dark) .toolIcon {
+  background: #30251f;
+}
+
+.toolCardContent {
+  display: flex;
+  flex: 1 1 auto;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.toolName {
+  overflow: hidden;
+  color: var(--text-primary);
+  font-size: 0.96rem;
+  font-weight: 750;
+  line-height: 1.3;
+  text-overflow: ellipsis;
+}
+
+.toolDescription {
+  display: -webkit-box;
+  margin-top: 0.24rem;
+  overflow: hidden;
+  color: var(--text-secondary);
+  font-size: 0.78rem;
+  line-height: 1.45;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+}
+
+.toolCategory {
+  margin-top: 0.48rem;
+  color: #9d4a2b;
+  font-size: 0.68rem;
+  font-weight: 750;
+  letter-spacing: 0.035em;
+  text-transform: uppercase;
+}
+
+.cardArrow {
+  align-self: center;
+  color: #a74c2a;
+  font-size: 1.12rem;
+  transition: transform 160ms ease;
+}
+
+.compactToolCard:hover .cardArrow,
+.toolCard:hover .cardArrow {
+  transform: translateX(3px);
+}
+
+.categoryStrip {
+  display: grid;
+  grid-template-columns: minmax(13rem, 0.7fr) minmax(0, 1.3fr);
+  gap: 2rem;
+  align-items: center;
+  margin-top: 4.25rem;
+  padding: clamp(1.35rem, 4vw, 2.4rem);
+  border: 1px solid #e9e1d8;
+  border-radius: 1rem;
+  background: #fbf8f3;
+}
+
+:global(html.dark) .categoryStrip {
+  border-color: #30372f;
+  background: #111713;
+}
+
+.categoryLinks {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.55rem;
+}
+
+.categoryLinks a {
+  padding: 0.56rem 0.68rem;
+  border: 1px solid #e3dcd3;
+  border-radius: 0.6rem;
+  color: var(--text-primary);
+  background: var(--bg-main);
+  font-size: 0.82rem;
+  font-weight: 650;
+  transition: border-color 160ms ease, transform 160ms ease;
+}
+
+.categoryLinks a:hover,
+.categoryLinks a:focus-visible {
+  border-color: #d89173;
+  transform: translateY(-1px);
+}
+
+.emptyState {
+  padding: clamp(2rem, 6vw, 4rem) 1.5rem;
+  border: 1px dashed #d8cec2;
+  border-radius: 1rem;
+  background: #fdfaf6;
+  text-align: center;
+}
+
+:global(html.dark) .emptyState {
+  border-color: #40483f;
+  background: #111612;
+}
+
+.emptyIcon {
+  display: grid;
+  width: 2.8rem;
+  height: 2.8rem;
+  place-items: center;
+  margin: 0 auto 0.85rem;
+  border-radius: 50%;
+  color: #a64c24;
+  background: #fff0e7;
+  font-size: 1.2rem;
+}
+
+.emptyState h3 {
+  color: var(--text-primary);
+  font-size: 1.15rem;
+}
+
+.emptyState p {
+  max-width: 31rem;
+  margin: 0.55rem auto 1.25rem;
+  color: var(--text-secondary);
+  font-size: 0.9rem;
+  line-height: 1.55;
+}
+
+.secondaryButton {
+  display: inline-flex;
+  gap: 0.45rem;
+  align-items: center;
+  padding: 0.72rem 0.95rem;
+  text-decoration: none;
+}
+
+.srOnly {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+@media (max-width: 960px) {
+  .featuredGrid,
+  .resultsGrid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .categoryStrip {
+    grid-template-columns: 1fr;
+    gap: 1.2rem;
+  }
+}
+
+@media (max-width: 640px) {
+  .hero {
+    padding-right: 1rem;
+    padding-left: 1rem;
+  }
+
+  .subtitle {
+    margin-bottom: 1.5rem;
+  }
+
+  .searchForm {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr) auto;
+    gap: 0.2rem;
+    min-height: auto;
+    padding: 0.45rem;
+  }
+
+  .searchIcon {
+    margin: 0 0.3rem 0 0.2rem;
+    font-size: 1.7rem;
+  }
+
+  .searchInput {
+    min-height: 2.75rem;
+    font-size: 0.92rem;
+  }
+
+  .searchInput::placeholder {
+    text-overflow: ellipsis;
+  }
+
+  .clearButton {
+    grid-column: 3;
+    grid-row: 1;
+  }
+
+  .searchButton {
+    grid-column: 1 / -1;
+    min-height: 2.85rem;
+  }
+
+  .shortcutHint {
+    display: none;
+  }
+
+  .quickSearches {
+    gap: 0.42rem;
+  }
+
+  .trustLine {
+    display: grid;
+    grid-template-columns: 1fr;
+    justify-items: center;
+    gap: 0.35rem;
+  }
+
+  .toolFinder {
+    padding-right: 1rem;
+    padding-left: 1rem;
+  }
+
+  .sectionHeading {
+    align-items: flex-start;
+    flex-direction: column;
+    margin-bottom: 1.15rem;
+  }
+
+  .featuredGrid,
+  .resultsGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .compactToolCard,
+  .toolCard {
+    padding: 0.9rem;
+  }
+
+  .categoryStrip {
+    margin-top: 2.75rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .searchForm,
+  .searchButton,
+  .secondaryButton,
+  .compactToolCard,
+  .toolCard,
+  .cardArrow,
+  .allToolsLink span,
+  .categoryLinks a {
+    transition: none;
+  }
+}

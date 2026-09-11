@@ -1,7 +1,6 @@
-import { getAllTools, CATEGORIES, SITE } from '@/lib/tools-config';
+import { CATEGORIES, SITE } from '@/lib/tools-config';
 import { getTranslations } from '@/lib/i18n';
 import { generateWebSiteSchema, generateOrganizationSchema, generateAlternates } from '@/lib/seo';
-import Script from 'next/script';
 import CommandCenter from '@/components/CommandCenter';
 import HtmlDirectory from '@/components/HtmlDirectory';
 
@@ -54,8 +53,6 @@ export async function generateMetadata({ params }) {
 export default async function Home({ params }) {
   const { lang } = await params;
   const t = getTranslations(lang);
-  const allTools = getAllTools(lang);
-  
   const jsonLdWebSite = generateWebSiteSchema(t, lang);
   const jsonLdOrg = generateOrganizationSchema();
 
@@ -74,4 +71,3 @@ export default async function Home({ params }) {
     </>
   );
 }
-

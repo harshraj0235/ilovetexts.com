@@ -1,183 +1,285 @@
 'use client';
 
-import { useState, useMemo } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import Link from 'next/link';
 import { getAllTools } from '@/lib/tools-config';
-import PromotedTools from '@/components/PromotedTools';
+import styles from './CommandCenter.module.css';
+
+const FEATURED_TOOL_SLUGS = [
+  'word-counter',
+  'grammar-checker',
+  'pdf-to-word',
+  'resume-builder',
+  'image-compressor',
+  'json-formatter',
+];
+
+const QUICK_SEARCHES = [
+  { label: 'Improve my writing', query: 'grammar' },
+  { label: 'Edit a PDF', query: 'pdf' },
+  { label: 'Work with images', query: 'image' },
+  { label: 'Build a resume', query: 'resume' },
+];
+
+const SEARCH_ALIASES = {
+  cv: 'resume',
+  photo: 'image',
+  jpeg: 'image',
+  jpg: 'image',
+  document: 'pdf',
+  spelling: 'grammar',
+  essay: 'writing',
+  money: 'finance',
+  tax: 'gst',
+  legal: 'contract',
+};
+
+const STOP_WORDS = new Set(['a', 'an', 'and', 'for', 'from', 'i', 'in', 'into', 'my', 'need', 'of', 'on', 'please', 'the', 'to', 'turn', 'with']);
+
+function getSearchTerms(query) {
+  const normalized = query.trim().toLowerCase();
+  if (!normalized) return [];
+
+  const expanded = SEARCH_ALIASES[normalized] || normalized;
+
+  return [...new Set(expanded.split(/\s+/).filter(term => term && !STOP_WORDS.has(term)))];
+}
+
+function scoreTool(tool, terms, normalizedQuery) {
+  const name = tool.name.toLowerCase();
+  const category = tool.categoryName.toLowerCase();
+  const description = tool.description.toLowerCase();
+  const keywords = (tool.keywords || '').toLowerCase();
+  const slug = tool.slug.replace(/-/g, ' ').toLowerCase();
+  const searchable = `${name} ${category} ${description} ${keywords} ${slug}`;
+
+  if (!terms.every(term => searchable.includes(term))) return 0;
+
+  let score = 0;
+  if (name === normalizedQuery || slug === normalizedQuery) score += 120;
+  if (name.startsWith(normalizedQuery) || slug.startsWith(normalizedQuery)) score += 70;
+  if (name.includes(normalizedQuery) || slug.includes(normalizedQuery)) score += 45;
+
+  terms.forEach(term => {
+    if (name.includes(term)) score += 24;
+    if (slug.includes(term)) score += 16;
+    if (category.includes(term)) score += 12;
+    if (keywords.includes(term)) score += 10;
+    if (description.includes(term)) score += 4;
+  });
+
+  return score;
+}
+
+function ToolCard({ tool, href, compact = false }) {
+  return (
+    <Link href={href} prefetch={false} className={compact ? styles.compactToolCard : styles.toolCard}>
+      <span className={styles.toolIcon} role="img" aria-hidden="true">{tool.icon}</span>
+      <span className={styles.toolCardContent}>
+        <span className={styles.toolName}>{tool.name}</span>
+        <span className={styles.toolDescription}>{tool.description}</span>
+        {!compact && <span className={styles.toolCategory}>{tool.categoryName}</span>}
+      </span>
+      <span className={styles.cardArrow} aria-hidden="true">→</span>
+    </Link>
+  );
+}
 
 export default function CommandCenter({ categories, lang, t }) {
   const allTools = useMemo(() => getAllTools(lang), [lang]);
+  const searchInputRef = useRef(null);
   const [query, setQuery] = useState('');
-
+  const [hasSearched, setHasSearched] = useState(false);
   const langLink = (path) => lang === 'en' ? path : `/${lang}${path}`;
+  const toolCount = allTools.length;
+  const normalizedQuery = query.trim().toLowerCase();
+  const searchTerms = useMemo(() => getSearchTerms(query), [query]);
 
-  // Real-time filtering
-  const filteredTools = useMemo(() => {
-    if (!query) return allTools.slice(0, 24); // Show top 24 by default
-    
-    const q = query.toLowerCase();
-    return allTools.filter(tool => 
-      tool.name.toLowerCase().includes(q) || 
-      tool.description.toLowerCase().includes(q)
-    );
-  }, [query, allTools]);
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    const sharedQuery = params.get('q');
+    if (sharedQuery) {
+      setQuery(sharedQuery);
+      setHasSearched(true);
+      window.setTimeout(() => searchInputRef.current?.focus(), 0);
+    }
+
+    const handleShortcut = (event) => {
+      const target = event.target;
+      const isTyping = target instanceof HTMLElement && (
+        target.tagName === 'INPUT' || target.tagName === 'TEXTAREA' || target.isContentEditable
+      );
+
+      if ((event.ctrlKey || event.metaKey) && event.key.toLowerCase() === 'k') {
+        event.preventDefault();
+        searchInputRef.current?.focus();
+      }
+
+      if (event.key === '/' && !isTyping) {
+        event.preventDefault();
+        searchInputRef.current?.focus();
+      }
+    };
+
+    window.addEventListener('keydown', handleShortcut);
+    return () => window.removeEventListener('keydown', handleShortcut);
+  }, []);
+
+  const searchResults = useMemo(() => {
+    if (!searchTerms.length) return [];
+
+    return allTools
+      .map(tool => ({ tool, score: scoreTool(tool, searchTerms, normalizedQuery) }))
+      .filter(result => result.score > 0)
+      .sort((a, b) => b.score - a.score || a.tool.name.localeCompare(b.tool.name))
+      .map(result => result.tool);
+  }, [allTools, normalizedQuery, searchTerms]);
+
+  const featuredTools = useMemo(() => {
+    const featured = FEATURED_TOOL_SLUGS
+      .map(slug => allTools.find(tool => tool.slug === slug))
+      .filter(Boolean);
+    return featured.length ? featured : allTools.slice(0, 6);
+  }, [allTools]);
+
+  const submitSearch = (event) => {
+    event.preventDefault();
+    setHasSearched(Boolean(normalizedQuery));
+    if (normalizedQuery) {
+      window.history.replaceState(null, '', `${window.location.pathname}?q=${encodeURIComponent(query.trim())}#tool-results`);
+    }
+  };
+
+  const chooseQuickSearch = (nextQuery) => {
+    setQuery(nextQuery);
+    setHasSearched(true);
+    window.setTimeout(() => searchInputRef.current?.focus(), 0);
+  };
+
+  const clearSearch = () => {
+    setQuery('');
+    setHasSearched(false);
+    window.history.replaceState(null, '', window.location.pathname);
+    searchInputRef.current?.focus();
+  };
+
+  const showResults = Boolean(normalizedQuery) && hasSearched;
 
   return (
     <>
-      <section className="command-center">
-        <h1 className="command-title">
-          {t.home.heroTitle || 'Every text tool you need,'} <span className="highlight">{t.home.heroTitleHighlight || 'in one free website.'}</span>
-        </h1>
-        <p className="command-subtitle">{t.home.heroDesc || 'Convert case, count words, format code, encode text, generate passwords, and hash strings — all instantly in your browser.'}</p>
-        
-        <div className="command-search-wrapper">
-          <span className="command-icon" role="img" aria-hidden="true">🔍</span>
-          <input
-            type="text"
-            className="command-input"
-            placeholder="Type to search tools (e.g., 'Word Counter', 'JSON', 'Hash')"
-            value={query}
-            onChange={(e) => setQuery(e.target.value)}
-            aria-label="Search tools"
-          />
-          <span className="command-shortcut">/</span>
-        </div>
-      </section>
-      
-      {!query && (
-        <section className="container" style={{ paddingBottom: '24px' }}>
-          <div style={{ marginBottom: '32px', paddingTop: '12px' }}>
-            <h3 style={{ marginBottom: '24px', color: '#10b981', display: 'flex', alignItems: 'center', gap: '8px' }}>
-              <span style={{ fontSize: '1.4rem' }}>💰</span> Trending: Finance Tools
-            </h3>
-            <div className="tools-grid">
-              {allTools.filter(t => ['bank-statement-converter', 'contract-analyzer', 'bank-statement-financial-report', 'job-application-pack'].includes(t.slug)).map(tool => (
-                <Link 
-                  key={tool.slug} 
-                  href={langLink(`/${tool.categoryId}/${tool.slug}`)} 
-                  prefetch={false}
-                  className="tool-card"
-                  style={{ border: '1px solid #10b981', boxShadow: '0 4px 15px rgba(16, 185, 129, 0.1)' }}
-                >
-                  <div className="tool-card-icon" role="img" aria-hidden="true">{tool.icon}</div>
-                  <div className="tool-card-content">
-                    <h3>{tool.name}</h3>
-                    <p>{tool.description}</p>
-                  </div>
-                </Link>
-              ))}
-            </div>
-          </div>
+      <section className={styles.hero} aria-labelledby="tool-finder-title">
+        <div className={styles.heroGlow} aria-hidden="true" />
+        <div className={styles.heroContent}>
+          <p className={styles.eyebrow}>
+            <span aria-hidden="true">✦</span> {toolCount}+ free tools, made for real work
+          </p>
+          <h1 id="tool-finder-title" className={styles.title}>
+            {t.home.heroTitle || 'Every text tool you need,'}{' '}
+            <span>{t.home.heroTitleHighlight || 'in one free website.'}</span>
+          </h1>
+          <p className={styles.subtitle}>
+            {t.home.heroDesc || 'Get the small jobs done quickly—privately, without accounts, uploads, or distractions.'}
+          </p>
 
-          <PromotedTools lang={lang} />
-          
-          <div style={{ marginBottom: '48px', paddingTop: '12px' }}>
-            <h3 style={{ marginBottom: '24px', color: '#10b981', display: 'flex', alignItems: 'center', gap: '8px' }}>
-              <span style={{ fontSize: '1.4rem' }}>🏛️</span> High Demand: Government & Legal Tools
-            </h3>
-            <div className="tools-grid">
-              {[
-                { name: 'RTI First Appeal', path: '/government-tools/rti-first-appeal', desc: 'Zero dedicated tools exist — only weak DR 15-20 sites', icon: '⚖️' },
-                { name: 'Income Certificate', path: '/government-tools/income-certificate-generator', desc: 'Scattered weak competitors, 500K+ monthly searches', icon: '📄' },
-                { name: 'Rent Agreement', path: '/government-tools/rent-agreement-generator', desc: 'DR 20-30 competitors, 2M+ monthly searches', icon: '🏠' },
-                { name: 'PF Form 19 Filler', path: '/government-tools/pf-withdrawal-form-19', desc: 'No dedicated filler tool exists anywhere', icon: '💼' },
-                { name: 'Form 16 Explainer', path: '/government-tools/form-16-explainer', desc: 'Interactive Form 16 visualizer and explainer.', icon: '🧾' }
-              ].map(tool => (
-                <Link 
-                  key={tool.path} 
-                  href={langLink(tool.path)} 
-                  prefetch={false}
-                  className="tool-card"
-                  style={{ border: '1px solid #10b981', boxShadow: '0 4px 15px rgba(16, 185, 129, 0.1)' }}
-                >
-                  <div className="tool-card-icon" role="img" aria-hidden="true">{tool.icon}</div>
-                  <div className="tool-card-content">
-                    <h3>{tool.name}</h3>
-                    <p>{tool.desc}</p>
-                  </div>
-                </Link>
-              ))}
-            </div>
-          </div>
-        </section>
-      )}
+          <form className={styles.searchForm} onSubmit={submitSearch} role="search">
+            <label className={styles.srOnly} htmlFor="tool-search">Find the right tool</label>
+            <span className={styles.searchIcon} aria-hidden="true">⌕</span>
+            <input
+              ref={searchInputRef}
+              id="tool-search"
+              type="search"
+              className={styles.searchInput}
+              placeholder="What would you like to do? Try “convert PDF to Word”"
+              value={query}
+              onChange={(event) => {
+                setQuery(event.target.value);
+                setHasSearched(true);
+              }}
+              onFocus={() => query && setHasSearched(true)}
+              autoComplete="off"
+              enterKeyHint="search"
+            />
+            {query && (
+              <button type="button" className={styles.clearButton} onClick={clearSearch} aria-label="Clear search">
+                Clear
+              </button>
+            )}
+            <button className={styles.searchButton} type="submit">Find a tool</button>
+            <span className={styles.shortcutHint} aria-hidden="true">Ctrl K</span>
+          </form>
 
-      <section className="container" style={{ paddingBottom: '100px' }}>
-        {query && <h3 style={{ marginBottom: '24px', color: 'var(--text-secondary)' }}>Search Results ({filteredTools.length})</h3>}
-        
-        {!query && (
-          <div style={{ marginBottom: '48px' }}>
-            <h3 style={{ marginBottom: '24px', color: '#ec4899', display: 'flex', alignItems: 'center', gap: '8px' }}>
-              <span style={{ fontSize: '1.4rem' }}>🌴</span> Trending: GTA 6 Vice City Tools
-            </h3>
-            <div className="tools-grid">
-              {allTools.filter(t => ['vice-city-headline-generator', 'vice-city-license-plate', 'gta-6-pc-requirements', 'vice-city-speculation-map', 'vice-city-rap-sheet'].includes(t.slug)).map(tool => (
-                <Link 
-                  key={tool.slug} 
-                  href={langLink(`/${tool.categoryId}/${tool.slug}`)} 
-                  prefetch={false}
-                  className="tool-card"
-                  style={{ border: '1px solid #ec4899', boxShadow: '0 4px 15px rgba(236, 72, 153, 0.1)' }}
-                >
-                  <div className="tool-card-icon" role="img" aria-hidden="true">{tool.icon}</div>
-                  <div className="tool-card-content">
-                    <h3>{tool.name}</h3>
-                    <p>{tool.description}</p>
-                  </div>
-                </Link>
-              ))}
-            </div>
-          </div>
-        )}
-
-        {!query && (
-          <div style={{ marginBottom: '48px' }}>
-            <h3 style={{ marginBottom: '24px', color: '#ef4444', display: 'flex', alignItems: 'center', gap: '8px' }}>
-              <span style={{ fontSize: '1.4rem' }}>🔥</span> Trending: AI & Creator Tools
-            </h3>
-            <div className="tools-grid">
-              {allTools.filter(t => ['pii-redactor', 'prompt-minifier', 'caption-formatter', 'json-to-markdown'].includes(t.slug)).map(tool => (
-                <Link 
-                  key={tool.slug} 
-                  href={langLink(`/${tool.categoryId}/${tool.slug}`)} 
-                  prefetch={false}
-                  className="tool-card"
-                  style={{ border: '1px solid #ef4444', boxShadow: '0 4px 15px rgba(239, 68, 68, 0.1)' }}
-                >
-                  <div className="tool-card-icon" role="img" aria-hidden="true">{tool.icon}</div>
-                  <div className="tool-card-content">
-                    <h3>{tool.name}</h3>
-                    <p>{tool.description}</p>
-                  </div>
-                </Link>
-              ))}
-            </div>
-          </div>
-        )}
-
-        {!query && <h3 style={{ marginBottom: '24px', color: 'var(--text-secondary)' }}>All Free Tools</h3>}
-        
-        {filteredTools.length === 0 ? (
-          <div style={{ textAlign: 'center', padding: '64px 0', color: 'var(--text-tertiary)' }}>
-            No tools found matching "{query}". Try a different keyword.
-          </div>
-        ) : (
-          <div className="tools-grid">
-            {filteredTools.map(tool => (
-              <Link 
-                key={tool.slug} 
-                href={langLink(`/${tool.categoryId}/${tool.slug}`)} 
-                prefetch={false}
-                className="tool-card"
-              >
-                <div className="tool-card-icon" role="img" aria-hidden="true">{tool.icon}</div>
-                <div className="tool-card-content">
-                  <h3>{tool.name}</h3>
-                  <p>{tool.description}</p>
-                </div>
-              </Link>
+          <div className={styles.quickSearches} aria-label="Popular searches">
+            <span>Popular:</span>
+            {QUICK_SEARCHES.map(item => (
+              <button key={item.query} type="button" onClick={() => chooseQuickSearch(item.query)}>
+                {item.label}
+              </button>
             ))}
           </div>
+
+          <ul className={styles.trustLine} aria-label="Our promises">
+            <li><span aria-hidden="true">✓</span> No account needed</li>
+            <li><span aria-hidden="true">✓</span> Works on any device</li>
+            <li><span aria-hidden="true">✓</span> Your work stays private</li>
+          </ul>
+        </div>
+      </section>
+
+      <section id="tool-results" className={`container ${styles.toolFinder}`} aria-live="polite">
+        {showResults ? (
+          <>
+            <div className={styles.sectionHeading}>
+              <div>
+                <p className={styles.kicker}>Tool matches</p>
+                <h2>{searchResults.length ? `${searchResults.length} result${searchResults.length === 1 ? '' : 's'} for “${query.trim()}”` : 'We could not find a close match'}</h2>
+              </div>
+              <button type="button" className={styles.textButton} onClick={clearSearch}>Show popular tools</button>
+            </div>
+
+            {searchResults.length ? (
+              <div className={styles.resultsGrid}>
+                {searchResults.map(tool => (
+                  <ToolCard key={`${tool.categoryId}-${tool.slug}`} tool={tool} href={langLink(`/${tool.categoryId}/${tool.slug}`)} />
+                ))}
+              </div>
+            ) : (
+              <div className={styles.emptyState}>
+                <span className={styles.emptyIcon} aria-hidden="true">✦</span>
+                <h3>Try a simpler word or browse by category.</h3>
+                <p>For example, search “PDF”, “word count”, “image”, “resume”, or “grammar”.</p>
+                <Link href={langLink('/tools')} className={styles.secondaryButton}>Browse every tool <span aria-hidden="true">→</span></Link>
+              </div>
+            )}
+          </>
+        ) : (
+          <>
+            <div className={styles.sectionHeading}>
+              <div>
+                <p className={styles.kicker}>A helpful place to begin</p>
+                <h2>Make today&apos;s task a little easier.</h2>
+              </div>
+              <Link href={langLink('/tools')} className={styles.allToolsLink}>View all {toolCount} tools <span aria-hidden="true">→</span></Link>
+            </div>
+            <div className={styles.featuredGrid}>
+              {featuredTools.map(tool => (
+                <ToolCard key={`${tool.categoryId}-${tool.slug}`} tool={tool} href={langLink(`/${tool.categoryId}/${tool.slug}`)} compact />
+              ))}
+            </div>
+
+            <div className={styles.categoryStrip}>
+              <div>
+                <p className={styles.kicker}>Explore your way</p>
+                <h2>Choose a category</h2>
+              </div>
+              <div className={styles.categoryLinks}>
+                {categories.slice(0, 6).map(category => (
+                  <Link key={category.id} href={langLink(`/${category.id}`)}>
+                    <span aria-hidden="true">{category.icon}</span> {category.name}
+                  </Link>
+                ))}
+              </div>
+            </div>
+          </>
         )}
       </section>
     </>
