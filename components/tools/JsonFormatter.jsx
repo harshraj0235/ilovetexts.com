@@ -1,235 +1,256 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import { useMemo, useState } from 'react';
 import JsonView from '@uiw/react-json-view';
 import { jsonrepair } from 'jsonrepair';
 import { JSONPath } from 'jsonpath-plus';
+import styles from './JsonFormatter.module.css';
 
-export default function JsonFormatter({ t, lang }) {
+const SAMPLE_JSON = `{
+  "project": "Launch checklist",
+  "owner": "Avery",
+  "published": false,
+  "tasks": [
+    { "id": 1, "title": "Write the brief", "done": true },
+    { "id": 2, "title": "Review accessibility", "done": false }
+  ]
+}`;
+
+function sortJson(value) {
+  if (Array.isArray(value)) return value.map(sortJson);
+  if (value && typeof value === 'object') {
+    return Object.keys(value).sort().reduce((result, key) => {
+      result[key] = sortJson(value[key]);
+      return result;
+    }, {});
+  }
+  return value;
+}
+
+function getLocation(message, value) {
+  const positionMatch = message.match(/position\s+(\d+)/i);
+  if (!positionMatch) return '';
+  const position = Number(positionMatch[1]);
+  const before = value.slice(0, position);
+  const line = before.split('\n').length;
+  const column = position - before.lastIndexOf('\n');
+  return `Line ${line}, column ${column}`;
+}
+
+function formatBytes(bytes) {
+  if (!bytes) return '0 B';
+  if (bytes < 1024) return `${bytes} B`;
+  return `${(bytes / 1024).toFixed(1)} KB`;
+}
+
+export default function JsonFormatter() {
   const [input, setInput] = useState('');
-  const [parsedJson, setParsedJson] = useState(null);
-  const [error, setError] = useState(null);
-  const [viewMode, setViewMode] = useState('tree'); // 'tree', 'text', 'minified'
+  const [viewMode, setViewMode] = useState('tree');
+  const [indent, setIndent] = useState(2);
+  const [sortKeys, setSortKeys] = useState(false);
   const [jsonPathQuery, setJsonPathQuery] = useState('');
-  const [filteredJson, setFilteredJson] = useState(null);
+  const [notice, setNotice] = useState('');
+  const [isDragging, setIsDragging] = useState(false);
 
-  useEffect(() => {
-    if (!input.trim()) {
-      setParsedJson(null);
-      setError(null);
-      return;
-    }
-
+  const analysis = useMemo(() => {
+    if (!input.trim()) return { json: null, isValid: false, error: null, location: '' };
     try {
-      const parsed = JSON.parse(input);
-      setParsedJson(parsed);
-      setError(null);
-    } catch (err) {
-      setParsedJson(null);
-      setError(err.message);
+      return { json: JSON.parse(input), isValid: true, error: null, location: '' };
+    } catch (error) {
+      return { json: null, isValid: false, error: error.message, location: getLocation(error.message, input) };
     }
   }, [input]);
 
-  useEffect(() => {
-    if (!parsedJson) {
-      setFilteredJson(null);
-      return;
-    }
-    
-    if (!jsonPathQuery.trim()) {
-      setFilteredJson(parsedJson);
-      return;
-    }
-
+  const filtered = useMemo(() => {
+    if (!analysis.isValid) return { value: null, error: '' };
+    if (!jsonPathQuery.trim()) return { value: analysis.json, error: '' };
     try {
-      const result = JSONPath({ path: jsonPathQuery, json: parsedJson });
-      setFilteredJson(result);
-    } catch (err) {
-      // If path is invalid, just show the original or maybe a soft error
-      setFilteredJson({ _error: "Invalid JSONPath query", _details: err.message });
+      return { value: JSONPath({ path: jsonPathQuery, json: analysis.json }), error: '' };
+    } catch (error) {
+      return { value: analysis.json, error: `JSONPath: ${error.message}` };
     }
-  }, [parsedJson, jsonPathQuery]);
+  }, [analysis.isValid, analysis.json, jsonPathQuery]);
+
+  const outputValue = useMemo(() => (
+    sortKeys ? sortJson(filtered.value) : filtered.value
+  ), [filtered.value, sortKeys]);
+
+  const outputText = useMemo(() => {
+    if (!analysis.isValid) return '';
+    return JSON.stringify(outputValue, null, viewMode === 'minified' ? 0 : indent);
+  }, [analysis.isValid, indent, outputValue, viewMode]);
+
+  const valid = analysis.isValid;
+  const setMessage = (message) => {
+    setNotice(message);
+    window.setTimeout(() => setNotice(''), 2600);
+  };
+
+  const replaceWithFormatted = (nextValue = analysis.json) => {
+    if (!valid) return;
+    setInput(JSON.stringify(sortKeys ? sortJson(nextValue) : nextValue, null, indent));
+    setMessage('JSON formatted');
+  };
 
   const handlePaste = async () => {
     try {
-      const clipboard = await navigator.clipboard.readText();
-      setInput(clipboard);
-    } catch (e) {
-      console.error(e);
+      setInput(await navigator.clipboard.readText());
+      setMessage('Pasted from clipboard');
+    } catch {
+      setMessage('Clipboard access was not available');
     }
-  };
-
-  const handleClear = () => {
-    setInput('');
-  };
-
-  const handleSample = () => {
-    setInput(`{
-  "name": "Jane Doe",
-  "age": 28,
-  "developer": true,
-  "skills": ["JavaScript", "React", "Next.js"],
-  "address": {
-    "city": "San Francisco",
-    "country": "USA"
-  }
-}`);
   };
 
   const handleAutoFix = () => {
     try {
-      const fixed = jsonrepair(input);
-      // Auto-format it beautifully after fixing
-      const formatted = JSON.stringify(JSON.parse(fixed), null, 2);
-      setInput(formatted);
-      setError(null);
-    } catch (err) {
-      setError(`Auto-fix failed: ${err.message}`);
+      const repaired = JSON.parse(jsonrepair(input));
+      setInput(JSON.stringify(repaired, null, indent));
+      setMessage('Repaired and formatted JSON');
+    } catch {
+      setMessage('Could not safely repair this JSON');
     }
   };
 
-  const handleCopyResult = () => {
-    if (filteredJson) {
-      if (viewMode === 'minified') {
-        navigator.clipboard.writeText(JSON.stringify(filteredJson));
-      } else {
-        navigator.clipboard.writeText(JSON.stringify(filteredJson, null, 2));
-      }
+  const handleCopy = async () => {
+    if (!outputText) return;
+    try {
+      await navigator.clipboard.writeText(outputText);
+      setMessage('Output copied');
+    } catch {
+      setMessage('Copy failed — select the output and copy it manually');
     }
+  };
+
+  const handleDownload = () => {
+    if (!outputText) return;
+    const url = URL.createObjectURL(new Blob([outputText], { type: 'application/json' }));
+    const anchor = document.createElement('a');
+    anchor.href = url;
+    anchor.download = 'formatted.json';
+    anchor.click();
+    URL.revokeObjectURL(url);
+    setMessage('Download started');
+  };
+
+  const loadFile = async (file) => {
+    if (!file) return;
+    if (file.size > 5 * 1024 * 1024) {
+      setMessage('Please choose a JSON file smaller than 5 MB');
+      return;
+    }
+    setInput(await file.text());
+    setMessage(`Loaded ${file.name}`);
   };
 
   return (
-    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '24px', maxWidth: '1400px', margin: '0 auto', width: '100%' }} className="json-formatter-grid">
-      
-      {/* Input Area */}
-      <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-          <h3 style={{ fontSize: '1.1rem', fontWeight: 600 }}>Raw JSON</h3>
-          <div className="tool-actions" style={{ marginTop: 0 }}>
-            <button className="btn btn-secondary" onClick={handleSample}>📝 Sample</button>
-            <button className="btn btn-secondary" onClick={handlePaste}>📋 Paste</button>
-            <button className="btn btn-secondary" onClick={handleClear}>🗑️ Clear</button>
-          </div>
+    <section className={styles.shell} aria-label="JSON formatter workspace">
+      <div className={styles.intro}>
+        <div>
+          <p className={styles.eyebrow}>Private browser workspace</p>
+          <h2>Format, validate, search, and export JSON</h2>
+          <p>Your JSON stays in this browser. Paste text or drop a file to start.</p>
         </div>
-        <textarea
-          className="tool-textarea"
-          value={input}
-          onChange={(e) => setInput(e.target.value)}
-          placeholder="Paste your raw, compressed, or broken JSON here..."
-          style={{ 
-            height: '600px', 
-            fontFamily: 'var(--font-mono)',
-            fontSize: '0.9rem', 
-            lineHeight: 1.5, 
-            padding: '16px',
-            border: error ? '1px solid var(--error, #ef4444)' : '1px solid var(--border-light)',
-            borderRadius: 'var(--radius-md)',
-            background: 'var(--bg-main)',
-            resize: 'vertical',
-            whiteSpace: 'pre',
-            boxShadow: 'inset 0 1px 3px rgba(0,0,0,0.05)'
-          }}
-          spellCheck="false"
-        />
-        
-        {/* Error State */}
-        {error && (
-          <div style={{ padding: '16px', background: '#fef2f2', border: '1px solid #fca5a5', borderRadius: '8px', color: '#991b1b' }}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '8px', fontWeight: 600, marginBottom: '8px' }}>
-              ⚠️ Invalid JSON Detected
-            </div>
-            <div style={{ fontSize: '0.9rem', fontFamily: 'var(--font-mono)', marginBottom: '16px' }}>
-              {error}
-            </div>
-            <button 
-              className="btn btn-primary" 
-              onClick={handleAutoFix}
-              style={{ background: '#dc2626', borderColor: '#dc2626', color: 'white' }}
-            >
-              🔧 Auto-Fix JSON (jsonrepair)
-            </button>
-          </div>
-        )}
+        <div className={styles.status} aria-live="polite">
+          <span className={`${styles.statusDot} ${valid ? styles.valid : input ? styles.invalid : ''}`} />
+          {valid ? 'Valid JSON' : input ? 'Needs attention' : 'Waiting for JSON'}
+        </div>
       </div>
 
-      {/* Output Area */}
-      <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', flexWrap: 'wrap', gap: '12px' }}>
-          <div style={{ flexGrow: 1, minWidth: '200px' }}>
-            <div style={{ fontSize: '0.85rem', fontWeight: 600, marginBottom: '6px', color: 'var(--text-secondary)' }}>JSONPath Filter:</div>
-            <input 
-              type="text" 
-              className="tool-input" 
-              placeholder="e.g. $.address.city or $..name" 
-              value={jsonPathQuery}
-              onChange={(e) => setJsonPathQuery(e.target.value)}
-              style={{ width: '100%' }}
-              disabled={!parsedJson}
+      {notice && <p className={styles.notice} role="status">{notice}</p>}
+
+      <div className={styles.grid}>
+        <div className={styles.panel}>
+          <div className={styles.panelHead}>
+            <div>
+              <h3>Source</h3>
+              <p>{formatBytes(new Blob([input]).size)} · {input.split('\n').length} lines</p>
+            </div>
+            <div className={styles.actions}>
+              <button type="button" className="btn btn-secondary" onClick={() => setInput(SAMPLE_JSON)}>Sample</button>
+              <button type="button" className="btn btn-secondary" onClick={handlePaste}>Paste</button>
+              <label className="btn btn-secondary">
+                Open file
+                <input type="file" accept="application/json,.json" onChange={(event) => loadFile(event.target.files?.[0])} />
+              </label>
+              <button type="button" className="btn btn-secondary" onClick={() => setInput('')} disabled={!input}>Clear</button>
+            </div>
+          </div>
+
+          <div
+            className={`${styles.editorWrap} ${isDragging ? styles.dragging : ''}`}
+            onDragEnter={(event) => { event.preventDefault(); setIsDragging(true); }}
+            onDragOver={(event) => event.preventDefault()}
+            onDragLeave={() => setIsDragging(false)}
+            onDrop={(event) => { event.preventDefault(); setIsDragging(false); loadFile(event.dataTransfer.files?.[0]); }}
+          >
+            <textarea
+              className={styles.editor}
+              value={input}
+              onChange={(event) => setInput(event.target.value)}
+              placeholder={'Paste JSON here…\n\nTip: Drop a .json file anywhere in this editor.'}
+              spellCheck="false"
+              aria-label="JSON source"
             />
+            {isDragging && <span className={styles.dropHint}>Drop JSON file to open</span>}
           </div>
-          <div className="tool-actions" style={{ marginTop: 0, gap: '8px' }}>
-            <button 
-              className={`btn ${viewMode === 'tree' ? 'btn-primary' : 'btn-secondary'}`}
-              onClick={() => setViewMode('tree')}
-              disabled={!filteredJson}
-            >🌳 Tree</button>
-            <button 
-              className={`btn ${viewMode === 'text' ? 'btn-primary' : 'btn-secondary'}`}
-              onClick={() => setViewMode('text')}
-              disabled={!filteredJson}
-            >📄 Format</button>
-            <button 
-              className={`btn ${viewMode === 'minified' ? 'btn-primary' : 'btn-secondary'}`}
-              onClick={() => setViewMode('minified')}
-              disabled={!filteredJson}
-            >📦 Minify</button>
-            <button className="btn btn-secondary" onClick={handleCopyResult} disabled={!filteredJson}>📑 Copy</button>
-          </div>
-        </div>
-        
-        <div style={{ 
-          height: '600px', 
-          border: '1px solid var(--border-light)',
-          borderRadius: 'var(--radius-md)',
-          background: 'var(--bg-main)',
-          overflow: 'auto',
-          padding: '16px',
-          boxShadow: 'inset 0 1px 3px rgba(0,0,0,0.05)'
-        }}>
-          {!filteredJson && !error && (
-            <div style={{ color: 'var(--text-tertiary)', display: 'flex', height: '100%', alignItems: 'center', justifyContent: 'center' }}>
-              Valid JSON will appear here...
-            </div>
-          )}
-          {!filteredJson && error && (
-            <div style={{ color: '#ef4444', display: 'flex', height: '100%', alignItems: 'center', justifyContent: 'center', opacity: 0.5 }}>
-              Waiting for valid JSON...
-            </div>
-          )}
-          
-          {filteredJson && viewMode === 'tree' && (
-            <JsonView value={filteredJson} displayDataTypes={false} displayObjectSize={true} style={{ background: 'transparent' }} />
-          )}
-          
-          {filteredJson && viewMode === 'text' && (
-            <pre style={{ fontFamily: 'var(--font-mono)', fontSize: '0.9rem', margin: 0, color: 'var(--text-primary)' }}>
-              {JSON.stringify(filteredJson, null, 2)}
-            </pre>
-          )}
 
-          {filteredJson && viewMode === 'minified' && (
-            <pre style={{ fontFamily: 'var(--font-mono)', fontSize: '0.9rem', margin: 0, color: 'var(--text-primary)', whiteSpace: 'pre-wrap', wordBreak: 'break-all' }}>
-              {JSON.stringify(filteredJson)}
-            </pre>
+          {analysis.error && (
+            <div className={styles.error} role="alert">
+              <div><strong>Invalid JSON</strong>{analysis.location && <span>{analysis.location}</span>}</div>
+              <code>{analysis.error}</code>
+              <button type="button" className="btn btn-primary" onClick={handleAutoFix}>Try safe auto-fix</button>
+            </div>
           )}
+        </div>
+
+        <div className={styles.panel}>
+          <div className={styles.panelHead}>
+            <div>
+              <h3>Result</h3>
+              <p>{valid ? 'Live preview updates as you type' : 'A valid result will appear here'}</p>
+            </div>
+            <div className={styles.actions}>
+              <button type="button" className="btn btn-secondary" onClick={() => replaceWithFormatted()} disabled={!valid}>Format source</button>
+              <button type="button" className="btn btn-secondary" onClick={() => { if (valid) { setInput(JSON.stringify(analysis.json)); setMessage('Source minified'); } }} disabled={!valid}>Minify source</button>
+              <button type="button" className="btn btn-secondary" onClick={handleCopy} disabled={!valid}>Copy</button>
+              <button type="button" className="btn btn-primary" onClick={handleDownload} disabled={!valid}>Download</button>
+            </div>
+          </div>
+
+          <div className={styles.controls}>
+            <label>
+              JSONPath query
+              <input value={jsonPathQuery} onChange={(event) => setJsonPathQuery(event.target.value)} placeholder="$.tasks[?(@.done === false)]" disabled={!valid} />
+            </label>
+            <label>
+              Indentation
+              <select value={indent} onChange={(event) => setIndent(Number(event.target.value))}>
+                <option value={2}>2 spaces</option>
+                <option value={4}>4 spaces</option>
+              </select>
+            </label>
+            <label className={styles.checkLabel}>
+              <input type="checkbox" checked={sortKeys} onChange={(event) => setSortKeys(event.target.checked)} />
+              Sort object keys
+            </label>
+          </div>
+          {filtered.error && <p className={styles.queryError} role="alert">{filtered.error}</p>}
+
+          <div className={styles.modeTabs} role="tablist" aria-label="Result display">
+            {['tree', 'formatted', 'minified'].map((mode) => (
+              <button key={mode} type="button" role="tab" aria-selected={viewMode === mode} className={viewMode === mode ? styles.activeTab : ''} onClick={() => setViewMode(mode)} disabled={!valid}>
+                {mode === 'tree' ? 'Tree' : mode === 'formatted' ? 'Text' : 'Minified'}
+              </button>
+            ))}
+          </div>
+
+          <div className={styles.output} aria-live="polite">
+            {!valid && <p className={styles.empty}>Paste valid JSON to see a clean, searchable result.</p>}
+            {valid && viewMode === 'tree' && <JsonView value={outputValue} displayDataTypes={false} displayObjectSize={true} style={{ background: 'transparent' }} />}
+            {valid && viewMode !== 'tree' && <pre>{outputText}</pre>}
+          </div>
         </div>
       </div>
-      
-      <style dangerouslySetInnerHTML={{__html: `
-        @media (max-width: 900px) {
-          .json-formatter-grid { grid-template-columns: 1fr !important; }
-        }
-      `}} />
-    </div>
+    </section>
   );
 }

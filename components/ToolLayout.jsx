@@ -6,6 +6,7 @@ import { getTranslations } from '@/lib/i18n';
 import EmbedWidget from './EmbedWidget';
 import RatingWidget from './RatingWidget';
 import RatingSchema from './RatingSchema';
+import styles from './ToolLayout.module.css';
 
 // Toast Notification Component
 function Toast({ message, type, onClose }) {
@@ -355,12 +356,12 @@ export default function ToolLayout({
   };
 
   return (
-    <div className={`toolPage ${isFocusMode ? styles.focusMode : ''}`}>
+    <div className={`${styles.toolPage} ${isFocusMode ? styles.focusMode : ''}`}>
       {/* Real aggregateRating JSON-LD — only emits when user has actually rated */}
       <RatingSchema tool={tool} category={category} />
 
       {/* ═══ Colored Hero Banner ═══ */}
-      <div className={`tool-hero hero`} style={{ '--tool-color': category.color }}>
+      <div className={`tool-hero ${styles.hero}`} style={{ '--tool-color': category.color }}>
         <div className="container">
           <nav className="breadcrumbs" aria-label="Breadcrumb">
             <Link href={lp('/')}>{t.nav.home}</Link>
@@ -372,7 +373,7 @@ export default function ToolLayout({
           <h1>{tool.name}</h1>
           <p className="tool-hero-desc">{tool.description}</p>
 
-          <div className="heroMeta">
+          <div className={styles.heroMeta}>
             <span>Runs locally in your browser</span>
             <span aria-hidden="true">•</span>
             <span>Free, with no account</span>
@@ -383,13 +384,13 @@ export default function ToolLayout({
             <span className="tool-hero-badge"><span role="img" aria-label="fast">⚡</span> {t.ui.instantResults}</span>
             <span className="tool-hero-badge"><span role="img" aria-label="free">🆓</span> {t.ui.freeForever}</span>
           </div>
-          <nav className="workflowNav" aria-label={`${tool.name} page navigation`}>
-            <button type="button" className="startButton" onClick={startTool}>
+          <nav className={styles.workflowNav} aria-label={`${tool.name} page navigation`}>
+            <button type="button" className={styles.startButton} onClick={startTool}>
               Start using it <span aria-hidden="true">↓</span>
             </button>
             <a href="#how-it-works">How it works</a>
             <a href="#tool-faq">FAQ</a>
-            <button type="button" className="saveLink" onClick={toggleSavedTool} aria-pressed={isSaved}>
+            <button type="button" className={styles.saveLink} onClick={toggleSavedTool} aria-pressed={isSaved}>
               <span aria-hidden="true">{isSaved ? '★' : '☆'}</span> {isSaved ? 'Saved' : 'Save tool'}
             </button>
           </nav>
@@ -397,14 +398,14 @@ export default function ToolLayout({
       </div>
 
       {/* ═══ Tool Workspace ═══ */}
-      <main id="tool-workspace" className={`tool-workspace workspace`} tabIndex="-1">
-        <div className="workspaceBar">
-          <div className="workspaceStatus">
-            <span className="statusDot" aria-hidden="true" />
+      <main id="tool-workspace" className={`tool-workspace ${styles.workspace}`} tabIndex="-1">
+        <div className={styles.workspaceBar}>
+          <div className={styles.workspaceStatus}>
+            <span className={styles.statusDot} aria-hidden="true" />
             <span><strong>{tool.name}</strong> workspace</span>
-            <span className="workspacePrivacy">Your work stays on this device</span>
+            <span className={styles.workspacePrivacy}>Your work stays on this device</span>
           </div>
-          <div className="workspaceActions">
+          <div className={styles.workspaceActions}>
             <button type="button" onClick={toggleSavedTool} aria-pressed={isSaved}>
               <span aria-hidden="true">{isSaved ? '★' : '☆'}</span> {isSaved ? 'Saved' : 'Save'}
             </button>
@@ -416,12 +417,12 @@ export default function ToolLayout({
         {children}
       </main>
 
-      <section className="actionDock" aria-label="Tool actions">
-        <div className="actionDockIntro">
+      <section className={styles.actionDock} aria-label="Tool actions">
+        <div className={styles.actionDockIntro}>
           <p>Made for the task in front of you</p>
           <span>Keep this tool handy, share it, or explore the next useful step.</span>
         </div>
-        <div className="actionDockButtons">
+        <div className={styles.actionDockButtons}>
           <button type="button" onClick={handleCopyLink}><span aria-hidden="true">↗</span> Copy link</button>
           <button type="button" onClick={handleShare}><span aria-hidden="true">↗</span> Share</button>
           <EmbedWidget toolUrl={toolUrl} toolName={tool.name} />

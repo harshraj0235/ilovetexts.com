@@ -91,6 +91,8 @@ import LoremIpsumGenerator from '@/components/tools/LoremIpsumGenerator';
 import PasswordStrengthAnalyzer from '@/components/tools/PasswordStrengthAnalyzer';
 import Base64EncodeDecode from '@/components/tools/Base64EncodeDecode';
 import MorseCodeTranslator from '@/components/tools/MorseCodeTranslator';
+import UrlEncodeDecode from '@/components/tools/UrlEncodeDecode';
+import HtmlEncodeDecode from '@/components/tools/HtmlEncodeDecode';
 import { notFound } from 'next/navigation';
 import Link from 'next/link';
 
@@ -312,6 +314,10 @@ export default async function ToolPage({ params }) {
           <PasswordStrengthAnalyzer t={t} lang={lang} />
         ) : toolData.slug === 'base64-encode-decode' ? (
           <Base64EncodeDecode t={t} lang={lang} />
+        ) : toolData.slug === 'url-encode-decode' ? (
+          <UrlEncodeDecode t={t} lang={lang} />
+        ) : toolData.slug === 'html-encode-decode' ? (
+          <HtmlEncodeDecode t={t} lang={lang} />
         ) : toolData.slug === 'morse-code' ? (
           <MorseCodeTranslator t={t} lang={lang} />
         ) : toolData.slug === 'prompt-minifier' ? (

@@ -1,0 +1,475 @@
+.toolPage {
+  --experience-ink: #15271e;
+  --experience-muted: #607068;
+  --experience-accent: #1c7550;
+  --experience-soft: #eff8f2;
+  --experience-border: #dce9df;
+  min-width: 0;
+}
+
+.toolPage :global(.tool-hero) {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  margin: 0;
+  padding: clamp(2rem, 5vw, 4.5rem) 0 clamp(1.75rem, 4vw, 3.25rem);
+  border: 0;
+  border-bottom: 1px solid var(--experience-border);
+  background:
+    radial-gradient(circle at 83% 4%, color-mix(in srgb, var(--tool-color) 22%, transparent), transparent 24rem),
+    radial-gradient(circle at 10% 100%, rgba(73, 170, 111, 0.12), transparent 26rem),
+    linear-gradient(145deg, #f8fcf9 0%, #ffffff 52%, #f2faf5 100%);
+}
+
+.toolPage :global(.tool-hero) :global(.container) {
+  max-width: 74rem;
+}
+
+.toolPage :global(.breadcrumbs) {
+  gap: 0.45rem;
+  margin-bottom: 1.35rem;
+  color: #62756a;
+  font-size: 0.78rem;
+}
+
+.toolPage :global(.breadcrumbs a) {
+  color: #456254;
+}
+
+.toolPage :global(.breadcrumbs a:hover),
+.toolPage :global(.breadcrumbs a:focus-visible) {
+  color: var(--experience-accent);
+}
+
+.toolPage :global(.tool-hero h1) {
+  max-width: 56rem;
+  margin: 0;
+  color: var(--experience-ink);
+  font-size: clamp(2rem, 4.5vw, 3.65rem);
+  font-weight: 820;
+  letter-spacing: -0.055em;
+  line-height: 1.02;
+  text-wrap: balance;
+}
+
+.toolPage :global(.tool-hero-desc) {
+  max-width: 48rem;
+  margin: 1rem 0 0;
+  color: #506259;
+  font-size: clamp(0.98rem, 1.8vw, 1.12rem);
+  line-height: 1.6;
+  text-wrap: balance;
+}
+
+.heroMeta {
+  display: inline-flex;
+  flex-wrap: wrap;
+  gap: 0.45rem;
+  margin-top: 1rem;
+  color: #537062;
+  font-size: 0.78rem;
+  font-weight: 650;
+}
+
+.toolPage :global(.tool-hero-badges) {
+  gap: 0.5rem;
+  margin-top: 1rem;
+}
+
+.toolPage :global(.tool-hero-badge) {
+  padding: 0.42rem 0.66rem;
+  border: 1px solid rgba(42, 112, 76, 0.15);
+  border-radius: 999px;
+  color: #335545;
+  background: rgba(255, 255, 255, 0.72);
+  font-size: 0.76rem;
+  font-weight: 650;
+  box-shadow: 0 1px 1px rgba(20, 60, 35, 0.04);
+}
+
+.workflowNav {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.55rem;
+  margin-top: 1.5rem;
+}
+
+.workflowNav a,
+.workflowNav button {
+  display: inline-flex;
+  align-items: center;
+  min-height: 2.55rem;
+  padding: 0.55rem 0.78rem;
+  border: 1px solid transparent;
+  border-radius: 0.68rem;
+  color: #385849;
+  background: transparent;
+  font: inherit;
+  font-size: 0.84rem;
+  font-weight: 720;
+  line-height: 1;
+  transition: background 160ms ease, border-color 160ms ease, transform 160ms ease;
+}
+
+.workflowNav a:hover,
+.workflowNav a:focus-visible,
+.workflowNav button:hover,
+.workflowNav button:focus-visible {
+  border-color: #b9d6c2;
+  background: rgba(255, 255, 255, 0.82);
+  transform: translateY(-1px);
+}
+
+.workflowNav .startButton {
+  gap: 0.42rem;
+  border-color: var(--experience-accent);
+  color: #ffffff;
+  background: var(--experience-accent);
+  box-shadow: 0 0.5rem 1.2rem rgba(28, 117, 80, 0.18);
+}
+
+.workflowNav .startButton:hover,
+.workflowNav .startButton:focus-visible {
+  border-color: #155d3f;
+  background: #155d3f;
+}
+
+.workflowNav .saveLink {
+  gap: 0.33rem;
+}
+
+.workspace {
+  width: min(100%, 78rem);
+  margin: clamp(1.1rem, 3vw, 2rem) auto 0;
+  padding: 0 clamp(1rem, 3vw, 1.5rem) clamp(1.4rem, 4vw, 2.5rem);
+  outline: none;
+}
+
+.workspace:focus-visible {
+  border-radius: 0.8rem;
+  box-shadow: 0 0 0 3px rgba(28, 117, 80, 0.24);
+}
+
+.workspaceBar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  min-height: 3.35rem;
+  padding: 0.6rem 0.65rem 0.6rem 0.8rem;
+  margin-bottom: 0.9rem;
+  border: 1px solid var(--experience-border);
+  border-radius: 0.82rem;
+  background: #f8fbf8;
+}
+
+.workspaceStatus,
+.workspaceActions {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  min-width: 0;
+}
+
+.workspaceStatus {
+  color: #476151;
+  font-size: 0.78rem;
+}
+
+.workspaceStatus strong {
+  color: #1c3225;
+  font-weight: 760;
+}
+
+.statusDot {
+  width: 0.5rem;
+  height: 0.5rem;
+  flex: 0 0 auto;
+  border-radius: 50%;
+  background: #3ca869;
+  box-shadow: 0 0 0 0.2rem rgba(60, 168, 105, 0.12);
+}
+
+.workspacePrivacy {
+  padding-left: 0.5rem;
+  border-left: 1px solid #dce7df;
+  color: #718178;
+}
+
+.workspaceActions {
+  flex: 0 0 auto;
+}
+
+.workspaceActions button,
+.actionDockButtons > button,
+.actionDockButtons > a {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  min-height: 2.2rem;
+  padding: 0.45rem 0.65rem;
+  border: 1px solid #d6e2d9;
+  border-radius: 0.55rem;
+  color: #385849;
+  background: #ffffff;
+  font: inherit;
+  font-size: 0.76rem;
+  font-weight: 700;
+  transition: border-color 160ms ease, background 160ms ease, transform 160ms ease;
+}
+
+.workspaceActions button:hover,
+.workspaceActions button:focus-visible,
+.actionDockButtons > button:hover,
+.actionDockButtons > button:focus-visible,
+.actionDockButtons > a:hover,
+.actionDockButtons > a:focus-visible {
+  border-color: #90bfa0;
+  background: #f0f8f2;
+  transform: translateY(-1px);
+}
+
+.actionDock {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem 2rem;
+  width: min(calc(100% - 2rem), 75rem);
+  margin: 0 auto;
+  padding: 1rem 1.1rem;
+  border: 1px solid var(--experience-border);
+  border-radius: 0.95rem;
+  background: linear-gradient(100deg, #f7fbf8, #ffffff);
+}
+
+.actionDockIntro {
+  min-width: 0;
+}
+
+.actionDockIntro p {
+  color: var(--experience-ink);
+  font-size: 0.88rem;
+  font-weight: 760;
+}
+
+.actionDockIntro span {
+  display: block;
+  margin-top: 0.18rem;
+  color: var(--experience-muted);
+  font-size: 0.77rem;
+  line-height: 1.45;
+}
+
+.actionDockButtons {
+  display: flex;
+  flex: 0 0 auto;
+  flex-wrap: wrap;
+  gap: 0.45rem;
+  justify-content: flex-end;
+}
+
+.actionDockButtons :global(.share-btn) {
+  width: auto;
+  min-height: 2.2rem;
+  padding: 0.45rem 0.65rem;
+  border: 1px solid #d6e2d9;
+  border-radius: 0.55rem;
+  color: #385849;
+  background: #ffffff;
+  font-size: 0.76rem;
+  font-weight: 700;
+}
+
+.actionDockButtons :global(.share-btn)::after {
+  margin-left: 0.32rem;
+  content: 'Embed';
+}
+
+.actionDockButtons :global(.share-btn:hover),
+.actionDockButtons :global(.share-btn:focus-visible) {
+  border-color: #90bfa0;
+  background: #f0f8f2;
+}
+
+.toolPage :global(#how-it-works),
+.toolPage :global(#tool-faq),
+.toolPage :global(#related-tools) {
+  scroll-margin-top: calc(var(--nav-height) + 1rem);
+}
+
+.focusMode .hero,
+.focusMode .actionDock,
+.focusMode :global(.tool-content-sections) {
+  display: none;
+}
+
+.focusMode .workspace {
+  width: min(100%, 88rem);
+  margin-top: 0;
+  padding-top: 1rem;
+}
+
+:global(html.dark) .toolPage {
+  --experience-ink: #e9f5ec;
+  --experience-muted: #aebfb2;
+  --experience-accent: #7ecb98;
+  --experience-soft: #112018;
+  --experience-border: #2e4838;
+}
+
+:global(html.dark) .toolPage :global(.tool-hero) {
+  background:
+    radial-gradient(circle at 83% 4%, color-mix(in srgb, var(--tool-color) 30%, transparent), transparent 24rem),
+    radial-gradient(circle at 10% 100%, rgba(59, 164, 97, 0.14), transparent 26rem),
+    linear-gradient(145deg, #0b120e 0%, #0a0f0c 52%, #0c1710 100%);
+}
+
+:global(html.dark) .toolPage :global(.breadcrumbs),
+:global(html.dark) .toolPage :global(.breadcrumbs a),
+:global(html.dark) .toolPage :global(.tool-hero-desc),
+:global(html.dark) .heroMeta {
+  color: #b0c3b5;
+}
+
+:global(html.dark) .toolPage :global(.tool-hero h1),
+:global(html.dark) .workspaceStatus strong,
+:global(html.dark) .actionDockIntro p {
+  color: #edf7ef;
+}
+
+:global(html.dark) .toolPage :global(.tool-hero-badge),
+:global(html.dark) .workflowNav a,
+:global(html.dark) .workflowNav button,
+:global(html.dark) .workspaceBar,
+:global(html.dark) .actionDock,
+:global(html.dark) .workspaceActions button,
+:global(html.dark) .actionDockButtons > button,
+:global(html.dark) .actionDockButtons > a,
+:global(html.dark) .actionDockButtons :global(.share-btn) {
+  border-color: #304c3a;
+  color: #d5e4d8;
+  background: #111b14;
+}
+
+:global(html.dark) .workspacePrivacy {
+  border-color: #304c3a;
+  color: #91aa97;
+}
+
+:global(html.dark) .workspaceActions button:hover,
+:global(html.dark) .workspaceActions button:focus-visible,
+:global(html.dark) .actionDockButtons > button:hover,
+:global(html.dark) .actionDockButtons > button:focus-visible,
+:global(html.dark) .actionDockButtons > a:hover,
+:global(html.dark) .actionDockButtons > a:focus-visible,
+:global(html.dark) .actionDockButtons :global(.share-btn:hover),
+:global(html.dark) .actionDockButtons :global(.share-btn:focus-visible),
+:global(html.dark) .workflowNav a:hover,
+:global(html.dark) .workflowNav a:focus-visible,
+:global(html.dark) .workflowNav button:hover,
+:global(html.dark) .workflowNav button:focus-visible {
+  border-color: #588c68;
+  background: #1a2a1e;
+}
+
+:global(html.dark) .workflowNav .startButton {
+  border-color: #7ecb98;
+  color: #07120a;
+  background: #7ecb98;
+}
+
+@media (max-width: 720px) {
+  .toolPage :global(.tool-hero) {
+    padding-top: 1.5rem;
+  }
+
+  .toolPage :global(.breadcrumbs) {
+    margin-bottom: 1rem;
+  }
+
+  .workflowNav {
+    flex-wrap: nowrap;
+    width: calc(100% + 2rem);
+    padding-right: 1rem;
+    margin-right: -1rem;
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+
+  .workflowNav::-webkit-scrollbar {
+    display: none;
+  }
+
+  .workflowNav a,
+  .workflowNav button {
+    flex: 0 0 auto;
+  }
+
+  .workspace {
+    padding-right: 1rem;
+    padding-left: 1rem;
+  }
+
+  .workspaceBar {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .workspaceActions {
+    width: 100%;
+  }
+
+  .workspaceActions button {
+    flex: 1 1 0;
+    justify-content: center;
+  }
+
+  .workspacePrivacy {
+    display: none;
+  }
+
+  .actionDock {
+    align-items: flex-start;
+    flex-direction: column;
+    width: calc(100% - 2rem);
+    gap: 0.8rem;
+  }
+
+  .actionDockButtons {
+    width: 100%;
+    justify-content: flex-start;
+  }
+}
+
+@media (max-width: 420px) {
+  .toolPage :global(.tool-hero h1) {
+    font-size: 2rem;
+  }
+
+  .toolPage :global(.tool-hero-badges) {
+    display: grid;
+    grid-template-columns: 1fr;
+  }
+
+  .toolPage :global(.tool-hero-badge) {
+    justify-content: center;
+  }
+
+  .actionDockButtons > button,
+  .actionDockButtons > a,
+  .actionDockButtons :global(.share-btn) {
+    flex: 1 1 calc(50% - 0.3rem);
+    justify-content: center;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .workflowNav a,
+  .workflowNav button,
+  .workspaceActions button,
+  .actionDockButtons > button,
+  .actionDockButtons > a {
+    transition: none;
+  }
+}
