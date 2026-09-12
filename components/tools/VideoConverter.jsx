@@ -110,7 +110,7 @@ export default function VideoConverter({ toolSlug, lang = 'en', t = {} }) {
     const { FFmpeg } = await import('@ffmpeg/ffmpeg');
     const { fetchFile, toBlobURL } = await import('@ffmpeg/util');
     const ffmpeg = new FFmpeg();
-    ffmpeg.on('log',      ({ message }) => setLog(message));
+    ffmpeg.on('log',      ({ message }) => setLog(prev => prev + '\n' + message));
     ffmpeg.on('progress', ({ progress: p }) => setProgress(Math.round(p * 100)));
     await ffmpeg.load({
       coreURL:   await toBlobURL('https://unpkg.com/@ffmpeg/core@0.12.6/dist/umd/ffmpeg-core.js',    'text/javascript'),
