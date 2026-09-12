@@ -1095,51 +1095,115 @@
       "relatedSearches": []
     },
     "binary-text": {
-      "name": "Binary ↔ Text",
-      "description": "Convert between binary and text",
-      "metaTitle": "Binary to Text Translator — Convert 0101 to English",
-      "metaDescription": "Easily translate binary code to text or convert english text into binary 010101. Free, fast, and completely private.",
-      "keywords": "binary to text converter, text to binary translator, 010101 code reader, binary alphabet, computer code translator",
-      "whatIs": "This tool converts standard human-readable text into Binary code (a series of 1s and 0s) and vice versa. Binary is the fundamental language used by computers to process data.",
-      "whyChoose": [],
-      "useCases": [],
-      "faqs": [],
+      "name": "Binary to Text Converter",
+      "description": "Translate binary to text or text to binary. Supports UTF-8, emoji, compact binary, file import, and a character-by-character byte inspector.",
+      "metaTitle": "Binary to Text Converter & Text to Binary — UTF-8",
+      "metaDescription": "Convert binary to text or text to binary with UTF-8 and ASCII support. Decode continuous bits, inspect characters, and download results. Free, no signup.",
+      "keywords": "binary to text converter, text to binary UTF-8, binary translator with emoji, decode binary without spaces",
+      "updatedAt": "2026-09-12",
+      "whatIs": "A binary-to-text converter reads groups of 0s and 1s as byte values, then decodes those bytes into readable characters. For example, 01001000 01101001 becomes Hi. The reverse conversion first encodes your text as UTF-8, then writes each byte as eight binary digits. English letters, digits, and common punctuation use one byte each; accented letters, Hindi, Chinese, and emoji can need several bytes. This distinction matters: a Unicode code point is not the same as an 8-bit byte. The inspector shows both so you can follow the conversion, identify line breaks, and check a message before copying it.",
+      "howToSteps": [
+        { "title": "Choose the direction", "description": "Select Binary to text to decode a message, or Text to binary to encode one. Leave UTF-8 selected for international text, or choose strict ASCII for codes 0–127." },
+        { "title": "Paste, type, or open a text file", "description": "For decoding, paste spaced bytes or a continuous binary string with eight bits per byte. Results update automatically. An error identifies malformed digits or incomplete groups." },
+        { "title": "Inspect and take the result", "description": "Use the character table to compare binary, decimal, hex, and octal values. Copy the result, download a text file, or open Formatting & export options for raw bytes and a CSV byte report." }
+      ],
+      "whyChoose": [
+        { "icon": "🌐", "title": "Keep every language intact", "description": "UTF-8 conversion preserves emoji, accents, and non-Latin text instead of treating JavaScript character codes as single bytes." },
+        { "icon": "🔍", "title": "Understand each byte", "description": "Inspect characters, Unicode code points, invisible controls, and byte offsets alongside four numeric formats." },
+        { "icon": "✓", "title": "Catch mistakes before copying", "description": "Invalid digits, incomplete compact groups, and malformed UTF-8 stop conversion with an explanation. Your input is not silently repaired." }
+      ],
+      "useCases": ["Decode a binary message from a puzzle or computer science exercise.", "Generate a UTF-8 binary example for a lesson, including emoji or non-English text.", "Compare a text fixture with the byte sequence expected by a program.", "Inspect spaces, tabs, and line breaks that are hard to see in an ordinary editor."],
+      "faqs": [
+        { "question": "Can I convert binary to text without spaces?", "answer": "Yes. A continuous binary string is split into eight-digit byte groups. For example, 0100100001101001 becomes Hi. If its length is not a multiple of eight, add the missing bits or separate the intended byte values; the converter does not guess missing digits." },
+        { "question": "How do I translate emoji or Hindi text to binary?", "answer": "Choose UTF-8 and select Text to binary. The tool encodes the complete Unicode text as bytes before converting each byte to binary. An emoji such as 😀 produces four groups: 11110000 10011111 10011000 10000000." },
+        { "question": "Why does valid-looking binary fail to decode?", "answer": "A sequence can contain only 0s and 1s but still fail to represent valid UTF-8 text. It may be truncated, use another character encoding, or contain non-text data. Strict validation reports this instead of returning misleading replacement characters." },
+        { "question": "Is binary conversion encryption?", "answer": "No. Binary notation changes how bytes are written; it does not hide the content or require a secret key. Anyone who knows the encoding can reverse it. Do not use binary conversion to protect confidential messages." },
+        { "question": "Can I import files, and what is the limit?", "answer": "Use Open file or drop a UTF-8 text file into the input. Encoding supports up to 128 KiB of text bytes. Decoding accepts up to 2 MiB of notation and 128 KiB of decoded bytes. This converter processes input locally and does not save it to a server." }
+      ],
       "relatedSearches": []
     },
     "hex-text": {
-      "name": "Hex ↔ Text",
-      "description": "Convert between hexadecimal and text",
-      "metaTitle": "Hex to Text & Text to Hex Converter Online Free",
-      "metaDescription": "Convert text to hexadecimal and hex to text instantly. Free online hex translator for developers and students. No signup required.",
-      "keywords": "hexadecimal to text converter online, text to hex converter online free, hex to ascii converter online, convert hex to string online, hex translator online free, hexadecimal decoder online tool",
-      "whatIs": "The Hex ↔ Text Converter translates text into hexadecimal representation and decodes hex strings back to readable text. Hexadecimal is used extensively in programming for color codes, memory addresses, character encoding, and data representation.",
-      "whyChoose": [],
-      "useCases": [],
-      "faqs": [],
+      "name": "Hex to Text Converter",
+      "description": "Decode hexadecimal strings or encode text as UTF-8 hex bytes. Read 0x and \\x prefixes, inspect Unicode, and export text, bytes, or CSV.",
+      "metaTitle": "Hex to Text Converter & Text to Hex — UTF-8",
+      "metaDescription": "Decode hex strings to text or encode text as UTF-8 hex. Supports compact hex, 0x prefixes, byte escapes, Unicode inspection, and file downloads.",
+      "keywords": "hex to text converter, text to hex UTF-8, decode hex string with 0x prefix, hexadecimal to string with emoji",
+      "updatedAt": "2026-09-12",
+      "whatIs": "Hexadecimal uses digits 0–9 and letters A–F to write numbers in base 16. Two hex digits can represent one byte, from 00 through FF. When those bytes contain UTF-8 text, this converter turns them into readable characters: 48 69 becomes Hi, while 43 61 66 C3 A9 becomes Café. It also performs the reverse conversion, which is useful for building test fixtures and examining encoded log values. The tool reads a byte sequence, not a memory address or an arbitrary whole number. It checks the complete sequence before decoding so a malformed string cannot silently turn into a different message.",
+      "howToSteps": [
+        { "title": "Select Hex to text or Text to hex", "description": "Use UTF-8 for Unicode strings. Select ASCII only when the expected character codes are in the range 0–127." },
+        { "title": "Enter the string", "description": "Paste 48 69, compact 4869, 0x48 0x69, or byte escapes such as \\x48\\x69. A file picker is available for UTF-8 text files containing hex notation." },
+        { "title": "Format and export", "description": "Choose uppercase or lowercase letters, separators, byte prefixes, and row wrapping when encoding. Copy the result or export the text, raw bytes, or a CSV report." }
+      ],
+      "whyChoose": [
+        { "icon": "0x", "title": "Read common hex formats", "description": "Accept compact strings, space or comma separators, 0x prefixes, and complete \\x byte escapes without manual cleanup." },
+        { "icon": "🌐", "title": "Decode whole UTF-8 sequences", "description": "Multi-byte characters stay intact. C3 A9 becomes é instead of two unrelated characters." },
+        { "icon": "📋", "title": "Prepare a useful output", "description": "Adjust case, add prefixes, wrap byte rows, and export the representation your code or documentation needs." }
+      ],
+      "useCases": ["Read a hex-encoded field copied from a log or debug console.", "Create UTF-8 byte fixtures for accents, emoji, and multilingual strings.", "Inspect whether an unexpected character came from the wrong encoding.", "Compare hexadecimal, binary, decimal, and octal representations of the same text."],
+      "faqs": [
+        { "question": "Can I decode hex without spaces or with 0x prefixes?", "answer": "Yes. 4869, 0x4869, and 0x48 0x69 all decode to Hi. A compact string must contain an even number of hex digits so each byte has two digits. Separated byte groups can contain one or two digits." },
+        { "question": "Does this tool support \\x hexadecimal escapes?", "answer": "Yes. A complete stream such as \\x48\\x69 is accepted. Every escaped byte must have exactly two hex digits. Incomplete escapes and mixed invalid characters produce an error rather than being stripped from the input." },
+        { "question": "Why does E9 fail while C3 A9 becomes é?", "answer": "E9 on its own is not valid UTF-8. The character é is encoded as C3 A9 in UTF-8. A source that uses E9 may use a different encoding such as ISO-8859-1. This tool supports UTF-8 and strict ASCII; it does not guess legacy encodings." },
+        { "question": "Can hexadecimal images or encrypted data become text?", "answer": "Not necessarily. Hex can represent any bytes, but only a valid character-encoding sequence becomes meaningful text. Images, compressed files, and encrypted bytes need the appropriate file decoder or decryption process." },
+        { "question": "Will my pasted hex be uploaded?", "answer": "No. The conversion runs in this browser. It accepts up to 128 KiB of text bytes, or up to 2 MiB of hex notation producing no more than 128 KiB of decoded bytes. No account is needed." }
+      ],
       "relatedSearches": []
     },
     "octal-text": {
-      "name": "Octal ↔ Text",
-      "description": "Convert between octal and text",
-      "metaTitle": "Octal to Text & Text to Octal Converter Online Free",
-      "metaDescription": "Convert text to octal notation and octal back to text instantly. Free online octal converter for developers and students.",
-      "keywords": "octal to text converter online free, text to octal converter online, octal decoder online free, convert octal to text online, octal number system converter",
-      "whatIs": "The Octal ↔ Text Converter translates text into octal (base-8) notation and decodes octal strings back to readable text. Octal encoding represents each character's ASCII value in base-8 format.",
-      "whyChoose": [],
-      "useCases": [],
-      "faqs": [],
+      "name": "Octal to Text Converter",
+      "description": "Translate octal bytes to text and text to octal with UTF-8 or strict ASCII. Check digits, inspect byte values, and download formatted results.",
+      "metaTitle": "Octal to Text Converter & Text to Octal — Free",
+      "metaDescription": "Convert octal to text or text to octal online. Supports UTF-8, strict ASCII, 0o prefixes, compact byte groups, and CSV export. No signup or uploads.",
+      "keywords": "octal to text converter, text to octal UTF-8, octal to ASCII online, decode octal bytes",
+      "updatedAt": "2026-09-12",
+      "whatIs": "Octal is base 8, so its digits run from 0 through 7. This tool reads octal byte values and converts them into text, or writes text bytes as padded three-digit octal groups. For example, octal 110 equals decimal 72, which represents H in ASCII and UTF-8. The sequence 110 151 therefore becomes Hi. Byte values can range from octal 000 to 377; strict ASCII narrows that range to 000 through 177. UTF-8 supports larger byte values as part of multi-byte character sequences. The inspector lets you compare these octal groups with binary, decimal, and hex values without leaving the page.",
+      "howToSteps": [
+        { "title": "Choose the conversion and encoding", "description": "Select Octal to text to decode byte values, or Text to octal to create them. UTF-8 supports international text; ASCII is limited to codes 0–127." },
+        { "title": "Enter valid octal groups", "description": "Use values such as 110 151, 0o110 0o151, or compact 110151. Each compact byte needs three digits. Digits 8 and 9 and values above 377 are rejected." },
+        { "title": "Check the character table", "description": "Compare each character with its octal bytes, then copy or download the result. Formatting options provide separators, prefixes, line wrapping, and a complete byte report." }
+      ],
+      "whyChoose": [
+        { "icon": "8", "title": "Clear base-8 validation", "description": "Identify invalid digits and out-of-range byte values before they turn into incorrect text." },
+        { "icon": "🔍", "title": "Follow the conversion", "description": "Use the character inspector to compare octal 110 with decimal 72, hex 48, and binary 01001000." },
+        { "icon": "📥", "title": "Practical file exports", "description": "Save a readable text result, raw bytes, or a CSV report with one row per byte." }
+      ],
+      "useCases": ["Check octal character values for a computer science assignment.", "Read separated octal bytes from a program or test fixture.", "Create examples that compare base-8, base-10, base-16, and binary notation.", "Inspect the UTF-8 byte groups needed for accented text."],
+      "faqs": [
+        { "question": "Can I decode octal without separators?", "answer": "Yes, when each byte is exactly three digits long. The compact string 110151 becomes Hi. Shorter byte values need leading zeroes in compact mode; use explicit separators if the byte groups have different lengths." },
+        { "question": "Why is 400 an invalid octal byte?", "answer": "Octal 400 equals decimal 256, which is larger than an 8-bit byte. The largest supported byte is octal 377, or decimal 255. In strict ASCII mode, values must be no higher than octal 177." },
+        { "question": "Can I convert Linux permissions such as 755 to text?", "answer": "File permission values describe permission bits, not a text encoding. A value such as 755 also exceeds the range of one octal byte. Use a permissions calculator for chmod values and this tool for octal character bytes." },
+        { "question": "Does octal support emoji or accented letters?", "answer": "Octal is a number notation; UTF-8 supplies the character encoding. Select UTF-8 to encode international text. For example, é becomes octal 303 251 because UTF-8 stores it as two bytes." },
+        { "question": "Are files processed locally?", "answer": "Yes. Open or drop a UTF-8 text file containing text or octal notation. Conversion supports up to 128 KiB of text bytes, with a 2 MiB notation-input limit. The converter does not upload your input." }
+      ],
       "relatedSearches": []
     },
     "ascii-text": {
-      "name": "ASCII ↔ Text",
-      "description": "Convert between ASCII codes and text",
-      "metaTitle": "ASCII to Text & Text to ASCII Converter Online Free",
-      "metaDescription": "Convert text to ASCII codes and ASCII numbers back to text instantly. Free online ASCII translator with character code table.",
-      "keywords": "ascii to text converter online free, text to ascii code converter, ascii code to character converter, ascii translator online free, convert ascii numbers to text, ascii code chart converter online",
-      "whatIs": "The ASCII ↔ Text Converter translates text characters into their ASCII numeric codes (e.g., A=65, a=97) and decodes ASCII numbers back to readable characters. Essential for understanding character encoding, debugging text processing, and computer science education.",
-      "whyChoose": [],
-      "useCases": [],
-      "faqs": [],
+      "name": "ASCII to Text Converter",
+      "description": "Convert ASCII decimal codes to text and back. Inspect control characters, compare byte formats, and choose UTF-8 for international text.",
+      "metaTitle": "ASCII to Text Converter & Text to ASCII Codes",
+      "metaDescription": "Translate ASCII codes to text and text to decimal codes. Strict 0–127 validation, control-character labels, optional UTF-8, and downloadable byte reports.",
+      "keywords": "ASCII to text converter, text to ASCII codes, decimal ASCII translator, ASCII control character viewer",
+      "updatedAt": "2026-09-12",
+      "whatIs": "ASCII assigns 128 numeric codes to English letters, digits, punctuation, and control characters. Uppercase A is 65, lowercase a is 97, and a space is 32. This converter reads separated decimal codes, such as 72 105 33, and returns Hi! It also shows the codes behind text you type. Strict ASCII is selected by default so values above 127 are not mislabeled as ASCII. If your source contains decimal UTF-8 bytes, choose UTF-8 instead: 195 169 then decodes to é. The character inspector labels invisible values such as NUL, TAB, LF, and CR, making it useful for line-ending and data-import problems.",
+      "howToSteps": [
+        { "title": "Choose text or decimal codes", "description": "Select Codes to text to decode, or Text to codes to inspect a string. ASCII accepts characters and codes in the range 0–127." },
+        { "title": "Separate each number", "description": "Paste decimal values separated by spaces, commas, semicolons, or newlines. A compact string such as 72105 is ambiguous; use 72 105 for Hi." },
+        { "title": "Inspect controls and export", "description": "Read the character table for named spaces, tabs, and line breaks. Switch to UTF-8 if needed, then copy the text or export decimal codes and a CSV byte report." }
+      ],
+      "whyChoose": [
+        { "icon": "127", "title": "ASCII means ASCII", "description": "Values above 127 require an explicit switch to UTF-8. The tool does not invent a universal extended ASCII encoding." },
+        { "icon": "↵", "title": "See invisible controls", "description": "Recognize NUL, TAB, LF, CR, SPACE, and DEL in the character table while preserving the original bytes." },
+        { "icon": "⇄", "title": "Compare number formats", "description": "View each code as decimal, binary, hex, and octal, with byte offsets for debugging." }
+      ],
+      "useCases": ["Turn a list of decimal ASCII codes from an assignment into readable text.", "Identify tabs, carriage returns, and line feeds in copied data.", "Check whether an input is valid ASCII before passing it to an ASCII-only system.", "Decode a decimal UTF-8 byte sequence by explicitly selecting the UTF-8 mode."],
+      "faqs": [
+        { "question": "How do I convert 72 101 108 108 111 to text?", "answer": "Select Codes to text and paste those space-separated numbers. Each decimal value maps to an ASCII character, producing Hello. You can use commas, semicolons, or newlines as separators too." },
+        { "question": "Why are ASCII values limited to 0–127?", "answer": "Standard ASCII is a 7-bit character set with 128 codes. The phrase extended ASCII refers to several incompatible encodings, not one universal mapping. This converter uses strict ASCII or explicitly selected UTF-8 and does not guess a code page." },
+        { "question": "Why is my result blank when the codes are valid?", "answer": "Control characters do not always have a visible glyph. For example, 9 is a tab, 10 is a line feed, and 0 is NUL. Check the character inspector to see their labels and values; the output preserves those characters." },
+        { "question": "How can I convert emoji or non-English characters?", "answer": "Switch Character encoding to UTF-8. The numbers now represent UTF-8 bytes rather than ASCII codes. An emoji can need four numbers. For example, 240 159 152 128 decodes to 😀." },
+        { "question": "Can I save the character codes as a file?", "answer": "Yes. Download .txt saves the current result. Formatting & export options also provides a raw .bin file and a CSV byte report. Processing runs locally with a 128 KiB text-byte limit." }
+      ],
       "relatedSearches": []
     },
     "rot13": {
@@ -1155,15 +1219,32 @@
       "relatedSearches": []
     },
     "utf8-encode-decode": {
-      "name": "UTF-8 Encode / Decode",
-      "description": "View UTF-8 byte representation",
-      "metaTitle": "UTF-8 Encoder & Decoder — View UTF-8 Bytes Online Free",
-      "metaDescription": "Convert text to UTF-8 byte representation or decode UTF-8 hex bytes to text. Free online UTF-8 encoder/decoder for developers.",
-      "keywords": "utf8 encode decode online free, utf8 byte viewer online, text to utf8 bytes converter, utf8 decoder online free, utf-8 encoding converter online, view utf8 byte representation online",
-      "whatIs": "The UTF-8 Encoder/Decoder shows the raw UTF-8 byte representation of your text in hexadecimal format, and decodes UTF-8 hex bytes back to readable text. UTF-8 is the dominant character encoding on the web, supporting all Unicode characters. Developers use this tool to debug encoding issues, analyze text data, and understand how multi-byte characters are stored.",
-      "whyChoose": [],
-      "useCases": [],
-      "faqs": [],
+      "name": "UTF-8 Encoder & Decoder",
+      "description": "Encode text as UTF-8 bytes or decode and validate hex bytes. Inspect code points, multi-byte characters, BOMs, and invisible controls.",
+      "metaTitle": "UTF-8 Encoder & Decoder — Validate & Inspect Bytes",
+      "metaDescription": "Convert text to UTF-8 hex bytes and decode bytes back to text. Validate malformed sequences, inspect emoji and code points, and export byte reports locally.",
+      "keywords": "UTF-8 encoder decoder, text to UTF-8 bytes, validate UTF-8 hex sequence, UTF-8 byte inspector emoji",
+      "updatedAt": "2026-09-12",
+      "whatIs": "UTF-8 encodes a Unicode code point using one to four bytes. A is 41 in hexadecimal, é is C3 A9, € is E2 82 AC, and 😀 is F0 9F 98 80. This tool makes those bytes visible and decodes valid hex sequences back into text. The inspector separates a character's Unicode identity, shown as U+ notation, from its actual byte encoding. It also shows byte offsets, which is helpful when comparing a file or log with the text you expected. A visually single symbol may contain several code points, such as a letter plus a combining accent or an emoji joined with other emoji; the table explains code points rather than claiming that every visible symbol is one character.",
+      "howToSteps": [
+        { "title": "Choose text or UTF-8 bytes", "description": "Use Text to UTF-8 to see hexadecimal byte values. Use UTF-8 to text to decode a sequence copied from a log, file, or test." },
+        { "title": "Enter or import your data", "description": "Paste text, choose the Unicode example, or open a UTF-8 text file. Decoding accepts compact or separated hex, 0x prefixes, and complete \\x byte escapes." },
+        { "title": "Validate and inspect", "description": "A valid sequence produces text and a character table. Malformed UTF-8 produces an error without substituted output. Compare code points and byte offsets, then download the result or a byte report." }
+      ],
+      "whyChoose": [
+        { "icon": "✓", "title": "Strict UTF-8 validation", "description": "Catch truncated sequences, invalid continuation bytes, and other malformed input instead of silently inserting replacement symbols." },
+        { "icon": "U+", "title": "Understand character boundaries", "description": "View Unicode code points separately from their one-to-four-byte representations and inspect byte offsets." },
+        { "icon": "↵", "title": "Preserve exact text", "description": "Keep leading BOM characters, spaces, tabs, and line endings. The converter does not trim or normalize your text." }
+      ],
+      "useCases": ["Debug a truncated UTF-8 sequence copied from an application log.", "Compare byte counts and code points for accents, Hindi, Chinese, and emoji.", "Inspect a leading byte order mark or hidden line-ending characters.", "Create reproducible Unicode fixtures and export their exact raw bytes."],
+      "faqs": [
+        { "question": "What is the difference between UTF-8 bytes and a Unicode code point?", "answer": "A code point identifies a Unicode character; an encoding specifies how to store it. For example, 😀 has code point U+1F600 and UTF-8 bytes F0 9F 98 80. The code point number is not a single byte value." },
+        { "question": "Why does the decoder reject an incomplete sequence?", "answer": "UTF-8 requires a specific number and range of continuation bytes. E2 82 is incomplete, while E2 82 AC represents €. The decoder stops on malformed input so missing or changed data is not disguised as a successful conversion." },
+        { "question": "Does decoding remove the UTF-8 BOM?", "answer": "No. A leading EF BB BF sequence is preserved as U+FEFF and labeled BOM in the inspector. This helps you inspect the original data and makes an encode/decode round trip preserve the bytes." },
+        { "question": "Will this repair mojibake or detect Windows-1252 automatically?", "answer": "No. This is a strict UTF-8 byte converter. It does not guess a legacy encoding or undo text that was previously decoded incorrectly. Obtain the original bytes and identify the source encoding before attempting a repair." },
+        { "question": "Can I convert percent-encoded URLs here?", "answer": "This page accepts hexadecimal byte notation such as C3 A9, not percent-encoded URLs or Unicode escape notation. Use the URL Encode / Decode tool for %C3%A9. Use this inspector when you need to examine the underlying UTF-8 bytes." },
+        { "question": "Where is conversion performed and what are the limits?", "answer": "Conversion runs in your browser without uploading text. Input supports up to 128 KiB of text bytes or 2 MiB of encoded notation, with a maximum of 128 KiB of decoded bytes. The table previews 120 code points; the CSV export includes all bytes." }
+      ],
       "relatedSearches": []
     },
     "morse-code": {

@@ -93,6 +93,8 @@ import Base64EncodeDecode from '@/components/tools/Base64EncodeDecode';
 import MorseCodeTranslator from '@/components/tools/MorseCodeTranslator';
 import UrlEncodeDecode from '@/components/tools/UrlEncodeDecode';
 import HtmlEncodeDecode from '@/components/tools/HtmlEncodeDecode';
+import ByteConverter from '@/components/tools/ByteConverter';
+import { BYTE_TOOLS } from '@/lib/byte-tool-config.mjs';
 import { notFound } from 'next/navigation';
 import Link from 'next/link';
 
@@ -201,7 +203,7 @@ export default async function ToolPage({ params }) {
   const faqs = generateFAQs(toolData, t);
   const relatedSearches = generateRelatedSearches(toolData);
 
-  const howToSteps = [
+  const howToSteps = toolData.content?.howToSteps?.length ? toolData.content.howToSteps : [
     {
       title: t.schema.step1Title,
       description: t.schema.step1Desc
@@ -316,6 +318,8 @@ export default async function ToolPage({ params }) {
           <LoremIpsumGenerator t={t} lang={lang} />
         ) : toolData.slug === 'password-strength' ? (
           <PasswordStrengthAnalyzer t={t} lang={lang} />
+        ) : BYTE_TOOLS[toolData.slug] ? (
+          <ByteConverter key={toolData.slug} toolSlug={toolData.slug} lang={lang} />
         ) : toolData.slug === 'base64-encode-decode' ? (
           <Base64EncodeDecode t={t} lang={lang} />
         ) : toolData.slug === 'url-encode-decode' ? (

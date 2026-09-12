@@ -17,6 +17,8 @@ import TransitionGenerator from '@/components/tools/TransitionGenerator';
 import TextCompare from '@/components/tools/TextCompare';
 import WordCounter from '@/components/tools/WordCounter';
 import JsonFormatter from '@/components/tools/JsonFormatter';
+import ByteConverter from '@/components/tools/ByteConverter';
+import { BYTE_TOOLS } from '@/lib/byte-tool-config.mjs';
 
 export async function generateStaticParams() {
   return []; // Dynamic rendering at edge to prevent ENOSPC on Cloudflare
@@ -63,6 +65,8 @@ export default async function EmbedToolPage({ params }) {
         <TextCompare t={t} lang={lang} />
       ) : toolData.slug === 'word-counter' ? (
         <WordCounter t={t} lang={lang} />
+      ) : BYTE_TOOLS[toolData.slug] ? (
+        <ByteConverter key={toolData.slug} toolSlug={toolData.slug} lang={lang} />
       ) : toolData.slug === 'json-formatter' ? (
         <JsonFormatter t={t} lang={lang} />
       ) : (

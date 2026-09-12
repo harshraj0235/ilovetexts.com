@@ -79,7 +79,7 @@ export async function GET(request, { params }) {
   // non-canonical translation or an unpublished article in a sitemap.
   if (INDEXABLE_TOOL_LOCALES.includes(lang)) {
     CATEGORIES.forEach((cat) => addUrl(`/${cat.id}`, '0.9', 'weekly', TOOLS_LAST_UPDATED, INDEXABLE_TOOL_LOCALES));
-    allTools.forEach((tool) => addUrl(`/${tool.categoryId}/${tool.slug}`, '0.85', 'weekly', TOOLS_LAST_UPDATED, INDEXABLE_TOOL_LOCALES));
+    allTools.forEach((tool) => addUrl(`/${tool.categoryId}/${tool.slug}`, '0.85', 'weekly', tool.content?.updatedAt || TOOLS_LAST_UPDATED, INDEXABLE_TOOL_LOCALES));
 
     addUrl('/blog', '0.7', 'weekly', CONTENT_LAST_UPDATED, ['en']);
     EN_BLOG_SLUGS
