@@ -365,7 +365,11 @@ export default function VideoConverter({ toolSlug, lang = 'en', t = {} }) {
 
       const exitCode = await ffmpeg.exec(args);
       if (exitCode !== 0) {
-        throw new Error(`FFmpeg exited with code ${exitCode}. Check the log output for missing codecs or invalid formats.`);
+        throw new Error(
+          cat === 'audio' 
+            ? 'Conversion failed. This video might not contain an audio track.'
+            : `FFmpeg exited with code ${exitCode}. Check the log output for missing codecs or invalid formats.`
+        );
       }
 
       let data;
