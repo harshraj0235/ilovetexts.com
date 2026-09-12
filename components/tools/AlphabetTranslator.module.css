@@ -1,0 +1,35 @@
+.studio { --alphabet-ink: color-mix(in srgb, var(--alphabet-accent) 86%, #111827); padding: clamp(22px, 4vw, 44px); border: 1px solid color-mix(in srgb, var(--alphabet-accent) 24%, transparent); border-radius: 24px; background: linear-gradient(135deg, color-mix(in srgb, var(--alphabet-accent) 10%, var(--bg-main, #fff)) 0%, var(--bg-main, #fff) 58%); color: var(--text-primary, #172033); }
+.topline, .editorHead, .meta, .reference { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+.eyebrow { color: var(--alphabet-ink); font-size: 11px; font-weight: 800; letter-spacing: .12em; }
+.local { color: var(--text-secondary, #52627a); font-size: 12px; font-weight: 700; }
+.studio h2 { margin: 9px 0 8px; max-width: 760px; font-size: clamp(28px, 4vw, 45px); letter-spacing: -.045em; line-height: 1.04; }
+.intro { max-width: 760px; margin: 0; color: var(--text-secondary, #52627a); font-size: 16px; line-height: 1.65; }
+.direction { display: flex; width: max-content; max-width: 100%; margin: 25px 0 18px; padding: 4px; border: 1px solid color-mix(in srgb, var(--alphabet-accent) 25%, transparent); border-radius: 13px; background: color-mix(in srgb, var(--alphabet-accent) 7%, transparent); overflow: auto; }
+.direction button, .actions button, .meta button, .reference button { min-height: 34px; border: 0; border-radius: 9px; background: transparent; color: var(--text-secondary, #52627a); cursor: pointer; font: inherit; font-size: 13px; font-weight: 750; padding: 7px 10px; white-space: nowrap; }
+.direction button.active { background: var(--alphabet-ink); color: #fff; box-shadow: 0 2px 8px color-mix(in srgb, var(--alphabet-ink) 25%, transparent); }
+.workspace { display: grid; grid-template-columns: minmax(0, 1fr) 34px minmax(0, 1fr); align-items: stretch; gap: 14px; }
+.editor { min-width: 0; border: 1px solid color-mix(in srgb, var(--alphabet-accent) 23%, transparent); border-radius: 16px; background: var(--bg-main, #fff); overflow: hidden; box-shadow: 0 10px 30px color-mix(in srgb, var(--alphabet-accent) 7%, transparent); }
+.editorHead { min-height: 49px; padding: 0 12px 0 15px; border-bottom: 1px solid color-mix(in srgb, var(--alphabet-accent) 15%, transparent); }
+.editorHead label { color: var(--text-primary, #172033); font-size: 14px; font-weight: 800; }
+.actions { display: flex; gap: 2px; }
+.actions button:not(:disabled):hover, .meta button:not(:disabled):hover, .reference button:hover { color: var(--alphabet-ink); background: color-mix(in srgb, var(--alphabet-accent) 10%, transparent); }
+.actions button:disabled, .meta button:disabled { cursor: not-allowed; opacity: .45; }
+.editor textarea { display: block; box-sizing: border-box; width: 100%; min-height: 214px; resize: vertical; border: 0; outline: 0; background: transparent; color: var(--text-primary, #172033); font: 500 15px/1.65 ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; padding: 15px; }
+.editor textarea::placeholder { color: var(--text-secondary, #78869a); opacity: .85; }
+.meta { min-height: 40px; padding: 0 14px; border-top: 1px solid color-mix(in srgb, var(--alphabet-accent) 12%, transparent); color: var(--text-secondary, #52627a); font-size: 12px; }
+.arrow { display: grid; place-items: center; color: var(--alphabet-ink); font-size: 25px; font-weight: 800; }
+.helper, .fontTip, .feedback { margin: 14px 0 0; border-radius: 12px; padding: 11px 13px; font-size: 13px; line-height: 1.55; }
+.helper { color: var(--text-secondary, #52627a); background: color-mix(in srgb, var(--alphabet-accent) 7%, transparent); }
+.fontTip { color: var(--text-primary, #172033); background: color-mix(in srgb, #f59e0b 13%, transparent); }
+.feedback { color: var(--alphabet-ink); background: color-mix(in srgb, var(--alphabet-accent) 11%, transparent); }
+.reference { margin-top: 31px; align-items: end; }
+.reference h3 { margin: 7px 0 0; font-size: clamp(20px, 3vw, 28px); letter-spacing: -.025em; }
+.reference button { border: 1px solid color-mix(in srgb, var(--alphabet-accent) 30%, transparent); color: var(--alphabet-ink); }
+.referenceGrid { display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 8px; margin-top: 15px; }
+.referenceCell { min-width: 0; min-height: 92px; border: 1px solid color-mix(in srgb, var(--alphabet-accent) 20%, transparent); border-radius: 12px; padding: 10px; background: color-mix(in srgb, var(--alphabet-accent) 5%, transparent); overflow: hidden; }
+.referenceCell b { display: block; color: var(--text-secondary, #52627a); font-size: 11px; }
+.referenceCell span { display: block; overflow: hidden; color: var(--alphabet-ink); font-size: 18px; font-weight: 800; line-height: 1.4; text-overflow: ellipsis; white-space: nowrap; }
+.referenceCell small { display: block; overflow: hidden; color: var(--text-secondary, #52627a); font-size: 10px; text-overflow: ellipsis; white-space: nowrap; }
+@media (max-width: 920px) { .workspace { grid-template-columns: 1fr; } .arrow { height: 25px; transform: rotate(90deg); } .referenceGrid { grid-template-columns: repeat(4, minmax(0, 1fr)); } }
+@media (max-width: 560px) { .studio { padding: 20px 15px; border-radius: 18px; } .topline { align-items: flex-start; flex-direction: column; } .direction { width: 100%; } .direction button { flex: 1; padding-inline: 8px; } .editorHead { align-items: flex-start; flex-direction: column; gap: 6px; padding-block: 11px; } .actions { width: 100%; } .actions button { flex: 1; background: color-mix(in srgb, var(--alphabet-accent) 7%, transparent); } .editor textarea { min-height: 180px; } .reference { align-items: flex-start; flex-direction: column; } .referenceGrid { grid-template-columns: repeat(3, minmax(0, 1fr)); } .referenceCell { min-height: 80px; padding: 8px; } }
+:global(html.dark) .studio { --alphabet-ink: color-mix(in srgb, var(--alphabet-accent) 65%, #fff); background: linear-gradient(135deg, color-mix(in srgb, var(--alphabet-accent) 16%, var(--bg-main, #101826)) 0%, var(--bg-main, #101826) 58%); }

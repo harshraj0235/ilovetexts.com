@@ -19,6 +19,8 @@ import WordCounter from '@/components/tools/WordCounter';
 import JsonFormatter from '@/components/tools/JsonFormatter';
 import ByteConverter from '@/components/tools/ByteConverter';
 import { BYTE_TOOLS } from '@/lib/byte-tool-config.mjs';
+import AlphabetTranslator from '@/components/tools/AlphabetTranslator';
+import { ALPHABET_TOOLS } from '@/lib/alphabet-translator.mjs';
 
 export async function generateStaticParams() {
   return []; // Dynamic rendering at edge to prevent ENOSPC on Cloudflare
@@ -67,6 +69,8 @@ export default async function EmbedToolPage({ params }) {
         <WordCounter t={t} lang={lang} />
       ) : BYTE_TOOLS[toolData.slug] ? (
         <ByteConverter key={toolData.slug} toolSlug={toolData.slug} lang={lang} />
+      ) : ALPHABET_TOOLS[toolData.slug] ? (
+        <AlphabetTranslator key={toolData.slug} toolSlug={toolData.slug} />
       ) : toolData.slug === 'json-formatter' ? (
         <JsonFormatter t={t} lang={lang} />
       ) : (

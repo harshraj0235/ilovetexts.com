@@ -9,6 +9,7 @@
     "start": "next start",
     "lint": "eslint",
     "test:byte-converter": "node --test tests/byte-converter.test.mjs",
+    "test:alphabet-translator": "node --test tests/alphabet-translator.test.mjs",
     "seo-check": "node seo-audit.js",
     "ping-search": "node ping-google.js"
   },

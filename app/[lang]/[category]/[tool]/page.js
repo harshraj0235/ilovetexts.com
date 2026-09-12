@@ -95,6 +95,8 @@ import UrlEncodeDecode from '@/components/tools/UrlEncodeDecode';
 import HtmlEncodeDecode from '@/components/tools/HtmlEncodeDecode';
 import ByteConverter from '@/components/tools/ByteConverter';
 import { BYTE_TOOLS } from '@/lib/byte-tool-config.mjs';
+import AlphabetTranslator from '@/components/tools/AlphabetTranslator';
+import { ALPHABET_TOOLS } from '@/lib/alphabet-translator.mjs';
 import { notFound } from 'next/navigation';
 import Link from 'next/link';
 
@@ -320,6 +322,8 @@ export default async function ToolPage({ params }) {
           <PasswordStrengthAnalyzer t={t} lang={lang} />
         ) : BYTE_TOOLS[toolData.slug] ? (
           <ByteConverter key={toolData.slug} toolSlug={toolData.slug} lang={lang} />
+        ) : ALPHABET_TOOLS[toolData.slug] ? (
+          <AlphabetTranslator key={toolData.slug} toolSlug={toolData.slug} />
         ) : toolData.slug === 'base64-encode-decode' ? (
           <Base64EncodeDecode t={t} lang={lang} />
         ) : toolData.slug === 'url-encode-decode' ? (

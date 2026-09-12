@@ -1208,14 +1208,29 @@
     },
     "rot13": {
       "name": "ROT13 Encoder / Decoder",
-      "description": "Apply ROT13 cipher to text",
-      "metaTitle": "ROT13 Encoder & Decoder — Caesar Cipher Online Free",
-      "metaDescription": "Encode or decode text using ROT13 cipher instantly. Rotate letters by 13 positions. Free online ROT13 encoder/decoder tool.",
-      "keywords": "rot13 encoder decoder online free, rot13 cipher online tool, rotate text 13 letters online, rot13 converter online free, caesar cipher 13 online, rot13 decode online free",
-      "whatIs": "The ROT13 Encoder/Decoder applies the ROT13 cipher to your text — shifting each letter 13 positions in the alphabet. Since the alphabet has 26 letters, applying ROT13 twice returns the original text (encoding and decoding use the same operation). ROT13 is commonly used to hide spoilers, puzzle answers, and offensive content on forums and newsgroups.",
-      "whyChoose": [],
-      "useCases": [],
-      "faqs": [],
+      "description": "Encode or decode ROT13 text instantly. Preserve punctuation, compare the A–Z mapping, copy results, and download a private local conversion.",
+      "metaTitle": "ROT13 Encoder & Decoder — Decode ROT13 Text Online",
+      "metaDescription": "Encode or decode ROT13 text online. Apply the reversible Caesar shift, preserve punctuation and case, inspect the letter mapping, then copy or download the result.",
+      "keywords": "ROT13 decoder, ROT13 encoder, decode ROT13 text, ROT13 cipher converter, Caesar cipher shift 13, ROT13 spoiler text",
+      "updatedAt": "2026-09-12",
+      "whatIs": "ROT13 is a fixed Caesar substitution that moves each English letter thirteen positions through the alphabet. A becomes N, N becomes A, and the same operation reverses itself because 13 is exactly half of 26. Numbers, punctuation, spaces, emoji, and line breaks are not changed. That makes it useful for lightweight spoiler masking, word puzzles, and reading an old ROT13 message without changing its formatting. It is not encryption: anyone who knows ROT13 can reverse it instantly, and it should never protect private information, passwords, account data, or confidential text.",
+      "howToSteps": [
+        { "title": "Paste the message", "description": "Enter ordinary text to create a ROT13 version, or paste text that already looks shifted. No separate decode setting is needed because ROT13 is its own inverse." },
+        { "title": "Check the result", "description": "Letters keep their case and everything outside A–Z stays in place. Use the reference grid when you want to verify an individual letter." },
+        { "title": "Copy or save it", "description": "Copy the converted text or download it as a UTF-8 text file. Conversion happens locally in the browser." }
+      ],
+      "whyChoose": [
+        { "icon": "13", "title": "One reversible action", "description": "Apply ROT13 once to encode and once more to return to the original text." },
+        { "icon": "A↔N", "title": "Visible reference", "description": "Check every A–Z pair instead of guessing how the shift works." },
+        { "icon": "⌘", "title": "Formatting preserved", "description": "Punctuation, numbers, spacing, emoji, and line breaks remain untouched." }
+      ],
+      "useCases": ["Hide a movie spoiler in a forum post without disturbing the surrounding text.", "Solve a puzzle or read a ROT13 Usenet-style message.", "Confirm that a fixed Caesar shift preserves a sample’s punctuation and line breaks.", "Create a reversible classroom demonstration of substitution ciphers."],
+      "faqs": [
+        { "question": "Is ROT13 encryption?", "answer": "No. ROT13 is a simple public letter substitution with no secret key. It is suitable for spoilers and puzzles, never for sensitive information." },
+        { "question": "Why does the same button encode and decode?", "answer": "Moving every letter by 13 places twice moves it by 26 places, returning each English letter to itself." },
+        { "question": "What happens to numbers and emoji?", "answer": "They are preserved exactly. ROT13 only changes the 26 English letters A–Z, in either case." },
+        { "question": "Does the tool save my text?", "answer": "No. The conversion runs in your browser. Copy and download actions stay on your device." }
+      ],
       "relatedSearches": []
     },
     "utf8-encode-decode": {
@@ -3144,11 +3159,17 @@
     },
     "braille-translator": {
       "name": "Braille Translator",
-      "description": "Convert text to Braille dots online.",
-      "metaTitle": "Braille Translator — Translate Text to Braille Online Free",
-      "metaDescription": "Instantly translate your text into Braille symbols. A free online text to Braille converter tool.",
-      "keywords": "translate text to braille online free, braille alphabet translator",
-      "whatIs": "Our Braille Translator converts standard English text into Braille dot patterns. It maps letters, numbers, and basic punctuation to their corresponding Braille Unicode characters.",
+      "description": "Translate English Grade 1 text to Unicode Braille cells or read supported cells back to text. See capital and number signs, mappings, and clear limits.",
+      "metaTitle": "Braille Translator — Text to Grade 1 Unicode Braille",
+      "metaDescription": "Convert English text to uncontracted Grade 1 Unicode Braille or decode supported Braille cells. See capital and number signs, inspect mappings, and copy the result.",
+      "keywords": "Braille translator, text to Braille, Braille to text, Grade 1 Braille translator, Unicode Braille cells, Braille alphabet chart",
+      "updatedAt": "2026-09-12",
+      "whatIs": "This converter writes basic English Grade 1, also called uncontracted Braille, as Unicode Braille cells. Each printed letter is represented explicitly, while a capital sign precedes an uppercase letter and a number sign starts a run of digits. Unicode cells are useful for learning, previews, and compatible digital text; they are not a substitute for a correctly prepared BRF file, an embosser workflow, or a qualified Braille transcriber. Grade 2 contractions, mathematical notation, music Braille, and language-specific Braille rules require a specialist translator and are intentionally not guessed here.",
+      "howToSteps": [
+        { "title": "Choose a direction", "description": "Use Text to Braille for ordinary English text, or Braille to text for Unicode cells you received or copied." },
+        { "title": "Review signs and cells", "description": "Uppercase letters receive ⠠ and number sequences begin with ⠼. Use the reference grid to see the six-dot cell assigned to each letter." },
+        { "title": "Copy with the right purpose", "description": "Copy Unicode cells for digital display. For accessible publishing or embossing, verify the output with appropriate Braille software and a qualified reviewer." }
+      ],
       "whyChoose": [
         {
           "title": "Instant Conversion",
@@ -3163,8 +3184,11 @@
       "faqs": [
         {
           "question": "Is this Grade 1 or Grade 2 Braille?",
-          "answer": "This tool generates uncontracted Grade 1 Braille (direct letter-for-letter mapping) using Unicode Braille Patterns."
-        }
+          "answer": "This tool generates and reads supported uncontracted English Grade 1 cells. It does not apply Grade 2 contractions or specialist notation."
+        },
+        { "question": "Why are capital and number signs visible?", "answer": "In Braille, capitalization and numbers use indicator cells before the following character or sequence. Showing them makes the conversion auditable instead of hiding important context." },
+        { "question": "Can I use this to make an accessible document?", "answer": "Use it for learning and digital previews. Professional Braille production needs the appropriate standard, language rules, formatting, and quality review." },
+        { "question": "Does it support images or scanned Braille?", "answer": "No. This page converts typed Unicode Braille cells and plain text; it does not perform image recognition." }
       ],
       "relatedSearches": [
         "braille alphabet translator",
@@ -3201,11 +3225,17 @@
     },
     "nato-phonetic-translator": {
       "name": "NATO Phonetic Translator",
-      "description": "Convert text to NATO phonetic alphabet (Alpha, Bravo, Charlie).",
-      "metaTitle": "NATO Phonetic Translator — Text to Phonetic Alphabet",
-      "metaDescription": "Instantly translate text to the NATO phonetic alphabet (Alpha, Bravo, Charlie). A free online spelling alphabet converter.",
-      "keywords": "nato phonetic alphabet translator text, phonetic alphabet spelling",
-      "whatIs": "Our NATO Phonetic Translator converts standard text into the official NATO phonetic alphabet (e.g., A becomes Alpha, B becomes Bravo). This is widely used in aviation, military, and customer support to ensure clear communication of spellings.",
+      "description": "Spell text with Alpha, Bravo, Charlie or decode NATO spelling words back to text. Preserve word breaks, verify standard words, copy, and download locally.",
+      "metaTitle": "NATO Phonetic Alphabet Translator — Encode & Decode Text",
+      "metaDescription": "Convert text to the NATO phonetic alphabet or decode Alpha Bravo Charlie words. Preserve word breaks, inspect the ICAO reference, and copy results locally.",
+      "keywords": "NATO phonetic alphabet translator, Alpha Bravo Charlie converter, phonetic spelling generator, decode NATO alphabet, ICAO spelling alphabet",
+      "updatedAt": "2026-09-12",
+      "whatIs": "The International Radiotelephony Spelling Alphabet assigns a clear spoken word to each Latin letter: Alpha for A, Bravo for B, and so on. It helps people spell a name, booking code, serial number, or call sign when audio quality is poor or accents differ. This tool converts ordinary text into those words and reads a supported pasted sequence back to letters. Slashes represent spaces when decoding, and double slashes create a new line. It uses the standard spelling Juliett and X-ray, while accepting the common Juliett/Juliet and X-ray/Xray variations on input.",
+      "howToSteps": [
+        { "title": "Enter text or spelling words", "description": "Choose Text to NATO to spell a code clearly. Choose NATO to text when you have words such as Alpha Bravo Charlie." },
+        { "title": "Keep word breaks clear", "description": "The generated output uses / between original words. Paste / between words and // for a line break when decoding." },
+        { "title": "Verify before reading aloud", "description": "Use the reference grid for the official A–Z words. Unknown pasted words are flagged rather than silently turned into the wrong letter." }
+      ],
       "whyChoose": [
         {
           "title": "Official Standard",
@@ -3220,8 +3250,11 @@
       "faqs": [
         {
           "question": "What is the NATO alphabet?",
-          "answer": "It is a spelling alphabet used by NATO and the aviation industry to clearly communicate letters over radio or telephone."
-        }
+          "answer": "It is an internationally recognized spelling alphabet used to make individual letters clearer over radio and telephone connections."
+        },
+        { "question": "Why is J written as Juliett?", "answer": "Juliett is the standard spelling in the International Radiotelephony Spelling Alphabet. The decoder also accepts the common Juliet spelling." },
+        { "question": "How do I separate words when decoding?", "answer": "Put a slash token between words, for example Alpha Bravo / Charlie. Use two slashes for a new line." },
+        { "question": "Does this translate natural language?", "answer": "No. It spells Latin letters and digits with standard code words; it does not translate meaning between languages." }
       ],
       "relatedSearches": [
         "alpha bravo charlie translator",
@@ -3230,11 +3263,17 @@
     },
     "wingdings-translator": {
       "name": "Wingdings Translator",
-      "description": "Convert text to Wingdings symbols online.",
-      "metaTitle": "Wingdings Translator — Convert Text to Wingdings Font Symbols",
-      "metaDescription": "Instantly translate text into the classic Wingdings symbols font online. A fun copy and paste tool.",
-      "keywords": "wingdings font translator text to symbols, wingdings copy paste",
-      "whatIs": "Our Wingdings Translator converts normal English text into the famous 1990s Wingdings font symbols using their Unicode equivalents. You can copy and paste the output anywhere.",
+      "description": "Create copyable Unicode-style symbol messages or decode this tool’s supported mapping. Keep a font-ready plain-text version, inspect code points, and verify device limits.",
+      "metaTitle": "Wingdings Translator — Text to Copyable Symbol Preview",
+      "metaDescription": "Convert text to a copyable Unicode-style Wingdings preview or decode supported symbols. Inspect mappings, keep font-ready plain text, and avoid unreliable font assumptions.",
+      "keywords": "Wingdings translator, text to Wingdings symbols, Wingdings decoder, copy paste symbols, Wingdings font preview, Wingdings alphabet chart",
+      "updatedAt": "2026-09-12",
+      "whatIs": "Wingdings is a symbol font, not a Unicode writing system: the same keyboard letter displays a picture only while the Wingdings font is applied. This page gives two practical views. It produces a portable Unicode-style symbol approximation that can often be copied into messages, and it keeps the original plain text available for use in Word or PowerPoint with a real Wingdings font selected. Those approaches are different. Unicode symbols can vary by device and are not guaranteed to match a proprietary Wingdings glyph; font-ready plain text depends on the recipient’s application having the selected font.",
+      "howToSteps": [
+        { "title": "Choose text or symbols", "description": "Use Text to symbols for a portable visual approximation. Use Symbols to text only for symbols generated by this tool’s displayed mapping." },
+        { "title": "Inspect the mapping", "description": "The reference shows each supported character, its preview symbol, and the Unicode code point so missing-glyph boxes are easier to diagnose." },
+        { "title": "Pick the right copy method", "description": "Copy the symbol preview for casual messages. For Word or PowerPoint, copy the original text and apply the Wingdings font in that document." }
+      ],
       "whyChoose": [
         {
           "title": "Unicode Output",
@@ -3249,8 +3288,11 @@
       "faqs": [
         {
           "question": "Will these symbols show up on all devices?",
-          "answer": "Yes, because we use Unicode standard characters that map to the visual equivalents of the classic Wingdings font."
-        }
+          "answer": "Not always. Unicode symbol coverage and appearance differ by device and font. The reference code point helps identify a symbol if a device shows a box."
+        },
+        { "question": "Is this the exact Microsoft Wingdings font?", "answer": "No. The symbol output is a Unicode-style visual approximation. For the actual font, use the original plain text in an application with Wingdings selected." },
+        { "question": "Can it decode every Wingdings message?", "answer": "No. Font glyphs do not carry their original keyboard letters after they are copied as an image or rendered by another system. Decode mode is limited to this tool’s published preview mapping." },
+        { "question": "Why keep the plain text?", "answer": "It is the reliable font-ready version for a document editor: apply Wingdings to those original characters where the font is available." }
       ],
       "relatedSearches": [
         "wingdings alphabet translator",
