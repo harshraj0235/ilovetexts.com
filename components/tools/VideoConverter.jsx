@@ -299,11 +299,20 @@ export default function VideoConverter({ toolSlug, lang = 'en', t = {} }) {
 
     try {
       const inputName = 'input.' + (file.name.split('.').pop() || 'mp4');
-      await ffmpeg.writeFile(inputName, await fetchFile(file));
-
       const cat  = mode.category;
       let outExt  = outputFormat || mode.outputExt;
       let outName = 'output.' + outExt;
+
+      await ffmpeg.deleteFile(inputName).catch(() => {});
+      await ffmpeg.deleteFile(outName).catch(() => {});
+      
+      const fileData = await file.arrayBuffer();
+      try {
+        await ffmpeg.writeFile(inputName, new Uint8Array(fileData));
+      } catch (writeErr) {
+        throw new Error('Failed to write input file to memory. File might be too large or memory is full.');
+      }
+
       let args    = [];
 
       if (cat === 'audio') {
@@ -354,9 +363,18 @@ export default function VideoConverter({ toolSlug, lang = 'en', t = {} }) {
         args = ['-i', inputName, '-ss', String(trimStart), '-to', String(trimEnd), '-c', 'copy', '-y', outName];
       }
 
-      await ffmpeg.exec(args);
+      const exitCode = await ffmpeg.exec(args);
+      if (exitCode !== 0) {
+        throw new Error(`FFmpeg exited with code ${exitCode}. Check the log output for missing codecs or invalid formats.`);
+      }
 
-      const data = await ffmpeg.readFile(outName);
+      let data;
+      try {
+        data = await ffmpeg.readFile(outName);
+      } catch (readErr) {
+        throw new Error('Failed to read output file. The conversion may have failed silently.');
+      }
+      
       const blob = new Blob([data.buffer], { type: mode.outputMime });
       const url  = URL.createObjectURL(blob);
       setOutputUrl(url);
@@ -371,7 +389,7 @@ export default function VideoConverter({ toolSlug, lang = 'en', t = {} }) {
 
     } catch (err) {
       setStatus('error');
-      setLog('Error: ' + (err?.message || String(err)));
+      setLog(prev => prev + '\nError: ' + (err?.message || String(err)));
     }
   }, [file, mode, outputFormat, audioBitrate, compressPreset, gifSize, gifFps, trimStart, trimEnd, resolutionIdx, customW, customH, toolSlug, videoSize, loadFFmpeg]);
 
