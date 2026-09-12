@@ -142,8 +142,8 @@
     "step3Desc": "Haga clic en \"📋 Copiar resultado\" o presione Ctrl+Entrar para copiar al portapapeles. Haga clic en \"⬇️ Descargar\" o presione Ctrl+S para guardar como un archivo .txt. Su texto procesado está listo para usar en cualquier lugar: correo electrónico, editor de código, redes sociales o documentos."
   },
   "trust": {
-    "privateTitle": "100% privado y seguro",
-    "privateDesc": "Todo el procesamiento de texto se realiza directamente en su navegador mediante JavaScript. Nunca enviamos, almacenamos ni registramos sus datos en nuestros servidores. Su privacidad está garantizada: cero seguimiento, cero cookies.",
+    "privateTitle": "Privacidad y procesamiento",
+    "privateDesc": "El lugar donde se procesa la información depende de la herramienta. Las herramientas que envían datos a un servicio externo lo indican antes de usarse; consulta nuestra Política de privacidad para conocer los detalles de analítica y uso de datos.",
     "instantTitle": "Resultados ultrarrápidos en tiempo real",
     "instantDesc": "Sin pantallas de carga, sin viajes de ida y vuelta al servidor. Obtenga resultados instantáneos mientras escribe. Procese miles de líneas en milisegundos con procesamiento del lado del cliente.",
     "freeTitle": "Completamente gratis para siempre, sin límites",

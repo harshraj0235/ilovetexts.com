@@ -12,7 +12,7 @@ export default function Footer({ lang, allToolsCount }) {
           <div>
             <h4 style={{ marginBottom: '16px', color: 'var(--text-primary)', fontSize: '1.1rem' }}>❤️ ilovetexts.com</h4>
             <p style={{ color: 'var(--text-secondary)', fontSize: '0.9rem', lineHeight: '1.6' }}>
-              Free online text tools, formatters, and generators. 100% private. Your text never leaves your browser.
+              Free online text tools, formatters, and generators. Many tools run in your browser; features that use an external service say so before you use them.
             </p>
             <div style={{ marginTop: '14px', display: 'flex', flexDirection: 'column', gap: '8px' }}>
               <Link href={lp('/tools')} style={{ color: 'var(--text-secondary)', textDecoration: 'none', fontSize: '0.85rem', display: 'flex', alignItems: 'center', gap: '6px' }} className="hover-text-primary">

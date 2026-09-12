@@ -142,8 +142,8 @@
     "step3Desc": "Clique em \"📋 Copiar resultado\" ou pressione Ctrl+Enter para copiar para a área de transferência. Clique em \"⬇️ Baixar\" ou pressione Ctrl+S para salvar como um arquivo .txt. Seu texto processado está pronto para uso em qualquer lugar: e-mail, editor de código, mídia social ou documentos."
   },
   "trust": {
-    "privateTitle": "100% privado e seguro",
-    "privateDesc": "Todo o processamento de texto acontece diretamente no seu navegador usando JavaScript. Nunca enviamos, armazenamos ou registramos seus dados em nossos servidores. Sua privacidade está garantida – zero rastreamento, zero cookies.",
+    "privateTitle": "Privacidade e processamento",
+    "privateDesc": "O local de processamento depende da ferramenta. As ferramentas que enviam dados a um serviço externo informam isso antes do uso; veja nossa Política de Privacidade para detalhes sobre análise e uso de dados.",
     "instantTitle": "Resultados extremamente rápidos em tempo real",
     "instantDesc": "Sem telas de carregamento, sem viagens de ida e volta ao servidor. Obtenha resultados instantâneos enquanto você digita. Processe milhares de linhas em milissegundos com processamento do lado do cliente.",
     "freeTitle": "Completamente grátis para sempre – sem limites",

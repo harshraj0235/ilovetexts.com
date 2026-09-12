@@ -12,7 +12,7 @@ export async function generateMetadata({ params }) {
   }
   return {
     title: `Privacy Policy | ${SITE.name}`,
-    description: `Privacy Policy for ${SITE.name}. Learn how we protect your data and why our tools are 100% private.`,
+    description: `Privacy Policy for ${SITE.name}. Learn how browser-based tools, external processing features, and site analytics handle data.`,
     alternates,
     robots: {
       index: lang === 'en', // Only index English version
@@ -31,7 +31,7 @@ export default function PrivacyPage() {
   return (
     <div className="container" style={{ padding: '80px 24px', maxWidth: '800px' }}>
       <h1 style={{ fontSize: '2.5rem', marginBottom: '24px', fontWeight: '800' }}>Privacy Policy</h1>
-      <p style={{ color: 'var(--text-muted)', marginBottom: '32px' }}>Last updated: {new Date().toLocaleDateString()}</p>
+      <p style={{ color: 'var(--text-muted)', marginBottom: '32px' }}>Last updated: September 12, 2026</p>
 
       <div style={{ display: 'flex', flexDirection: 'column', gap: '24px', color: 'var(--text-secondary)', lineHeight: '1.8' }}>
         <section>
@@ -43,33 +43,28 @@ export default function PrivacyPage() {
         </section>
 
         <section>
-          <h2 style={{ color: 'var(--text-main)', fontSize: '1.5rem', marginBottom: '12px' }}>2. 100% Client-Side Processing</h2>
+          <h2 style={{ color: 'var(--text-main)', fontSize: '1.5rem', marginBottom: '12px' }}>2. Browser Processing and External Features</h2>
           <p>
-            <strong>We do not collect, store, or transmit your text data.</strong> 
+            Many tools process inputs directly in your browser. Other features use external services to provide their result.
           </p>
           <p style={{ marginTop: '8px' }}>
-            Every single tool on {SITE.name} runs entirely within your web browser using client-side JavaScript. 
-            When you type, paste, or process text, that data never leaves your device. We do not have servers 
-            that process your inputs, meaning it is mathematically impossible for us to read, save, or share 
-            the text you put into our tools.
+            For example, text-to-speech sends requested text through our service to Google Translate text-to-speech; grammar, spelling, and punctuation checks send text to LanguageTool; word lookups may send a word or letters to Datamuse; and the document translator sends extracted text to Google Translate. We label these tools in the workspace before you use them. Avoid entering sensitive information into an external-processing tool.
           </p>
         </section>
 
         <section>
-          <h2 style={{ color: 'var(--text-main)', fontSize: '1.5rem', marginBottom: '12px' }}>3. Information We Do Not Collect</h2>
+          <h2 style={{ color: 'var(--text-main)', fontSize: '1.5rem', marginBottom: '12px' }}>3. Accounts and Tool Outputs</h2>
           <ul style={{ paddingLeft: '24px', display: 'flex', flexDirection: 'column', gap: '8px' }}>
-            <li>We do not collect personal information (names, emails, etc.) as we do not require account registration.</li>
-            <li>We do not log the text, code, passwords, or data you process using our tools.</li>
-            <li>We do not store your generated outputs.</li>
+            <li>We do not require an account to use the tools.</li>
+            <li>We do not intentionally retain text or files processed by browser-only tools.</li>
+            <li>External providers process data under their own policies when you use an external-processing feature.</li>
           </ul>
         </section>
 
         <section>
           <h2 style={{ color: 'var(--text-main)', fontSize: '1.5rem', marginBottom: '12px' }}>4. Analytics and Cookies</h2>
           <p>
-            We may use standard, privacy-focused analytics tools (like Cloudflare Web Analytics) to understand general traffic 
-            patterns (e.g., how many people visit the site, which tools are most popular). This data is anonymized and aggregated. 
-            It cannot be used to identify you personally, and it is never linked to the text you process.
+            We use Google Analytics to understand aggregate site activity, such as pages visited and device information. Google Analytics may use cookies or similar identifiers according to Google&apos;s policies. We do not use analytics to read the text or files you enter into a tool.
           </p>
         </section>
 

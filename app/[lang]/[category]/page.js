@@ -5,8 +5,10 @@ import Link from 'next/link';
 import { notFound } from 'next/navigation';
 
 export async function generateStaticParams() {
-  return []; // Dynamic rendering at edge to prevent ENOSPC on Cloudflare
+  return CATEGORIES.map((category) => ({ lang: 'en', category: category.id }));
 }
+
+export const revalidate = 86400;
 
 
 

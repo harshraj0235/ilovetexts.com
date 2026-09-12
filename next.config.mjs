@@ -144,7 +144,6 @@ const nextConfig = {
         source: '/((?!_next|api|static).*)',
         headers: [
           { key: 'Cache-Control', value: 'public, s-maxage=3600, stale-while-revalidate=86400' },
-          { key: 'X-Robots-Tag', value: 'index, follow' },
         ],
       },
     ];

@@ -126,43 +126,49 @@ try {
   warn('Could not check tool slug uniqueness: ' + e.message);
 }
 
-// ── 8. Blog slug list in sitemap matches BLOG_POSTS ───────
+// ── 8. Unpublished articles must stay out of sitemap discovery ─────────────
 try {
   const blogPage = fs.readFileSync('app/[lang]/blog/page.js', 'utf8');
-  const blogSlugs = (blogPage.match(/slug:\s*['"]([^'"]+)['"]/g) || []).map(m => m.match(/['"]([^'"]+)['"]/)[1]);
-  
   const sitemapContent = fs.readFileSync('app/sitemap-api/[lang]/route.js', 'utf8');
-  const sitemapSlugs = (sitemapContent.match(/slug:\s*['"]([^'"]+)['"]/g) || []).map(m => m.match(/['"]([^'"]+)['"]/)[1]);
-  
-  const missingFromBlog = sitemapSlugs.filter(s => !blogSlugs.includes(s));
-  if (missingFromBlog.length > 0) {
-    error(`Sitemap lists blog slugs that don't exist in BLOG_POSTS (will return 404): ${missingFromBlog.slice(0, 5).join(', ')}${missingFromBlog.length > 5 ? '...' : ''}`);
+  const indexingPolicy = fs.readFileSync('lib/search-indexing.js', 'utf8');
+  const cutoff = (indexingPolicy.match(/PUBLISHED_ON_OR_BEFORE\s*=\s*['"]([^'"]+)/) || [])[1];
+  const dates = [...blogPage.matchAll(/date:\s*['"](\d{4}-\d{2}-\d{2})['"]/g)].map(match => match[1]);
+
+  if (!cutoff) {
+    error('lib/search-indexing.js: PUBLISHED_ON_OR_BEFORE is missing');
+  } else if (dates.some(date => date > cutoff) && !sitemapContent.includes('isPublishedDate(post.date)')) {
+    error('Sitemap can advertise posts dated after the publication cutoff');
+  } else if (!blogPage.includes('ALL_BLOG_POSTS.filter((post) => isPublishedDate(post.date))')) {
+    error('Blog index can show articles before their publication date');
   } else {
-    ok(`All ${sitemapSlugs.length} sitemap blog slugs exist in BLOG_POSTS`);
+    ok('Unpublished blog posts are excluded from navigation and sitemap discovery');
   }
 } catch (e) {
-  warn('Could not verify blog slug consistency: ' + e.message);
+  warn('Could not verify blog publication policy: ' + e.message);
 }
 
-// ── 9. Check generateStaticParams returns [] not full list ─
-// (prevents ENOSPC on Cloudflare — this is intentional for this project)
+// ── 9. Indexable English catalog pages should be statically generated ───────
 [
   'app/[lang]/[category]/page.js',
   'app/[lang]/[category]/[tool]/page.js',
 ].forEach(f => {
   if (!fs.existsSync(f)) return;
   const c = fs.readFileSync(f, 'utf8');
-  if (c.includes('generateStaticParams') && c.includes('return []')) {
-    ok(`${f}: dynamic rendering (intentional for Cloudflare edge)`);
+  if (!c.includes("lang: 'en'") || !c.includes('export const revalidate')) {
+    error(`${f}: English catalog pages are not pre-rendered with controlled revalidation`);
+  } else {
+    ok(`${f}: English catalog pages are statically generated and revalidated`);
   }
 });
 
-// ── 10. Verify X-Robots-Tag header set in next.config ────
+// ── 10. Do not override per-page noindex metadata with a global index header ─
 const nextConfig = fs.existsSync('next.config.mjs') ? fs.readFileSync('next.config.mjs', 'utf8') : '';
-if (nextConfig.includes('X-Robots-Tag')) {
-  ok('next.config.mjs: X-Robots-Tag header set for all pages');
+if (nextConfig.includes("value: 'index, follow'")) {
+  error('next.config.mjs: a global X-Robots-Tag index header conflicts with per-page noindex metadata');
+} else if (nextConfig.includes("value: 'noindex, nofollow'")) {
+  ok('next.config.mjs: API routes are noindex without overriding page metadata');
 } else {
-  warn('next.config.mjs: X-Robots-Tag header not set — add { key: "X-Robots-Tag", value: "index, follow" } to headers');
+  warn('next.config.mjs: API noindex header is missing');
 }
 
 // ── 11. Home page must have OG image ─────────────────────
@@ -210,24 +216,29 @@ try {
   }
 } catch (e) { warn('Could not check robots.js embed blocking: ' + e.message); }
 
-// ── 15. hreflang must cover all 6 languages ───────────────
+// ── 15. Hreflang must only advertise reviewed tool locales ─────────────────
 try {
   const seoJs = fs.readFileSync('lib/seo.js', 'utf8');
-  // Check that generateAlternates explicitly iterates over LANG_CODES
-  // which is imported from i18n.js and contains all 6 language codes
-  if (!seoJs.includes('generateAlternates') || !seoJs.includes('LANG_CODES')) {
-    error('lib/seo.js: generateAlternates does not use LANG_CODES — hreflang may be missing languages');
+  const sitemapJs = fs.readFileSync('app/sitemap-api/[lang]/route.js', 'utf8');
+  if (!seoJs.includes('INDEXABLE_TOOL_LOCALES') || !seoJs.includes('index: canIndex') || !sitemapJs.includes('INDEXABLE_TOOL_LOCALES.includes(lang)')) {
+    error('Tool/catalog locale gating is incomplete: hreflang, robots, and sitemap must agree');
   } else {
-    const i18nJs = fs.existsSync('lib/i18n.js') ? fs.readFileSync('lib/i18n.js', 'utf8') : '';
-    const requiredLangs = ['en', 'hi', 'pt', 'es', 'de', 'id'];
-    const missingFromI18n = requiredLangs.filter(l => !i18nJs.includes(`code: '${l}'`) && !i18nJs.includes(`code: "${l}"`));
-    if (missingFromI18n.length > 0) {
-      error(`lib/i18n.js: LANGUAGES array missing language codes: ${missingFromI18n.join(', ')}`);
-    } else {
-      ok(`lib/seo.js: hreflang via LANG_CODES covers all ${requiredLangs.length} languages (${requiredLangs.join(', ')})`);
-    }
+    ok('Tool/catalog hreflang, robots, and sitemap use the reviewed-locale policy');
   }
-} catch (e) { warn('Could not check hreflang completeness: ' + e.message); }
+} catch (e) { warn('Could not check reviewed-locale policy: ' + e.message); }
+
+// ── 16. Global trust copy must not promise zero tracking or universal local processing ─
+try {
+  const locale = fs.readFileSync('locales/en.json', 'utf8');
+  const layout = fs.readFileSync('components/ToolLayout.jsx', 'utf8');
+  if (locale.includes('zero tracking, zero cookies') || layout.includes('Your work stays on this device')) {
+    error('Global trust copy makes an unsupported universal privacy claim');
+  } else if (!layout.includes('EXTERNAL_PROCESSING_NOTICES')) {
+    error('External-processing tools do not have a workspace disclosure');
+  } else {
+    ok('Tool pages distinguish browser processing from external processing');
+  }
+} catch (e) { warn('Could not verify processing disclosures: ' + e.message); }
 
 // ── 16. FAQs must be non-empty on tool pages ──────────────
 try {
@@ -276,6 +287,16 @@ try {
     ok('components/ToolLayout.jsx: FAQs use native <details>/<summary> — Googlebot reads content regardless of open/closed state');
   }
 } catch (e) { warn('Could not check FAQ DOM visibility: ' + e.message); }
+
+// ── 21. Tool-to-blog links must not point to planned articles ───────────────
+try {
+  const toolLayout = fs.readFileSync('components/ToolLayout.jsx', 'utf8');
+  if (!toolLayout.includes('PUBLISHED_BLOG_SLUGS') || !toolLayout.includes('PUBLISHED_BLOG_SLUGS.has(post.slug)')) {
+    error('Tool pages can link to unpublished blog URLs that return 404');
+  } else {
+    ok('Tool-to-blog internal links are limited to published guides');
+  }
+} catch (e) { warn('Could not verify tool-to-blog links: ' + e.message); }
 
 // ── Summary ───────────────────────────────────────────────
 console.log('\n' + '='.repeat(50));

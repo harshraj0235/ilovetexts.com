@@ -4,6 +4,7 @@ import { notFound } from 'next/navigation';
 import { BLOG_POSTS } from '../page';
 import { SITE } from '@/lib/tools-config';
 import { LANG_CODES, buildCanonical } from '@/lib/i18n';
+import { generateAlternates } from '@/lib/seo';
 
 export async function generateStaticParams() {
   const params = [];
@@ -24,45 +25,32 @@ export async function generateStaticParams() {
   return params;
 }
 
-import { generateAlternates } from '@/lib/seo';
-
 export async function generateMetadata({ params }) {
   const { lang, slug } = await params;
   const post = BLOG_POSTS.find((p) => p.slug === slug);
   if (!post) return {};
 
   const path = `/blog/${post.slug}`;
-  const alternates = generateAlternates(lang, path);
-
-  // Canonical strategy:
-  // - English-only posts (no post.lang): all lang variants point to the English canonical,
-  //   because the English version is the real page.
-  // - Language-specific posts (post.lang set): the canonical is the post's own locale URL.
-  //   Pointing these to an English URL that doesn't exist causes Google to override the
-  //   canonical ("Duplicate, Google chose different canonical" in GSC).
-  if (lang !== 'en') {
-    if (post.lang) {
-      // Language-specific post — its own locale URL IS the canonical
-      alternates.canonical = buildCanonical(lang, path);
-    } else {
-      // English-only post — all translated variants point to the English canonical
-      alternates.canonical = buildCanonical('en', path);
-    }
-  }
+  const contentLocale = post.lang || 'en';
+  const canIndex = lang === contentLocale;
+  const alternates = generateAlternates(lang, path, {
+    canonicalLocale: contentLocale,
+    locales: [contentLocale],
+  });
 
   return {
     title: `${post.title} | ${SITE.name}`,
     description: post.description,
     alternates,
     robots: {
-      index: true,
+      index: canIndex,
       follow: true,
-      googleBot: { index: true, follow: true, 'max-snippet': -1, 'max-image-preview': 'large' },
+      googleBot: { index: canIndex, follow: true, 'max-snippet': -1, 'max-image-preview': 'large' },
     },
     openGraph: {
       title: post.title,
       description: post.description,
-      url: buildCanonical(lang, `/blog/${post.slug}`),
+      url: buildCanonical(contentLocale, `/blog/${post.slug}`),
       type: 'article',
       publishedTime: post.date,
       siteName: SITE.name,
@@ -265,10 +253,8 @@ export default async function BlogPostPage({ params }) {
   const post = BLOG_POSTS.find((p) => p.slug === slug);
   if (!post) notFound();
 
-  // Use a recent modified date so Google treats the page as fresh content.
-  // Each comparison post is kept updated with the latest tool landscape.
-  const BUILD_DATE = '2026-09-04';
-  const modifiedDate = post.date > BUILD_DATE ? post.date : BUILD_DATE;
+  // A modification date must reflect an actual update, not a deploy date.
+  const modifiedDate = post.date;
   const wordCount = post.content.trim().split(/\s+/).length;
 
   const articleSchema = {

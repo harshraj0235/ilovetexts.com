@@ -4,15 +4,16 @@ import { generateAlternates } from '@/lib/seo';
 
 export async function generateMetadata({ params }) {
   const { lang } = await params;
+  const canIndex = lang === 'en';
   return {
     title: `Contact Us | ${SITE.name}`,
     description: `Get in touch with the ${SITE.name} team for support, feedback, or inquiries.`,
-    alternates: generateAlternates(lang, '/contact'),
+    alternates: generateAlternates(lang, '/contact', { canonicalLocale: 'en', locales: ['en'] }),
     robots: {
-      index: true,
+      index: canIndex,
       follow: true,
       googleBot: {
-        index: true,
+        index: canIndex,
         follow: true,
         'max-snippet': -1,
         'max-image-preview': 'large',

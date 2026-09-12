@@ -9,14 +9,13 @@ const BUILD_DATE = '2026-09-04';
 export async function generateMetadata({ params }) {
   const { lang } = await params;
   const path = '/resources';
-  const alternates = generateAlternates(lang, path);
-  if (lang !== 'en') alternates.canonical = buildCanonical('en', path);
+  const canIndex = lang === 'en';
+  const alternates = generateAlternates(lang, path, { canonicalLocale: 'en', locales: ['en'] });
   return {
     title: 'Free Cheat Sheets & Reference Guides — Download PDF | ilovetexts',
     description: 'Free printable cheat sheets for Regex, Markdown, JSON, Keyboard Shortcuts, Base64 encoding, and Text Cases. Press Ctrl+P to save as PDF — no login required.',
-    keywords: 'regex cheat sheet free pdf, markdown cheat sheet, json cheat sheet, keyboard shortcuts cheat sheet, base64 encoding reference, text case formats',
     alternates,
-    robots: { index: true, follow: true, googleBot: { index: true, follow: true, 'max-snippet': -1 } },
+    robots: { index: canIndex, follow: true, googleBot: { index: canIndex, follow: true, 'max-snippet': -1 } },
   };
 }
 

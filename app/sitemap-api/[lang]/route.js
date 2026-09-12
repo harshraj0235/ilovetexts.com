@@ -1,5 +1,6 @@
 import { getAllTools, CATEGORIES, SITE } from '@/lib/tools-config';
 import { LANG_CODES, buildCanonical } from '@/lib/i18n';
+import { INDEXABLE_TOOL_LOCALES, isPublishedDate } from '@/lib/search-indexing';
 
 // ─── English-only blog post slugs (only include slugs that actually exist in BLOG_POSTS) ───
 // These are served at /blog/[slug] in English only.
@@ -47,9 +48,9 @@ const SITE_LAUNCH = '2025-08-01';
 const TOOLS_LAST_UPDATED = '2026-09-06';  // Update this when you add/update tools
 const CONTENT_LAST_UPDATED = '2026-09-06'; // Update this when you update content
 
-function getAlternatesXml(path) {
+function getAlternatesXml(path, locales = LANG_CODES) {
   let xml = `  <xhtml:link rel="alternate" hreflang="x-default" href="${buildCanonical('en', path)}" />\n`;
-  LANG_CODES.forEach(code => {
+  locales.forEach(code => {
     xml += `  <xhtml:link rel="alternate" hreflang="${code}" href="${buildCanonical(code, path)}" />\n`;
   });
   return xml;
@@ -66,53 +67,34 @@ export async function GET(request, { params }) {
   const allTools = getAllTools();
   let urlsXml = '';
 
-  const addUrl = (path, priority, changefreq, date) => {
-    urlsXml += `<url>\n  <loc>${buildCanonical(lang, path)}</loc>\n${getAlternatesXml(path)}  <lastmod>${date}</lastmod>\n  <changefreq>${changefreq}</changefreq>\n  <priority>${priority}</priority>\n</url>\n`;
+  const addUrl = (path, priority, changefreq, date, locales = LANG_CODES) => {
+    urlsXml += `<url>\n  <loc>${buildCanonical(lang, path)}</loc>\n${getAlternatesXml(path, locales)}  <lastmod>${date}</lastmod>\n  <changefreq>${changefreq}</changefreq>\n  <priority>${priority}</priority>\n</url>\n`;
   };
 
   // Home
   addUrl('/', '1.0', 'daily', CONTENT_LAST_UPDATED);
 
-  // Category Pages
-  CATEGORIES.forEach((cat) => addUrl(`/${cat.id}`, '0.9', 'weekly', TOOLS_LAST_UPDATED));
+  // Tool, category, directory, and editorial URLs are only discoverable in
+  // locales that have a complete, reviewable experience. Do not place a
+  // non-canonical translation or an unpublished article in a sitemap.
+  if (INDEXABLE_TOOL_LOCALES.includes(lang)) {
+    CATEGORIES.forEach((cat) => addUrl(`/${cat.id}`, '0.9', 'weekly', TOOLS_LAST_UPDATED, INDEXABLE_TOOL_LOCALES));
+    allTools.forEach((tool) => addUrl(`/${tool.categoryId}/${tool.slug}`, '0.85', 'weekly', TOOLS_LAST_UPDATED, INDEXABLE_TOOL_LOCALES));
 
-  // Tool Pages — all tools, all languages
-  allTools.forEach((tool) => addUrl(`/${tool.categoryId}/${tool.slug}`, '0.85', 'weekly', TOOLS_LAST_UPDATED));
+    addUrl('/blog', '0.7', 'weekly', CONTENT_LAST_UPDATED, ['en']);
+    EN_BLOG_SLUGS
+      .filter((post) => !post.lang && isPublishedDate(post.date))
+      .forEach((post) => addUrl(`/blog/${post.slug}`, '0.7', 'monthly', post.date, ['en']));
 
-  // Blog index — only once (not in static pages loop below)
-  addUrl('/blog', '0.7', 'weekly', CONTENT_LAST_UPDATED);
-
-  // Blog Posts — language-aware inclusion
-  EN_BLOG_SLUGS.forEach((post) => {
-    if (post.lang) {
-      // Language-specific post: only emit in that language's sitemap,
-      // using the post's own locale URL as <loc> (it IS the canonical).
-      if (lang === post.lang) {
-        addUrl(`/blog/${post.slug}`, '0.6', 'monthly', post.date);
-      }
-      // Also emit in the English sitemap so Google can find the English variant
-      // (page exists at /en/blog/slug, canonical = post.lang URL).
-      if (lang === 'en') {
-        addUrl(`/blog/${post.slug}`, '0.5', 'monthly', post.date);
-      }
-    } else {
-      // English-only post: only include in English sitemap — canonical is /blog/slug.
-      // Non-English pages for these posts point canonical → English, so they don't
-      // need separate sitemap entries (they are duplicates, not canonical URLs).
-      if (lang === 'en') {
-        addUrl(`/blog/${post.slug}`, '0.7', 'monthly', post.date);
-      }
-    }
-  });
-
-  // Static pages — NOT including 'blog' (already added above)
-  ['about', 'privacy', 'terms', 'contact', 'tools', 'resources'].forEach((page) =>
-    addUrl(`/${page}`,
-      page === 'tools' ? '0.8' : '0.4',
-      page === 'tools' ? 'weekly' : 'yearly',
-      page === 'tools' ? TOOLS_LAST_UPDATED : SITE_LAUNCH
-    )
-  );
+    ['about', 'privacy', 'terms', 'contact', 'tools', 'resources'].forEach((page) =>
+      addUrl(`/${page}`,
+        page === 'tools' ? '0.8' : '0.4',
+        page === 'tools' ? 'weekly' : 'yearly',
+        page === 'tools' ? TOOLS_LAST_UPDATED : SITE_LAUNCH,
+        ['en']
+      )
+    );
+  }
 
   const xml = `<?xml version="1.0" encoding="UTF-8"?>
 <?xml-stylesheet type="text/xsl" href="/sitemap.xsl"?>

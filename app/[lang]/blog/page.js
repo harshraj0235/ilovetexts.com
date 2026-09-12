@@ -9,21 +9,25 @@ import { SITE, getAllTools } from '@/lib/tools-config';
 
 import { generateAlternates } from '@/lib/seo';
 import { buildCanonical } from '@/lib/i18n';
+import { isPublishedDate } from '@/lib/search-indexing';
 
 export async function generateMetadata({ params }) {
   const { lang } = await params;
-  const alternates = generateAlternates(lang, '/blog');
-  if (lang !== 'en') {
-    alternates.canonical = buildCanonical('en', '/blog');
-  }
+  const canIndex = lang === 'en';
+  const alternates = generateAlternates(lang, '/blog', { canonicalLocale: 'en', locales: ['en'] });
 
   return {
     title: `Blog & Guides | ${SITE.name}`,
     description: `Read the latest guides and tutorials on how to effectively use ${SITE.name} text tools for your daily tasks.`,
     alternates,
+    robots: {
+      index: canIndex,
+      follow: true,
+      googleBot: { index: canIndex, follow: true, 'max-snippet': -1, 'max-image-preview': 'large' },
+    },
   };
 }
-export const BLOG_POSTS = [
+const ALL_BLOG_POSTS = [
   {
     slug: 'how-to-count-words-in-any-document',
     title: 'How to Count Words in Any Document — 5 Free Methods (2026)',
@@ -1709,6 +1713,9 @@ The tool is free, has no daily limit, and your files are never uploaded anywhere
     `,
   },
 ];
+
+// Do not show, syndicate, or link articles before their stated publication date.
+export const BLOG_POSTS = ALL_BLOG_POSTS.filter((post) => isPublishedDate(post.date));
 
 // Static metadata removed in favor of dynamic generateMetadata at the top
 

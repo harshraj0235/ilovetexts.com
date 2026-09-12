@@ -97,10 +97,14 @@ import { notFound } from 'next/navigation';
 import Link from 'next/link';
 
 export async function generateStaticParams() {
-  return []; // Dynamic rendering at edge to prevent ENOSPC on Cloudflare
+  return getAllTools('en').map((tool) => ({
+    lang: 'en',
+    category: tool.categoryId,
+    tool: tool.slug,
+  }));
 }
 
-export const dynamic = 'force-dynamic';
+export const revalidate = 86400;
 
 export async function generateMetadata({ params }) {
   const { lang, category, tool } = await params;

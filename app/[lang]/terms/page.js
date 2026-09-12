@@ -5,10 +5,7 @@ import { generateAlternates } from '@/lib/seo';
 
 export async function generateMetadata({ params }) {
   const { lang } = await params;
-  const alternates = generateAlternates(lang, '/terms');
-  if (lang !== 'en') {
-    alternates.canonical = buildCanonical('en', '/terms');
-  }
+  const alternates = generateAlternates(lang, '/terms', { canonicalLocale: 'en', locales: ['en'] });
   return {
     title: `Terms of Service | ${SITE.name}`,
     description: `Terms of Service and usage guidelines for ${SITE.name}.`,
@@ -33,7 +30,7 @@ export default async function TermsPage({ params }) {
   return (
     <div className="container" style={{ padding: '80px 24px', maxWidth: '800px' }}>
       <h1 style={{ fontSize: '2.5rem', marginBottom: '24px', fontWeight: '800' }}>Terms of Service</h1>
-      <p style={{ color: 'var(--text-muted)', marginBottom: '32px' }}>Last updated: {new Date().toLocaleDateString()}</p>
+      <p style={{ color: 'var(--text-muted)', marginBottom: '32px' }}>Last updated: September 12, 2026</p>
 
       <div style={{ display: 'flex', flexDirection: 'column', gap: '24px', color: 'var(--text-secondary)', lineHeight: '1.8' }}>
         <section>
@@ -56,9 +53,8 @@ export default async function TermsPage({ params }) {
         <section>
           <h2 style={{ color: 'var(--text-main)', fontSize: '1.5rem', marginBottom: '12px' }}>3. Privacy and Data Security</h2>
           <p>
-            Your privacy is extremely important to us. All text manipulation performed by our tools occurs entirely 
-            within your web browser on your device. We do not transmit, store, or process your text data on our servers. 
-            For more detailed information, please review our <Link href={lp('/privacy')} style={{ color: 'var(--brand-color)' }}>Privacy Policy</Link>.
+            Many tools process input in your browser, while some features use external services to produce a result.
+            Review the processing notice in each tool workspace and our <Link href={lp('/privacy')} style={{ color: 'var(--brand-color)' }}>Privacy Policy</Link> before entering sensitive information.
           </p>
         </section>
 

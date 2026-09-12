@@ -142,8 +142,8 @@
     "step3Desc": "Klik \"📋 Salin Hasil\" atau tekan Ctrl+Enter untuk menyalin ke clipboard. Klik \"⬇️ Unduh\" atau tekan Ctrl+S untuk menyimpan sebagai file .txt. Teks olahan Anda siap digunakan di mana saja — email, editor kode, media sosial, atau dokumen."
   },
   "trust": {
-    "privateTitle": "100% Pribadi & Aman",
-    "privateDesc": "Semua pemrosesan teks terjadi langsung di browser Anda menggunakan JavaScript. Kami tidak pernah mengirim, menyimpan, atau mencatat data Anda di server kami. Privasi Anda terjamin — tanpa pelacakan, tanpa cookie.",
+    "privateTitle": "Privasi dan pemrosesan",
+    "privateDesc": "Lokasi pemrosesan bergantung pada alatnya. Alat yang mengirim input ke layanan eksternal akan menjelaskannya sebelum digunakan; lihat Kebijakan Privasi kami untuk detail analitik dan penggunaan data.",
     "instantTitle": "Hasil Real-Time Secepat Kilat",
     "instantDesc": "Tidak ada layar pemuatan, tidak ada perjalanan bolak-balik server. Dapatkan hasil instan saat Anda mengetik. Proses ribuan baris dalam milidetik dengan pemrosesan sisi klien.",
     "freeTitle": "Sepenuhnya Gratis Selamanya — Tanpa Batas",

@@ -9,14 +9,13 @@ export async function generateMetadata({ params }) {
   const { lang } = await params;
   const allTools = getAllTools(lang);
   const path = '/tools';
-  const alternates = generateAlternates(lang, path);
-  if (lang !== 'en') alternates.canonical = buildCanonical('en', path);
+  const canIndex = lang === 'en';
+  const alternates = generateAlternates(lang, path, { canonicalLocale: 'en', locales: ['en'] });
   return {
     title: `All ${allTools.length}+ Free Online Text Tools — Complete Directory | ilovetexts`,
-    description: `Browse all ${allTools.length}+ free online text tools on ilovetexts.com. Sorted A–Z: text case converters, word counters, PDF editors, JSON formatters, grammar checkers and more. No signup, 100% private.`,
-    keywords: 'all text tools online free, list of online text tools, free online tools directory, text processing tools, online utilities free no signup',
+    description: `Browse all ${allTools.length}+ free online text tools on ilovetexts.com. Sorted A–Z: text case converters, word counters, PDF editors, JSON formatters, grammar checkers and more. No account required.`,
     alternates,
-    robots: { index: true, follow: true, googleBot: { index: true, follow: true, 'max-snippet': -1 } },
+    robots: { index: canIndex, follow: true, googleBot: { index: canIndex, follow: true, 'max-snippet': -1 } },
   };
 }
 
@@ -65,7 +64,7 @@ export default async function AllToolsPage({ params }) {
           🔧 All {allTools.length}+ Free Online Tools
         </h1>
         <p style={{ color: 'var(--text-secondary)', fontSize: '0.95rem', lineHeight: 1.7, maxWidth: 680, marginBottom: '24px' }}>
-          Every free tool on ilovetexts.com — {CATEGORIES.length} categories, 100% browser-based, no signup, no uploads.
+          Every free tool on ilovetexts.com — {CATEGORIES.length} categories and no account required. Processing details are shown in each tool workspace.
           Updated {new Date(BUILD_DATE).toLocaleDateString('en-US', { month: 'long', year: 'numeric' })}.
         </p>
 
@@ -75,7 +74,7 @@ export default async function AllToolsPage({ params }) {
             { n: allTools.length + '+', l: 'Free Tools' },
             { n: CATEGORIES.length, l: 'Categories' },
             { n: '6', l: 'Languages' },
-            { n: '0', l: 'Data Uploaded' },
+            { n: '✓', l: 'Processing details shown' },
           ].map(s => (
             <div key={s.l} style={{ padding: '10px 18px', background: 'var(--bg-section)', borderRadius: 'var(--radius-md)', border: '1px solid var(--border-light)', textAlign: 'center' }}>
               <div style={{ fontSize: '1.4rem', fontWeight: 800, color: 'var(--accent)' }}>{s.n}</div>

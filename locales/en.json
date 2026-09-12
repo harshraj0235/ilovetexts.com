@@ -135,15 +135,15 @@
     "howToTool": "Web browser (Chrome, Firefox, Safari, Edge)",
     "useAction": "Use {toolName}",
     "step1Title": "Paste or type your text",
-    "step1Desc": "Enter your text in the input area. You can type directly, paste from clipboard (Ctrl+V), drag and drop a .txt file, or click \"Upload\" to load a file. For PDF tools, drag and drop any PDF file directly.",
+    "step1Desc": "Enter the input this tool accepts. You can paste or type text, choose a sample, or use a file picker only where the tool provides one.",
     "step2Title": "Instant automatic processing",
-    "step2Desc": "The {toolName} processes your text in real-time as you type. Results appear instantly — no \"Submit\" button needed. All processing happens in your browser, so even large texts are processed in milliseconds.",
+    "step2Desc": "Choose the relevant options and run {toolName}. Some tools update as you type; others use a clear action button and show the result when it is ready.",
     "step3Title": "Copy or download your results",
-    "step3Desc": "Click \"📋 Copy Result\" or press Ctrl+Enter to copy to clipboard. Click \"⬇️ Download\" or press Ctrl+S to save as a .txt file. Your processed text is ready to use anywhere — email, code editor, social media, or documents."
+    "step3Desc": "Use the copy, download, or export option available in the result area. Your completed result is ready to use in the next app or document."
   },
   "trust": {
-    "privateTitle": "100% Private & Secure",
-    "privateDesc": "All text processing happens directly in your browser using JavaScript. We never send, store, or log your data on our servers. Your privacy is guaranteed — zero tracking, zero cookies.",
+    "privateTitle": "Privacy & processing",
+    "privateDesc": "Processing location depends on the tool. Tools that send input to an external service identify that before use; see our Privacy Policy for analytics and data-use details.",
     "instantTitle": "Lightning Fast Real-Time Results",
     "instantDesc": "No loading screens, no server round-trips. Get instant results as you type. Process thousands of lines in milliseconds with client-side processing.",
     "freeTitle": "Completely Free Forever — No Limits",

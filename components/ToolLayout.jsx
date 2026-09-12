@@ -58,6 +58,21 @@ const TOOL_BLOG_MAP = {
   'speech-to-text':   [{ slug: 'text-to-speech-online-free-guide', title: 'Best Free Speech Tools 2026' }],
 };
 
+// Keep internal links from tool pages pointed only at published guides. The
+// blog itself owns the publication schedule; update this small index when a
+// new guide is released.
+const PUBLISHED_BLOG_SLUGS = new Set([
+  'how-to-count-words-in-any-document',
+  'convert-text-case-uppercase-lowercase-title-case',
+  'format-json-online-beautify-validate-minify',
+  'base64-encoding-decoding-explained',
+  'generate-strong-password-guide',
+  'instagram-caption-formatting-tips',
+  'text-to-speech-online-free-guide',
+  'sha256-hash-generator-guide',
+  'remove-line-breaks-from-pdf-text',
+]);
+
 // Category-level fallback links
 const CAT_BLOG_MAP = {
   'writing-grammar-tools': [{ slug: 'best-free-grammarly-alternative', title: 'Best Free Grammarly Alternative 2026' }],
@@ -69,8 +84,24 @@ const CAT_BLOG_MAP = {
   'text-hasher-cryptography': [{ slug: 'generate-strong-password-guide', title: 'Strong Password Guide' }],
 };
 
+// Browser-only tools and tools that call third parties must be distinguished
+// at the point of use. Keep this list aligned with the network calls in each
+// tool component.
+const EXTERNAL_PROCESSING_NOTICES = {
+  'grammar-checker': 'Sends text to LanguageTool for checking',
+  'spell-checker': 'Sends text to LanguageTool for checking',
+  'punctuation-checker': 'Sends text to LanguageTool for checking',
+  'rhyming-dictionary': 'Sends your word to Datamuse for matches',
+  'wordle-word-finder': 'Sends your pattern to Datamuse for matches',
+  'anagram-generator': 'Sends letter patterns to Datamuse for matches',
+  'online-typing-tool': 'Sends typed words to Google Input Tools for suggestions',
+  'text-to-audio': 'Sends text to Google Translate text-to-speech',
+  'gov-doc-translator': 'Sends extracted text to Google Translate',
+};
+
 function RelatedBlogLinks({ toolSlug, categoryId, lp }) {
-  const posts = TOOL_BLOG_MAP[toolSlug] || CAT_BLOG_MAP[categoryId] || [];
+  const posts = (TOOL_BLOG_MAP[toolSlug] || CAT_BLOG_MAP[categoryId] || [])
+    .filter((post) => PUBLISHED_BLOG_SLUGS.has(post.slug));
   if (!posts.length) return null;
   return (
     <section style={{ marginBottom: '32px' }}>
@@ -195,7 +226,7 @@ function EmbedCTA({ toolUrl, toolName }) {
             <div style={{ display: 'flex', gap: '10px', marginBottom: '18px', flexWrap: 'wrap' }}>
               {[
                 { icon: '🆓', text: 'Always free' },
-                { icon: '🔒', text: '100% private' },
+                { icon: '🔒', text: 'Privacy-focused' },
                 { icon: '📱', text: 'Mobile responsive' },
                 { icon: '🔄', text: 'Auto-updated' },
               ].map(b => (
@@ -273,6 +304,7 @@ export default function ToolLayout({
   const [isSaved, setIsSaved] = useState(false);
   const [isFocusMode, setIsFocusMode] = useState(false);
   const savedToolId = `${category.id}/${tool.slug}`;
+  const processingNotice = EXTERNAL_PROCESSING_NOTICES[tool.slug] || 'Processes input in your browser';
 
   // Track this tool as recently used
   useEffect(() => {
@@ -403,7 +435,7 @@ export default function ToolLayout({
           <div className={styles.workspaceStatus}>
             <span className={styles.statusDot} aria-hidden="true" />
             <span><strong>{tool.name}</strong> workspace</span>
-            <span className={styles.workspacePrivacy}>Your work stays on this device</span>
+            <span className={styles.workspacePrivacy}>{processingNotice}</span>
           </div>
           <div className={styles.workspaceActions}>
             <button type="button" onClick={toggleSavedTool} aria-pressed={isSaved}>

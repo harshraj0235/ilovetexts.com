@@ -142,8 +142,8 @@
     "step3Desc": "Klicken Sie auf „📋 Ergebnis kopieren“ oder drücken Sie Strg+Eingabetaste, um es in die Zwischenablage zu kopieren. Klicken Sie auf „⬇️ Herunterladen“ oder drücken Sie Strg+S, um die Datei als TXT-Datei zu speichern. Ihr verarbeiteter Text kann überall verwendet werden – per E-Mail, Code-Editor, in sozialen Medien oder in Dokumenten."
   },
   "trust": {
-    "privateTitle": "100 % privat und sicher",
-    "privateDesc": "Die gesamte Textverarbeitung erfolgt direkt in Ihrem Browser mithilfe von JavaScript. Wir senden, speichern oder protokollieren Ihre Daten niemals auf unseren Servern. Ihre Privatsphäre ist garantiert – kein Tracking, keine Cookies.",
+    "privateTitle": "Datenschutz und Verarbeitung",
+    "privateDesc": "Wo Daten verarbeitet werden, hängt vom jeweiligen Tool ab. Tools, die Eingaben an einen externen Dienst senden, weisen vor der Nutzung darauf hin; Details zu Analyse und Datennutzung finden Sie in unserer Datenschutzerklärung.",
     "instantTitle": "Blitzschnelle Ergebnisse in Echtzeit",
     "instantDesc": "Keine Ladebildschirme, keine Server-Roundtrips. Erhalten Sie beim Tippen sofort Ergebnisse. Verarbeiten Sie Tausende von Zeilen in Millisekunden mit clientseitiger Verarbeitung.",
     "freeTitle": "Für immer völlig kostenlos – keine Grenzen",
