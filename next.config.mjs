@@ -86,13 +86,13 @@ const nextConfig = {
         headers: [
           { key: 'X-Content-Type-Options', value: 'nosniff' },
           { key: 'Referrer-Policy', value: 'strict-origin-when-cross-origin' },
-          { key: 'Permissions-Policy', value: 'camera=(), microphone=(), geolocation=()' },
+          { key: 'Permissions-Policy', value: 'camera=(), microphone=(self), geolocation=()' },
           { key: 'X-DNS-Prefetch-Control', value: 'on' },
           // COOP + COEP: required for SharedArrayBuffer which FFmpeg.wasm needs
           // for multi-threaded video processing. Applied to all pages — harmless
           // for non-video pages, critical for video converter tools.
           { key: 'Cross-Origin-Opener-Policy',   value: 'same-origin' },
-          { key: 'Cross-Origin-Embedder-Policy',  value: 'require-corp' },
+          { key: 'Cross-Origin-Embedder-Policy',  value: 'credentialless' },
           // CSP: allow same-origin scripts + Google Analytics + GTM only.
           // unsafe-inline is required for Next.js inline scripts (theme FOUC fix, JSON-LD).
           // Note: frame-ancestors is set separately per route below.
@@ -100,11 +100,12 @@ const nextConfig = {
             key: 'Content-Security-Policy',
             value: [
               "default-src 'self'",
-              "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://www.googletagmanager.com https://www.google-analytics.com https://api.producthunt.com",
+              "script-src 'self' 'unsafe-inline' 'unsafe-eval' blob: https://www.googletagmanager.com https://www.google-analytics.com https://api.producthunt.com https://unpkg.com",
               "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
               "font-src 'self' https://fonts.gstatic.com",
               "img-src 'self' data: blob: https://api.producthunt.com https://www.google-analytics.com https://www.googletagmanager.com",
-              "connect-src 'self' https://www.google-analytics.com https://analytics.google.com https://www.googletagmanager.com https://translate.googleapis.com https://texttospeech.googleapis.com",
+              "media-src 'self' blob:",
+              "connect-src 'self' blob: https://www.google-analytics.com https://analytics.google.com https://www.googletagmanager.com https://translate.googleapis.com https://texttospeech.googleapis.com https://unpkg.com",
               "worker-src 'self' blob:",
               "frame-src 'self'",
               "object-src 'none'",
