@@ -218,7 +218,7 @@ export default function WordCounter({ t, lang }) {
         const pdfjsLib = await import('pdfjs-dist');
         pdfjsLib.GlobalWorkerOptions.workerSrc = '/pdf.worker.min.mjs';
         const buf = await file.arrayBuffer();
-        const pdf = await pdfjsLib.getDocument({ data: buf }).promise;
+        const pdf = await pdfjsLib.getDocument({ data: buf.slice(0) }).promise;
         let out = '';
         for (let i = 1; i <= pdf.numPages; i++) {
           const page = await pdf.getPage(i);

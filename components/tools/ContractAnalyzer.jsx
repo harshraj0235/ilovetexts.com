@@ -143,7 +143,7 @@ export default function ContractAnalyzer({ t, lang }) {
       const pdfjsLib = await import('pdfjs-dist');
       pdfjsLib.GlobalWorkerOptions.workerSrc = '/pdf.worker.min.mjs';
       const ab = await file.arrayBuffer();
-      const pdf = await pdfjsLib.getDocument({ data: ab }).promise;
+      const pdf = await pdfjsLib.getDocument({ data: ab.slice(0) }).promise;
       let fullText = '';
       for (let i = 1; i <= Math.min(pdf.numPages, 20); i++) {
         const page = await pdf.getPage(i);

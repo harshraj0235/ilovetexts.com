@@ -390,7 +390,7 @@ export default function BankStatementReport({ t, lang }) {
         const pdfjs = await import('pdfjs-dist');
         pdfjs.GlobalWorkerOptions.workerSrc = '/pdf.worker.min.mjs';
         try {
-          const doc = await pdfjs.getDocument({ data: new Uint8Array(ab), password: password || undefined }).promise;
+          const doc = await pdfjs.getDocument({ data: new Uint8Array(ab.slice(0)), password: password || undefined }).promise;
           for (let i = 1; i <= doc.numPages; i++) {
             const page = await doc.getPage(i);
             const content = await page.getTextContent();

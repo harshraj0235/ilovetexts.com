@@ -94,7 +94,7 @@ export default function GovDocExtractor({ t, lang }) {
           const pdfjsLib = await import('pdfjs-dist');
           pdfjsLib.GlobalWorkerOptions.workerSrc = '/pdf.worker.min.mjs';
           const ab = await file.arrayBuffer();
-          const pdf = await pdfjsLib.getDocument({ data: ab }).promise;
+          const pdf = await pdfjsLib.getDocument({ data: ab.slice(0) }).promise;
           for (let p = 1; p <= Math.min(pdf.numPages, 3); p++) {
             const page = await pdf.getPage(p);
             const content = await page.getTextContent();

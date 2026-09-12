@@ -30,7 +30,7 @@ export default function SplitPdf({ t, lang }) {
       const ab = await file.arrayBuffer();
       const pdfjs = await import('pdfjs-dist');
       pdfjs.GlobalWorkerOptions.workerSrc = '/pdf.worker.min.mjs';
-      const doc = await pdfjs.getDocument({ data: new Uint8Array(ab) }).promise;
+      const doc = await pdfjs.getDocument({ data: new Uint8Array(ab.slice(0)) }).promise;
       setPageCount(doc.numPages);
       setPdfBytes(ab);
       setRangeInput(`1-${Math.ceil(doc.numPages/2)},${Math.ceil(doc.numPages/2)+1}-${doc.numPages}`);

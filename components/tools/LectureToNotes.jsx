@@ -130,7 +130,7 @@ export default function LectureToNotes({ t, lang }) {
         const ab = await file.arrayBuffer();
         const pdfjs = await import('pdfjs-dist');
         pdfjs.GlobalWorkerOptions.workerSrc = '/pdf.worker.min.mjs';
-        const doc = await pdfjs.getDocument({ data: new Uint8Array(ab) }).promise;
+        const doc = await pdfjs.getDocument({ data: new Uint8Array(ab.slice(0)) }).promise;
         setTotalPages(doc.numPages);
         setPageRange([1, Math.min(doc.numPages, 30)]);
         let txt = '';

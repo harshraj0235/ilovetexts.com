@@ -539,7 +539,7 @@ export default function ClientTool({ categoryId, toolSlug, t = {} }) {
       pdfjsLib.GlobalWorkerOptions.workerSrc = '/pdf.worker.min.mjs';
       
       const arrayBuffer = await file.arrayBuffer();
-      const pdf = await pdfjsLib.getDocument({ data: arrayBuffer }).promise;
+      const pdf = await pdfjsLib.getDocument({ data: arrayBuffer.slice(0) }).promise;
       
       let textContent = '';
       for (let i = 1; i <= pdf.numPages; i++) {

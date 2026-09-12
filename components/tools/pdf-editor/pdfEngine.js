@@ -16,7 +16,7 @@ async function getPdfjs() {
 
 export async function loadPdf(arrayBuffer) {
   const pdfjs = await getPdfjs();
-  return await pdfjs.getDocument({ data: arrayBuffer }).promise;
+  return await pdfjs.getDocument({ data: arrayBuffer.slice(0) }).promise;
 }
 
 /**

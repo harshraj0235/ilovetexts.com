@@ -122,7 +122,7 @@ export default function PdfMergePanel({ initialFiles = [], autoStart = false, on
           const pdfjs = await import('pdfjs-dist');
           const ver = pdfjs.version;
           pdfjs.GlobalWorkerOptions.workerSrc = '/pdf.worker.min.mjs';
-          const doc = await pdfjs.getDocument({ data: new Uint8Array(ab) }).promise;
+          const doc = await pdfjs.getDocument({ data: new Uint8Array(ab.slice(0)) }).promise;
           const count = doc.numPages;
           doc.destroy();
           setFiles(prev => {
@@ -152,7 +152,7 @@ export default function PdfMergePanel({ initialFiles = [], autoStart = false, on
         const pdfjs = await import('pdfjs-dist');
         const ver = pdfjs.version;
         pdfjs.GlobalWorkerOptions.workerSrc = '/pdf.worker.min.mjs';
-        const doc = await pdfjs.getDocument({ data: new Uint8Array(ab) }).promise;
+        const doc = await pdfjs.getDocument({ data: new Uint8Array(ab.slice(0)) }).promise;
         pageCount = doc.numPages;
         doc.destroy();
       } catch { /* page count stays '?' */ }

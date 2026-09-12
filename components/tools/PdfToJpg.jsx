@@ -35,7 +35,7 @@ export default function PdfToJpg({ t, lang }) {
       const ab = await file.arrayBuffer();
       const pdfjs = await import('pdfjs-dist');
       pdfjs.GlobalWorkerOptions.workerSrc = '/pdf.worker.min.mjs';
-      const doc = await pdfjs.getDocument({ data: new Uint8Array(ab) }).promise;
+      const doc = await pdfjs.getDocument({ data: new Uint8Array(ab.slice(0)) }).promise;
       const total = doc.numPages;
       const rendered = [];
       for (let i = 1; i <= total; i++) {
