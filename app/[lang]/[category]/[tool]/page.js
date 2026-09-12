@@ -558,7 +558,7 @@ export default async function ToolPage({ params }) {
         ) : toolData.slug === 'pdf-compressor' ? (
           <PdfCompressor t={t} lang={lang} />
         ) : toolData.category?.id === 'video-converter-tools' ? (
-          <VideoConverter toolSlug={toolData.slug} lang={lang} t={t} />
+          <VideoConverter key={toolData.slug} toolSlug={toolData.slug} lang={lang} t={t} />
         ) : (
           <ClientTool categoryId={category.id} toolSlug={toolData.slug} t={t} />
         )}
