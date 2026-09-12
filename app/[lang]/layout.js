@@ -144,6 +144,11 @@ export default async function LangLayout({ children, params }) {
           {/* Sidebar — hidden on mobile via CSS, only rendered on desktop */}
           <aside className="app-sidebar" aria-label="Tool categories">
             <nav className="app-sidebar-nav">
+              <div style={{ marginBottom: '24px' }}>
+                <h4>Your workspace</h4>
+                <Link href={lang === 'en' ? '/' : `/${lang}`} className="app-sidebar-link">Free Tools</Link>
+                <Link href="/workflows" className="app-sidebar-link">Workflows <span aria-hidden="true">↗</span></Link>
+              </div>
               {allLocalizedCategories.map(cat => (
                 <div key={cat.id} style={{ marginBottom: '24px' }}>
                   <h4>{cat.name}</h4>

@@ -3,6 +3,7 @@ import { getTranslations } from '@/lib/i18n';
 import { generateWebSiteSchema, generateOrganizationSchema, generateAlternates } from '@/lib/seo';
 import CommandCenter from '@/components/CommandCenter';
 import HtmlDirectory from '@/components/HtmlDirectory';
+import WorkspaceSwitch from '@/components/WorkspaceSwitch';
 
 export async function generateMetadata({ params }) {
   const { lang } = await params;
@@ -61,6 +62,7 @@ export default async function Home({ params }) {
       <script id="schema-website" type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLdWebSite) }} />
       <script id="schema-org" type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLdOrg) }} />
 
+      <WorkspaceSwitch lang={lang} />
       <CommandCenter 
         categories={CATEGORIES}
         lang={lang}

@@ -1,0 +1,7 @@
+.wrap { display: flex; justify-content: center; padding: 24px 16px 16px; }
+.switch { display: inline-flex; padding: 4px; border-radius: 999px; background: var(--bg-secondary, #f4f4f5); border: 1px solid var(--border-light, #e5e7eb); gap: 3px; }
+.switch a { text-decoration: none; padding: 10px 27px; border: 1px solid transparent; border-radius: 999px; color: var(--text-secondary, #52525b); font-size: 14px; font-weight: 600; line-height: 1.4; transition: background .15s; }
+.switch a[aria-current] { background: var(--bg-main, white); border-color: var(--border-light, #e5e7eb); color: var(--text-primary, #18181b); box-shadow: 0 2px 5px #00000008; }
+.switch a:hover { color: var(--text-primary, #18181b); }
+.switch a:focus-visible { outline: 3px solid #387c66; outline-offset: 3px; }
+@media (max-width: 360px) { .switch a { padding-inline: 22px; } }

@@ -86,6 +86,8 @@ export default function NavBar({ lang }) {
             </button>
             <button 
               className="mobile-menu-btn" 
+              aria-label="Open navigation menu"
+              aria-expanded={mobileMenuOpen}
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
               style={{ fontSize: '1.2rem', display: 'none', background: 'none', border: 'none', cursor: 'pointer' }}
             >
@@ -105,6 +107,10 @@ export default function NavBar({ lang }) {
           onClick={e => e.stopPropagation()}
         >
             <h3 style={{ marginBottom: '16px', fontSize: '1.2rem' }}>Menu</h3>
+            <div style={{ display: 'grid', gap: 12, marginBottom: 24 }}>
+              <Link href={lp('/')} onClick={() => setMobileMenuOpen(false)}>Free Tools</Link>
+              <Link href="/workflows" onClick={() => setMobileMenuOpen(false)}>Workflows →</Link>
+            </div>
             {allCategories.map(cat => (
               <div key={cat.id} style={{ marginBottom: '16px' }}>
                 <div style={{ fontWeight: 600, fontSize: '0.85rem', color: 'var(--text-secondary)', textTransform: 'uppercase', marginBottom: '8px' }}>

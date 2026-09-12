@@ -82,6 +82,9 @@ export async function GET(request, { params }) {
     allTools.forEach((tool) => addUrl(`/${tool.categoryId}/${tool.slug}`, '0.85', 'weekly', tool.content?.updatedAt || TOOLS_LAST_UPDATED, INDEXABLE_TOOL_LOCALES));
 
     addUrl('/blog', '0.7', 'weekly', CONTENT_LAST_UPDATED, ['en']);
+    ['workflows', 'workflows/statement-review', 'office'].forEach(path =>
+      addUrl(`/${path}`, '0.7', 'monthly', '2026-09-12', ['en'])
+    );
     EN_BLOG_SLUGS
       .filter((post) => !post.lang && isPublishedDate(post.date))
       .forEach((post) => addUrl(`/blog/${post.slug}`, '0.7', 'monthly', post.date, ['en']));

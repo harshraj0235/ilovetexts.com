@@ -178,7 +178,7 @@ export default function CommandCenter({ categories, lang, t }) {
             <span>{t.home.heroTitleHighlight || 'in one free website.'}</span>
           </h1>
           <p className={styles.subtitle}>
-            {t.home.heroDesc || 'Get the small jobs done quickly—privately, without accounts, uploads, or distractions.'}
+            {lang === 'en' ? 'Find a free tool for the small jobs in your day. Need a guided, multi-step task? Switch to Workflows whenever you’re ready.' : t.home.heroDesc}
           </p>
 
           <form className={styles.searchForm} onSubmit={submitSearch} role="search">
@@ -220,7 +220,7 @@ export default function CommandCenter({ categories, lang, t }) {
           <ul className={styles.trustLine} aria-label="Our promises">
             <li><span aria-hidden="true">✓</span> No account needed</li>
             <li><span aria-hidden="true">✓</span> Works on any device</li>
-            <li><span aria-hidden="true">✓</span> Your work stays private</li>
+            <li><span aria-hidden="true">✓</span> Free tools stay free</li>
           </ul>
         </div>
       </section>
