@@ -109,7 +109,7 @@ export default function PdfDiffChecker({ t, lang }) {
     if (ext === 'txt') return new TextDecoder().decode(ab);
     if (ext === 'pdf') {
       const pdfjs = await import('pdfjs-dist');
-      pdfjs.GlobalWorkerOptions.workerSrc = `https://unpkg.com/pdfjs-dist@${pdfjs.version}/build/pdf.worker.min.mjs`;
+      pdfjs.GlobalWorkerOptions.workerSrc = '/pdf.worker.min.mjs';
       const doc = await pdfjs.getDocument({ data: new Uint8Array(ab) }).promise;
       let text = '';
       for (let i = 1; i <= doc.numPages; i++) {

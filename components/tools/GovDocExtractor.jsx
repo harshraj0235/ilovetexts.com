@@ -92,7 +92,7 @@ export default function GovDocExtractor({ t, lang }) {
         let text = '';
         if (file.name.toLowerCase().endsWith('.pdf')) {
           const pdfjsLib = await import('pdfjs-dist');
-          pdfjsLib.GlobalWorkerOptions.workerSrc = '/pdf.worker.min.js';
+          pdfjsLib.GlobalWorkerOptions.workerSrc = '/pdf.worker.min.mjs';
           const ab = await file.arrayBuffer();
           const pdf = await pdfjsLib.getDocument({ data: ab }).promise;
           for (let p = 1; p <= Math.min(pdf.numPages, 3); p++) {

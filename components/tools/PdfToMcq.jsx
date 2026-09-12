@@ -129,7 +129,7 @@ export default function PdfToMcq({ t, lang }) {
       if(ext==='pdf') {
         const ab=await file.arrayBuffer();
         const pdfjs=await import('pdfjs-dist');
-        pdfjs.GlobalWorkerOptions.workerSrc=`https://unpkg.com/pdfjs-dist@${pdfjs.version}/build/pdf.worker.min.mjs`;
+        pdfjs.GlobalWorkerOptions.workerSrc = '/pdf.worker.min.mjs';
         const doc=await pdfjs.getDocument({data:new Uint8Array(ab)}).promise;
         let text='';
         for(let i=1;i<=Math.min(doc.numPages,20);i++){const page=await doc.getPage(i);const c=await page.getTextContent();text+=c.items.map(item=>item.str).join(' ')+' ';}

@@ -121,7 +121,7 @@ export default function PdfMergePanel({ initialFiles = [], autoStart = false, on
           const ab = await file.arrayBuffer();
           const pdfjs = await import('pdfjs-dist');
           const ver = pdfjs.version;
-          pdfjs.GlobalWorkerOptions.workerSrc = `https://unpkg.com/pdfjs-dist@${ver}/build/pdf.worker.min.mjs`;
+          pdfjs.GlobalWorkerOptions.workerSrc = '/pdf.worker.min.mjs';
           const doc = await pdfjs.getDocument({ data: new Uint8Array(ab) }).promise;
           const count = doc.numPages;
           doc.destroy();
@@ -151,7 +151,7 @@ export default function PdfMergePanel({ initialFiles = [], autoStart = false, on
         const ab = await file.arrayBuffer();
         const pdfjs = await import('pdfjs-dist');
         const ver = pdfjs.version;
-        pdfjs.GlobalWorkerOptions.workerSrc = `https://unpkg.com/pdfjs-dist@${ver}/build/pdf.worker.min.mjs`;
+        pdfjs.GlobalWorkerOptions.workerSrc = '/pdf.worker.min.mjs';
         const doc = await pdfjs.getDocument({ data: new Uint8Array(ab) }).promise;
         pageCount = doc.numPages;
         doc.destroy();

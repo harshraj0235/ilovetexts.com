@@ -122,7 +122,7 @@ export default function BankStatementAnalyzer({ t, lang }) {
       if (ext === 'pdf') {
         const ab = await file.arrayBuffer();
         const pdfjs = await import('pdfjs-dist');
-        pdfjs.GlobalWorkerOptions.workerSrc = `https://unpkg.com/pdfjs-dist@${pdfjs.version}/build/pdf.worker.min.mjs`;
+        pdfjs.GlobalWorkerOptions.workerSrc = '/pdf.worker.min.mjs';
         try {
           const doc = await pdfjs.getDocument({ data: new Uint8Array(ab), password: pdfPassword||undefined }).promise;
           for (let i=1;i<=doc.numPages;i++) {

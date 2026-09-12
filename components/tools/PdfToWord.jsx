@@ -33,7 +33,7 @@ export default function PdfToWord({ t, lang }) {
     setStatus('extracting'); setProgress(10);
     try {
       const pdfjsLib = await import('pdfjs-dist');
-      pdfjsLib.GlobalWorkerOptions.workerSrc = '/pdf.worker.min.js';
+      pdfjsLib.GlobalWorkerOptions.workerSrc = '/pdf.worker.min.mjs';
       const ab = await file.arrayBuffer();
       setProgress(20);
       const pdf = await pdfjsLib.getDocument({ data: ab }).promise;
