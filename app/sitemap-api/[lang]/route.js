@@ -85,6 +85,7 @@ export async function GET(request, { params }) {
     ['workflows', 'workflows/statement-review', 'office'].forEach(path =>
       addUrl(`/${path}`, '0.7', 'monthly', '2026-09-12', ['en'])
     );
+    addUrl('/workflows/application-ready', '0.7', 'monthly', '2026-09-13', ['en']);
     EN_BLOG_SLUGS
       .filter((post) => !post.lang && isPublishedDate(post.date))
       .forEach((post) => addUrl(`/blog/${post.slug}`, '0.7', 'monthly', post.date, ['en']));

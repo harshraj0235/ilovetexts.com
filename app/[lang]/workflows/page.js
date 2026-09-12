@@ -5,7 +5,7 @@ import s from '@/components/workflows/Workflows.module.css';
 
 export async function generateMetadata({ params }) {
   const { lang } = await params;
-  return workflowMetadata(lang, '/workflows', 'Document Workflows — From Statement to Reviewed Spreadsheet', 'Guided document workflows for everyday office work. Review bank statement PDF or CSV rows, check duplicates and export Excel. Free workspace; optional paid setup help.');
+  return workflowMetadata(lang, '/workflows', 'Document Workflows — Application Packs & Statement Review', 'Free guided document workflows: organise university application PDFs with ApplicationReady, or review statement rows and export Excel. Clear steps and local file processing.');
 }
 
 export default function Workflows() {
@@ -31,8 +31,14 @@ export default function Workflows() {
         </div>
       </section>
       <section className={s.section} aria-labelledby="choose-workflow">
-        <div className={s.sectionHeading}><h2 id="choose-workflow">Choose what you need today.</h2><span className={s.badge}>One workflow, thoughtfully built</span></div>
+        <div className={s.sectionHeading}><h2 id="choose-workflow">Choose what you need today.</h2><span className={s.badge}>Two free workflows</span></div>
         <div className={s.grid}>
+          <article className={s.card}>
+            <span className={s.badge}>Free · ApplicationReady</span><h3>Application documents → organised pack</h3>
+            <p>Preparing for a German university application? Keep original PDFs together, link them to a sourced starting checklist and record the items you still need to check.</p>
+            <ul className={s.list}><li>For Indian university graduates using uni-assist</li><li>Unchanged originals, integrity and duplicate checks</li><li>ZIP export with a preparation report—not approval</li></ul>
+            <div className={s.actions}><Link href="/workflows/application-ready" className={s.primary}>Open ApplicationReady →</Link></div>
+          </article>
           <article className={s.card}>
             <span className={s.badge}>Free · Available now</span><h3>Statement → reviewed spreadsheet</h3>
             <p>Prepare bank transaction rows for your own reconciliation. Import files, inspect possible duplicates, correct amounts and export with source references.</p>

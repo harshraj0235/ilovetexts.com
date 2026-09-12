@@ -13,6 +13,8 @@
     "test:alphabet-translator": "node --test tests/alphabet-translator.test.mjs",
     "test:statement-review": "node --test tests/statement-review.test.mjs",
     "test:workflows": "node tests/workflows.browser.mjs",
+    "test:application-ready": "node --test tests/application-ready.test.mjs",
+    "test:application-ready:browser": "node tests/application-ready.browser.mjs",
     "seo-check": "node seo-audit.js",
     "ping-search": "node ping-google.js"
   },
