@@ -1,10 +1,5 @@
 'use client';
 
-// Build date constant — update this when deploying new content.
-// Hard-coding prevents "updated today" signal spam to Google on every deploy.
-const BUILD_DATE = '2026-09-06';
-const BUILD_DATE_DISPLAY = 'September 2026';
-
 import Link from 'next/link';
 import { useState, useEffect } from 'react';
 import { getTranslations } from '@/lib/i18n';
@@ -247,7 +242,7 @@ function EmbedCTA({ toolUrl, toolName }) {
             </div>
 
             <p style={{ marginTop: '14px', fontSize: '0.74rem', color: 'var(--text-tertiary)', textAlign: 'center' }}>
-              By embedding, you help us stay free. The "Powered by ilovetexts.com" link is appreciated but not required.
+              By embedding, you help us stay free. The &quot;Powered by ilovetexts.com&quot; link is appreciated but not required.
             </p>
           </div>
         </div>
@@ -274,6 +269,9 @@ export default function ToolLayout({
   const t = getTranslations(lang);
   const lp = (path) => lang === 'en' ? path : `/${lang}${path}`;
   const [toast, setToast] = useState(null);
+  const [isSaved, setIsSaved] = useState(false);
+  const [isFocusMode, setIsFocusMode] = useState(false);
+  const savedToolId = `${category.id}/${tool.slug}`;
 
   // Track this tool as recently used
   useEffect(() => {
@@ -290,6 +288,17 @@ export default function ToolLayout({
       localStorage.setItem('ilt-recent-tools', JSON.stringify(filtered.slice(0, 10)));
     } catch (e) { /* localStorage might be full or unavailable */ }
   }, [category.id, tool.slug]);
+
+  // Saved tools stay on the user's device: useful, private, and account-free.
+  useEffect(() => {
+    const frame = window.requestAnimationFrame(() => {
+      try {
+        const saved = JSON.parse(localStorage.getItem('ilt-saved-tools') || '[]');
+        setIsSaved(saved.some((item) => item.id === savedToolId));
+      } catch (e) { /* localStorage might be unavailable */ }
+    });
+    return () => window.cancelAnimationFrame(frame);
+  }, [savedToolId]);
 
   const toolUrl = `https://ilovetexts.com${lp(`/${category.id}/${tool.slug}`)}`;
 
@@ -309,45 +318,49 @@ export default function ToolLayout({
     setToast({ message: 'Link copied to clipboard!', type: 'success' });
   };
 
-  const shareOnTwitter = () => {
-    window.open(
-      `https://twitter.com/intent/tweet?text=${encodeURIComponent(`Just used the free ${tool.name} tool on ilovetexts.com — works instantly in the browser! 🚀`)}&url=${encodeURIComponent(toolUrl)}`,
-      '_blank',
-      'noopener,noreferrer'
-    );
+  const toggleSavedTool = () => {
+    try {
+      const saved = JSON.parse(localStorage.getItem('ilt-saved-tools') || '[]');
+      const exists = saved.some((item) => item.id === savedToolId);
+      const next = exists
+        ? saved.filter((item) => item.id !== savedToolId)
+        : [{
+          id: savedToolId,
+          categoryId: category.id,
+          slug: tool.slug,
+          name: tool.name,
+          savedAt: Date.now(),
+        }, ...saved].slice(0, 24);
+
+      localStorage.setItem('ilt-saved-tools', JSON.stringify(next));
+      setIsSaved(!exists);
+      setToast({ message: exists ? 'Removed from saved tools.' : 'Saved on this device.', type: 'success' });
+    } catch (e) {
+      setToast({ message: 'Your browser could not save this tool.', type: 'error' });
+    }
   };
 
-  const shareOnLinkedIn = () => {
-    window.open(
-      `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(toolUrl)}`,
-      '_blank',
-      'noopener,noreferrer'
-    );
+  const startTool = () => {
+    const workspace = document.getElementById('tool-workspace');
+    workspace?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    window.setTimeout(() => {
+      const firstControl = workspace?.querySelector('textarea, input:not([type="hidden"]), select, button');
+      firstControl?.focus({ preventScroll: true });
+    }, 250);
   };
 
-  const shareOnReddit = () => {
-    window.open(
-      `https://reddit.com/submit?url=${encodeURIComponent(toolUrl)}&title=${encodeURIComponent(`Free ${tool.name} — works instantly in browser`)}`,
-      '_blank',
-      'noopener,noreferrer'
-    );
-  };
-
-  const shareOnWhatsApp = () => {
-    window.open(
-      `https://wa.me/?text=${encodeURIComponent(`Check out this free ${tool.name} tool: ${toolUrl}`)}`,
-      '_blank',
-      'noopener,noreferrer'
-    );
+  const toggleFocusMode = () => {
+    setIsFocusMode((current) => !current);
+    if (!isFocusMode) startTool();
   };
 
   return (
-    <>
+    <div className={`toolPage ${isFocusMode ? styles.focusMode : ''}`}>
       {/* Real aggregateRating JSON-LD — only emits when user has actually rated */}
       <RatingSchema tool={tool} category={category} />
 
       {/* ═══ Colored Hero Banner ═══ */}
-      <div className="tool-hero" style={{ '--tool-color': category.color }}>
+      <div className={`tool-hero hero`} style={{ '--tool-color': category.color }}>
         <div className="container">
           <nav className="breadcrumbs" aria-label="Breadcrumb">
             <Link href={lp('/')}>{t.nav.home}</Link>
@@ -359,82 +372,62 @@ export default function ToolLayout({
           <h1>{tool.name}</h1>
           <p className="tool-hero-desc">{tool.description}</p>
 
-          {/* Last Updated — freshness signal for Google */}
-          <div style={{
-            display: 'inline-flex', alignItems: 'center', gap: '6px',
-            fontSize: '0.78rem', color: 'rgba(255,255,255,0.7)',
-            marginTop: '8px', marginBottom: '2px',
-          }}>
-            <span>🕒</span>
-            <span>Last updated: <time dateTime={BUILD_DATE}>{BUILD_DATE_DISPLAY}</time></span>
-            <span style={{ opacity: 0.5 }}>·</span>
-            <span>Free &amp; no signup</span>
+          <div className="heroMeta">
+            <span>Runs locally in your browser</span>
+            <span aria-hidden="true">•</span>
+            <span>Free, with no account</span>
           </div>
 
           <div className="tool-hero-badges">
             <span className="tool-hero-badge"><span role="img" aria-label="private">🔒</span> {t.ui.private}</span>
             <span className="tool-hero-badge"><span role="img" aria-label="fast">⚡</span> {t.ui.instantResults}</span>
             <span className="tool-hero-badge"><span role="img" aria-label="free">🆓</span> {t.ui.freeForever}</span>
-            <span className="tool-hero-badge"><span role="img" aria-label="mobile">📱</span> {t.trust.devicesTitle}</span>
-            <span className="tool-hero-badge"><span role="img" aria-label="keyboard">⌨️</span> {t.trust.shortcutsTitle}</span>
           </div>
+          <nav className="workflowNav" aria-label={`${tool.name} page navigation`}>
+            <button type="button" className="startButton" onClick={startTool}>
+              Start using it <span aria-hidden="true">↓</span>
+            </button>
+            <a href="#how-it-works">How it works</a>
+            <a href="#tool-faq">FAQ</a>
+            <button type="button" className="saveLink" onClick={toggleSavedTool} aria-pressed={isSaved}>
+              <span aria-hidden="true">{isSaved ? '★' : '☆'}</span> {isSaved ? 'Saved' : 'Save tool'}
+            </button>
+          </nav>
         </div>
       </div>
 
       {/* ═══ Tool Workspace ═══ */}
-      <div className="tool-workspace">
+      <main id="tool-workspace" className={`tool-workspace workspace`} tabIndex="-1">
+        <div className="workspaceBar">
+          <div className="workspaceStatus">
+            <span className="statusDot" aria-hidden="true" />
+            <span><strong>{tool.name}</strong> workspace</span>
+            <span className="workspacePrivacy">Your work stays on this device</span>
+          </div>
+          <div className="workspaceActions">
+            <button type="button" onClick={toggleSavedTool} aria-pressed={isSaved}>
+              <span aria-hidden="true">{isSaved ? '★' : '☆'}</span> {isSaved ? 'Saved' : 'Save'}
+            </button>
+            <button type="button" onClick={toggleFocusMode} aria-pressed={isFocusMode}>
+              <span aria-hidden="true">{isFocusMode ? '⊟' : '⛶'}</span> {isFocusMode ? 'Exit focus' : 'Focus'}
+            </button>
+          </div>
+        </div>
         {children}
-      </div>
+      </main>
 
-      {/* ═══ Share Tool Bar — Enhanced with Social Buttons ═══ */}
-      <div className="tool-share-bar">
-        <div className="container">
-          <div className="share-bar-inner">
-            <span className="share-bar-label">Share:</span>
-            <div className="share-buttons">
-              <button className="share-btn share-twitter" onClick={shareOnTwitter} aria-label="Share on Twitter" title="Twitter/X">
-                𝕏
-              </button>
-              <button className="share-btn share-linkedin" onClick={shareOnLinkedIn} aria-label="Share on LinkedIn" title="LinkedIn">
-                in
-              </button>
-              <button className="share-btn share-reddit" onClick={shareOnReddit} aria-label="Share on Reddit" title="Reddit">
-                ↑
-              </button>
-              <button className="share-btn share-whatsapp" onClick={shareOnWhatsApp} aria-label="Share on WhatsApp" title="WhatsApp">
-                💬
-              </button>
-              <button className="share-btn share-copy" onClick={handleCopyLink} aria-label="Copy link" title="Copy link">
-                🔗
-              </button>
-              <button className="btn btn-secondary" onClick={handleShare} style={{ gap: '8px', marginLeft: '8px' }}>
-                <span role="img" aria-label="share">📤</span>
-              </button>
-              <EmbedWidget toolUrl={toolUrl} toolName={tool.name} />
-            </div>
-          </div>
+      <section className="actionDock" aria-label="Tool actions">
+        <div className="actionDockIntro">
+          <p>Made for the task in front of you</p>
+          <span>Keep this tool handy, share it, or explore the next useful step.</span>
         </div>
-      </div>
-
-      {/* ═══ Keyboard Shortcuts Info ═══ */}
-      <div className="keyboard-shortcuts-bar hide-on-mobile">
-        <style jsx>{`
-          @media (max-width: 767px) {
-            .hide-on-mobile { display: none !important; }
-          }
-        `}</style>
-        <div className="container">
-          <div className="shortcuts-inner">
-            <span className="shortcuts-label">⌨️ Shortcuts:</span>
-            <span className="shortcut-item"><kbd>Ctrl</kbd>+<kbd>Enter</kbd> {t.ui.copyResult}</span>
-            <span className="shortcut-item"><kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>C</kbd> {t.ui.clear}</span>
-            <span className="shortcut-item"><kbd>Ctrl</kbd>+<kbd>S</kbd> {t.ui.download}</span>
-          </div>
+        <div className="actionDockButtons">
+          <button type="button" onClick={handleCopyLink}><span aria-hidden="true">↗</span> Copy link</button>
+          <button type="button" onClick={handleShare}><span aria-hidden="true">↗</span> Share</button>
+          <EmbedWidget toolUrl={toolUrl} toolName={tool.name} />
+          <Link href={lp(`/${category.id}`)}>More in {category.name} <span aria-hidden="true">→</span></Link>
         </div>
-      </div>
-
-      {/* ═══ Embed CTA Banner ═══ */}
-      <EmbedCTA toolUrl={toolUrl} toolName={tool.name} />
+      </section>
 
       {/* ═══ Content Sections ═══ */}
       <div className="tool-content-sections">
@@ -449,7 +442,7 @@ export default function ToolLayout({
 
         {/* Section 2: How-To Steps */}
         {howToSteps && howToSteps.length > 0 && (
-          <section className="howto-section">
+          <section className="howto-section" id="how-it-works">
             <h2>How to Use the {tool.name}</h2>
             <div className="howto-steps">
               {howToSteps.map((step, idx) => (
@@ -495,7 +488,7 @@ export default function ToolLayout({
 
         {/* Section 5: FAQ */}
         {faqs && faqs.length > 0 && (
-          <section className="faq-section">
+          <section className="faq-section" id="tool-faq">
             <h2>Frequently Asked Questions — {tool.name}</h2>
             <div className="faq-list">
               {faqs.map((faq, idx) => (
@@ -615,7 +608,7 @@ export default function ToolLayout({
       </div>
       
       {toast && <Toast message={toast.message} type={toast.type} onClose={() => setToast(null)} />}
-    </>
+    </div>
   );
 }
 

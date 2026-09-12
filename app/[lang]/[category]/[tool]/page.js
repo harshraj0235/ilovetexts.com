@@ -89,6 +89,8 @@ import PasswordGenerator from '@/components/tools/PasswordGenerator';
 import ColorConverter from '@/components/tools/ColorConverter';
 import LoremIpsumGenerator from '@/components/tools/LoremIpsumGenerator';
 import PasswordStrengthAnalyzer from '@/components/tools/PasswordStrengthAnalyzer';
+import Base64EncodeDecode from '@/components/tools/Base64EncodeDecode';
+import MorseCodeTranslator from '@/components/tools/MorseCodeTranslator';
 import { notFound } from 'next/navigation';
 import Link from 'next/link';
 
@@ -308,6 +310,10 @@ export default async function ToolPage({ params }) {
           <LoremIpsumGenerator t={t} lang={lang} />
         ) : toolData.slug === 'password-strength' ? (
           <PasswordStrengthAnalyzer t={t} lang={lang} />
+        ) : toolData.slug === 'base64-encode-decode' ? (
+          <Base64EncodeDecode t={t} lang={lang} />
+        ) : toolData.slug === 'morse-code' ? (
+          <MorseCodeTranslator t={t} lang={lang} />
         ) : toolData.slug === 'prompt-minifier' ? (
           <PromptMinifier t={t} lang={lang} />
         ) : toolData.slug === 'caption-formatter' ? (
