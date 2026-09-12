@@ -84,6 +84,13 @@ import BankStatementReport from '@/components/tools/BankStatementReport';
 import PdfToWord from '@/components/tools/PdfToWord';
 import HeicToJpg from '@/components/tools/HeicToJpg';
 import PassportPhotoMaker from '@/components/tools/PassportPhotoMaker';
+import BatchPdfProcessor from '@/components/tools/BatchPdfProcessor';
+import PdfToExcel from '@/components/tools/PdfToExcel';
+import OcrUnlimited from '@/components/tools/OcrUnlimited';
+import PdfRedactor from '@/components/tools/PdfRedactor';
+import PdfWatermarkRemover from '@/components/tools/PdfWatermarkRemover';
+import PdfSummarizer from '@/components/tools/PdfSummarizer';
+import PdfCompressor from '@/components/tools/PdfCompressor';
 import MemeGenerator from '@/components/tools/MemeGenerator';
 import PasswordGenerator from '@/components/tools/PasswordGenerator';
 import ColorConverter from '@/components/tools/ColorConverter';
@@ -462,6 +469,20 @@ export default async function ToolPage({ params }) {
           <PassportPhotoMaker t={t} lang={lang} />
         ) : toolData.slug === 'meme-generator' ? (
           <MemeGenerator t={t} lang={lang} />
+        ) : toolData.slug === 'batch-pdf-processor' ? (
+          <BatchPdfProcessor t={t} lang={lang} />
+        ) : toolData.slug === 'pdf-to-excel' ? (
+          <PdfToExcel t={t} lang={lang} />
+        ) : toolData.slug === 'ocr-unlimited' ? (
+          <OcrUnlimited t={t} lang={lang} />
+        ) : toolData.slug === 'pdf-redactor' ? (
+          <PdfRedactor t={t} lang={lang} />
+        ) : toolData.slug === 'pdf-watermark-remover' ? (
+          <PdfWatermarkRemover t={t} lang={lang} />
+        ) : toolData.slug === 'pdf-summarizer' ? (
+          <PdfSummarizer t={t} lang={lang} />
+        ) : toolData.slug === 'pdf-compressor' ? (
+          <PdfCompressor t={t} lang={lang} />
         ) : (
           <ClientTool categoryId={category.id} toolSlug={toolData.slug} t={t} />
         )}
