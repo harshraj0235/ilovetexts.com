@@ -19,6 +19,8 @@
     "ping-search": "node ping-google.js"
   },
   "dependencies": {
+    "@ffmpeg/ffmpeg": "^0.12.15",
+    "@ffmpeg/util": "^0.12.2",
     "@iarna/toml": "^2.2.5",
     "@uiw/react-json-view": "^2.0.0-alpha.43",
     "bcryptjs": "^3.0.3",

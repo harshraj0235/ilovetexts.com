@@ -50,6 +50,9 @@ import TextToHandwriting from '@/components/tools/TextToHandwriting';
 import ImageCompressor from '@/components/tools/ImageCompressor';
 import ImageResizer from '@/components/tools/ImageResizer';
 import ImageConverter from '@/components/tools/ImageConverter';
+import UniversalImageConverter from '@/components/tools/UniversalImageConverter';
+import UniversalUnitConverter from '@/components/tools/UniversalUnitConverter';
+import UniversalDataConverter from '@/components/tools/UniversalDataConverter';
 import JpgToPdf from '@/components/tools/JpgToPdf';
 import PdfToJpg from '@/components/tools/PdfToJpg';
 import SplitPdf from '@/components/tools/SplitPdf';
@@ -104,6 +107,7 @@ import ByteConverter from '@/components/tools/ByteConverter';
 import { BYTE_TOOLS } from '@/lib/byte-tool-config.mjs';
 import AlphabetTranslator from '@/components/tools/AlphabetTranslator';
 import { ALPHABET_TOOLS } from '@/lib/alphabet-translator.mjs';
+import VideoConverter from '@/components/tools/VideoConverter';
 import { notFound } from 'next/navigation';
 import Link from 'next/link';
 
@@ -395,8 +399,78 @@ export default async function ToolPage({ params }) {
           <ImageCompressor t={t} lang={lang} />
         ) : toolData.slug === 'resize-image' ? (
           <ImageResizer t={t} lang={lang} />
+        ) : toolData.slug === 'json-to-xml' ? (
+          <UniversalDataConverter from="json" to="xml" />
+        ) : toolData.slug === 'xml-to-json' ? (
+          <UniversalDataConverter from="xml" to="json" />
+        ) : toolData.slug === 'json-to-yaml' ? (
+          <UniversalDataConverter from="json" to="yaml" />
+        ) : toolData.slug === 'yaml-to-json' ? (
+          <UniversalDataConverter from="yaml" to="json" />
+        ) : toolData.slug === 'json-to-csv' ? (
+          <UniversalDataConverter from="json" to="csv" />
+        ) : toolData.slug === 'csv-to-json' ? (
+          <UniversalDataConverter from="csv" to="json" />
+        ) : toolData.slug === 'csv-to-xml' ? (
+          <UniversalDataConverter from="csv" to="xml" />
+        ) : toolData.slug === 'xml-to-csv' ? (
+          <UniversalDataConverter from="xml" to="csv" />
+        ) : toolData.slug === 'length-converter' ? (
+          <UniversalUnitConverter type="length" />
+        ) : toolData.slug === 'weight-converter' ? (
+          <UniversalUnitConverter type="weight" />
+        ) : toolData.slug === 'temperature-converter' ? (
+          <UniversalUnitConverter type="temperature" />
+        ) : toolData.slug === 'area-converter' ? (
+          <UniversalUnitConverter type="area" />
+        ) : toolData.slug === 'volume-converter' ? (
+          <UniversalUnitConverter type="volume" />
+        ) : toolData.slug === 'speed-converter' ? (
+          <UniversalUnitConverter type="speed" />
+        ) : toolData.slug === 'time-converter' ? (
+          <UniversalUnitConverter type="time" />
+        ) : toolData.slug === 'data-storage-converter' ? (
+          <UniversalUnitConverter type="data" />
+        ) : toolData.slug === 'pressure-converter' ? (
+          <UniversalUnitConverter type="pressure" />
+        ) : toolData.slug === 'energy-converter' ? (
+          <UniversalUnitConverter type="energy" />
+        ) : toolData.slug === 'power-converter' ? (
+          <UniversalUnitConverter type="power" />
+        ) : toolData.slug === 'angle-converter' ? (
+          <UniversalUnitConverter type="angle" />
         ) : toolData.slug === 'convert-image' ? (
           <ImageConverter t={t} lang={lang} />
+        ) : toolData.slug === 'png-to-jpg' ? (
+          <UniversalImageConverter t={t} lang={lang} from="png" to="jpg" />
+        ) : toolData.slug === 'jpg-to-png' ? (
+          <UniversalImageConverter t={t} lang={lang} from="jpg" to="png" />
+        ) : toolData.slug === 'webp-to-jpg' ? (
+          <UniversalImageConverter t={t} lang={lang} from="webp" to="jpg" />
+        ) : toolData.slug === 'webp-to-png' ? (
+          <UniversalImageConverter t={t} lang={lang} from="webp" to="png" />
+        ) : toolData.slug === 'jpg-to-webp' ? (
+          <UniversalImageConverter t={t} lang={lang} from="jpg" to="webp" />
+        ) : toolData.slug === 'png-to-webp' ? (
+          <UniversalImageConverter t={t} lang={lang} from="png" to="webp" />
+        ) : toolData.slug === 'svg-to-png' ? (
+          <UniversalImageConverter t={t} lang={lang} from="svg" to="png" />
+        ) : toolData.slug === 'svg-to-jpg' ? (
+          <UniversalImageConverter t={t} lang={lang} from="svg" to="jpg" />
+        ) : toolData.slug === 'image-to-base64' ? (
+          <UniversalImageConverter t={t} lang={lang} to="base64" />
+        ) : toolData.slug === 'base64-to-image' ? (
+          <UniversalImageConverter t={t} lang={lang} from="base64" to="jpg" />
+        ) : toolData.slug === 'heic-to-png' ? (
+          <UniversalImageConverter t={t} lang={lang} from="heic" to="png" />
+        ) : toolData.slug === 'gif-to-png' ? (
+          <UniversalImageConverter t={t} lang={lang} from="gif" to="png" />
+        ) : toolData.slug === 'bmp-to-jpg' ? (
+          <UniversalImageConverter t={t} lang={lang} from="bmp" to="jpg" />
+        ) : toolData.slug === 'ico-to-png' ? (
+          <UniversalImageConverter t={t} lang={lang} from="ico" to="png" />
+        ) : toolData.slug === 'image-to-pdf' ? (
+          <JpgToPdf t={t} lang={lang} />
         ) : toolData.slug === 'jpg-to-pdf' ? (
           <JpgToPdf t={t} lang={lang} />
         ) : toolData.slug === 'pdf-to-jpg' ? (
@@ -483,6 +557,8 @@ export default async function ToolPage({ params }) {
           <PdfSummarizer t={t} lang={lang} />
         ) : toolData.slug === 'pdf-compressor' ? (
           <PdfCompressor t={t} lang={lang} />
+        ) : toolData.category?.id === 'video-converter-tools' ? (
+          <VideoConverter toolSlug={toolData.slug} lang={lang} t={t} />
         ) : (
           <ClientTool categoryId={category.id} toolSlug={toolData.slug} t={t} />
         )}

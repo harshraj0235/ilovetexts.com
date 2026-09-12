@@ -65,6 +65,13 @@ const nextConfig = {
             chunks: 'async',
             priority: 30,
           },
+          // Keep @ffmpeg/ffmpeg in its own chunk — only loaded on video tool pages
+          ffmpeg: {
+            test: /[\\/]node_modules[\\/]@ffmpeg[\\/]/,
+            name: 'ffmpeg',
+            chunks: 'async',
+            priority: 30,
+          },
         },
       };
     }
@@ -81,6 +88,11 @@ const nextConfig = {
           { key: 'Referrer-Policy', value: 'strict-origin-when-cross-origin' },
           { key: 'Permissions-Policy', value: 'camera=(), microphone=(), geolocation=()' },
           { key: 'X-DNS-Prefetch-Control', value: 'on' },
+          // COOP + COEP: required for SharedArrayBuffer which FFmpeg.wasm needs
+          // for multi-threaded video processing. Applied to all pages — harmless
+          // for non-video pages, critical for video converter tools.
+          { key: 'Cross-Origin-Opener-Policy',   value: 'same-origin' },
+          { key: 'Cross-Origin-Embedder-Policy',  value: 'require-corp' },
           // CSP: allow same-origin scripts + Google Analytics + GTM only.
           // unsafe-inline is required for Next.js inline scripts (theme FOUC fix, JSON-LD).
           // Note: frame-ancestors is set separately per route below.
