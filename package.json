@@ -7,6 +7,7 @@
     "prebuild": "node seo-audit.js",
     "build": "next build",
     "start": "next start",
+    "postinstall": "node scripts/copy-pdf-worker.js",
     "lint": "eslint",
     "test:byte-converter": "node --test tests/byte-converter.test.mjs",
     "test:alphabet-translator": "node --test tests/alphabet-translator.test.mjs",

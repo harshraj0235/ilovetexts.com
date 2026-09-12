@@ -140,6 +140,14 @@ const nextConfig = {
         ],
       },
       {
+        // PDF.js worker — cache aggressively, serve as JS module
+        source: '/pdf.worker.min.mjs',
+        headers: [
+          { key: 'Cache-Control', value: 'public, max-age=31536000, immutable' },
+          { key: 'Content-Type', value: 'application/javascript; charset=utf-8' },
+        ],
+      },
+      {
         // HTML pages — short cache + stale-while-revalidate
         source: '/((?!_next|api|static).*)',
         headers: [
