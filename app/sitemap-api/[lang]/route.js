@@ -89,6 +89,10 @@ export async function GET(request, { params }) {
     EN_BLOG_SLUGS
       .filter((post) => !post.lang && isPublishedDate(post.date))
       .forEach((post) => addUrl(`/blog/${post.slug}`, '0.7', 'monthly', post.date, ['en']));
+    // Language-specific blog posts (e.g. Hindi, Spanish, Portuguese)
+    EN_BLOG_SLUGS
+      .filter((post) => post.lang === lang && isPublishedDate(post.date))
+      .forEach((post) => addUrl(`/blog/${post.slug}`, '0.7', 'monthly', post.date, [lang]));
 
     ['about', 'privacy', 'terms', 'contact', 'tools', 'resources'].forEach((page) =>
       addUrl(`/${page}`,
