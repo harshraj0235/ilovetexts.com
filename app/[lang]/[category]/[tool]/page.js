@@ -85,6 +85,8 @@ import PdfToWord from '@/components/tools/PdfToWord';
 import HeicToJpg from '@/components/tools/HeicToJpg';
 import PassportPhotoMaker from '@/components/tools/PassportPhotoMaker';
 import MemeGenerator from '@/components/tools/MemeGenerator';
+import PasswordGenerator from '@/components/tools/PasswordGenerator';
+import ColorConverter from '@/components/tools/ColorConverter';
 import { notFound } from 'next/navigation';
 import Link from 'next/link';
 
@@ -296,6 +298,10 @@ export default async function ToolPage({ params }) {
           <RegexTester t={t} lang={lang} />
         ) : toolData.slug === 'pii-redactor' ? (
           <PiiRedactor t={t} lang={lang} />
+        ) : toolData.slug === 'password-generator' ? (
+          <PasswordGenerator t={t} lang={lang} />
+        ) : toolData.slug === 'color-converter' ? (
+          <ColorConverter t={t} lang={lang} />
         ) : toolData.slug === 'prompt-minifier' ? (
           <PromptMinifier t={t} lang={lang} />
         ) : toolData.slug === 'caption-formatter' ? (
