@@ -4045,11 +4045,11 @@
     },
     "merge-pdf": {
       "name": "Merge PDF Online Free",
-      "description": "Combine multiple PDF files into one — free, no upload, no limits, no watermark.",
-      "metaTitle": "Merge PDF Online Free — Combine PDFs, No Upload, No Watermark",
-      "metaDescription": "Merge multiple PDF files into one online for free. No file upload, no daily limits, no watermark. All merging happens in your browser. No signup required.",
+      "description": "Combine multiple PDF files in your chosen order — free, private, with no upload or watermark.",
+      "metaTitle": "Merge PDF Online Free — Combine PDF Files Privately",
+      "metaDescription": "Merge PDF files online free in the order you choose. Fast, private browser processing with no upload, watermark, signup, or software installation.",
       "keywords": "merge pdf online free, combine pdf files free, join pdfs online no upload, merge pdf no watermark free, pdf merger browser, combine multiple pdf into one free",
-      "whatIs": "Our free PDF Merger combines multiple PDF files into a single document entirely in your browser using pdf-lib. Unlike iLovePDF or SmallPDF, your files are never uploaded to any server — all processing happens locally. No daily task limits, no page caps, no watermarks, no signup required.",
+      "whatIs": "Merge PDF is a private browser-based tool for combining two or more PDF documents into one file. Add your PDFs, review the page counts, arrange the files in the exact order you want, and download the finished document. Processing happens locally on your device, so sensitive contracts, invoices, applications, and personal records are not uploaded to our servers.",
       "whyChoose": [
         {
           "icon": "🔒",
@@ -4057,9 +4057,9 @@
           "description": "Your PDFs never leave your browser. All merging uses pdf-lib running locally."
         },
         {
-          "icon": "♾️",
-          "title": "No Limits",
-          "description": "No daily task limit, no page cap, no file size restriction. Merge as many PDFs as you need."
+          "icon": "📱",
+          "title": "Works on Any Device",
+          "description": "The responsive workflow and accessible order controls work on phones, tablets, and computers."
         },
         {
           "icon": "🔀",
@@ -4073,27 +4073,27 @@
         }
       ],
       "useCases": [
-        "Combine multiple chapters into one ebook PDF",
-        "Merge scanned document pages into a single file",
-        "Join contract pages before signing",
-        "Combine monthly invoices into one PDF for expense reports"
+        "Combine a cover letter, résumé, and portfolio into one job application PDF",
+        "Join invoices, receipts, or statements into a single file for accounting",
+        "Merge chapters, handouts, or research papers in a chosen reading order",
+        "Create one client-ready PDF from several reports without installing software"
       ],
       "faqs": [
         {
-          "question": "How many PDFs can I merge at once?",
-          "answer": "There is no hard limit. You can merge as many PDFs as your browser can handle. Very large files (100MB+) may be slow on older devices."
+          "question": "How do I merge PDF files in a specific order?",
+          "answer": "Add at least two PDFs, then use the up and down controls beside each file to arrange them. The number shown beside each file is its position in the final PDF."
         },
         {
           "question": "Are my PDFs uploaded to a server?",
-          "answer": "No. All merging happens in your browser using pdf-lib. Your files never leave your device."
+          "answer": "No. Your browser reads and combines the files locally on your device. The files and merged result are not uploaded to our servers."
         },
         {
           "question": "Can I merge password-protected PDFs?",
           "answer": "You need to remove the password first. Our tool will show a clear error if a PDF is encrypted."
         },
         {
-          "question": "Is the merged PDF quality the same as the originals?",
-          "answer": "Yes. pdf-lib copies pages without re-encoding, so the original quality is fully preserved."
+          "question": "Can I merge PDFs on a phone or tablet?",
+          "answer": "Yes. The tool is responsive and works in modern mobile browsers. Use the order buttons to rearrange files without relying on desktop drag-and-drop."
         }
       ],
       "relatedSearches": [

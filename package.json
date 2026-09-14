@@ -17,6 +17,7 @@
     "test:application-ready:browser": "node tests/application-ready.browser.mjs",
     "test:seo-release": "node --test tests/seo-release-gate.test.mjs",
     "test:word-counter": "node --test tests/word-counter.test.mjs",
+    "test:merge-pdf": "node --test tests/merge-pdf.test.mjs",
     "seo-check": "node seo-audit.js",
     "ping-search": "node ping-google.js"
   },

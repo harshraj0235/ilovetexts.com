@@ -39,6 +39,7 @@ import ViceCitySpeculationMap from '@/components/tools/ViceCitySpeculationMap';
 import ViceCityRapSheet from '@/components/tools/ViceCityRapSheet';
 import ExcelEditor from '@/components/tools/ExcelEditor';
 import PdfTextEditor from '@/components/tools/PdfTextEditor';
+import MergePdfTool from '@/components/tools/MergePdfTool';
 import ImageTextEditor from '@/components/tools/ImageTextEditor';
 import WordDocumentEditor from '@/components/tools/WordDocumentEditor';
 import TextFileEditor from '@/components/tools/TextFileEditor';
@@ -367,7 +368,7 @@ export default async function ToolPage({ params }) {
         ) : toolData.slug === 'pdf-text-editor' ? (
           <PdfTextEditor t={t} lang={lang} />
         ) : toolData.slug === 'merge-pdf' ? (
-          <PdfTextEditor t={t} lang={lang} initialMode="pages" />
+          <MergePdfTool />
         ) : toolData.slug === 'annotate-pdf' ? (
           <PdfTextEditor t={t} lang={lang} initialMode="annotate" />
         ) : toolData.slug === 'sign-pdf' ? (
