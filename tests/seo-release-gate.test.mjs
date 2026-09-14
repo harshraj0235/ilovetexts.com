@@ -173,3 +173,20 @@ test('five-letter finder handles position clues, repeats, and spoiler-safe short
   assert.match(JSON.stringify(content), /not the official Wordle/i);
   assert.doesNotMatch(JSON.stringify(content), /Find the answer instantly/i);
 });
+
+test('thesis builder creates editable, essay-specific drafts without false guarantees', () => {
+  const component = read('components/tools/ThesisGenerator.jsx');
+  const content = JSON.parse(read('locales/content/en.json')).tools['thesis-statement-generator'];
+
+  assert.match(component, /argumentative/);
+  assert.match(component, /analytical/);
+  assert.match(component, /expository/);
+  assert.match(component, /counterargument/);
+  assert.match(component, /updateDraft/);
+  assert.match(component, /Your text stays in this browser/);
+  assert.match(component, /Before submitting, ask:/);
+  assert.ok(content.seoSections.length >= 3);
+  assert.match(content.metaDescription, /processed in your browser/);
+  assert.doesNotMatch(JSON.stringify(content), /perfect thesis/i);
+  assert.doesNotMatch(JSON.stringify(content), /guarantee a strong thesis/i);
+});

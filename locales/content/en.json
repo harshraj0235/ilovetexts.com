@@ -332,36 +332,65 @@
       ]
     },
     "thesis-statement-generator": {
-      "name": "Thesis Statement Generator",
-      "description": "Generate a strong thesis statement for your essay",
-      "metaTitle": "Free Thesis Statement Generator — Write Your Essay Outline",
-      "metaDescription": "Generate a perfect thesis statement for your essay in seconds. Just input your topic, opinion, and main reasons. 100% free with no signup required.",
-      "keywords": "thesis statement generator free, essay thesis maker, write my thesis statement, research paper thesis",
-      "whatIs": "Our Thesis Statement Generator helps students and writers craft strong, argumentative, or analytical thesis statements instantly based on a proven formula.",
+      "name": "Thesis Statement Generator — Editable Essay Thesis Builder",
+      "description": "Turn your topic, claim, reasons, qualification, and counterargument into editable argumentative, analytical, or expository thesis drafts.",
+      "metaTitle": "Thesis Statement Generator — Free Editable Builder",
+      "metaDescription": "Build editable argumentative, analytical or expository thesis drafts from your own topic, claim and reasons. Free, private and processed in your browser.",
+      "keywords": "free thesis statement generator no signup, argumentative thesis statement builder, analytical thesis generator with reasons, expository thesis statement maker, thesis statement formula topic claim reasons, research paper thesis builder, editable thesis statement generator, thesis generator with counterargument, strong thesis statement checklist, essay thesis maker for students, how to write a thesis statement online",
+      "whatIs": "This browser-based Thesis Statement Generator arranges your own topic, claim or controlling idea, and supporting points into three editable sentence frames. Select argumentative, analytical, or expository writing; optionally add a genuine counterargument and qualification; then revise the drafts using the included self-review checklist. The builder does not use AI, conduct research, verify evidence, or guarantee that a generated sentence meets your assignment or institution's academic-integrity rules.",
+      "seoSections": [
+        { "title": "Build a thesis from a focused topic, claim, and reasons", "paragraphs": ["A useful thesis does more than name a broad subject. For an argument, it presents a position that a reasonable reader could question and previews a line of reasoning the paper can support. Analytical writing offers an interpretation, while expository writing establishes a focused controlling idea.", "Start with the exact assignment prompt, narrow the topic to fit the available word count, and enter reasons that can become supported body sections. The builder supplies sentence structures, but the intellectual work and evidence remain yours."] },
+        { "title": "Choose argumentative, analytical, or expository structure", "paragraphs": ["Argumentative frames connect a contestable claim to reasons and can acknowledge a counterargument. Analytical frames explain what an examination reveals and how specific elements support that interpretation. Expository frames preview the factors or process the paper will explain without pretending every topic is a debate.", "Generate several versions and compare clarity rather than treating the first result as final. Edit awkward phrasing, preserve important proper nouns, and use terminology that matches the discipline and assignment."] },
+        { "title": "Revise a generated thesis before using it", "paragraphs": ["Check whether the sentence directly answers the prompt, stays narrow enough for the paper, and can be supported with credible evidence. Each listed reason should connect logically to the central claim instead of functioning as an unrelated topic.", "A template cannot judge factual accuracy, originality, source quality, or course expectations. Rewrite the result in your own voice, update it as the paper develops, and follow your school or publisher's rules for writing-assistance tools."] }
+      ],
       "whyChoose": [
         {
-          "title": "Proven Formula",
-          "description": "Uses academic structures to guarantee a strong thesis."
+          "title": "Three Writing Modes",
+          "description": "Uses distinct frames for argumentative, analytical, and expository papers."
         },
         {
-          "title": "100% Free",
-          "description": "No apps to download and no accounts to create."
+          "title": "Editable Drafts",
+          "description": "Revise each result directly instead of copying a rigid template unchanged."
+        },
+        {
+          "title": "Private Browser Processing",
+          "description": "Your assignment prompt and ideas stay in the browser and are not sent to an external service."
         }
       ],
       "useCases": [
-        "Writing analytical or argumentative essays.",
-        "Structuring a research paper.",
-        "Overcoming writer's block when starting an assignment."
+        "Comparing argumentative thesis structures with or without a counterargument.",
+        "Turning an analytical interpretation and supporting points into a focused draft.",
+        "Planning an expository paper's controlling idea and body-section roadmap."
       ],
       "faqs": [
         {
-          "question": "Is this tool free?",
-          "answer": "Yes, our thesis statement generator is completely free to use."
+          "question": "What information should I enter?",
+          "answer": "Enter a focused topic, the claim or controlling idea your paper will develop, and at least one reason or analytical point you can support. The assignment prompt, counterargument, and qualification are optional planning aids."
+        },
+        {
+          "question": "Does the generator use AI or research my topic?",
+          "answer": "No. It works locally in your browser and combines only the ideas you provide with transparent sentence frames. It does not search sources, invent evidence, or verify facts."
+        },
+        {
+          "question": "What makes an argumentative thesis effective?",
+          "answer": "It normally answers the prompt with a focused, contestable claim and a coherent reasoning path that credible evidence can support. Exact expectations vary by assignment and discipline."
+        },
+        {
+          "question": "Is using a thesis statement generator allowed at school?",
+          "answer": "Policies differ. Treat each result as a starting framework, rewrite it in your own voice, disclose assistance when required, and follow your instructor or institution's rules."
+        },
+        {
+          "question": "Where does a thesis statement go?",
+          "answer": "It often appears near the end of an introduction, but placement and length depend on the genre, discipline, and assignment. Follow the guidance provided for your paper."
         }
       ],
       "relatedSearches": [
-        "thesis statement generator free",
-        "essay thesis maker"
+        "argumentative thesis statement generator",
+        "analytical thesis statement builder",
+        "thesis generator with counterargument",
+        "topic claim reasons thesis formula",
+        "editable essay thesis maker",
+        "strong thesis statement checklist"
       ]
     },
     "wordle-word-finder": {
