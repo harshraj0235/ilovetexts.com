@@ -365,41 +365,65 @@
       ]
     },
     "wordle-word-finder": {
-      "name": "Wordle Word Finder",
-      "description": "Find 5-letter words to solve Wordle puzzles",
-      "metaTitle": "Wordle Word Finder — Free 5 Letter Word Solver",
-      "metaDescription": "Stuck on Wordle? Use our free Wordle Word Finder to filter 5-letter words by green, yellow, and grey letters. Find the answer instantly.",
-      "keywords": "wordle word finder 5 letters, cheat wordle today, wordle solver free, 5 letter words with, wordle helper",
-      "whatIs": "Our Wordle Word Finder is a smart solver designed to help you find the daily Wordle answer. Simply enter the letters you know (green), the letters in the wrong spot (yellow), and the letters to exclude (grey) to get a list of all possible valid 5-letter words.",
+      "name": "Wordle Word Finder — Green, Yellow and Grey Solver",
+      "description": "Narrow five-letter dictionary words using exact positions, misplaced letters, exclusions, repeated-letter clues, and a copyable shortlist.",
+      "metaTitle": "Wordle Word Finder — Green, Yellow & Grey Solver",
+      "metaDescription": "Find five-letter words from green, yellow and grey clues. Handle wrong positions and repeated letters, then filter and copy a spoiler-free shortlist.",
+      "keywords": "wordle word finder green yellow grey letters, five letter word finder by position, 5 letter word solver with excluded letters, Wordle helper repeated letters, find 5 letter words with letters in certain positions, five letter words containing and excluding letters, spoiler free Wordle solver, word finder wrong position letters, 5 letter word pattern finder, Wordle candidate word shortlist",
+      "whatIs": "This independent five-letter word finder narrows Datamuse dictionary candidates using the clues you enter. Green letters must occupy an exact position, yellow letters must appear somewhere else, and grey letters are excluded unless that same letter is already confirmed green or yellow. Repeating a letter across clue tiles requires that many copies in a candidate. The tool does not load or reveal today's answer, and its dictionary is not the official Wordle answer or accepted-guess list.",
+      "seoSections": [
+        { "title": "Find five-letter words by green, yellow and grey clues", "paragraphs": ["Place each green letter in its confirmed position. Put each yellow letter in the position where it was tried so the finder can require the letter while rejecting that slot. Use the keyboard for letters confirmed absent from the answer.", "The result is a spoiler-free candidate list based only on your clues. Add constraints gradually: one incorrect clue can remove the actual answer, so review the newest tile first when no words remain."] },
+        { "title": "Handle repeated letters without excluding a valid word", "paragraphs": ["Repeated letters need special care. When two clue tiles confirm the same letter, this finder requires at least two copies in every candidate. If a grey copy appears beside a green or yellow copy of the same letter, the grey entry is not treated as a global exclusion.", "Tile feedback can encode an exact maximum count that a simple excluded-letter keyboard cannot fully represent. Treat the shortlist as a narrowing aid and compare it with the feedback from your actual puzzle."] },
+        { "title": "Use the finder for five-letter patterns without daily spoilers", "paragraphs": ["This page is also useful for crossword-style clues, vocabulary exercises, and five-letter word searches such as words with A in the middle or words that contain R but not S. Filter the returned list, sort it alphabetically, and select candidates to copy.", "Results come from the Datamuse English dictionary service, not a particular game's private solution list. Names, inflections, rare terms, and accepted guesses can differ, and relevance scores are not probabilities that a word is the daily answer."] }
+      ],
       "whyChoose": [
         {
-          "title": "Smart Filtering",
-          "description": "Filters thousands of words instantly based on your exact criteria."
+          "title": "Position-Aware Clues",
+          "description": "Green tiles lock a position while yellow tiles reject the position where they appeared."
         },
         {
-          "title": "100% Free",
-          "description": "No apps to download and no accounts to create."
+          "title": "Repeated-Letter Safety",
+          "description": "Repeated confirmed letters set a minimum count and known letters are not excluded globally."
         },
         {
-          "title": "Updated Dictionary",
-          "description": "Uses a comprehensive dictionary of valid 5-letter words."
+          "title": "Spoiler-Free Shortlist",
+          "description": "Filter and copy candidates derived only from the clues you provide."
         }
       ],
       "useCases": [
-        "Solving the daily Wordle puzzle when you are stuck.",
-        "Finding words for Scrabble, Words with Friends, and crosswords.",
-        "Discovering new 5-letter vocabulary words."
+        "Narrowing a five-letter daily word puzzle without loading its answer.",
+        "Finding five-letter words with known positions, included letters, and exclusions.",
+        "Building a shortlist for crossword-style clues and vocabulary exercises."
       ],
       "faqs": [
         {
-          "question": "Is this a Wordle cheat?",
-          "answer": "It can be used as a cheat or simply a helper when you are stuck and need some inspiration for 5-letter words."
+          "question": "Does this reveal today's Wordle answer?",
+          "answer": "No. It has no daily-answer feed and returns dictionary candidates only from the green, yellow, and grey clues you enter."
+        },
+        {
+          "question": "How do I enter a yellow letter?",
+          "answer": "Put it in the same position where it appeared yellow in your guess. Candidates must contain that letter, but cannot place it in that position."
+        },
+        {
+          "question": "How does the solver handle repeated letters?",
+          "answer": "If the same letter appears in multiple green or yellow clue tiles, candidates must contain at least that many copies. A grey entry is ignored as a global exclusion when the letter is also confirmed green or yellow."
+        },
+        {
+          "question": "Why might an accepted word be missing?",
+          "answer": "The finder uses Datamuse rather than an official game word list. Dictionary coverage and the words accepted by a particular puzzle can differ."
+        },
+        {
+          "question": "Is this website affiliated with Wordle?",
+          "answer": "No. This is an independent five-letter word-finding utility. Wordle is a trademark of The New York Times Company."
         }
       ],
       "relatedSearches": [
-        "wordle word finder 5 letters",
-        "cheat wordle today",
-        "5 letter words with"
+        "wordle word finder green yellow grey",
+        "five letter word finder by position",
+        "5 letter words with excluded letters",
+        "wordle solver repeated letters",
+        "five letter word pattern finder",
+        "spoiler free wordle helper"
       ]
     },
     "anagram-generator": {

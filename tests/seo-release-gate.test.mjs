@@ -157,3 +157,19 @@ test('anagram generator validates exact letters and offers filtered shortlists',
   assert.doesNotMatch(JSON.stringify(content), /100% Offline/i);
   assert.doesNotMatch(JSON.stringify(content), /all possible permutations/i);
 });
+
+test('five-letter finder handles position clues, repeats, and spoiler-safe shortlists', () => {
+  const component = read('components/tools/WordleFinder.jsx');
+  const content = JSON.parse(read('locales/content/en.json')).tools['wordle-word-finder'];
+
+  assert.match(component, /yellowLetters\.some/);
+  assert.match(component, /requiredCounts/);
+  assert.match(component, /ignoredGreys/);
+  assert.match(component, /positionConflicts/);
+  assert.match(component, /copyResults/);
+  assert.match(component, /never reveals or stores a daily answer/);
+  assert.match(content.metaDescription, /repeated letters/);
+  assert.ok(content.seoSections.length >= 3);
+  assert.match(JSON.stringify(content), /not the official Wordle/i);
+  assert.doesNotMatch(JSON.stringify(content), /Find the answer instantly/i);
+});
