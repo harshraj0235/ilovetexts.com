@@ -105,7 +105,7 @@ const nextConfig = {
               "font-src 'self' https://fonts.gstatic.com",
               "img-src 'self' data: blob: https://api.producthunt.com https://www.google-analytics.com https://www.googletagmanager.com",
               "media-src 'self' blob:",
-              "connect-src 'self' blob: https://www.google-analytics.com https://analytics.google.com https://www.googletagmanager.com https://translate.googleapis.com https://texttospeech.googleapis.com https://unpkg.com",
+              "connect-src 'self' blob: https://www.google-analytics.com https://analytics.google.com https://www.googletagmanager.com https://translate.googleapis.com https://texttospeech.googleapis.com https://api.datamuse.com https://inputtools.google.com https://unpkg.com",
               "worker-src 'self' blob:",
               "frame-src 'self'",
               "object-src 'none'",

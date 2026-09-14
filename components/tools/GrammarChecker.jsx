@@ -3,7 +3,7 @@
 import { useState, useRef, useEffect } from 'react';
 
 // LanguageTool API endpoint for grammar checking
-const API_URL = 'https://api.languagetoolplus.com/v2/check';
+const API_URL = '/api/language-check';
 
 export default function GrammarChecker({ t = {} }) {
   const [text, setText] = useState('');
@@ -244,9 +244,11 @@ export default function GrammarChecker({ t = {} }) {
           </h3>
           
           <div className="issues-list">
-            {matches.length === 0 ? (
+            {error ? (
+              <div className="no-issues" role="status">The check could not be completed. Your text has not been verified.</div>
+            ) : matches.length === 0 ? (
               <div className="no-issues">
-                {isChecking ? 'Analyzing text...' : 'No issues found! Your text looks good.'}
+                {isChecking ? 'Analyzing text...' : text.trim() ? 'Select Check Grammar to verify this text.' : 'Enter text to begin.'}
               </div>
             ) : (
               matches.map((match, index) => (

@@ -220,8 +220,12 @@ try {
 try {
   const seoJs = fs.readFileSync('lib/seo.js', 'utf8');
   const sitemapJs = fs.readFileSync('app/sitemap-api/[lang]/route.js', 'utf8');
+  const indexingPolicy = fs.readFileSync('lib/search-indexing.js', 'utf8');
+  const reviewedLocales = (indexingPolicy.match(/INDEXABLE_TOOL_LOCALES\s*=\s*\[([^\]]*)\]/) || [])[1] || '';
   if (!seoJs.includes('INDEXABLE_TOOL_LOCALES') || !seoJs.includes('index: canIndex') || !sitemapJs.includes('INDEXABLE_TOOL_LOCALES.includes(lang)')) {
     error('Tool/catalog locale gating is incomplete: hreflang, robots, and sitemap must agree');
+  } else if (reviewedLocales.replace(/\s/g, '') !== "'en'") {
+    error(`Tool locales are advertised before full translation review: [${reviewedLocales}]`);
   } else {
     ok('Tool/catalog hreflang, robots, and sitemap use the reviewed-locale policy');
   }
@@ -231,7 +235,7 @@ try {
 try {
   const locale = fs.readFileSync('locales/en.json', 'utf8');
   const layout = fs.readFileSync('components/ToolLayout.jsx', 'utf8');
-  if (locale.includes('zero tracking, zero cookies') || layout.includes('Your work stays on this device')) {
+  if (locale.includes('zero tracking, zero cookies') || layout.includes('Your work stays on this device') || layout.includes('<span>Runs locally in your browser</span>')) {
     error('Global trust copy makes an unsupported universal privacy claim');
   } else if (!layout.includes('EXTERNAL_PROCESSING_NOTICES')) {
     error('External-processing tools do not have a workspace disclosure');
@@ -276,6 +280,36 @@ if (nextConfig.includes('Content-Security-Policy')) {
 } else {
   warn('next.config.mjs: Content-Security-Policy header not set — add CSP to prevent XSS and signal site quality to Google');
 }
+
+// ── 22. Tool workspace must not nest a second main landmark ────────────────
+try {
+  const toolLayout = fs.readFileSync('components/ToolLayout.jsx', 'utf8');
+  if (toolLayout.includes('<main id="tool-workspace"')) {
+    error('components/ToolLayout.jsx: tool workspace nests a second main landmark');
+  } else if (!toolLayout.includes('<section id="tool-workspace"')) {
+    warn('components/ToolLayout.jsx: tool workspace semantic section not found');
+  } else {
+    ok('components/ToolLayout.jsx: tool workspace uses one page-level main landmark');
+  }
+} catch (e) { warn('Could not verify tool workspace landmark: ' + e.message); }
+
+// ── 23. LanguageTool clients must use the same-origin proxy ────────────────
+try {
+  ['GrammarChecker.jsx', 'SpellChecker.jsx', 'PunctuationChecker.jsx'].forEach((name) => {
+    const component = fs.readFileSync(`components/tools/${name}`, 'utf8');
+    if (!component.includes("const API_URL = '/api/language-check'")) {
+      error(`${name}: LanguageTool request bypasses the validated same-origin proxy`);
+    }
+    if (!component.includes('Your text has not been verified')) {
+      error(`${name}: failure state can be mistaken for a clean result`);
+    }
+  });
+  if (!fs.existsSync('app/api/language-check/route.js')) {
+    error('app/api/language-check/route.js is missing');
+  } else {
+    ok('LanguageTool clients use a same-origin proxy with explicit failure states');
+  }
+} catch (e) { warn('Could not verify LanguageTool proxy: ' + e.message); }
 
 // ── 20. FAQ answers must be in DOM (not JS-hidden) ────────
 try {

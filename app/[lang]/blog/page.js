@@ -943,7 +943,7 @@ Para la mayoría de usuarios, la combinación de [ilovetexts Grammar Checker](/w
     title: 'Contador de Palabras Online Gratis — Cuenta Palabras, Caracteres y Más (2026)',
     description: 'Cuenta palabras, caracteres, oraciones y párrafos al instante. Calcula el tiempo de lectura y densidad de palabras clave. Gratis, sin registro.',
     category: 'Guías',
-    date: '2026-10-19',
+    date: '2026-09-14',
     readTime: '4 min',
     toolLinks: [
       { slug: 'word-counting-tools/word-counter', name: 'Contador de Palabras' },

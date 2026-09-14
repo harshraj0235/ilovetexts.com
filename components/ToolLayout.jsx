@@ -305,6 +305,7 @@ export default function ToolLayout({
   const [isFocusMode, setIsFocusMode] = useState(false);
   const savedToolId = `${category.id}/${tool.slug}`;
   const processingNotice = EXTERNAL_PROCESSING_NOTICES[tool.slug] || 'Processes input in your browser';
+  const usesExternalService = Boolean(EXTERNAL_PROCESSING_NOTICES[tool.slug]);
 
   // Track this tool as recently used
   useEffect(() => {
@@ -406,7 +407,7 @@ export default function ToolLayout({
           <p className="tool-hero-desc">{tool.description}</p>
 
           <div className={styles.heroMeta}>
-            <span>Runs locally in your browser</span>
+            <span>{usesExternalService ? 'Uses a named external service' : 'Processes in your browser'}</span>
             <span aria-hidden="true">•</span>
             <span>Free, with no account</span>
           </div>
@@ -430,7 +431,7 @@ export default function ToolLayout({
       </div>
 
       {/* ═══ Tool Workspace ═══ */}
-      <main id="tool-workspace" className={`tool-workspace ${styles.workspace}`} tabIndex="-1">
+      <section id="tool-workspace" className={`tool-workspace ${styles.workspace}`} tabIndex="-1" aria-label={`${tool.name} workspace`}>
         <div className={styles.workspaceBar}>
           <div className={styles.workspaceStatus}>
             <span className={styles.statusDot} aria-hidden="true" />
@@ -447,7 +448,7 @@ export default function ToolLayout({
           </div>
         </div>
         {children}
-      </main>
+      </section>
 
       <section className={styles.actionDock} aria-label="Tool actions">
         <div className={styles.actionDockIntro}>

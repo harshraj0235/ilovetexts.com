@@ -4,7 +4,7 @@ import { useState, useRef, useEffect } from 'react';
 import Link from 'next/link';
 
 // LanguageTool API endpoint for punctuation checking
-const API_URL = 'https://api.languagetoolplus.com/v2/check';
+const API_URL = '/api/language-check';
 
 export default function PunctuationChecker({ t = {}, lang = 'en' }) {
   const lp = (path) => lang === 'en' ? path : `/${lang}${path}`;
@@ -253,9 +253,11 @@ export default function PunctuationChecker({ t = {}, lang = 'en' }) {
           </h3>
           
           <div className="issues-list">
-            {matches.length === 0 ? (
+            {error ? (
+              <div className="no-issues" role="status">The check could not be completed. Your text has not been verified.</div>
+            ) : matches.length === 0 ? (
               <div className="no-issues">
-                {isChecking ? 'Analyzing text...' : 'No issues found! Your text looks good.'}
+                {isChecking ? 'Analyzing text...' : text.trim() ? 'Select Check Punctuation to verify this text.' : 'Enter text to begin.'}
               </div>
             ) : (
               matches.map((match, index) => (

@@ -28,7 +28,7 @@ const EN_BLOG_SLUGS = [
   { slug: 'como-unir-pdf-gratis', date: '2026-10-16', lang: 'es' },
   { slug: 'mejor-alternativa-grammarly-gratis', date: '2026-10-17', lang: 'es' },
   { slug: 'comprimir-pdf-gratis-online', date: '2026-10-18', lang: 'es' },
-  { slug: 'contador-palabras-online-gratis', date: '2026-10-19', lang: 'es' },
+  { slug: 'contador-palabras-online-gratis', date: '2026-09-14', lang: 'es' },
   { slug: 'convertir-texto-mayusculas-minusculas', date: '2026-10-20', lang: 'es' },
   { slug: 'como-juntar-pdf-gratis', date: '2026-10-16', lang: 'pt' },
   { slug: 'melhor-alternativa-grammarly-gratis', date: '2026-10-17', lang: 'pt' },
@@ -74,13 +74,17 @@ export async function GET(request, { params }) {
   // Home
   addUrl('/', '1.0', 'daily', CONTENT_LAST_UPDATED);
 
-  // Tool, category, directory, and editorial URLs are only discoverable in
+  // Tool and category URLs are only discoverable in
   // locales that have a complete, reviewable experience. Do not place a
   // non-canonical translation or an unpublished article in a sitemap.
   if (INDEXABLE_TOOL_LOCALES.includes(lang)) {
     CATEGORIES.forEach((cat) => addUrl(`/${cat.id}`, '0.9', 'weekly', TOOLS_LAST_UPDATED, INDEXABLE_TOOL_LOCALES));
     allTools.forEach((tool) => addUrl(`/${tool.categoryId}/${tool.slug}`, '0.85', 'weekly', tool.content?.updatedAt || TOOLS_LAST_UPDATED, INDEXABLE_TOOL_LOCALES));
 
+  }
+
+  // English-only editorial and legal pages belong only in the English sitemap.
+  if (lang === 'en') {
     addUrl('/blog', '0.7', 'weekly', CONTENT_LAST_UPDATED, ['en']);
     ['workflows', 'workflows/statement-review', 'office'].forEach(path =>
       addUrl(`/${path}`, '0.7', 'monthly', '2026-09-12', ['en'])
@@ -89,11 +93,6 @@ export async function GET(request, { params }) {
     EN_BLOG_SLUGS
       .filter((post) => !post.lang && isPublishedDate(post.date))
       .forEach((post) => addUrl(`/blog/${post.slug}`, '0.7', 'monthly', post.date, ['en']));
-    // Language-specific blog posts (e.g. Hindi, Spanish, Portuguese)
-    EN_BLOG_SLUGS
-      .filter((post) => post.lang === lang && isPublishedDate(post.date))
-      .forEach((post) => addUrl(`/blog/${post.slug}`, '0.7', 'monthly', post.date, [lang]));
-
     ['about', 'privacy', 'terms', 'contact', 'tools', 'resources'].forEach((page) =>
       addUrl(`/${page}`,
         page === 'tools' ? '0.8' : '0.4',
@@ -103,6 +102,12 @@ export async function GET(request, { params }) {
       )
     );
   }
+
+  // A reviewed language-specific article is independently canonical even when
+  // the broader tool catalogue for that locale is not ready for indexation.
+  EN_BLOG_SLUGS
+    .filter((post) => post.lang === lang && isPublishedDate(post.date))
+    .forEach((post) => addUrl(`/blog/${post.slug}`, '0.7', 'monthly', post.date, [lang]));
 
   const xml = `<?xml version="1.0" encoding="UTF-8"?>
 <?xml-stylesheet type="text/xsl" href="/sitemap.xsl"?>
