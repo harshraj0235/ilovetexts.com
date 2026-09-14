@@ -4804,6 +4804,35 @@
         "separate pages from pdf free"
       ]
     },
+    "flipbook-maker": {
+      "name": "PDF Flipbook Maker — Free Interactive HTML Creator",
+      "description": "Turn a PDF into a responsive interactive flipbook. Choose a design template, preview pages, and download portable HTML to host or embed.",
+      "metaTitle": "Free Flipbook Maker — Convert PDF to Interactive HTML",
+      "metaDescription": "Convert a PDF into an interactive flipbook free. Choose branded templates, page-turn speed, autoplay, fullscreen, thumbnails, and portable HTML export.",
+      "keywords": "free flipbook maker, pdf to flipbook online free, interactive pdf flipbook creator, digital catalog maker free, html5 flipbook generator, online magazine maker from pdf, brochure flipbook creator, flipbook embed code",
+      "whatIs": "The free PDF Flipbook Maker turns a static PDF into a responsive page-turning publication directly in your browser. Choose from five original design templates, adjust the turn speed, enable autoplay, browse with keyboard controls or thumbnails, and open the reader fullscreen. Download the finished publication as one self-contained HTML file that can be opened offline, uploaded to your own hosting, or placed in a website with the generated iframe code. Your PDF is processed locally and is never uploaded to our servers.",
+      "whyChoose": [
+        { "icon": "📖", "title": "Real Page-Turn Reader", "description": "Create an inviting interactive reader with animated navigation, thumbnails, autoplay, keyboard controls, and fullscreen." },
+        { "icon": "🎨", "title": "Five Design Templates", "description": "Choose Studio, Editorial, Midnight, Meadow, or Gallery to match a catalog, portfolio, magazine, or report." },
+        { "icon": "📦", "title": "Portable HTML Export", "description": "Download one self-contained HTML file that opens offline and can be uploaded to your own website without a subscription." },
+        { "icon": "🔒", "title": "Private Browser Processing", "description": "PDF rendering happens on your device. No document upload, account, server storage, or watermark is required." }
+      ],
+      "useCases": [
+        "Turn a product catalog PDF into an interactive publication for a business website",
+        "Present a portfolio, lookbook, or photography collection with page-turn navigation",
+        "Publish a school magazine, newsletter, annual report, or community bulletin",
+        "Create an offline HTML brochure for a sales presentation, event, or trade show",
+        "Embed a responsive PDF flipbook inside a landing page or blog post"
+      ],
+      "faqs": [
+        { "question": "How do I turn a PDF into a flipbook for free?", "answer": "Choose a PDF up to 50 MB and 40 pages. The tool renders it locally, then opens the customization studio where you can choose a template, page-turn speed, and autoplay before downloading the result." },
+        { "question": "Can I put the flipbook on my website?", "answer": "Yes. Download the self-contained HTML flipbook, upload it to your website hosting, then use the generated iframe code. The HTML file must be hosted at the iframe path for visitors to open it." },
+        { "question": "Is my PDF uploaded or stored?", "answer": "No. The PDF is converted inside your browser and never sent to our servers. The downloaded HTML contains rendered page images, so treat that file with the same privacy care as the original PDF." },
+        { "question": "Does the exported flipbook work on phones?", "answer": "Yes. Both the editing preview and exported HTML reader adapt to phone, tablet, and desktop screens and support buttons plus keyboard navigation." },
+        { "question": "Can this tool provide hosted links or visitor analytics?", "answer": "Not currently. This privacy-first version creates a portable HTML file for your own hosting. Hosted share links, lead forms, and cross-visitor analytics require a server-backed publishing account and are not claimed by this free tool." }
+      ],
+      "relatedSearches": ["convert PDF to HTML5 flipbook", "free digital catalog maker", "interactive brochure creator", "PDF magazine viewer", "self hosted flipbook HTML"]
+    },
     "pdf-page-numbers": {
       "name": "Add Page Numbers to PDF Free Online",
       "description": "Add page numbers to a PDF online free. Choose the position, format, starting number, and which PDF page to number first. No upload.",

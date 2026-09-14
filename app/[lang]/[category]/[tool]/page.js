@@ -58,6 +58,7 @@ import JpgToPdf from '@/components/tools/JpgToPdf';
 import PdfToJpg from '@/components/tools/PdfToJpg';
 import SplitPdf from '@/components/tools/SplitPdf';
 import PdfPageNumbers from '@/components/tools/PdfPageNumbers';
+import FlipbookMaker from '@/components/tools/FlipbookMaker';
 import ExcelToCsv from '@/components/tools/ExcelToCsv';
 import PdfDiffChecker from '@/components/tools/PdfDiffChecker';
 import ScreenshotToExcel from '@/components/tools/ScreenshotToExcel';
@@ -483,6 +484,8 @@ export default async function ToolPage({ params }) {
           <SplitPdf t={t} lang={lang} />
         ) : toolData.slug === 'pdf-page-numbers' ? (
           <PdfPageNumbers t={t} lang={lang} />
+        ) : toolData.slug === 'flipbook-maker' ? (
+          <FlipbookMaker />
         ) : toolData.slug === 'excel-to-csv' ? (
           <ExcelToCsv t={t} lang={lang} />
         ) : toolData.slug === 'csv-to-excel' ? (

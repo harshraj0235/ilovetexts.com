@@ -6,6 +6,7 @@ import { getAllTools } from '@/lib/tools-config';
 import styles from './CommandCenter.module.css';
 
 const FEATURED_TOOL_SLUGS = [
+  'flipbook-maker',
   'word-counter',
   'grammar-checker',
   'pdf-to-word',
@@ -99,6 +100,8 @@ export default function CommandCenter({ categories, lang, t }) {
     const params = new URLSearchParams(window.location.search);
     const sharedQuery = params.get('q');
     if (sharedQuery) {
+      // URL state is an external browser input discovered after hydration.
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setQuery(sharedQuery);
       setHasSearched(true);
       window.setTimeout(() => searchInputRef.current?.focus(), 0);
@@ -265,6 +268,16 @@ export default function CommandCenter({ categories, lang, t }) {
                 <ToolCard key={`${tool.categoryId}-${tool.slug}`} tool={tool} href={langLink(`/${tool.categoryId}/${tool.slug}`)} compact />
               ))}
             </div>
+
+            <Link href={langLink('/pdf-text-tools/flipbook-maker')} className={styles.flipbookPromo}>
+              <span className={styles.promoArt} aria-hidden="true"><span>1</span><span>2</span><span>3</span></span>
+              <span className={styles.promoCopy}>
+                <span className={styles.promoEyebrow}>New · Free PDF experience</span>
+                <strong>Make flipbooks people want to explore.</strong>
+                <span>Turn a PDF into a responsive page-turning publication. Pick a template, preview every page, then download portable HTML to host or embed anywhere.</span>
+              </span>
+              <span className={styles.promoCta}>Create a flipbook <span aria-hidden="true">→</span></span>
+            </Link>
 
             <div className={styles.categoryStrip}>
               <div>

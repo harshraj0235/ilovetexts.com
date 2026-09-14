@@ -20,6 +20,7 @@
     "test:merge-pdf": "node --test tests/merge-pdf.test.mjs",
     "test:split-pdf": "node --test tests/split-pdf.test.mjs",
     "test:pdf-page-numbers": "node --test tests/pdf-page-numbers.test.mjs",
+    "test:flipbook": "node --test tests/flipbook-utils.test.mjs",
     "seo-check": "node seo-audit.js",
     "ping-search": "node ping-google.js"
   },
