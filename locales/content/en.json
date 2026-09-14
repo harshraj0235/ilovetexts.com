@@ -4806,15 +4806,15 @@
     },
     "pdf-page-numbers": {
       "name": "Add Page Numbers to PDF Free Online",
-      "description": "Add page numbers to PDF pages online free. Choose position, format, font size, starting number. No upload, no signup.",
+      "description": "Add page numbers to a PDF online free. Choose the position, format, starting number, and which PDF page to number first. No upload.",
       "metaTitle": "Add Page Numbers to PDF Free Online — No Upload, All Positions",
-      "metaDescription": "Add page numbers to your PDF online for free. Choose from 6 positions, 4 number formats, custom prefix/suffix, font size and margins. pdf-lib powered, no upload, no watermark.",
+      "metaDescription": "Add page numbers to a PDF online free. Choose 6 positions, 5 formats, custom text, margins, and skip cover pages. Private, no upload or watermark.",
       "keywords": "add page numbers to pdf free online, insert page numbers pdf browser, number pdf pages free no signup, pdf page numbering tool, add footer page number pdf free, pdf bates numbering free",
-      "whatIs": "Our Add Page Numbers to PDF tool inserts page numbers on every page of your PDF using pdf-lib, running entirely in your browser. Choose from 6 positions (bottom center, bottom right, bottom left, top center, top right, top left), 4 number formats (1, 1/10, Page 1, 1 of 10), custom prefix and suffix text, font size, starting number, and margin from the page edge. Preview the format before applying.",
+      "whatIs": "The Add Page Numbers to PDF tool inserts permanent page labels while processing the document entirely in your browser. Choose from six header or footer positions, five formats, custom prefix and suffix text, font size, starting number, and an exact millimetre margin. You can also skip a cover page or front matter by choosing which PDF page should receive the first number.",
       "whyChoose": [
         {
           "icon": "🔢",
-          "title": "6 Positions, 4 Formats",
+          "title": "6 Positions, 5 Formats",
           "description": "Place numbers anywhere — bottom center, top right, etc. Format as \"1\", \"1/10\", \"Page 1\" and more."
         },
         {
@@ -4847,11 +4847,15 @@
         },
         {
           "question": "Can I add \"Page 1 of 10\" format?",
-          "answer": "Yes. Select \"Page n\" or \"n of total\" from the Number Format dropdown."
+          "answer": "Yes. Select \"Page n of total\" from the Number Format dropdown."
         },
         {
           "question": "Will the page numbers be permanent?",
           "answer": "Yes. The numbers are baked into the PDF text layer of the downloaded file."
+        },
+        {
+          "question": "Can I leave the cover page unnumbered?",
+          "answer": "Yes. Set Number from PDF page to 2 to skip one cover page, or choose a later page to skip additional front matter. The starting number is applied to that selected page."
         }
       ],
       "relatedSearches": [
