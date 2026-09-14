@@ -16,15 +16,18 @@ test('English-only editorial pages are gated to the English sitemap', () => {
 });
 
 test('LanguageTool clients use the same-origin validated proxy', () => {
-  for (const file of ['GrammarChecker.jsx', 'PunctuationChecker.jsx']) {
+  for (const file of ['GrammarChecker.jsx']) {
     const component = read(`components/tools/${file}`);
     assert.match(component, /const API_URL = '\/api\/language-check'/);
     assert.doesNotMatch(component, /const API_URL = 'https:\/\/api\.languagetoolplus\.com/);
     assert.match(component, /Your text has not been verified/);
   }
   const spelling = read('components/tools/SpellChecker.jsx');
+  const punctuation = read('components/tools/PunctuationChecker.jsx');
   assert.match(spelling, /GrammarChecker/);
   assert.match(spelling, /mode="spelling"/);
+  assert.match(punctuation, /GrammarChecker/);
+  assert.match(punctuation, /mode="punctuation"/);
 });
 
 test('external browser APIs required by tools are allowed by CSP', () => {
@@ -99,4 +102,18 @@ test('spell checker reuses advanced editor but returns spelling findings only', 
   assert.ok(content.seoSections.length >= 3);
   assert.doesNotMatch(JSON.stringify(content), /unlimited text/i);
   assert.doesNotMatch(JSON.stringify(content), /100% Private/i);
+});
+
+test('punctuation checker isolates typography findings in the advanced editor', () => {
+  const shared = read('components/tools/GrammarChecker.jsx');
+  const punctuation = read('components/tools/PunctuationChecker.jsx');
+  const content = JSON.parse(read('locales/content/en.json')).tools['punctuation-checker'];
+
+  assert.match(punctuation, /mode="punctuation"/);
+  assert.match(shared, /\['PUNCTUATION', 'TYPOGRAPHY'\]/);
+  assert.match(shared, /Check Punctuation/);
+  assert.match(content.keywords, /comma splice checker online/);
+  assert.ok(content.seoSections.length >= 3);
+  assert.doesNotMatch(JSON.stringify(content), /no word limits/i);
+  assert.doesNotMatch(JSON.stringify(content), /completely anonymously/i);
 });

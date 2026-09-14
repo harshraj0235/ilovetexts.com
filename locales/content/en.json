@@ -595,30 +595,37 @@
       ]
     },
     "punctuation-checker": {
-      "name": "Punctuation Checker",
-      "description": "Free online punctuation checker to fix commas and periods",
-      "metaTitle": "Free Online Punctuation Checker — Fix Commas & Formatting",
-      "metaDescription": "Instantly check your text for missing commas, incorrect periods, and typographical errors. Free punctuation checker online with no signup required.",
-      "keywords": "free online punctuation checker no signup fix commas, comma checker online free for essays, fix punctuation errors in text online, check for missing periods online free, typographical error checker free",
-      "whatIs": "Our free Punctuation Checker specifically focuses on formatting, typographical errors, and punctuation mistakes. It helps you catch missing commas, double spaces, incorrect quotation marks, and more. Keep your writing clean and professional without installing any software or creating an account.",
+      "name": "Free Punctuation Checker — Fix Commas and Apostrophes",
+      "description": "Review possible comma, apostrophe, quotation-mark, spacing, and typography problems in essays, emails, dialogue, reports, and everyday text.",
+      "metaTitle": "Free Punctuation Checker — Fix Commas and Apostrophes",
+      "metaDescription": "Check up to 20,000 characters for commas, apostrophes, quotation marks and typography. Review explanations, apply fixes and undo changes without signup.",
+      "keywords": "free punctuation checker online no signup, comma checker online free for essays, fix punctuation in a paragraph online, apostrophe checker online free, quotation mark checker for dialogue, comma splice checker online, punctuation checker for essays and assignments, check punctuation in emails and reports, fix missing periods online, multilingual punctuation checker, punctuation and capitalization checker free",
+      "whatIs": "The free Punctuation Checker filters the multilingual writing engine to show findings classified as punctuation or typography. Paste up to 20,000 characters, choose a language or English dialect, and review possible issues involving commas, apostrophes, quotation marks, sentence marks, spacing, and related formatting. Apply suggestions individually or together, undo a bulk change, and download the revised text. Checks are sent through the protected iLoveTexts proxy to LanguageTool; iLoveTexts does not store submitted text.",
       "whyChoose": [
         {
           "title": "Focus on Punctuation",
-          "description": "Designed specifically to catch formatting and punctuation errors."
+          "description": "Filters out unrelated findings so you can focus on punctuation and typography suggestions."
         },
         {
           "title": "Completely Free",
-          "description": "No subscriptions, no word limits, no signups."
+          "description": "No account or subscription is required. Each check accepts up to 20,000 characters."
         },
         {
-          "title": "Private & Secure",
-          "description": "Your text is processed securely and never stored."
+          "title": "Clear Data Handling",
+          "description": "iLoveTexts does not store your text. It is sent to LanguageTool only when you request a check."
         }
       ],
       "useCases": [
         "Writers ensuring proper comma usage and dialogue formatting.",
         "Students polishing their essays before submitting them.",
-        "Professionals formatting important documents and emails."
+        "Professionals formatting important documents and emails.",
+        "Fiction writers reviewing dialogue quotation marks and dialogue tags.",
+        "Editors checking reports, presentations, captions, and website copy."
+      ],
+      "seoSections": [
+        { "title": "Comma checker for essays, paragraphs, and assignments", "paragraphs": ["Use the comma checker to review introductory phrases, lists, clause boundaries, and other comma patterns in an essay or paragraph. Read each explanation because comma choices sometimes depend on meaning, emphasis, dialect, and the required style guide.", "A comma splice joins independent clauses with a comma alone. A checker may suggest a period, semicolon, or conjunction, but you should choose the option that preserves the relationship and rhythm you intend."] },
+        { "title": "Check apostrophes, quotation marks, and dialogue punctuation", "paragraphs": ["Apostrophes can mark possession or omitted letters in contractions, while quotation-mark conventions vary between languages and style systems. Select the document language before checking and review names, plurals, contractions, and quoted material in context.", "For fiction and interviews, inspect opening and closing quotation marks, punctuation around dialogue tags, and paragraphs where one speaker continues. Automated suggestions cannot always infer who is speaking or whether a mark is deliberate."] },
+        { "title": "Fix punctuation in emails, reports, and website copy", "paragraphs": ["A dedicated punctuation pass can reveal missing sentence endings, repeated marks, spacing mistakes, and inconsistent typography that are easy to overlook during drafting. Check the final version after moving or rewriting sentences.", "No punctuation corrector can guarantee that every sentence is correct. Review each result, keep an original copy, and use a qualified editor for high-stakes academic, legal, medical, or public-facing documents."] }
       ],
       "faqs": [
         {
@@ -627,14 +634,19 @@
         },
         {
           "question": "Do I need to create an account?",
-          "answer": "No, you can use our punctuation checker completely anonymously."
+          "answer": "No account is required. The text is sent to LanguageTool when you request a check, so avoid confidential or highly sensitive material."
         }
       ],
       "relatedSearches": [
         "free online punctuation checker no signup fix commas",
         "comma checker online free for essays",
         "fix punctuation errors in text online",
-        "typographical error checker free"
+        "typographical error checker free",
+        "apostrophe checker online free",
+        "quotation mark checker for dialogue",
+        "comma splice checker online",
+        "fix punctuation in a paragraph online",
+        "punctuation checker for emails and reports"
       ]
     },
     "uppercase": {

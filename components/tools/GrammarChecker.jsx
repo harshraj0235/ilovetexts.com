@@ -70,13 +70,15 @@ export default function GrammarChecker({ t = {}, mode = 'grammar' }) {
       }
       const checkedMatches = mode === 'spelling'
         ? (data.matches || []).filter((match) => match.rule?.issueType === 'misspelling')
-        : (data.matches || []);
+        : mode === 'punctuation'
+          ? (data.matches || []).filter((match) => match.rule?.issueType === 'typographical' || ['PUNCTUATION', 'TYPOGRAPHY'].includes(match.rule?.category?.id))
+          : (data.matches || []);
       setMatches(checkedMatches);
       
       if (checkedMatches.length === 0) {
-        setToast({ message: mode === 'spelling' ? 'No spelling errors found!' : 'No grammar or spelling errors found!', type: 'success' });
+        setToast({ message: mode === 'spelling' ? 'No spelling errors found!' : mode === 'punctuation' ? 'No punctuation issues found!' : 'No grammar or spelling errors found!', type: 'success' });
       } else {
-        setToast({ message: `Found ${checkedMatches.length} possible ${mode === 'spelling' ? 'spelling ' : ''}issues.`, type: 'warning' });
+        setToast({ message: `Found ${checkedMatches.length} possible ${mode === 'spelling' ? 'spelling ' : mode === 'punctuation' ? 'punctuation ' : ''}issues.`, type: 'warning' });
       }
 
     } catch (err) {
@@ -147,7 +149,7 @@ export default function GrammarChecker({ t = {}, mode = 'grammar' }) {
 
   const loadSample = () => {
     if (text) setUndoText(text);
-    setText('Their going to the library tommorow, but they does not know if its open. This sentence have several error.');
+    setText(mode === 'punctuation' ? 'After the meeting we reviewed the budget the timeline and the risks however we didnt make a final decision' : 'Their going to the library tommorow, but they does not know if its open. This sentence have several error.');
     setMatches([]);
     setError(null);
   };
@@ -256,7 +258,7 @@ export default function GrammarChecker({ t = {}, mode = 'grammar' }) {
           disabled={isChecking || !text.trim() || text.length > maxCharacters}
           style={{ marginLeft: 'auto', padding: '8px 24px', fontWeight: 'bold' }}
         >
-          {isChecking ? '⏳ Checking...' : mode === 'spelling' ? '📝 Check Spelling' : '✅ Check Grammar'}
+          {isChecking ? '⏳ Checking...' : mode === 'spelling' ? '📝 Check Spelling' : mode === 'punctuation' ? '✒️ Check Punctuation' : '✅ Check Grammar'}
         </button>
       </div>
 
@@ -285,7 +287,7 @@ export default function GrammarChecker({ t = {}, mode = 'grammar' }) {
                 }
               }}
               onScroll={handleScroll}
-              placeholder={mode === 'spelling' ? 'Type or paste your text here to check spelling and typos...' : 'Type or paste your text here to check for grammar, spelling, and punctuation errors...'}
+              placeholder={mode === 'spelling' ? 'Type or paste your text here to check spelling and typos...' : mode === 'punctuation' ? 'Type or paste your text here to check commas, apostrophes, quotes, and other punctuation...' : 'Type or paste your text here to check for grammar, spelling, and punctuation errors...'}
               className="grammar-textarea"
               spellCheck="false"
             />
@@ -300,16 +302,16 @@ export default function GrammarChecker({ t = {}, mode = 'grammar' }) {
         {/* Sidebar for Errors */}
         <div className="grammar-sidebar">
           <h3 style={{ marginBottom: '16px', color: '#202124', borderBottom: '1px solid #E8EAED', paddingBottom: '8px' }}>
-            {mode === 'spelling' ? 'Spelling Suggestions' : 'Issues Found'} {matches.length > 0 && <span className="badge">{matches.length}</span>}
+            {mode === 'spelling' ? 'Spelling Suggestions' : mode === 'punctuation' ? 'Punctuation Suggestions' : 'Issues Found'} {matches.length > 0 && <span className="badge">{matches.length}</span>}
           </h3>
-          {matches.length > 0 && <>{mode !== 'spelling' && <div className="issue-filters" aria-label="Filter suggestions">{['all','grammar','spelling','punctuation'].map((kind)=><button type="button" key={kind} className={issueFilter===kind?'active':''} onClick={()=>setIssueFilter(kind)}>{kind} <span>{kind==='all'?matches.length:matches.filter((match)=>issueKind(match)===kind).length}</span></button>)}</div>}<button type="button" className="apply-all" onClick={applyAllFixes}>Apply suggested {mode === 'spelling' ? 'spellings' : 'fixes'}</button></>}
+          {matches.length > 0 && <>{mode === 'grammar' && <div className="issue-filters" aria-label="Filter suggestions">{['all','grammar','spelling','punctuation'].map((kind)=><button type="button" key={kind} className={issueFilter===kind?'active':''} onClick={()=>setIssueFilter(kind)}>{kind} <span>{kind==='all'?matches.length:matches.filter((match)=>issueKind(match)===kind).length}</span></button>)}</div>}<button type="button" className="apply-all" onClick={applyAllFixes}>Apply suggested {mode === 'spelling' ? 'spellings' : mode === 'punctuation' ? 'punctuation' : 'fixes'}</button></>}
           
           <div className="issues-list">
             {error ? (
               <div className="no-issues" role="status">The check could not be completed. Your text has not been verified.</div>
             ) : matches.length === 0 ? (
               <div className="no-issues">
-                {isChecking ? 'Analyzing text...' : text.trim() ? `Select Check ${mode === 'spelling' ? 'Spelling' : 'Grammar'} to verify this text.` : 'Enter text to begin.'}
+                {isChecking ? 'Analyzing text...' : text.trim() ? `Select Check ${mode === 'spelling' ? 'Spelling' : mode === 'punctuation' ? 'Punctuation' : 'Grammar'} to verify this text.` : 'Enter text to begin.'}
               </div>
             ) : (
               visibleMatches.map((match) => {

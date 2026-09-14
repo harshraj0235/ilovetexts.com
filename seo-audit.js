@@ -297,7 +297,8 @@ try {
 try {
   ['GrammarChecker.jsx', 'SpellChecker.jsx', 'PunctuationChecker.jsx'].forEach((name) => {
     const component = fs.readFileSync(`components/tools/${name}`, 'utf8');
-    const usesSharedValidatedClient = name === 'SpellChecker.jsx' && component.includes("import GrammarChecker from './GrammarChecker'") && component.includes('mode="spelling"');
+    const sharedMode = name === 'SpellChecker.jsx' ? 'spelling' : name === 'PunctuationChecker.jsx' ? 'punctuation' : null;
+    const usesSharedValidatedClient = sharedMode && component.includes("import GrammarChecker from './GrammarChecker'") && component.includes(`mode="${sharedMode}"`);
     if (!usesSharedValidatedClient && !component.includes("const API_URL = '/api/language-check'")) {
       error(`${name}: LanguageTool request bypasses the validated same-origin proxy`);
     }
