@@ -479,16 +479,16 @@
       ]
     },
     "grammar-checker": {
-      "name": "Grammar Checker",
-      "description": "Free grammar and spelling checker",
-      "metaTitle": "Free Online Grammar & Spell Checker (No Signup Required)",
-      "metaDescription": "Check your text for grammar, spelling, and punctuation errors instantly. 100% free online grammar checker with no signup required. Perfect for students, bloggers, and writers.",
-      "keywords": "free grammar checker online no signup, spell checker online free for essays, fix punctuation errors in text online, check grammar mistakes free online, online sentence checker free without registration",
-      "whatIs": "Our free Grammar Checker is a simple, browser-based tool designed to help you catch spelling, punctuation, and grammar mistakes instantly. Unlike premium tools that require subscriptions or accounts, this tool lets you paste your text and identify errors without any sign-up process.",
+      "name": "Free Grammar Checker — Spelling & Punctuation Fixer",
+      "description": "Check grammar, spelling, punctuation, and style in essays, emails, reports, and everyday writing. Review explanations and apply fixes one by one or together.",
+      "metaTitle": "Free Grammar Checker Online — Fix Writing Without Signup",
+      "metaDescription": "Check up to 20,000 characters for grammar, spelling and punctuation. Choose English dialects or 5 other languages, review explanations and apply fixes free.",
+      "keywords": "free grammar checker online no signup, grammar checker for essays free, check my sentence for grammar mistakes, free grammar and punctuation checker, English grammar checker UK and US, grammar checker for emails and reports, multilingual grammar checker online, correct grammar mistakes with explanations, online sentence checker without registration, spelling punctuation and grammar checker free",
+      "whatIs": "The free Grammar Checker reviews up to 20,000 characters for possible grammar, spelling, punctuation, word-choice, and style issues. Choose automatic detection, US or UK English, Spanish, German, Portuguese, Hindi, or Indonesian. Each result includes an explanation and available replacements, so you can accept individual suggestions or apply the first non-overlapping suggestions together and undo the change. Checks are sent through the iLoveTexts security-controlled proxy to LanguageTool; iLoveTexts does not store the submitted text.",
       "whyChoose": [
         {
           "title": "100% Free",
-          "description": "No hidden fees or subscriptions. Check unlimited words."
+          "description": "No account or subscription is required. Review up to 20,000 characters in each check."
         },
         {
           "title": "No Signup Required",
@@ -496,19 +496,25 @@
         },
         {
           "title": "Privacy First",
-          "description": "Your text is processed quickly and we do not store your documents on our servers."
+          "description": "iLoveTexts does not store your document. The text is sent to the named LanguageTool service only when you request a check."
         }
       ],
       "useCases": [
         "Students proofreading their essays and assignments before submission.",
         "Bloggers and content creators ensuring their articles are free of typos.",
         "Professionals double-checking important emails or reports.",
-        "Non-native English speakers wanting to improve their sentence structure."
+        "Non-native English speakers reviewing multilingual writing and sentence structure.",
+        "Job seekers checking cover letters, résumés, and application answers before submitting them."
+      ],
+      "seoSections": [
+        { "title": "Grammar checker for essays, assignments, and academic drafts", "paragraphs": ["Paste an essay or assignment draft, select its language or English dialect, and run the check. Review each explanation in context instead of accepting every replacement automatically. A grammar checker can catch many mechanical errors, but it cannot verify your argument, evidence, citations, or academic integrity.", "For a careful final proofread, check one section at a time, apply appropriate corrections, read the revised paragraph aloud, and download the corrected text. Keep your original draft so you can compare meaning and restore wording when a suggestion changes your intended voice."] },
+        { "title": "Check grammar in emails, reports, cover letters, and applications", "paragraphs": ["Professional writing benefits from a focused last pass for subject-verb agreement, missing words, punctuation, capitalization, spelling, and repeated phrases. Use US or UK English deliberately when an employer, client, or publication has a preferred dialect.", "The issue filters help you review grammar, spelling, and punctuation separately. This is useful when a document has many findings and you want to make decisions in manageable groups rather than changing everything blindly."] },
+        { "title": "What this multilingual grammar checker can and cannot do", "paragraphs": ["Results depend on the selected language, the surrounding sentence, and the rules available from the checking service. Automatic detection is convenient for a single-language document; selecting the language manually is usually clearer for short text or writing that contains names and borrowed words.", "No automated grammar corrector catches every mistake, and valid creative or technical wording may be flagged. Always review the explanation, preserve specialist terms, and ask a qualified human editor to check high-stakes legal, medical, academic, or business documents."] }
       ],
       "faqs": [
         {
           "question": "Is this grammar checker completely free?",
-          "answer": "Yes, our grammar checker is 100% free to use with no word limits or signups required."
+          "answer": "Yes. No signup or payment is required. Each check accepts up to 20,000 characters so the service remains reliable."
         },
         {
           "question": "Does it check spelling as well?",
@@ -516,7 +522,7 @@
         },
         {
           "question": "Is my text stored on your servers?",
-          "answer": "No. We do not store your text. It is only processed to find grammatical errors and then discarded."
+          "answer": "iLoveTexts does not store the submitted text. When you press Check Grammar, it is sent through our protected proxy to LanguageTool for processing, so do not submit confidential or highly sensitive material."
         }
       ],
       "relatedSearches": [
@@ -524,7 +530,12 @@
         "spell checker online free for essays",
         "fix punctuation errors in text online",
         "check grammar mistakes free online",
-        "online sentence checker free without registration"
+        "online sentence checker free without registration",
+        "grammar checker for essays free",
+        "English grammar checker UK and US",
+        "grammar checker for emails and reports",
+        "multilingual grammar checker online",
+        "correct grammar mistakes with explanations"
       ]
     },
     "spell-checker": {

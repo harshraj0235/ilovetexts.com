@@ -9,10 +9,10 @@ export async function POST(request) {
     return Response.json({ error: 'Invalid form data.' }, { status: 400 });
   }
 
-  const text = String(formData.get('text') || '').trim();
+  const text = String(formData.get('text') || '');
   const language = String(formData.get('language') || 'auto');
 
-  if (!text) {
+  if (!text.trim()) {
     return Response.json({ error: 'Text is required.' }, { status: 400 });
   }
   if (text.length > MAX_TEXT_LENGTH) {

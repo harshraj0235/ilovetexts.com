@@ -67,3 +67,19 @@ test('editor-reviewed long-tail sections reach tool pages', () => {
   assert.ok(flipbook.seoSections.length >= 4);
   assert.match(JSON.stringify(flipbook), /not affiliated with or endorsed by Flipsnack/i);
 });
+
+test('grammar checker exposes honest limits, multilingual controls, and advanced review actions', () => {
+  const component = read('components/tools/GrammarChecker.jsx');
+  const route = read('app/api/language-check/route.js');
+  const content = JSON.parse(read('locales/content/en.json')).tools['grammar-checker'];
+
+  assert.match(component, /Check language/);
+  assert.match(component, /applyAllFixes/);
+  assert.match(component, /issueFilter/);
+  assert.match(component, /Download checked text/);
+  assert.match(component, /Text is sent securely to LanguageTool/);
+  assert.match(route, /const text = String\(formData\.get\('text'\) \|\| ''\);/);
+  assert.match(content.metaDescription, /20,000 characters/);
+  assert.ok(content.seoSections.length >= 3);
+  assert.doesNotMatch(JSON.stringify(content), /unlimited words/i);
+});

@@ -11,6 +11,9 @@ export default function GrammarChecker({ t = {} }) {
   const [isChecking, setIsChecking] = useState(false);
   const [error, setError] = useState(null);
   const [toast, setToast] = useState(null);
+  const [language, setLanguage] = useState('auto');
+  const [issueFilter, setIssueFilter] = useState('all');
+  const [undoText, setUndoText] = useState(null);
   
   // Ref for the editable div and highlight layer
   const editorRef = useRef(null);
@@ -24,9 +27,11 @@ export default function GrammarChecker({ t = {} }) {
     }
   };
 
-  // Map our app languages to LanguageTool language codes
-  // We use auto-detect for simplicity but can hardcode if needed
-  const langCode = 'auto'; 
+  const maxCharacters = 20000;
+  const wordCount = text.trim() ? text.trim().split(/\s+/u).length : 0;
+  const issueKind = (match) => match.rule?.issueType === 'misspelling' ? 'spelling' :
+    /punctuation/i.test(`${match.rule?.issueType || ''} ${match.rule?.category?.name || ''}`) ? 'punctuation' : 'grammar';
+  const visibleMatches = matches.filter((match) => issueFilter === 'all' || issueKind(match) === issueFilter);
 
   useEffect(() => {
     if (toast) {
@@ -48,7 +53,7 @@ export default function GrammarChecker({ t = {} }) {
     try {
       const params = new URLSearchParams({
         text: text,
-        language: langCode,
+        language,
       });
 
       const response = await fetch(API_URL, {
@@ -59,11 +64,10 @@ export default function GrammarChecker({ t = {} }) {
         body: params.toString(),
       });
 
-      if (!response.ok) {
-        throw new Error('Failed to reach grammar checking service. Please try again later.');
-      }
-
       const data = await response.json();
+      if (!response.ok) {
+        throw new Error(data.error || 'Failed to reach grammar checking service. Please try again later.');
+      }
       setMatches(data.matches || []);
       
       if (data.matches && data.matches.length === 0) {
@@ -87,6 +91,7 @@ export default function GrammarChecker({ t = {} }) {
     // Replace text in the string based on offset and length
     const newText = text.substring(0, match.offset) + replacement + text.substring(match.offset + match.length);
     
+    setUndoText(text);
     setText(newText);
     
     // Remove the match from the list
@@ -104,10 +109,54 @@ export default function GrammarChecker({ t = {} }) {
     setMatches(newMatches);
   };
 
+  const applyAllFixes = () => {
+    const candidates = [];
+    [...matches].sort((a, b) => a.offset - b.offset).forEach((match) => {
+      if (!match.replacements?.[0]) return;
+      const previous = candidates[candidates.length - 1];
+      if (!previous || match.offset >= previous.offset + previous.length) candidates.push(match);
+    });
+    if (!candidates.length) return;
+    setUndoText(text);
+    let corrected = text;
+    [...candidates].reverse().forEach((match) => {
+      corrected = corrected.substring(0, match.offset) + match.replacements[0].value + corrected.substring(match.offset + match.length);
+    });
+    setText(corrected);
+    setMatches([]);
+    setToast({ message: `Applied ${candidates.length} suggested ${candidates.length === 1 ? 'fix' : 'fixes'}. Review the result before using it.`, type: 'success' });
+  };
+
   const handleClear = () => {
+    if (text) setUndoText(text);
     setText('');
     setMatches([]);
     setError(null);
+  };
+
+  const handleUndo = () => {
+    if (undoText === null) return;
+    const current = text;
+    setText(undoText);
+    setUndoText(current);
+    setMatches([]);
+  };
+
+  const loadSample = () => {
+    if (text) setUndoText(text);
+    setText('Their going to the library tommorow, but they does not know if its open. This sentence have several error.');
+    setMatches([]);
+    setError(null);
+  };
+
+  const downloadText = () => {
+    if (!text) return;
+    const url = URL.createObjectURL(new Blob([text], { type: 'text/plain;charset=utf-8' }));
+    const anchor = document.createElement('a');
+    anchor.href = url;
+    anchor.download = 'checked-text.txt';
+    anchor.click();
+    window.setTimeout(() => URL.revokeObjectURL(url), 1000);
   };
 
   const handleCopy = () => {
@@ -181,6 +230,10 @@ export default function GrammarChecker({ t = {} }) {
       )}
 
       {/* Toolbar */}
+      <div className="grammar-controls">
+        <label>Check language<select value={language} onChange={(event) => { setLanguage(event.target.value); setMatches([]); }}><option value="auto">Detect automatically</option><option value="en-US">English (US)</option><option value="en-GB">English (UK)</option><option value="es">Spanish</option><option value="de-DE">German</option><option value="pt">Portuguese</option><option value="hi-IN">Hindi</option><option value="id">Indonesian</option></select></label>
+        <span className="privacy-note">Text is sent securely to LanguageTool for this check and is not stored by iLoveTexts.</span>
+      </div>
       <div className="tool-toolbar" style={{ display: 'flex', gap: '8px', marginBottom: '16px', flexWrap: 'wrap' }}>
         <button onClick={handlePaste} className="btn-secondary" title="Paste text">
           📋 Paste
@@ -191,10 +244,13 @@ export default function GrammarChecker({ t = {} }) {
         <button onClick={handleClear} className="btn-secondary" title="Clear text">
           🗑️ Clear
         </button>
+        <button onClick={handleUndo} className="btn-secondary" disabled={undoText === null} title="Undo last text change">↶ Undo</button>
+        <button onClick={loadSample} className="btn-secondary" title="Load example text">✨ Sample</button>
+        <button onClick={downloadText} className="btn-secondary" disabled={!text} title="Download checked text">⇩ Download</button>
         <button 
           onClick={checkGrammar} 
           className="btn-primary" 
-          disabled={isChecking || !text.trim()}
+          disabled={isChecking || !text.trim() || text.length > maxCharacters}
           style={{ marginLeft: 'auto', padding: '8px 24px', fontWeight: 'bold' }}
         >
           {isChecking ? '⏳ Checking...' : '✅ Check Grammar'}
@@ -206,6 +262,7 @@ export default function GrammarChecker({ t = {} }) {
           {error}
         </div>
       )}
+      {text.length > maxCharacters && <div className="alert-error" role="alert" style={{ marginBottom: '16px', padding: '12px', background: '#fff7ed', color: '#9a3412', borderRadius: '8px' }}>Shorten the text by {(text.length - maxCharacters).toLocaleString()} characters to run this check.</div>}
 
       <div className="grammar-layout">
         {/* Editor Area */}
@@ -232,8 +289,8 @@ export default function GrammarChecker({ t = {} }) {
           </div>
           
           <div className="editor-stats" style={{ display: 'flex', justifyContent: 'space-between', padding: '8px 0', color: 'var(--text-muted)', fontSize: '0.9rem' }}>
-            <span>{text.length} characters</span>
-            <span>{text.split(/\s+/).filter(w => w.length > 0).length} words</span>
+            <span className={text.length > maxCharacters ? 'limit-over' : ''}>{text.length.toLocaleString()} / {maxCharacters.toLocaleString()} characters</span>
+            <span>{wordCount.toLocaleString()} words</span>
           </div>
         </div>
 
@@ -242,6 +299,7 @@ export default function GrammarChecker({ t = {} }) {
           <h3 style={{ marginBottom: '16px', color: '#202124', borderBottom: '1px solid #E8EAED', paddingBottom: '8px' }}>
             Issues Found {matches.length > 0 && <span className="badge">{matches.length}</span>}
           </h3>
+          {matches.length > 0 && <><div className="issue-filters" aria-label="Filter suggestions">{['all','grammar','spelling','punctuation'].map((kind)=><button type="button" key={kind} className={issueFilter===kind?'active':''} onClick={()=>setIssueFilter(kind)}>{kind} <span>{kind==='all'?matches.length:matches.filter((match)=>issueKind(match)===kind).length}</span></button>)}</div><button type="button" className="apply-all" onClick={applyAllFixes}>Apply suggested fixes</button></>}
           
           <div className="issues-list">
             {error ? (
@@ -251,11 +309,13 @@ export default function GrammarChecker({ t = {} }) {
                 {isChecking ? 'Analyzing text...' : text.trim() ? 'Select Check Grammar to verify this text.' : 'Enter text to begin.'}
               </div>
             ) : (
-              matches.map((match, index) => (
-                <div key={index} id={`issue-${index}`} className="issue-card">
+              visibleMatches.map((match) => {
+                const index = matches.indexOf(match);
+                const kind = issueKind(match);
+                return <div key={`${match.offset}-${match.rule?.id || index}`} id={`issue-${index}`} className="issue-card">
                   <div className="issue-header">
-                    <span className={`issue-type-badge ${match.rule.issueType === 'misspelling' ? 'spelling' : 'grammar'}`}>
-                      {match.rule.issueType === 'misspelling' ? 'Spelling' : 'Grammar'}
+                    <span className={`issue-type-badge ${kind}`}>
+                      {kind}
                     </span>
                     <span className="issue-category">{match.rule.category.name}</span>
                   </div>
@@ -278,8 +338,8 @@ export default function GrammarChecker({ t = {} }) {
                       </div>
                     </div>
                   )}
-                </div>
-              ))
+                </div>;
+              })
             )}
           </div>
         </div>
@@ -291,12 +351,26 @@ export default function GrammarChecker({ t = {} }) {
           gap: 24px;
           min-height: 500px;
         }
+
+        .grammar-controls { display:flex; align-items:end; justify-content:space-between; gap:16px; margin-bottom:12px; padding:12px 14px; border:1px solid #dbeafe; border-radius:12px; background:#f8fbff; }
+        .grammar-controls label { display:grid; gap:5px; color:#334155; font-size:.75rem; font-weight:750; }
+        .grammar-controls select { min-height:40px; padding:0 36px 0 10px; border:1px solid #cbd5e1; border-radius:8px; background:white; color:#0f172a; }
+        .privacy-note { max-width:520px; color:#475569; font-size:.75rem; line-height:1.45; }
+        .limit-over { color:#b91c1c; font-weight:800; }
+        .issue-filters { display:flex; gap:6px; overflow-x:auto; margin-bottom:9px; padding-bottom:2px; }
+        .issue-filters button { min-height:34px; padding:0 9px; border:1px solid #e2e8f0; border-radius:999px; background:#fff; color:#475569; text-transform:capitalize; white-space:nowrap; cursor:pointer; }
+        .issue-filters button.active { border-color:#7c3aed; background:#f5f3ff; color:#6d28d9; }
+        .issue-filters span { font-weight:800; }
+        .apply-all { width:100%; min-height:42px; margin-bottom:12px; border:0; border-radius:9px; background:#166534; color:white; font-weight:800; cursor:pointer; }
         
         @media (max-width: 900px) {
           .grammar-layout {
             grid-template-columns: 1fr;
           }
+          .grammar-sidebar { max-height:none; }
         }
+
+        @media (max-width: 560px) { .grammar-controls { align-items:stretch; flex-direction:column; } .grammar-controls select { width:100%; } .editor-container { height:340px; } .grammar-textarea,.grammar-highlight-layer { padding:16px; font-size:1rem; } .tool-toolbar .btn-primary { width:100%; margin-left:0!important; min-height:48px; } }
 
         .grammar-editor-wrapper {
           position: relative;
@@ -438,6 +512,7 @@ export default function GrammarChecker({ t = {} }) {
           background: #fef3c7;
           color: #92400e;
         }
+        .issue-type-badge.punctuation { background:#e0f2fe; color:#075985; }
 
         .issue-category {
           font-size: 0.8rem;
