@@ -142,3 +142,18 @@ test('rhyming dictionary supports near rhymes, meter filters, and a writing shor
   assert.match(content.metaTitle, /Perfect and Near Rhymes/);
   assert.ok(content.seoSections.length >= 3);
 });
+
+test('anagram generator validates exact letters and offers filtered shortlists', () => {
+  const component = read('components/tools/AnagramGenerator.jsx');
+  const content = JSON.parse(read('locales/content/en.json')).tools['anagram-generator'];
+
+  assert.match(component, /replace\(\/\[\^a-z\]\/g, ''\)/);
+  assert.match(component, /startsWith/);
+  assert.match(component, /selected/);
+  assert.match(component, /copyResults/);
+  assert.match(component, /Dictionary lookup uses Datamuse/);
+  assert.match(content.metaTitle, /Exact Letter Anagram Solver/);
+  assert.ok(content.seoSections.length >= 3);
+  assert.doesNotMatch(JSON.stringify(content), /100% Offline/i);
+  assert.doesNotMatch(JSON.stringify(content), /all possible permutations/i);
+});

@@ -17,12 +17,19 @@ export default function AnagramGenerator({ t = {}, lang = 'en' }) {
   const [error, setError] = useState(null);
   const [hasSearched, setHasSearched] = useState(false);
   const [toast, setToast] = useState(null);
+  const [startsWith, setStartsWith] = useState('');
+  const [contains, setContains] = useState('');
+  const [sortBy, setSortBy] = useState('score');
+  const [selected, setSelected] = useState([]);
+
+  const letters = word.toLocaleLowerCase().replace(/[^a-z]/g, '').slice(0, 15);
+  const visibleAnagrams = anagrams.filter((item) => item.word.toLocaleLowerCase().startsWith(startsWith.toLocaleLowerCase()) && item.word.toLocaleLowerCase().includes(contains.toLocaleLowerCase())).sort((a, b) => sortBy === 'alphabetical' ? a.word.localeCompare(b.word) : (b.score || 0) - (a.score || 0));
 
   const searchAnagrams = async (e) => {
     if (e) e.preventDefault();
     
-    if (!word.trim() || word.trim().length > 15) {
-      setToast({ message: 'Please enter a word up to 15 letters long.', type: 'warning' });
+    if (letters.length < 2) {
+      setToast({ message: 'Enter between 2 and 15 English letters.', type: 'warning' });
       return;
     }
 
@@ -32,7 +39,7 @@ export default function AnagramGenerator({ t = {}, lang = 'en' }) {
     setHasSearched(true);
 
     try {
-      const response = await fetch(`https://api.datamuse.com/words?sp=${word.split('').sort().join('').replace(/./g, '?')}&max=1000`);
+      const response = await fetch(`https://api.datamuse.com/words?sp=${'?'.repeat(letters.length)}&max=1000`);
       
       if (!response.ok) {
         throw new Error('Failed to reach the dictionary service.');
@@ -40,14 +47,15 @@ export default function AnagramGenerator({ t = {}, lang = 'en' }) {
 
       const data = await response.json();
       
-      const inputSorted = word.toLowerCase().trim().split('').sort().join('');
+      const inputSorted = letters.split('').sort().join('');
       const validAnagrams = data.filter(item => {
         if (!item.word || item.word.includes(' ')) return false;
         const itemSorted = item.word.toLowerCase().split('').sort().join('');
-        return itemSorted === inputSorted && item.word.toLowerCase() !== word.toLowerCase().trim();
+        return itemSorted === inputSorted && item.word.toLowerCase() !== letters;
       });
 
       setAnagrams(validAnagrams);
+      setSelected([]);
       
       if (validAnagrams.length === 0) {
         setToast({ message: `No anagrams found for "${word}".`, type: 'warning' });
@@ -60,6 +68,12 @@ export default function AnagramGenerator({ t = {}, lang = 'en' }) {
     } finally {
       setIsSearching(false);
     }
+  };
+
+  const toggleSelected = (value) => setSelected((current) => current.includes(value) ? current.filter((item) => item !== value) : [...current, value]);
+  const copyResults = (values = visibleAnagrams.map((item) => item.word)) => {
+    if (!values.length) return;
+    navigator.clipboard.writeText(values.join(', ')).then(() => setToast({ message: 'Anagrams copied.', type: 'success' }));
   };
 
   return (
@@ -110,6 +124,7 @@ export default function AnagramGenerator({ t = {}, lang = 'en' }) {
             {isSearching ? 'Generating...' : '✨ Generate'}
           </button>
         </form>
+        <div className="anagram-extras"><div className="letter-rack" aria-label="Normalized letter rack">{letters ? letters.toUpperCase().split('').map((letter,index)=><span key={`${letter}-${index}`}>{letter}</span>) : <small>Letters A–Z only · 15 maximum · every letter is used</small>}</div><div className="examples">Try: {['listen','earth','cinema','state'].map((item)=><button type="button" key={item} onClick={()=>setWord(item)}>{item}</button>)}</div><p>Dictionary lookup uses Datamuse. Your letters are sent only when you select Generate.</p></div>
       </div>
 
       {error && (
@@ -123,21 +138,22 @@ export default function AnagramGenerator({ t = {}, lang = 'en' }) {
           {anagrams.length === 0 ? (
             <div className="tool-panel" style={{ padding: '40px', textAlign: 'center', background: 'var(--bg-section)' }}>
               <div style={{ fontSize: '3rem', marginBottom: '16px' }}>🤔</div>
-              <h3 style={{ fontSize: '1.2rem', color: 'var(--text-secondary)' }}>No anagrams found for "{word}". Try rearranging or using different letters!</h3>
+              <h3 style={{ fontSize: '1.2rem', color: 'var(--text-secondary)' }}>No exact dictionary anagrams found for &ldquo;{letters}&rdquo;.</h3>
             </div>
           ) : (
             <div className="tool-panel">
               <div className="tool-panel-header">
                 <div className="tool-panel-title">
-                  Results for "{word}"
+                  Results for &ldquo;{letters}&rdquo;
                   <span style={{ marginLeft: '12px', background: '#E0E7FF', color: '#4F46E5', padding: '2px 10px', borderRadius: '12px', fontSize: '0.85rem' }}>
-                    {anagrams.length} anagrams
+                    {visibleAnagrams.length} of {anagrams.length}
                   </span>
                 </div>
               </div>
+              <div className="anagram-filters"><label>Starts with<input value={startsWith} maxLength={5} onChange={(e)=>setStartsWith(e.target.value.replace(/[^a-z]/gi,''))}/></label><label>Contains<input value={contains} maxLength={8} onChange={(e)=>setContains(e.target.value.replace(/[^a-z]/gi,''))}/></label><label>Sort<select value={sortBy} onChange={(e)=>setSortBy(e.target.value)}><option value="score">Relevance</option><option value="alphabetical">A–Z</option></select></label><button type="button" onClick={()=>copyResults(selected.length?selected:visibleAnagrams.map((item)=>item.word))}>Copy {selected.length?'selected':'results'}</button></div>
               <div style={{ padding: '24px', display: 'flex', flexWrap: 'wrap', gap: '12px' }}>
-                {anagrams.map((item, idx) => (
-                    <span 
+                {visibleAnagrams.map((item, idx) => (
+                    <button type="button"
                       key={idx} 
                       style={{
                         padding: '10px 18px',
@@ -148,14 +164,16 @@ export default function AnagramGenerator({ t = {}, lang = 'en' }) {
                         color: 'var(--text-main)',
                         border: '1px solid var(--border-light)',
                         boxShadow: 'var(--shadow-sm)',
-                        cursor: 'default',
+                        cursor: 'pointer',
                         transition: 'all 0.2s transform'
                       }}
                       onMouseEnter={(e) => { e.target.style.transform = 'translateY(-2px)'; e.target.style.boxShadow = 'var(--shadow-card)'; e.target.style.borderColor = '#4F46E5'; }}
                       onMouseLeave={(e) => { e.target.style.transform = 'translateY(0)'; e.target.style.boxShadow = 'var(--shadow-sm)'; e.target.style.borderColor = 'var(--border-light)'; }}
+                      onClick={()=>toggleSelected(item.word)}
+                      aria-pressed={selected.includes(item.word)}
                     >
                       {item.word}
-                    </span>
+                    </button>
                 ))}
               </div>
             </div>
@@ -164,6 +182,7 @@ export default function AnagramGenerator({ t = {}, lang = 'en' }) {
       )}
       
       {toast && <Toast message={toast.message} type={toast.type} onClose={() => setToast(null)} />}
+      <style jsx>{`.anagram-extras{display:grid;gap:12px;padding:0 24px 22px}.anagram-extras p{margin:0;color:var(--text-secondary);font-size:.75rem}.letter-rack,.examples{display:flex;flex-wrap:wrap;gap:7px;align-items:center}.letter-rack span{display:grid;place-items:center;width:38px;height:42px;border:1px solid #c7d2fe;border-radius:8px;background:#eef2ff;color:#3730a3;font-weight:900}.examples button{min-height:34px;padding:0 11px;border:1px solid var(--border-light);border-radius:999px;background:var(--bg-white);cursor:pointer}.anagram-filters{display:grid;grid-template-columns:1fr 1fr 1fr auto;gap:10px;padding:14px 24px;background:var(--bg-section);border-bottom:1px solid var(--border-light)}.anagram-filters label{display:grid;gap:4px;font-size:.72rem;font-weight:800}.anagram-filters input,.anagram-filters select,.anagram-filters button{min-width:0;min-height:40px;padding:0 10px;border:1px solid var(--border-light);border-radius:8px;background:var(--bg-white);color:var(--text-main)}.anagram-filters button{align-self:end;background:#4f46e5;color:white;font-weight:800;cursor:pointer}@media(max-width:700px){.anagram-filters{grid-template-columns:1fr 1fr;padding:12px}.anagram-filters button{grid-column:1/-1}.anagram-extras{padding-inline:16px}}`}</style>
     </div>
   );
 }

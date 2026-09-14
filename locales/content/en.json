@@ -403,41 +403,61 @@
       ]
     },
     "anagram-generator": {
-      "name": "Anagram Generator",
-      "description": "Generate anagrams and word permutations from any letters",
-      "metaTitle": "Free Online Anagram Solver & Generator — Make Words from Letters",
-      "metaDescription": "Generate anagrams and find all possible word permutations from your letters. The best free anagram solver online. No signup required.",
-      "keywords": "anagram solver make words from letters, anagram generator free, word permutation generator, unscramble letters",
-      "whatIs": "Our Anagram Generator is a fast, offline tool that calculates all possible permutations of your input letters. It is perfect for word games, puzzles, or discovering interesting letter combinations.",
+      "name": "Anagram Generator — Exact Letter Anagram Solver",
+      "description": "Find exact single-word anagrams that use every entered letter, then filter, sort, select, and copy the strongest matches.",
+      "metaTitle": "Anagram Generator — Exact Letter Anagram Solver",
+      "metaDescription": "Enter 2–15 English letters to find exact single-word anagrams that use every letter. Filter, sort and copy results with this free anagram solver.",
+      "keywords": "free anagram generator online, exact anagram solver use all letters, unscramble letters into words, make words from letters online, single word anagram finder, anagram solver for names, anagram puzzle helper, rearrange letters into a word, anagram generator with filters, find anagrams that start with a letter",
+      "whatIs": "This exact-letter Anagram Generator checks the Datamuse English word service for single words made with every letter you enter, once and only once. It excludes the original word, then lets you filter matches by starting letters or contained letters, sort them, select favorites, and copy a shortlist. It does not calculate every character permutation, find shorter subset words, or build multi-word phrases.",
+      "seoSections": [
+        { "title": "Exact anagram solver versus a word unscrambler", "paragraphs": ["An exact anagram rearranges every supplied letter into another single word. For example, listen and silent contain the same six letters. This page validates that exact letter inventory instead of returning shorter words that leave tiles unused.", "A broad word unscrambler is better when a game allows subset words. Use this exact solver when a clue, name puzzle, classroom exercise, or anagram challenge requires every letter to appear exactly once."] },
+        { "title": "Filter and shortlist anagram ideas", "paragraphs": ["Use Starts with when you know the opening letter or prefix, and Contains when the answer must include a particular sequence. Sort by relevance for common dictionary matches or A–Z for a predictable scan.", "Select promising words as you compare them, then copy only the shortlist. This is useful for anagram puzzles, pen-name exploration, headings, character names, and creative wordplay without losing your candidates."] },
+        { "title": "Understand dictionary and word-game limits", "paragraphs": ["Results come from an external English dictionary service, so rare names, new slang, inflections, technical terms, or regional spellings may be missing. A result is a dictionary candidate, not proof that it is legal in Scrabble, Words With Friends, or a specific tournament word list.", "The tool accepts English A–Z letters and searches for one-word matches up to 15 letters. Spaces, punctuation, accents, wildcard tiles, and multi-word phrase anagrams are not part of this exact search."] }
+      ],
       "whyChoose": [
         {
-          "title": "Lightning Fast",
-          "description": "Generates permutations instantly in your browser."
+          "title": "Exact-Letter Validation",
+          "description": "Every returned word uses the same letters with the same frequency."
         },
         {
-          "title": "100% Offline",
-          "description": "Works entirely without sending data to a server."
+          "title": "Useful Filters",
+          "description": "Narrow matches by beginning or contained letters and sort the list."
         },
         {
-          "title": "Free & Private",
-          "description": "No limits, no signups, complete privacy."
+          "title": "Copy a Shortlist",
+          "description": "Select the useful candidates and copy them together in one click."
         }
       ],
       "useCases": [
-        "Solving word puzzles and anagrams.",
-        "Finding new naming combinations.",
-        "Exploring mathematical permutations of strings."
+        "Solving exact-letter anagram clues in word puzzles and classroom activities.",
+        "Exploring alternate single-word arrangements for names and creative projects.",
+        "Checking whether a set of letters forms another English dictionary word."
       ],
       "faqs": [
         {
-          "question": "Is this tool free?",
-          "answer": "Yes, our anagram generator is completely free."
+          "question": "Does the anagram solver use every letter?",
+          "answer": "Yes. Each result must contain exactly the same letters, including repeated letters, as the text you entered."
+        },
+        {
+          "question": "Can it create multi-word anagram phrases?",
+          "answer": "No. This version finds exact single-word English dictionary matches. It does not split letters across phrases or return shorter subset words."
+        },
+        {
+          "question": "Why is a valid name or game word missing?",
+          "answer": "The search depends on Datamuse dictionary coverage. Proper names, specialist terms, slang, and words accepted by a particular game dictionary may differ."
+        },
+        {
+          "question": "Are my letters processed privately?",
+          "answer": "Your letters are sent to Datamuse only after you select Generate so the tool can retrieve dictionary candidates. Do not enter sensitive text."
         }
       ],
       "relatedSearches": [
-        "anagram solver make words from letters",
-        "anagram generator free",
-        "unscramble letters"
+        "exact anagram solver use all letters",
+        "free anagram generator online",
+        "unscramble letters into one word",
+        "anagram solver for names",
+        "find anagrams that start with a letter",
+        "rearrange letters into a word"
       ]
     },
     "rhyming-dictionary": {
