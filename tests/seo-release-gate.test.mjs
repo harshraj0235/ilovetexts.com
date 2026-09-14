@@ -52,3 +52,18 @@ test('curated tool content reaches the rendered page instead of generic fallback
   assert.match(page, /seoData\?\.useCases/);
   assert.match(page, /seoData\?\.keywords/);
 });
+
+test('editor-reviewed long-tail sections reach tool pages', () => {
+  const page = read('app/[lang]/[category]/[tool]/page.js');
+  const layout = read('components/ToolLayout.jsx');
+  const content = JSON.parse(read('locales/content/en.json'));
+  const flipbook = content.tools['flipbook-maker'];
+
+  assert.match(page, /const seoSections = toolData\.content\?\.seoSections \|\| \[\]/);
+  assert.match(page, /seoSections=\{seoSections\}/);
+  assert.match(layout, /seoSections\.map/);
+  assert.match(flipbook.metaTitle, /Flipsnack Alternative/);
+  assert.match(flipbook.keywords, /PDF flipbook maker for WordPress/i);
+  assert.ok(flipbook.seoSections.length >= 4);
+  assert.match(JSON.stringify(flipbook), /not affiliated with or endorsed by Flipsnack/i);
+});

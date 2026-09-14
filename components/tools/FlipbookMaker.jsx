@@ -1,7 +1,7 @@
 'use client';
 /* eslint-disable @next/next/no-img-element -- PDF pages are runtime-generated data URLs. */
 
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { buildStandaloneFlipbook, FLIPBOOK_LIMITS, FLIPBOOK_TEMPLATES, safeFlipbookTitle, safeHtmlFileName } from '@/lib/flipbook-utils.mjs';
 import styles from './FlipbookMaker.module.css';
 
@@ -22,6 +22,10 @@ export default function FlipbookMaker() {
   const [error, setError] = useState('');
 
   const theme = FLIPBOOK_TEMPLATES[template];
+  const spreadStarts = useMemo(() => {
+    if (!pages.length) return [];
+    return [0, ...Array.from({ length: Math.ceil((pages.length - 1) / 2) }, (_, index) => 1 + (index * 2))];
+  }, [pages.length]);
   const goTo = useCallback((next) => {
     if (!pages.length || turning) return;
     setTurning(true);
@@ -31,20 +35,32 @@ export default function FlipbookMaker() {
     }, Math.max(100, speed / 3));
   }, [pages.length, speed, turning]);
 
+  const goSpread = useCallback((direction) => {
+    if (!spreadStarts.length || turning) return;
+    const current = Math.max(0, spreadStarts.indexOf(page));
+    const next = (current + direction + spreadStarts.length) % spreadStarts.length;
+    goTo(spreadStarts[next]);
+  }, [goTo, page, spreadStarts, turning]);
+
   useEffect(() => {
     if (!autoplay || pages.length < 2) return undefined;
-    timerRef.current = window.setInterval(() => setPage((current) => (current + 1) % pages.length), 3500);
+    timerRef.current = window.setInterval(() => {
+      setPage((current) => {
+        const position = Math.max(0, spreadStarts.indexOf(current));
+        return spreadStarts[(position + 1) % spreadStarts.length];
+      });
+    }, 3500);
     return () => window.clearInterval(timerRef.current);
-  }, [autoplay, pages.length]);
+  }, [autoplay, pages.length, spreadStarts]);
 
   useEffect(() => {
     const keydown = (event) => {
-      if (event.key === 'ArrowLeft') goTo(page - 1);
-      if (event.key === 'ArrowRight') goTo(page + 1);
+      if (event.key === 'ArrowLeft') goSpread(-1);
+      if (event.key === 'ArrowRight') goSpread(1);
     };
     window.addEventListener('keydown', keydown);
     return () => window.removeEventListener('keydown', keydown);
-  }, [goTo, page]);
+  }, [goSpread]);
 
   async function loadPdf(file) {
     if (!file) return;
@@ -118,11 +134,15 @@ export default function FlipbookMaker() {
       <div className={styles.stageWrap}>
         <div className={styles.toolbar}><strong title={fileName}>📖 {safeFlipbookTitle(title)}</strong><div className={styles.toolbarActions}><button className={styles.toolButton} type="button" onClick={()=>setAutoplay(v=>!v)} aria-label={autoplay?'Pause autoplay':'Start autoplay'}>{autoplay?'❚❚':'▶'}</button><button className={styles.toolButton} type="button" onClick={()=>stageRef.current?.requestFullscreen?.()} aria-label="Open fullscreen">⛶</button></div></div>
         <div ref={stageRef} className={styles.stage} style={{'--flip-bg':theme.background,'--flip-surface':theme.surface,'--flip-speed':`${speed}ms`}}>
-          <button className={`${styles.nav} ${styles.prev}`} type="button" onClick={()=>goTo(page-1)} aria-label="Previous page">←</button>
-          <img className={`${styles.page} ${turning?styles.turning:''}`} src={pages[page]} alt={`Page ${page+1} of ${pages.length}`} />
-          <button className={`${styles.nav} ${styles.next}`} type="button" onClick={()=>goTo(page+1)} aria-label="Next page">→</button><span className={styles.counter}>{page+1} / {pages.length}</span>
+          <button className={`${styles.nav} ${styles.prev}`} type="button" onClick={()=>goSpread(-1)} aria-label="Previous pages">‹</button>
+          <div className={`${styles.book} ${page===0?styles.coverBook:styles.spreadBook} ${turning?styles.turning:''}`}>
+            <img className={styles.page} src={pages[page]} alt={`Page ${page+1} of ${pages.length}`} />
+            {page > 0 && pages[page+1] && <img className={styles.page} src={pages[page+1]} alt={`Page ${page+2} of ${pages.length}`} />}
+          </div>
+          <button className={`${styles.nav} ${styles.next}`} type="button" onClick={()=>goSpread(1)} aria-label="Next pages">›</button>
+          <div className={styles.readerRail}><span>{page===0?'1':`${page+1} - ${Math.min(page+2,pages.length)}`} / {pages.length}</span><div className={styles.railTrack}><i style={{width:`${(Math.min(page+2,pages.length)/pages.length)*100}%`}} /></div></div>
         </div>
-        <div className={styles.thumbs} aria-label="Page thumbnails">{pages.map((src,index)=><button type="button" className={`${styles.thumb} ${index===page?styles.thumbActive:''}`} key={index} onClick={()=>goTo(index)} aria-label={`Go to page ${index+1}`}><img src={src} alt="" /></button>)}</div>
+        <div className={styles.thumbs} aria-label="Page thumbnails">{pages.map((src,index)=><button type="button" className={`${styles.thumb} ${(index===page||(index===page+1&&page>0))?styles.thumbActive:''}`} key={index} onClick={()=>goTo(index===0?0:(index%2===0?index-1:index))} aria-label={`Go to page ${index+1}`}><img src={src} alt="" /></button>)}</div>
       </div>
     </div>}
   </section>;

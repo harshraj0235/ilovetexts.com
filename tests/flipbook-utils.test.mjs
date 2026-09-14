@@ -14,3 +14,17 @@ test('standalone export escapes injected markup and clamps animation speed', () 
   assert.match(html, /data:image\/jpeg;base64/);
   assert.match(html, /\\u003c\/script>/);
 });
+
+test('standalone reader opens as a cover and advances in two-page spreads', () => {
+  const html = buildStandaloneFlipbook({
+    title: 'Catalog',
+    pages: ['page-1', 'page-2', 'page-3', 'page-4', 'page-5'],
+  });
+
+  assert.match(html, /class="book cover"/);
+  assert.match(html, /id="left"/);
+  assert.match(html, /id="right"/);
+  assert.match(html, /1\+n\*2/);
+  assert.match(html, /Page progress/);
+  assert.match(html, /progress\.style\.width/);
+});

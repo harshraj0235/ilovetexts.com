@@ -220,6 +220,7 @@ export default async function ToolPage({ params }) {
   const useCases = generateUseCases(toolData, category, seoData);
   const faqs = generateFAQs(toolData, t, seoData);
   const relatedSearches = generateRelatedSearches(toolData, seoData);
+  const seoSections = toolData.content?.seoSections || [];
 
   const howToSteps = toolData.content?.howToSteps?.length ? toolData.content.howToSteps : [
     {
@@ -274,6 +275,7 @@ export default async function ToolPage({ params }) {
         whatIs={whatIs}
         whyChoose={whyChoose}
         useCases={useCases}
+        seoSections={seoSections}
         relatedSearches={relatedSearches}
         allCategories={CATEGORIES}
         lang={lang}

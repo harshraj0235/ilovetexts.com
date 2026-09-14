@@ -294,6 +294,7 @@ export default function ToolLayout({
   whatIs = '',
   whyChoose = [],
   useCases = [],
+  seoSections = [],
   relatedSearches = [],
   allCategories = [],
   lang = 'en',
@@ -519,6 +520,23 @@ export default function ToolLayout({
             </div>
           </section>
         )}
+
+        {/* Helpful topic sections for tools with deeper, editor-reviewed guidance. */}
+        {seoSections.map((section, sectionIndex) => (
+          <section className="what-is-section" key={`${section.title}-${sectionIndex}`}>
+            <h2>{section.title}</h2>
+            {(section.paragraphs || []).map((paragraph, paragraphIndex) => (
+              <p key={paragraphIndex}>{paragraph}</p>
+            ))}
+            {section.bullets?.length > 0 && (
+              <ul>
+                {section.bullets.map((bullet, bulletIndex) => (
+                  <li key={bulletIndex}>{bullet}</li>
+                ))}
+              </ul>
+            )}
+          </section>
+        ))}
 
         {/* Section 5: FAQ */}
         {faqs && faqs.length > 0 && (
