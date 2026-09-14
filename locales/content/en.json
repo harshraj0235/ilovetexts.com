@@ -441,12 +441,17 @@
       ]
     },
     "rhyming-dictionary": {
-      "name": "Rhyming Dictionary",
-      "description": "Find words that rhyme with your word online",
-      "metaTitle": "Free Online Rhyming Dictionary — Find Rhyming Words Instantly",
-      "metaDescription": "Discover words that rhyme with any word instantly. The best free online rhyming dictionary for poets, songwriters, and writers. No signup required.",
-      "keywords": "find words that rhyme with my word online, rhyming dictionary free, find rhyming words, online rhyme generator, words that rhyme with",
-      "whatIs": "Our Rhyming Dictionary is a fast, free tool designed to help you find words that rhyme with any input word. Perfect for writing poetry, lyrics, or just finding the perfect word for your essay.",
+      "name": "Rhyming Dictionary — Perfect and Near Rhyme Finder",
+      "description": "Find perfect or near rhymes, filter by syllable count, hear pronunciation, and collect a shortlist for poems, lyrics, rap, and wordplay.",
+      "metaTitle": "Rhyming Dictionary — Find Perfect and Near Rhymes",
+      "metaDescription": "Find perfect and near rhymes online, filter by syllables, hear words and copy a writing shortlist. Free rhyme finder for poetry, songs, lyrics and rap.",
+      "keywords": "rhyming dictionary online free, find words that rhyme with my word, perfect rhyme finder, near rhyme finder online, slant rhyme generator free, rhymes for song lyrics, rhyme finder for poetry, rap rhyme generator by syllables, multi syllable rhyme finder, words that rhyme by syllable count, online rhyme shortlist",
+      "whatIs": "The Rhyming Dictionary queries the Datamuse word service for English perfect rhymes or broader near rhymes and groups results by reported syllable count. Filter the list to fit a line's meter, select up to 20 candidates for a writing shortlist, copy that shortlist, or use your browser's speech voice to hear a word. Results are creative prompts rather than guarantees that every pronunciation, dialect, meaning, or stress pattern will fit your line.",
+      "seoSections": [
+        { "title": "Find perfect, near, and slant rhymes for lyrics", "paragraphs": ["Perfect rhymes closely match the sound from the final stressed vowel onward, while near or slant rhymes loosen that match. Lyrics often mix both: a precise rhyme can anchor a chorus, while near rhymes give verses more natural vocabulary.", "Start with Perfect when the ending must land clearly. Switch to Near when the list is predictable or conversational phrasing matters more than an exact match."] },
+        { "title": "Filter rhyming words by syllables for poetry and rap", "paragraphs": ["Syllable filtering narrows results to words more likely to fit the available space in a poetic line or musical bar. Matching syllable count does not guarantee matching stress, so say the complete line aloud against its rhythm.", "Multi-syllable writing depends on pronunciation, stressed sounds, tempo, and delivery—not spelling alone. Use pronunciation as a quick reference, then trust the spoken line and intended accent."] },
+        { "title": "Build a rhyme shortlist before choosing a line ending", "paragraphs": ["Select several candidates that fit the meaning before committing. A technically exact rhyme can weaken a line if it forces an unnatural idea, tense, or phrase.", "Copy the shortlist into your draft and test each option in the whole sentence. Confirm unfamiliar, rare, slang, and regional words with an authoritative dictionary."] }
+      ],
       "whyChoose": [
         {
           "title": "Lightning Fast",

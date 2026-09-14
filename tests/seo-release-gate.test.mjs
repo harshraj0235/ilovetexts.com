@@ -130,3 +130,15 @@ test('online typing tool autosaves locally and exposes focused writing controls'
   assert.match(content.metaTitle, /Autosave and Transliteration/);
   assert.ok(content.seoSections.length >= 3);
 });
+
+test('rhyming dictionary supports near rhymes, meter filters, and a writing shortlist', () => {
+  const component = read('components/tools/RhymingDictionary.jsx');
+  const content = JSON.parse(read('locales/content/en.json')).tools['rhyming-dictionary'];
+
+  assert.match(component, /rel_nry/);
+  assert.match(component, /syllableFilter/);
+  assert.match(component, /savedRhymes/);
+  assert.match(component, /SpeechSynthesisUtterance/);
+  assert.match(content.metaTitle, /Perfect and Near Rhymes/);
+  assert.ok(content.seoSections.length >= 3);
+});
