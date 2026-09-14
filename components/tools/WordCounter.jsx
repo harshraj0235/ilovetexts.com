@@ -119,6 +119,7 @@ export default function WordCounter({ t, lang }) {
   const [historyIndex, setHistoryIndex] = useState(0);
   const [copied, setCopied] = useState(false);
   const [exported, setExported] = useState(false);
+  const [fileError, setFileError] = useState('');
   const textareaRef = useRef(null);
   const historyTimer = useRef(null);
 
@@ -181,21 +182,23 @@ export default function WordCounter({ t, lang }) {
     pushHistory(val);
   };
 
-  const undo = () => {
+  const undo = useCallback(() => {
+    clearTimeout(historyTimer.current);
     if (historyIndex > 0) {
       const newIdx = historyIndex - 1;
       setHistoryIndex(newIdx);
       setText(history[newIdx]);
     }
-  };
+  }, [history, historyIndex]);
 
-  const redo = () => {
+  const redo = useCallback(() => {
+    clearTimeout(historyTimer.current);
     if (historyIndex < history.length - 1) {
       const newIdx = historyIndex + 1;
       setHistoryIndex(newIdx);
       setText(history[newIdx]);
     }
-  };
+  }, [history, historyIndex]);
 
   // ─── Keyboard shortcuts ───────────────────────────────
   useEffect(() => {
@@ -208,39 +211,54 @@ export default function WordCounter({ t, lang }) {
   }, [undo, redo]);
 
   // ─── File drag & drop ─────────────────────────────────
-  const handleDrop = async (e) => {
-    e.preventDefault();
-    setIsDragging(false);
-    const file = e.dataTransfer.files[0];
+  const loadFile = async (file) => {
     if (!file) return;
+    setFileError('');
+    if (file.size > 10 * 1024 * 1024) {
+      setFileError('Choose a text or PDF file smaller than 10 MB.');
+      return;
+    }
     if (file.type === 'application/pdf' || file.name.endsWith('.pdf')) {
+      let pdf;
       try {
         const pdfjsLib = await import('pdfjs-dist');
         pdfjsLib.GlobalWorkerOptions.workerSrc = '/pdf.worker.min.mjs';
         const buf = await file.arrayBuffer();
-        const pdf = await pdfjsLib.getDocument({ data: buf.slice(0) }).promise;
+        pdf = await pdfjsLib.getDocument({ data: buf.slice(0) }).promise;
         let out = '';
         for (let i = 1; i <= pdf.numPages; i++) {
           const page = await pdf.getPage(i);
           const tc = await page.getTextContent();
           out += tc.items.map(item => item.str).join(' ') + '\n\n';
+          page.cleanup();
         }
-        setText(out.trim());
-      } catch { /* ignore */ }
+        const extracted = out.trim();
+        if (!extracted) throw new Error('No selectable text was found in this PDF. Scanned PDFs require OCR.');
+        setText(extracted);
+      } catch (error) {
+        setFileError(error?.message || 'This PDF could not be read. Try copying its text instead.');
+      } finally {
+        await pdf?.destroy?.();
+      }
     } else {
-      const reader = new FileReader();
-      reader.onload = ev => setText(ev.target.result);
-      reader.readAsText(file);
+      try {
+        setText(await file.text());
+      } catch {
+        setFileError('This file could not be read as text.');
+      }
     }
   };
 
+  const handleDrop = async (e) => {
+    e.preventDefault();
+    setIsDragging(false);
+    await loadFile(e.dataTransfer.files[0]);
+  };
+
   // ─── File upload button ───────────────────────────────
-  const handleUpload = (e) => {
+  const handleUpload = async (e) => {
     const file = e.target.files[0];
-    if (!file) return;
-    const reader = new FileReader();
-    reader.onload = ev => setText(ev.target.result);
-    reader.readAsText(file);
+    await loadFile(file);
     e.target.value = '';
   };
 
@@ -253,6 +271,7 @@ export default function WordCounter({ t, lang }) {
 
   const handleClear = () => {
     setText('');
+    setFileError('');
     setHistory(['']);
     setHistoryIndex(0);
   };
@@ -321,7 +340,7 @@ export default function WordCounter({ t, lang }) {
 
   const TABS = [
     { id: 'overview', label: '📊 Overview' },
-    { id: 'seo',      label: '🔍 SEO' },
+    { id: 'seo',      label: '🔍 Keywords' },
     { id: 'social',   label: '📱 Social' },
     { id: 'goals',    label: '🎯 Goals' },
   ];
@@ -331,7 +350,7 @@ export default function WordCounter({ t, lang }) {
     <div style={{ display: 'flex', flexDirection: 'column', gap: '20px', width: '100%', maxWidth: '1200px', margin: '0 auto' }}>
 
       {/* ── Live stat strip ── */}
-      <div style={{
+      <div aria-live="polite" aria-label="Live text statistics" style={{
         display: 'grid',
         gridTemplateColumns: 'repeat(auto-fit, minmax(110px, 1fr))',
         gap: '12px',
@@ -417,6 +436,7 @@ export default function WordCounter({ t, lang }) {
                 outline: 'none',
                 color: 'var(--text-primary)',
               }}
+              aria-label="Text to count and analyze"
             />
             {isDragging && (
               <div style={{
@@ -432,6 +452,12 @@ export default function WordCounter({ t, lang }) {
             )}
           </div>
 
+          {fileError && (
+            <div role="alert" style={{ padding: '10px 12px', borderRadius: 'var(--radius-sm)', background: '#fef2f2', border: '1px solid #fecaca', color: '#991b1b', fontSize: '0.84rem' }}>
+              {fileError}
+            </div>
+          )}
+
           {/* Bottom hint */}
           <div style={{ fontSize: '0.78rem', color: 'var(--text-tertiary)', display: 'flex', gap: '16px', flexWrap: 'wrap' }}>
             <span>⌨️ Ctrl+Z undo · Ctrl+Y redo</span>
@@ -445,7 +471,7 @@ export default function WordCounter({ t, lang }) {
         <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
 
           {/* Tabs */}
-          <div style={{
+          <div role="tablist" aria-label="Text analysis views" style={{
             display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)',
             background: 'var(--bg-secondary)',
             borderRadius: 'var(--radius-md)',
@@ -457,6 +483,9 @@ export default function WordCounter({ t, lang }) {
               <button
                 key={tab.id}
                 onClick={() => setActiveTab(tab.id)}
+                role="tab"
+                aria-selected={activeTab === tab.id}
+                aria-controls={`word-counter-panel-${tab.id}`}
                 style={{
                   padding: '8px 4px',
                   borderRadius: 'var(--radius-sm)',
@@ -478,7 +507,7 @@ export default function WordCounter({ t, lang }) {
 
           {/* ── TAB: OVERVIEW ── */}
           {activeTab === 'overview' && (
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
+            <div id="word-counter-panel-overview" role="tabpanel" style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
 
               {/* Readability */}
               <div style={cardStyle()}>
@@ -572,19 +601,17 @@ export default function WordCounter({ t, lang }) {
 
           {/* ── TAB: SEO ── */}
           {activeTab === 'seo' && (
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
+            <div id="word-counter-panel-seo" role="tabpanel" style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
 
-              {/* SEO Score */}
+              {/* Writing checks — not presented as a Google ranking score */}
               <div style={cardStyle()}>
-                <SectionTitle>SEO Content Score</SectionTitle>
+                <SectionTitle>Writing Structure</SectionTitle>
                 {(() => {
                   const checks = [
-                    { label: 'Word count ≥ 300',     pass: words >= 300     },
-                    { label: 'Word count ≥ 1000',    pass: words >= 1000    },
-                    { label: 'Sentences ≥ 5',         pass: sentences >= 5   },
-                    { label: 'Paragraphs ≥ 3',        pass: paragraphs >= 3  },
-                    { label: 'Readability ≥ Standard',pass: heavyStats.readability.score >= 50 },
-                    { label: 'Avg sent ≤ 25 words',   pass: sentences > 0 && (words / sentences) <= 25 },
+                    { label: 'Contains complete sentences', pass: sentences > 0 },
+                    { label: 'Uses paragraphs for longer text', pass: words < 150 || paragraphs >= 2 },
+                    { label: 'Average sentence is 25 words or fewer', pass: sentences > 0 && (words / sentences) <= 25 },
+                    { label: 'Readable for a broad audience', pass: heavyStats.readability.score >= 50 },
                   ];
                   const score = Math.round((checks.filter(c => c.pass).length / checks.length) * 100);
                   const col = score >= 80 ? '#22c55e' : score >= 50 ? '#facc15' : '#ef4444';
@@ -604,6 +631,7 @@ export default function WordCounter({ t, lang }) {
                           </div>
                         ))}
                       </div>
+                      <p style={{ margin: '12px 0 0', fontSize: '0.75rem', lineHeight: 1.45, color: 'var(--text-tertiary)' }}>These are writing aids, not a Google ranking score. Useful content has no required word count or keyword-density target.</p>
                     </>
                   );
                 })()}
@@ -663,7 +691,7 @@ export default function WordCounter({ t, lang }) {
 
           {/* ── TAB: SOCIAL ── */}
           {activeTab === 'social' && (
-            <div style={cardStyle()}>
+            <div id="word-counter-panel-social" role="tabpanel" style={cardStyle()}>
               <SectionTitle>Character Limits</SectionTitle>
               <div style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
                 {SOCIAL_LIMITS.map((s) => {
@@ -697,7 +725,7 @@ export default function WordCounter({ t, lang }) {
 
           {/* ── TAB: GOALS ── */}
           {activeTab === 'goals' && (
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
+            <div id="word-counter-panel-goals" role="tabpanel" style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
               <div style={cardStyle()}>
                 <SectionTitle>Writing Goal</SectionTitle>
                 <select

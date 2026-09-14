@@ -135,12 +135,13 @@ export async function generateMetadata({ params }) {
 // Pulls localized data from content JSONs
 // ==========================================
 
-function generateWhatIs(toolData, t) {
-  return toolData.content?.whatIs || `${t.schema.howToDesc.replace('{toolName}', toolData.name).replace('{domain}', 'ilovetexts.com')} ${toolData.description}`;
+function generateWhatIs(toolData, t, seoData) {
+  return toolData.content?.whatIs || seoData?.whatIs || `${t.schema.howToDesc.replace('{toolName}', toolData.name).replace('{domain}', 'ilovetexts.com')} ${toolData.description}`;
 }
 
-function generateWhyChoose(toolData, t) {
+function generateWhyChoose(toolData, t, seoData) {
   if (toolData.content?.whyChoose?.length > 0) return toolData.content.whyChoose;
+  if (seoData?.whyChoose?.length > 0) return seoData.whyChoose;
   
   return [
     { icon: '🚀', title: t.trust.instantTitle, description: t.trust.instantDesc },
@@ -149,12 +150,13 @@ function generateWhyChoose(toolData, t) {
   ];
 }
 
-function generateUseCases(toolData, category) {
-  return toolData.content?.useCases || [];
+function generateUseCases(toolData, category, seoData) {
+  return toolData.content?.useCases?.length ? toolData.content.useCases : seoData?.useCases || [];
 }
 
-function generateFAQs(toolData, t) {
+function generateFAQs(toolData, t, seoData) {
   if (toolData.content?.faqs?.length > 0) return toolData.content.faqs;
+  if (seoData?.faqs?.length > 0) return seoData.faqs;
   
   const toolName = toolData.name;
   
@@ -164,8 +166,8 @@ function generateFAQs(toolData, t) {
   ];
 }
 
-function generateRelatedSearches(toolData) {
-  return toolData.content?.relatedSearches || [];
+function generateRelatedSearches(toolData, seoData) {
+  return toolData.content?.relatedSearches?.length ? toolData.content.relatedSearches : seoData?.keywords || [];
 }
 
 function getSmartCrossLinks(categoryId, toolSlug, lang = 'en') {
@@ -205,16 +207,17 @@ export default async function ToolPage({ params }) {
   }
 
   const category = toolData.category;
+  const seoData = getToolSEO(toolData.slug);
   const relatedTools = getRelatedTools(category.id, toolData.slug, lang, 12);
   const crossLinks = getCrossLinks(category.id, lang, 6);
   const smartCrossLinks = getSmartCrossLinks(category.id, toolData.slug, lang);
 
   // Generate all SEO content
-  const whatIs = generateWhatIs(toolData, t);
-  const whyChoose = generateWhyChoose(toolData, t);
-  const useCases = generateUseCases(toolData, category);
-  const faqs = generateFAQs(toolData, t);
-  const relatedSearches = generateRelatedSearches(toolData);
+  const whatIs = generateWhatIs(toolData, t, seoData);
+  const whyChoose = generateWhyChoose(toolData, t, seoData);
+  const useCases = generateUseCases(toolData, category, seoData);
+  const faqs = generateFAQs(toolData, t, seoData);
+  const relatedSearches = generateRelatedSearches(toolData, seoData);
 
   const howToSteps = toolData.content?.howToSteps?.length ? toolData.content.howToSteps : [
     {

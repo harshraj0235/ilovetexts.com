@@ -44,3 +44,11 @@ test('restored Spanish word counter article is published and date-aligned', () =
   const articleBlock = blog.slice(blog.indexOf("slug: 'contador-palabras-online-gratis'"));
   assert.match(articleBlock.slice(0, 500), /date: '2026-09-14'/);
 });
+
+test('curated tool content reaches the rendered page instead of generic fallbacks', () => {
+  const page = read('app/[lang]/[category]/[tool]/page.js');
+  assert.match(page, /seoData\?\.whatIs/);
+  assert.match(page, /seoData\?\.faqs/);
+  assert.match(page, /seoData\?\.useCases/);
+  assert.match(page, /seoData\?\.keywords/);
+});
