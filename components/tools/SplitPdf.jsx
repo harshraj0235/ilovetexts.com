@@ -4,7 +4,8 @@
 // Uses pdf-lib — zero upload, 100% private
 // Targets: "split pdf online free" 400K/mo
 // ═══════════════════════════════════════════════════════
-import { useState, useRef, useCallback } from 'react';
+import { useState, useRef, useCallback, useEffect } from 'react';
+import { MAX_SPLIT_PDF_SIZE, parsePageSelection, parseSplitRanges, safePdfBaseName } from '@/lib/split-pdf-utils.mjs';
 
 export default function SplitPdf({ t, lang }) {
   const [fileName, setFileName]   = useState('');
@@ -19,60 +20,55 @@ export default function SplitPdf({ t, lang }) {
   const [processing, setProcessing] = useState(false);
   const [results, setResults]     = useState([]); // [{name, url, pages}]
   const [toast, setToast]         = useState(null);
+  const [error, setError]         = useState('');
   const inputRef = useRef(null);
 
   const showToast = (m,t='success') => { setToast({m,t}); setTimeout(()=>setToast(null),3000); };
 
   const loadPdf = useCallback(async (file) => {
+    if (!file) return;
     if (!file.name.toLowerCase().endsWith('.pdf')) { showToast('Please upload a PDF file','warning'); return; }
+    if (!file.size) { setError('This PDF is empty. Choose a different file.'); return; }
+    if (file.size > MAX_SPLIT_PDF_SIZE) { setError('This PDF is larger than 100 MB. Choose a smaller file.'); return; }
+    setError('');
     setLoading(true); setResults([]); setFileName(file.name);
+    let doc;
     try {
       const ab = await file.arrayBuffer();
       const pdfjs = await import('pdfjs-dist');
       pdfjs.GlobalWorkerOptions.workerSrc = '/pdf.worker.min.mjs';
-      const doc = await pdfjs.getDocument({ data: new Uint8Array(ab.slice(0)) }).promise;
+      doc = await pdfjs.getDocument({ data: new Uint8Array(ab.slice(0)) }).promise;
       setPageCount(doc.numPages);
       setPdfBytes(ab);
       setRangeInput(`1-${Math.ceil(doc.numPages/2)},${Math.ceil(doc.numPages/2)+1}-${doc.numPages}`);
       showToast(`PDF loaded — ${doc.numPages} pages`);
     } catch(e) {
-      showToast('Failed to load PDF: ' + e.message, 'error');
-    } finally { setLoading(false); }
+      setFileName('');
+      setError('Could not read this PDF. It may be damaged or password-protected.');
+    } finally { await doc?.destroy(); setLoading(false); }
   }, []);
 
-  // Parse page range string like "1-3,5,7-9" → [0,1,2,4,6,7,8] (0-indexed)
-  function parseRange(str, total) {
-    const indices = new Set();
-    str.split(',').forEach(part => {
-      const [a, b] = part.trim().split('-').map(Number);
-      if (b) { for (let i=a;i<=b;i++) if(i>=1&&i<=total) indices.add(i-1); }
-      else if (a>=1&&a<=total) indices.add(a-1);
-    });
-    return [...indices].sort((a,b)=>a-b);
-  }
+  const revokeResults = useCallback((list) => list.forEach((result) => URL.revokeObjectURL(result.url)), []);
+  useEffect(() => () => revokeResults(results), [results, revokeResults]);
 
   const handleSplit = useCallback(async () => {
     if (!pdfBytes || !pageCount) return;
-    setProcessing(true); setResults([]);
+    setProcessing(true); revokeResults(results); setResults([]); setError('');
     try {
       const { PDFDocument } = await import('pdf-lib');
       const srcDoc = await PDFDocument.load(pdfBytes);
-      const baseName = fileName.replace('.pdf','');
+      const baseName = safePdfBaseName(fileName);
       const parts = [];
 
       if (mode === 'range') {
-        const ranges = rangeInput.split(',').map(r => r.trim()).filter(Boolean);
+        const ranges = parseSplitRanges(rangeInput, pageCount);
         for (const range of ranges) {
-          const [a,b] = range.split('-').map(Number);
-          const indices = b ? Array.from({length:b-a+1},(_,i)=>a+i-1) : [a-1];
-          const valid = indices.filter(i=>i>=0&&i<pageCount);
-          if (!valid.length) continue;
           const newDoc = await PDFDocument.create();
-          const copied = await newDoc.copyPages(srcDoc, valid);
+          const copied = await newDoc.copyPages(srcDoc, range.indices);
           copied.forEach(p => newDoc.addPage(p));
           const bytes = await newDoc.save();
           const blob = new Blob([bytes], { type:'application/pdf' });
-          parts.push({ name: `${baseName}-pages-${range}.pdf`, url: URL.createObjectURL(blob), pages: valid.length });
+          parts.push({ name: `${baseName}-pages-${range.label}.pdf`, url: URL.createObjectURL(blob), blob, pages: range.indices.length });
         }
       } else if (mode === 'every') {
         const n = Math.max(1, everyN);
@@ -84,36 +80,46 @@ export default function SplitPdf({ t, lang }) {
           copied.forEach(p => newDoc.addPage(p));
           const bytes = await newDoc.save();
           const blob = new Blob([bytes], { type:'application/pdf' });
-          parts.push({ name: `${baseName}-part-${Math.floor(start/n)+1}.pdf`, url: URL.createObjectURL(blob), pages: indices.length });
+          parts.push({ name: `${baseName}-part-${Math.floor(start/n)+1}.pdf`, url: URL.createObjectURL(blob), blob, pages: indices.length });
         }
       } else {
         // Extract specific pages
-        const indices = parseRange(extractPages, pageCount);
-        if (!indices.length) { showToast('No valid pages specified','warning'); setProcessing(false); return; }
+        const indices = parsePageSelection(extractPages, pageCount);
         const newDoc = await PDFDocument.create();
         const copied = await newDoc.copyPages(srcDoc, indices);
         copied.forEach(p => newDoc.addPage(p));
         const bytes = await newDoc.save();
         const blob = new Blob([bytes], { type:'application/pdf' });
-        parts.push({ name: `${baseName}-extracted.pdf`, url: URL.createObjectURL(blob), pages: indices.length });
+        parts.push({ name: `${baseName}-extracted.pdf`, url: URL.createObjectURL(blob), blob, pages: indices.length });
       }
 
       setResults(parts);
       showToast(`Split into ${parts.length} PDF${parts.length!==1?'s':''}!`);
     } catch(e) {
       console.error(e);
-      showToast('Split failed: ' + e.message, 'error');
+      setError(e.message || 'The PDF could not be split. Please try again.');
     } finally { setProcessing(false); }
-  }, [pdfBytes, pageCount, fileName, mode, rangeInput, everyN, extractPages]);
+  }, [pdfBytes, pageCount, fileName, mode, rangeInput, everyN, extractPages, results, revokeResults]);
 
-  const downloadAll = () => {
-    results.forEach(r => { const a=document.createElement('a'); a.href=r.url; a.download=r.name; a.click(); });
-    showToast('All PDFs downloaded!');
+  const downloadAll = async () => {
+    if (results.length === 1) {
+      const anchor = document.createElement('a'); anchor.href = results[0].url; anchor.download = results[0].name; anchor.click();
+      return;
+    }
+    const JSZip = (await import('jszip')).default;
+    const zip = new JSZip();
+    results.forEach((result) => zip.file(result.name, result.blob));
+    const blob = await zip.generateAsync({ type: 'blob' });
+    const url = URL.createObjectURL(blob);
+    const anchor = document.createElement('a'); anchor.href = url; anchor.download = `${safePdfBaseName(fileName)}-split-files.zip`; anchor.click();
+    setTimeout(() => URL.revokeObjectURL(url), 1000);
+    showToast('ZIP downloaded!');
   };
 
   return (
     <div style={{ maxWidth: 760, margin: '0 auto', width: '100%' }}>
       {toast && <div className={`toast ${toast.t}`}>{toast.t==='success'?'✅ ':'⚠️ '}{toast.m}</div>}
+      {error && <div role="alert" style={{ padding:'11px 14px', marginBottom:14, border:'1px solid #fecaca', borderRadius:10, background:'#fef2f2', color:'#b91c1c', fontSize:'.84rem' }}>⚠️ {error}</div>}
 
       {/* Upload */}
       {!pdfBytes ? (
@@ -138,7 +144,7 @@ export default function SplitPdf({ t, lang }) {
                 onClick={e => { e.stopPropagation(); inputRef.current?.click(); }}>
                 Choose PDF
               </button>
-              <p style={{ marginTop:14, fontSize:'0.78rem', color:'var(--text-tertiary)' }}>🔒 Your PDF never leaves your browser — 100% private</p>
+              <p style={{ marginTop:14, fontSize:'0.78rem', color:'var(--text-tertiary)' }}>🔒 Your PDF never leaves your browser · PDF up to 100 MB</p>
             </>
           )}
         </div>
@@ -150,11 +156,11 @@ export default function SplitPdf({ t, lang }) {
               <div style={{ fontWeight:700, fontSize:'0.9rem' }}>📄 {fileName}</div>
               <div style={{ fontSize:'0.78rem', color:'var(--text-secondary)' }}>{pageCount} pages</div>
             </div>
-            <button onClick={() => { setPdfBytes(null); setFileName(''); setPageCount(0); setResults([]); }} className="btn btn-secondary" style={{ fontSize:'0.82rem' }}>Change PDF</button>
+            <button onClick={() => { revokeResults(results); setPdfBytes(null); setFileName(''); setPageCount(0); setResults([]); setError(''); }} className="btn btn-secondary" style={{ fontSize:'0.82rem' }}>Change PDF</button>
           </div>
 
           {/* Mode selector */}
-          <div style={{ display:'grid', gridTemplateColumns:'repeat(3,1fr)', gap:8, marginBottom:16 }}>
+          <div style={{ display:'grid', gridTemplateColumns:'repeat(auto-fit,minmax(140px,1fr))', gap:8, marginBottom:16 }}>
             {[['range','By Range','Split into custom ranges\ne.g. 1-3, 4-6'],['every','Every N Pages','Split every 1, 2, 3… pages'],['extract','Extract Pages','Get specific pages\ne.g. 1, 3, 5-7']].map(([v,l,d]) => (
               <button key={v} onClick={() => setMode(v)} style={{ padding:'12px 8px', borderRadius:'var(--radius-md)', border:`2px solid ${mode===v?'#0ea5e9':'var(--border-light)'}`, background:mode===v?'rgba(14,165,233,0.1)':'var(--bg-section)', cursor:'pointer', textAlign:'center' }}>
                 <div style={{ fontWeight:700, fontSize:'0.85rem', color:mode===v?'#0ea5e9':'var(--text-primary)', marginBottom:3 }}>{l}</div>
@@ -173,7 +179,7 @@ export default function SplitPdf({ t, lang }) {
                 <input value={rangeInput} onChange={e => setRangeInput(e.target.value)} placeholder="e.g. 1-3, 4-6, 7-10"
                   style={{ width:'100%', padding:'9px 12px', borderRadius:'var(--radius-sm)', border:'1px solid var(--border-light)', background:'var(--bg-main)', color:'var(--text-primary)', fontSize:'0.9rem', boxSizing:'border-box' }} />
                 <p style={{ fontSize:'0.75rem', color:'var(--text-tertiary)', marginTop:6 }}>
-                  Each range becomes a separate PDF. Example: "1-5, 6-10" creates 2 PDFs.
+                  Each range becomes a separate PDF. Example: 1-5, 6-10 creates 2 PDFs.
                 </p>
               </div>
             )}
@@ -209,14 +215,14 @@ export default function SplitPdf({ t, lang }) {
           {results.length > 0 && (
             <>
               <div style={{ display:'flex', gap:10, marginBottom:12 }}>
-                <button onClick={downloadAll} className="btn-primary" style={{ padding:'9px 20px' }}>⬇ Download All ({results.length})</button>
+                <button onClick={downloadAll} className="btn-primary" style={{ padding:'9px 20px' }}>⬇ {results.length > 1 ? `Download ZIP (${results.length})` : 'Download PDF'}</button>
               </div>
               <div style={{ display:'flex', flexDirection:'column', gap:8 }}>
                 {results.map((r,i) => (
-                  <div key={i} style={{ display:'flex', alignItems:'center', gap:12, padding:'10px 14px', background:'var(--bg-section)', border:'1px solid var(--border-light)', borderRadius:'var(--radius-sm)' }}>
+                  <div key={i} style={{ display:'flex', flexWrap:'wrap', alignItems:'center', gap:12, padding:'10px 14px', background:'var(--bg-section)', border:'1px solid var(--border-light)', borderRadius:'var(--radius-sm)' }}>
                     <span style={{ fontSize:'1.2rem' }}>📄</span>
-                    <div style={{ flex:1 }}>
-                      <div style={{ fontSize:'0.85rem', fontWeight:600 }}>{r.name}</div>
+                    <div style={{ flex:1, minWidth:160 }}>
+                      <div style={{ fontSize:'0.85rem', fontWeight:600, overflowWrap:'anywhere' }}>{r.name}</div>
                       <div style={{ fontSize:'0.75rem', color:'var(--text-tertiary)' }}>{r.pages} page{r.pages!==1?'s':''}</div>
                     </div>
                     <button onClick={() => { const a=document.createElement('a'); a.href=r.url; a.download=r.name; a.click(); }}

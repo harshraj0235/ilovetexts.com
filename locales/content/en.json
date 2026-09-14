@@ -4760,9 +4760,9 @@
           "description": "pdf-lib splits PDFs entirely in your browser. Your document never leaves your device."
         },
         {
-          "icon": "🆓",
-          "title": "No Page Limit",
-          "description": "Split PDFs of any length — no 50-page cap like Sejda or SmallPDF."
+          "icon": "📦",
+          "title": "One ZIP Download",
+          "description": "Download multiple split files together in one ZIP instead of approving many separate downloads."
         },
         {
           "icon": "💧",
@@ -4789,6 +4789,10 @@
         {
           "question": "Is the output PDF quality the same?",
           "answer": "Yes. pdf-lib copies pages without re-encoding, preserving original quality and content."
+        },
+        {
+          "question": "What is the maximum PDF file size?",
+          "answer": "You can split a PDF up to 100 MB. This device-friendly safeguard prevents very large files from exhausting browser memory, especially on phones and older computers."
         }
       ],
       "relatedSearches": [

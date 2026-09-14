@@ -18,6 +18,7 @@
     "test:seo-release": "node --test tests/seo-release-gate.test.mjs",
     "test:word-counter": "node --test tests/word-counter.test.mjs",
     "test:merge-pdf": "node --test tests/merge-pdf.test.mjs",
+    "test:split-pdf": "node --test tests/split-pdf.test.mjs",
     "seo-check": "node seo-audit.js",
     "ping-search": "node ping-google.js"
   },
