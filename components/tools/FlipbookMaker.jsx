@@ -9,6 +9,7 @@ export default function FlipbookMaker() {
   const inputRef = useRef(null);
   const stageRef = useRef(null);
   const timerRef = useRef(null);
+  const touchStartRef = useRef(null);
   const [pages, setPages] = useState([]);
   const [fileName, setFileName] = useState('');
   const [title, setTitle] = useState('My flipbook');
@@ -42,6 +43,23 @@ export default function FlipbookMaker() {
     goTo(spreadStarts[next]);
   }, [goTo, page, spreadStarts, turning]);
 
+  const startSwipe = (event) => {
+    const touch = event.changedTouches?.[0];
+    touchStartRef.current = touch ? { x: touch.clientX, y: touch.clientY } : null;
+  };
+
+  const finishSwipe = (event) => {
+    const start = touchStartRef.current;
+    const touch = event.changedTouches?.[0];
+    touchStartRef.current = null;
+    if (!start || !touch) return;
+    const deltaX = touch.clientX - start.x;
+    const deltaY = touch.clientY - start.y;
+    if (Math.abs(deltaX) >= 48 && Math.abs(deltaX) > Math.abs(deltaY) * 1.2) {
+      goSpread(deltaX < 0 ? 1 : -1);
+    }
+  };
+
   useEffect(() => {
     if (!autoplay || pages.length < 2) return undefined;
     timerRef.current = window.setInterval(() => {
@@ -55,6 +73,7 @@ export default function FlipbookMaker() {
 
   useEffect(() => {
     const keydown = (event) => {
+      if (event.target instanceof HTMLElement && event.target.closest('input, select, textarea, button')) return;
       if (event.key === 'ArrowLeft') goSpread(-1);
       if (event.key === 'ArrowRight') goSpread(1);
     };
@@ -133,14 +152,14 @@ export default function FlipbookMaker() {
       </aside>
       <div className={styles.stageWrap}>
         <div className={styles.toolbar}><strong title={fileName}>📖 {safeFlipbookTitle(title)}</strong><div className={styles.toolbarActions}><button className={styles.toolButton} type="button" onClick={()=>setAutoplay(v=>!v)} aria-label={autoplay?'Pause autoplay':'Start autoplay'}>{autoplay?'❚❚':'▶'}</button><button className={styles.toolButton} type="button" onClick={()=>stageRef.current?.requestFullscreen?.()} aria-label="Open fullscreen">⛶</button></div></div>
-        <div ref={stageRef} className={styles.stage} style={{'--flip-bg':theme.background,'--flip-surface':theme.surface,'--flip-speed':`${speed}ms`}}>
+        <div ref={stageRef} className={styles.stage} style={{'--flip-bg':theme.background,'--flip-surface':theme.surface,'--flip-speed':`${speed}ms`}} onTouchStart={startSwipe} onTouchEnd={finishSwipe}>
           <button className={`${styles.nav} ${styles.prev}`} type="button" onClick={()=>goSpread(-1)} aria-label="Previous pages">‹</button>
           <div className={`${styles.book} ${page===0?styles.coverBook:styles.spreadBook} ${turning?styles.turning:''}`}>
             <img className={styles.page} src={pages[page]} alt={`Page ${page+1} of ${pages.length}`} />
             {page > 0 && pages[page+1] && <img className={styles.page} src={pages[page+1]} alt={`Page ${page+2} of ${pages.length}`} />}
           </div>
           <button className={`${styles.nav} ${styles.next}`} type="button" onClick={()=>goSpread(1)} aria-label="Next pages">›</button>
-          <div className={styles.readerRail}><span>{page===0?'1':`${page+1} - ${Math.min(page+2,pages.length)}`} / {pages.length}</span><div className={styles.railTrack}><i style={{width:`${(Math.min(page+2,pages.length)/pages.length)*100}%`}} /></div></div>
+          <div className={styles.readerRail}><span>{page===0?'1':`${page+1} - ${Math.min(page+2,pages.length)}`} / {pages.length}</span><span className={styles.swipeHint}>Swipe or use arrow keys</span><div className={styles.railTrack}><i style={{width:`${(Math.min(page+2,pages.length)/pages.length)*100}%`}} /></div></div>
         </div>
         <div className={styles.thumbs} aria-label="Page thumbnails">{pages.map((src,index)=><button type="button" className={`${styles.thumb} ${(index===page||(index===page+1&&page>0))?styles.thumbActive:''}`} key={index} onClick={()=>goTo(index===0?0:(index%2===0?index-1:index))} aria-label={`Go to page ${index+1}`}><img src={src} alt="" /></button>)}</div>
       </div>

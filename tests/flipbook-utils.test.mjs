@@ -27,4 +27,7 @@ test('standalone reader opens as a cover and advances in two-page spreads', () =
   assert.match(html, /1\+n\*2/);
   assert.match(html, /Page progress/);
   assert.match(html, /progress\.style\.width/);
+  assert.match(html, /touchstart/);
+  assert.match(html, /prefers-reduced-motion/);
+  assert.match(html, /orientation:landscape/);
 });
