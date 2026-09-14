@@ -5,7 +5,7 @@ import { useState, useRef, useEffect } from 'react';
 // LanguageTool API endpoint for grammar checking
 const API_URL = '/api/language-check';
 
-export default function GrammarChecker({ t = {} }) {
+export default function GrammarChecker({ t = {}, mode = 'grammar' }) {
   const [text, setText] = useState('');
   const [matches, setMatches] = useState([]);
   const [isChecking, setIsChecking] = useState(false);
@@ -68,12 +68,15 @@ export default function GrammarChecker({ t = {} }) {
       if (!response.ok) {
         throw new Error(data.error || 'Failed to reach grammar checking service. Please try again later.');
       }
-      setMatches(data.matches || []);
+      const checkedMatches = mode === 'spelling'
+        ? (data.matches || []).filter((match) => match.rule?.issueType === 'misspelling')
+        : (data.matches || []);
+      setMatches(checkedMatches);
       
-      if (data.matches && data.matches.length === 0) {
-        setToast({ message: 'No grammar or spelling errors found!', type: 'success' });
+      if (checkedMatches.length === 0) {
+        setToast({ message: mode === 'spelling' ? 'No spelling errors found!' : 'No grammar or spelling errors found!', type: 'success' });
       } else {
-        setToast({ message: `Found ${data.matches.length} possible issues.`, type: 'warning' });
+        setToast({ message: `Found ${checkedMatches.length} possible ${mode === 'spelling' ? 'spelling ' : ''}issues.`, type: 'warning' });
       }
 
     } catch (err) {
@@ -253,7 +256,7 @@ export default function GrammarChecker({ t = {} }) {
           disabled={isChecking || !text.trim() || text.length > maxCharacters}
           style={{ marginLeft: 'auto', padding: '8px 24px', fontWeight: 'bold' }}
         >
-          {isChecking ? '⏳ Checking...' : '✅ Check Grammar'}
+          {isChecking ? '⏳ Checking...' : mode === 'spelling' ? '📝 Check Spelling' : '✅ Check Grammar'}
         </button>
       </div>
 
@@ -282,7 +285,7 @@ export default function GrammarChecker({ t = {} }) {
                 }
               }}
               onScroll={handleScroll}
-              placeholder="Type or paste your text here to check for grammar, spelling, and punctuation errors..."
+              placeholder={mode === 'spelling' ? 'Type or paste your text here to check spelling and typos...' : 'Type or paste your text here to check for grammar, spelling, and punctuation errors...'}
               className="grammar-textarea"
               spellCheck="false"
             />
@@ -297,16 +300,16 @@ export default function GrammarChecker({ t = {} }) {
         {/* Sidebar for Errors */}
         <div className="grammar-sidebar">
           <h3 style={{ marginBottom: '16px', color: '#202124', borderBottom: '1px solid #E8EAED', paddingBottom: '8px' }}>
-            Issues Found {matches.length > 0 && <span className="badge">{matches.length}</span>}
+            {mode === 'spelling' ? 'Spelling Suggestions' : 'Issues Found'} {matches.length > 0 && <span className="badge">{matches.length}</span>}
           </h3>
-          {matches.length > 0 && <><div className="issue-filters" aria-label="Filter suggestions">{['all','grammar','spelling','punctuation'].map((kind)=><button type="button" key={kind} className={issueFilter===kind?'active':''} onClick={()=>setIssueFilter(kind)}>{kind} <span>{kind==='all'?matches.length:matches.filter((match)=>issueKind(match)===kind).length}</span></button>)}</div><button type="button" className="apply-all" onClick={applyAllFixes}>Apply suggested fixes</button></>}
+          {matches.length > 0 && <>{mode !== 'spelling' && <div className="issue-filters" aria-label="Filter suggestions">{['all','grammar','spelling','punctuation'].map((kind)=><button type="button" key={kind} className={issueFilter===kind?'active':''} onClick={()=>setIssueFilter(kind)}>{kind} <span>{kind==='all'?matches.length:matches.filter((match)=>issueKind(match)===kind).length}</span></button>)}</div>}<button type="button" className="apply-all" onClick={applyAllFixes}>Apply suggested {mode === 'spelling' ? 'spellings' : 'fixes'}</button></>}
           
           <div className="issues-list">
             {error ? (
               <div className="no-issues" role="status">The check could not be completed. Your text has not been verified.</div>
             ) : matches.length === 0 ? (
               <div className="no-issues">
-                {isChecking ? 'Analyzing text...' : text.trim() ? 'Select Check Grammar to verify this text.' : 'Enter text to begin.'}
+                {isChecking ? 'Analyzing text...' : text.trim() ? `Select Check ${mode === 'spelling' ? 'Spelling' : 'Grammar'} to verify this text.` : 'Enter text to begin.'}
               </div>
             ) : (
               visibleMatches.map((match) => {

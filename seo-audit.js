@@ -297,10 +297,11 @@ try {
 try {
   ['GrammarChecker.jsx', 'SpellChecker.jsx', 'PunctuationChecker.jsx'].forEach((name) => {
     const component = fs.readFileSync(`components/tools/${name}`, 'utf8');
-    if (!component.includes("const API_URL = '/api/language-check'")) {
+    const usesSharedValidatedClient = name === 'SpellChecker.jsx' && component.includes("import GrammarChecker from './GrammarChecker'") && component.includes('mode="spelling"');
+    if (!usesSharedValidatedClient && !component.includes("const API_URL = '/api/language-check'")) {
       error(`${name}: LanguageTool request bypasses the validated same-origin proxy`);
     }
-    if (!component.includes('Your text has not been verified')) {
+    if (!usesSharedValidatedClient && !component.includes('Your text has not been verified')) {
       error(`${name}: failure state can be mistaken for a clean result`);
     }
   });

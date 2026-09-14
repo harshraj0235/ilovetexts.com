@@ -539,30 +539,37 @@
       ]
     },
     "spell-checker": {
-      "name": "Spell Checker",
-      "description": "Free online spell checker for essays and text",
-      "metaTitle": "Free Online Spell Checker — Fix Spelling Mistakes Instantly",
-      "metaDescription": "Check your text for spelling errors instantly. 100% free online spell checker with no signup required. Perfect for students, bloggers, and writers.",
-      "keywords": "spell checker online free for essays, free spell check online without registration, fix spelling mistakes in text online, online spelling corrector free, spell checker without word limit",
-      "whatIs": "Our free Spell Checker helps you identify and fix spelling mistakes in your text instantly. Just paste your text into the editor and let our system find misspelled words, offering one-click suggestions to fix them. No account required, and your text remains 100% private.",
+      "name": "Free Spell Checker — Fix Spelling and Typos Online",
+      "description": "Find possible misspellings in essays, emails, applications, reports, and everyday text. Choose a language or English dialect and review corrections in context.",
+      "metaTitle": "Free Spell Checker Online — Fix Spelling and Typos",
+      "metaDescription": "Check up to 20,000 characters for spelling mistakes and typos. Select US or UK English or another supported language, review fixes, undo and download free.",
+      "keywords": "free spell checker online no signup, spell checker online free for essays, check my spelling and grammar free, fix spelling mistakes in text online, British English spell checker online, American English spelling checker free, multilingual spell checker online, spell checker for emails and reports, resume and cover letter spell checker, typo checker online without registration, online spelling corrector with suggestions",
+      "whatIs": "The free Spell Checker focuses the shared multilingual writing engine on findings classified as misspellings. Paste up to 20,000 characters, select automatic detection or a supported language and English dialect, then review suggested spellings individually or apply the first non-overlapping suggestions together. You can undo a bulk change, copy the corrected text, or download it as a plain-text file. Checks are sent through the protected iLoveTexts proxy to LanguageTool; iLoveTexts does not store the submitted text.",
       "whyChoose": [
         {
           "title": "Instant Results",
-          "description": "Get real-time feedback on spelling errors."
+          "description": "Run an intentional check and receive contextual spelling suggestions with explanations."
         },
         {
           "title": "No Account Required",
-          "description": "Check unlimited text without signing up or paying."
+          "description": "No signup or payment is required. Each check accepts up to 20,000 characters."
         },
         {
-          "title": "100% Private",
-          "description": "We do not store or read your text data."
+          "title": "Clear Data Handling",
+          "description": "iLoveTexts does not store the text. It is sent to LanguageTool only when you request a check."
         }
       ],
       "useCases": [
         "Students proofreading their essays and assignments.",
         "Professionals ensuring their emails are typo-free.",
-        "Writers checking their manuscripts for spelling errors."
+        "Writers checking manuscripts, newsletters, captions, and articles for spelling errors.",
+        "Job seekers proofreading résumés, cover letters, and application answers.",
+        "Multilingual writers checking Spanish, German, Portuguese, Hindi, or Indonesian text."
+      ],
+      "seoSections": [
+        { "title": "Free spell checker for essays and assignments", "paragraphs": ["Use the essay spell checker after revising the ideas and structure of your draft. Paste one section at a time, choose the intended language or dialect, and review every highlighted word in its sentence before accepting a correction.", "Names, citations, technical vocabulary, and subject-specific terminology can be valid even when a dictionary flags them. Keep your original draft and use Undo when a replacement changes a proper noun or intended spelling."] },
+        { "title": "British and American English spelling checker", "paragraphs": ["Select English (UK) when you want forms such as colour and organise, or English (US) for color and organize. Choosing the dialect manually helps the checker evaluate regional spelling more consistently than automatic detection on a short paragraph.", "A dialect checker can identify many differences, but style guides and organizations may make their own choices. Follow the requirements of your school, employer, client, or publisher when they differ from general dictionary conventions."] },
+        { "title": "Check spelling in emails, résumés, reports, and website copy", "paragraphs": ["Typos in a subject line, product page, cover letter, or client report can be easy to miss because the writer already knows what the sentence should say. Run a dedicated spelling pass after editing and before publishing or sending the final version.", "The checker can suggest replacements for possible misspellings, but it cannot guarantee factual accuracy or detect every correctly spelled word used in the wrong context. Read the corrected document from beginning to end before relying on it."] }
       ],
       "faqs": [
         {
@@ -571,14 +578,20 @@
         },
         {
           "question": "Are my documents saved?",
-          "answer": "No, your text is only processed temporarily and never saved on our servers."
+          "answer": "iLoveTexts does not save the submitted text. When you press Check Spelling, it is sent through our protected proxy to LanguageTool for processing, so avoid confidential or highly sensitive content."
         }
       ],
       "relatedSearches": [
         "spell checker online free for essays",
         "free spell check online without registration",
         "fix spelling mistakes in text online",
-        "online spelling corrector free"
+        "online spelling corrector free",
+        "British English spell checker online",
+        "American English spelling checker free",
+        "multilingual spell checker online",
+        "spell checker for emails and reports",
+        "resume and cover letter spell checker",
+        "typo checker online without registration"
       ]
     },
     "punctuation-checker": {

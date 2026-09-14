@@ -16,12 +16,15 @@ test('English-only editorial pages are gated to the English sitemap', () => {
 });
 
 test('LanguageTool clients use the same-origin validated proxy', () => {
-  for (const file of ['GrammarChecker.jsx', 'SpellChecker.jsx', 'PunctuationChecker.jsx']) {
+  for (const file of ['GrammarChecker.jsx', 'PunctuationChecker.jsx']) {
     const component = read(`components/tools/${file}`);
     assert.match(component, /const API_URL = '\/api\/language-check'/);
     assert.doesNotMatch(component, /const API_URL = 'https:\/\/api\.languagetoolplus\.com/);
     assert.match(component, /Your text has not been verified/);
   }
+  const spelling = read('components/tools/SpellChecker.jsx');
+  assert.match(spelling, /GrammarChecker/);
+  assert.match(spelling, /mode="spelling"/);
 });
 
 test('external browser APIs required by tools are allowed by CSP', () => {
@@ -82,4 +85,18 @@ test('grammar checker exposes honest limits, multilingual controls, and advanced
   assert.match(content.metaDescription, /20,000 characters/);
   assert.ok(content.seoSections.length >= 3);
   assert.doesNotMatch(JSON.stringify(content), /unlimited words/i);
+});
+
+test('spell checker reuses advanced editor but returns spelling findings only', () => {
+  const shared = read('components/tools/GrammarChecker.jsx');
+  const spelling = read('components/tools/SpellChecker.jsx');
+  const content = JSON.parse(read('locales/content/en.json')).tools['spell-checker'];
+
+  assert.match(spelling, /mode="spelling"/);
+  assert.match(shared, /mode === 'spelling'/);
+  assert.match(shared, /issueType === 'misspelling'/);
+  assert.match(content.metaDescription, /US or UK English/);
+  assert.ok(content.seoSections.length >= 3);
+  assert.doesNotMatch(JSON.stringify(content), /unlimited text/i);
+  assert.doesNotMatch(JSON.stringify(content), /100% Private/i);
 });
