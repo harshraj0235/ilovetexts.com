@@ -117,3 +117,16 @@ test('punctuation checker isolates typography findings in the advanced editor', 
   assert.doesNotMatch(JSON.stringify(content), /no word limits/i);
   assert.doesNotMatch(JSON.stringify(content), /completely anonymously/i);
 });
+
+test('online typing tool autosaves locally and exposes focused writing controls', () => {
+  const component = read('components/tools/OnlineTypingTool.jsx');
+  const content = JSON.parse(read('locales/content/en.json')).tools['online-typing-tool'];
+
+  assert.match(component, /localStorage\.setItem/);
+  assert.match(component, /Focus mode/);
+  assert.match(component, /replaceNext/);
+  assert.match(component, /Word goal/);
+  assert.match(component, /body\.textContent = text/);
+  assert.match(content.metaTitle, /Autosave and Transliteration/);
+  assert.ok(content.seoSections.length >= 3);
+});

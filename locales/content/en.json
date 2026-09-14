@@ -2803,9 +2803,9 @@
       "relatedSearches": []
     },
     "online-typing-tool": {
-      "name": "Online Typing Tool",
-      "description": "Type phonetically in 20+ languages using English keyboard",
-      "whatIs": "The Online Typing Tool allows you to type in multiple languages using a standard English (QWERTY) keyboard. It uses phonetic transliteration to convert your English words into native scripts instantly.",
+      "name": "Online Typing Tool — Multilingual Writing Pad",
+      "description": "Write with local autosave, focus mode, goals, find and replace, TXT export, and phonetic transliteration into 20 scripts from an English keyboard.",
+      "whatIs": "The Online Typing Tool combines a private browser-saved writing pad with phonetic transliteration for 20 scripts. Draft text with local autosave, set a word goal, adjust text size, find and replace phrases, enter fullscreen focus mode, import or export TXT, copy, print, or email the result. When you type a Latin-script word and press Space or Enter, the selected transliteration request is sent to Google Input Tools; the draft itself is stored only in this browser unless you deliberately email or export it.",
       "whyChoose": [
         {
           "icon": "⚡",
@@ -2833,9 +2833,14 @@
           "answer": "No, this tool relies on an external API (Google Input Tools) to provide accurate transliteration, so an active internet connection is required."
         }
       ],
-      "metaTitle": "Free Online Typing Tool — English to Hindi, Arabic, Russian & More",
-      "metaDescription": "Instantly type in 20+ languages using a standard English keyboard. Free online phonetic typing tool for Hindi, Gujarati, Marathi, Bengali, Arabic, and more.",
-      "keywords": "hindi typing tool, gujarati typing tool, marathi typing tool, bengali typing tool, arabic typing tool, russian typing tool, phonetic typing online, english to hindi typing, english to arabic typing tool free, online transliteration tool, type in native language keyboard, punjabi typing tool, tamil typing tool, telugu typing tool",
+      "metaTitle": "Online Typing Tool with Autosave and Transliteration",
+      "metaDescription": "Free online writing pad with local autosave, focus mode, word goals, find and replace, TXT export and phonetic typing in Hindi, Arabic and 18 more scripts.",
+      "keywords": "online typing tool free with autosave, online writing pad no signup, distraction free writing tool online, online notepad with word count goal, free text editor find and replace, type document online and download txt, Hindi typing tool English keyboard, English to Hindi phonetic typing, multilingual transliteration tool online, Gujarati Marathi Bengali typing tool, Arabic typing tool online free, Tamil Telugu Punjabi typing online",
+      "seoSections": [
+        { "title": "Free online writing pad with local autosave", "paragraphs": ["Use the editor for notes, drafts, emails, meeting summaries, captions, and articles without creating an account. The current draft is saved in this browser and restored when you revisit on the same device.", "Local autosave is not a backup or cross-device sync service. Download important work as a TXT file before clearing browser data, using private browsing, changing devices, or relying on the draft for a deadline."] },
+        { "title": "Distraction-free typing with word goals and find and replace", "paragraphs": ["Focus mode expands the workspace so the draft remains central on phones, tablets, laptops, and desktop screens. Set a practical word target and adjust text size for a comfortable writing session.", "Find and replace helps update recurring names or phrases. Review replacements carefully, especially when capitalization or similar words matter, because Replace All matches the exact entered text."] },
+        { "title": "Type Hindi and other scripts using an English keyboard", "paragraphs": ["Select Hindi, Gujarati, Marathi, Bengali, Tamil, Telugu, Punjabi, Arabic, Russian, or another available script. Type a word phonetically in Latin letters and press Space or Enter to request a native-script suggestion.", "Transliteration converts sounds rather than translating meaning. It requires internet access and sends the completed word to Google Input Tools. Proofread names, technical terms, and formal documents with a fluent speaker before publishing."] }
+      ],
       "relatedSearches": [
         "english to hindi typing tool free online",
         "gujarati typing tool online",
