@@ -190,3 +190,19 @@ test('thesis builder creates editable, essay-specific drafts without false guara
   assert.doesNotMatch(JSON.stringify(content), /perfect thesis/i);
   assert.doesNotMatch(JSON.stringify(content), /guarantee a strong thesis/i);
 });
+
+test('essay outliner provides editable evidence planning and exact word budgets', () => {
+  const component = read('components/tools/EssayOutliner.jsx');
+  const content = JSON.parse(read('locales/content/en.json')).tools['essay-outliner'];
+
+  assert.match(component, /allocateWords/);
+  assert.match(component, /comparison/);
+  assert.match(component, /includeCounter/);
+  assert.match(component, /updateItem/);
+  assert.match(component, /moveSection/);
+  assert.match(component, /downloadOutline/);
+  assert.match(component, /never invents research, quotations, or citations/);
+  assert.ok(content.seoSections.length >= 3);
+  assert.match(content.metaDescription, /300–10,000-word/);
+  assert.doesNotMatch(JSON.stringify(content), /perfectly structured/i);
+});

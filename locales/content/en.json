@@ -300,35 +300,66 @@
       ]
     },
     "essay-outliner": {
-      "name": "Essay Outliner",
-      "description": "Generate a structured outline for your essay instantly",
-      "metaTitle": "Free Essay Outline Generator — Structure Your Essay Instantly",
-      "metaDescription": "Organize your thoughts with our free essay outline generator. Create a professional structure for argumentative, analytical, and expository essays in seconds. No signup required.",
-      "keywords": "free essay outline generator structure maker, how to outline an essay",
-      "whatIs": "Our Essay Outliner helps students and professionals build a clear, logical structure for their writing by defining the introduction, body paragraphs, and conclusion.",
+      "name": "Essay Outline Generator — Editable Word-Budget Planner",
+      "description": "Plan an essay with genre-specific sections, main points, evidence and analysis prompts, word budgets, reordering, editing, copying, and text export.",
+      "metaTitle": "Essay Outline Generator — Editable Word-Count Planner",
+      "metaDescription": "Build an editable essay outline with main points, evidence and analysis slots, counterargument planning and an exact 300–10,000-word section budget.",
+      "keywords": "free essay outline generator no signup, editable essay outline maker, argumentative essay outline with counterargument, analytical essay outline evidence analysis, compare and contrast essay outline point by point, expository essay structure planner, essay outline with word count allocation, research paper outline template online, college essay planning tool, claim evidence analysis outline, download essay outline text, five paragraph essay outline alternative",
+      "whatIs": "This private Essay Outline Generator turns your topic, prompt, thesis, and chosen main points into an editable planning workspace. It supports argumentative, analytical, expository, and point-by-point comparison structures; distributes a 300–10,000-word target across the introduction, body, optional counterargument, and conclusion; and provides slots for evidence and analysis. Everything runs in your browser. It creates structure rather than finished prose and never invents research, quotations, or citations.",
+      "seoSections": [
+        { "title": "Create an essay outline from your own main points", "paragraphs": ["Begin with the assignment prompt, a focused topic, and a working thesis or controlling idea. Give each body section one job—a supporting claim, interpretation, explanatory factor, or shared comparison criterion—so the paper develops a visible line of reasoning.", "The generated plan is fully editable. Rename sections, replace prompts with notes from your research, add planning details, and reorder body sections until each step prepares the reader for the next."] },
+        { "title": "Plan claim, evidence, analysis, and counterargument", "paragraphs": ["A body paragraph needs more than a topic label. The outline separates the point being made, the evidence that will support it, the analysis explaining that evidence, and the link back to the thesis. This helps expose sections that contain facts but no reasoning.", "Argumentative mode can add a dedicated counterargument and response section. Present the opposing view fairly, identify why it is credible, and decide whether your response should concede a limit, qualify the thesis, or rebut the objection."] },
+        { "title": "Allocate an essay word count before drafting", "paragraphs": ["Choose a target from 300 to 10,000 words to receive an exact section budget. The planner reserves a concise share for the introduction and conclusion, then distributes the remainder across the body sections. These numbers are planning guides rather than mandatory limits.", "As evidence accumulates, adjust the outline and budget to match the assignment. Longer research papers may need literature, methods, or findings sections that go beyond a general essay template; always follow the structure required by your discipline and instructor."] }
+      ],
       "whyChoose": [
         {
-          "title": "Instant Structure",
-          "description": "Saves you hours of planning."
+          "title": "Editable Structure",
+          "description": "Rename, rewrite, add, remove, and reorder planning notes and body sections."
         },
         {
-          "title": "Multiple Formats",
-          "description": "Supports argumentative, analytical, and expository essays."
+          "title": "Genre-Specific Prompts",
+          "description": "Plan argumentative, analytical, expository, or point-by-point comparison writing."
+        },
+        {
+          "title": "Exact Word Budget",
+          "description": "Distribute a 300–10,000-word target across every planned section."
         }
       ],
       "useCases": [
-        "Structuring college essays and research papers.",
-        "Organizing blog posts and articles."
+        "Planning an argumentative essay with claims, evidence, reasoning, and counterargument.",
+        "Mapping an analytical or expository paper before drafting paragraphs.",
+        "Creating a point-by-point compare-and-contrast essay structure.",
+        "Balancing section lengths for short assignments and longer research papers."
       ],
       "faqs": [
         {
-          "question": "Is the outliner completely free?",
-          "answer": "Yes, 100% free with no registration required."
+          "question": "Does this tool write or research my essay?",
+          "answer": "No. It creates an editable framework from the topic, thesis, and main points you provide. Evidence and citation slots are prompts; you must research, verify, cite, and write the paper yourself."
+        },
+        {
+          "question": "How is the essay word count divided?",
+          "answer": "The planner assigns about 12% to the introduction, 10% to the conclusion, and divides the exact remainder among body and optional counterargument sections. Adjust the plan when your assignment requires different proportions."
+        },
+        {
+          "question": "Can I make a compare-and-contrast essay outline?",
+          "answer": "Yes. Comparison mode uses a point-by-point structure: each body section applies one shared criterion to both subjects and then analyzes the meaningful similarity or difference."
+        },
+        {
+          "question": "Is the generated outline editable?",
+          "answer": "Yes. You can edit section titles and every planning note, add or remove notes, reorder body sections, copy the complete plan, or download it as a plain-text file."
+        },
+        {
+          "question": "Is my essay information uploaded?",
+          "answer": "No. Outline generation and editing happen locally in your browser. Downloading creates the text file on your device."
         }
       ],
       "relatedSearches": [
-        "free essay outline generator structure maker",
-        "how to outline an essay"
+        "editable essay outline generator",
+        "argumentative essay outline with counterargument",
+        "analytical essay claim evidence analysis outline",
+        "compare and contrast point by point outline",
+        "essay word count planner",
+        "download essay outline template"
       ]
     },
     "thesis-statement-generator": {
