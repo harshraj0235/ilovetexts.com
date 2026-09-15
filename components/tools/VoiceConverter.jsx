@@ -1,229 +1,53 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useMemo, useState } from 'react';
+import { analyzeVoice } from '@/lib/voice-analysis';
 
-function Toast({ message, type, onClose }) {
-  useEffect(() => {
-    const timer = setTimeout(onClose, 2500);
-    return () => clearTimeout(timer);
-  }, [onClose]);
-  return <div className={`toast ${type}`}>{type === 'success' ? '✅ ' : '⚠️ '}{message}</div>;
-}
+const LIMIT = 30000;
+const PROFILE_NOTES = {
+  general: 'Choose active voice when naming the actor improves clarity; keep purposeful passives.',
+  academic: 'Discipline and journal conventions vary. Passive voice may appropriately emphasize a method, result, or receiver.',
+  business: 'Check whether passive wording hides responsibility, ownership, or the next action.',
+};
 
-export default function VoiceConverter({ t = {}, lang = 'en' }) {
+export default function VoiceConverter() {
   const [text, setText] = useState('');
-  const [analyzedSentences, setAnalyzedSentences] = useState([]);
-  const [activeTab, setActiveTab] = useState('analyze'); // analyze, rewrite
-  const [toast, setToast] = useState(null);
+  const [sentences, setSentences] = useState([]);
+  const [profile, setProfile] = useState('general');
+  const [filter, setFilter] = useState('all');
+  const [message, setMessage] = useState('');
+  const flagged = sentences.filter(({ status }) => status !== 'no-pattern').length;
+  const visible = useMemo(() => sentences.filter(({ status }) => filter === 'all' || (filter === 'flagged' ? status !== 'no-pattern' : status === 'review')), [sentences, filter]);
 
-  // English Regex to detect passive voice
-  // Looks for forms of "to be" followed by a word ending in ed/en/t, often followed by "by"
-  const passiveRegex = /\b(am|is|are|was|were|be|being|been)\b\s+([a-z]+(?:ed|en|t|own|ung))\b(\s+by\b)?/i;
-
-  const analyzeText = (e) => {
-    if (e) e.preventDefault();
-    if (!text.trim()) {
-      setToast({ message: 'Please enter some text to analyze.', type: 'warning' });
-      return;
-    }
-
-    // Split text into sentences (naively by punctuation)
-    const sentences = text.match(/[^.!?]+[.!?]+/g) || [text];
-    
-    const analyzed = sentences.map(sentence => {
-      const isPassive = passiveRegex.test(sentence);
-      
-      let hint = '';
-      if (isPassive) {
-        const match = sentence.match(passiveRegex);
-        const hasBy = match && match[3];
-        if (hasBy) {
-           hint = "Hint: Move the noun after 'by' to the front of the sentence to make it active.";
-        } else {
-           hint = "Hint: Identify who is performing the action and place them at the beginning of the sentence.";
-        }
-      }
-
-      return {
-        original: sentence.trim(),
-        isPassive,
-        hint,
-        rewritten: ''
-      };
-    });
-
-    setAnalyzedSentences(analyzed);
-    setActiveTab('rewrite');
-    setToast({ message: 'Analysis complete!', type: 'success' });
-    
-    setTimeout(() => {
-      document.getElementById('voice-results')?.scrollIntoView({ behavior: 'smooth' });
-    }, 100);
+  const analyze = (event) => {
+    event.preventDefault();
+    if (!text.trim()) { setMessage('Enter English text before scanning.'); return; }
+    const results = analyzeVoice(text).map((item) => ({ ...item, rewrite: item.suggestion, actor: '', keep: false }));
+    setSentences(results); setMessage('Scan complete. Every flag is a review prompt, not a grammar error.');
+    requestAnimationFrame(() => document.getElementById('voice-review')?.scrollIntoView({ behavior: 'smooth', block: 'start' }));
   };
-
-  const handleRewrite = (index, newValue) => {
-    const updated = [...analyzedSentences];
-    updated[index].rewritten = newValue;
-    setAnalyzedSentences(updated);
+  const update = (index, changes) => setSentences((current) => current.map((sentence, sentenceIndex) => sentenceIndex === index ? { ...sentence, ...changes } : sentence));
+  const finalText = () => sentences.map((sentence) => sentence.keep || !sentence.rewrite.trim() ? sentence.original : sentence.rewrite.trim()).join(' ');
+  const copyFinal = async () => { if (sentences.length) { await navigator.clipboard.writeText(finalText()); setMessage('Reviewed text copied.'); } };
+  const downloadFinal = () => {
+    if (!sentences.length) return; const url = URL.createObjectURL(new Blob([finalText()], { type: 'text/plain;charset=utf-8' }));
+    const link = document.createElement('a'); link.href = url; link.download = 'voice-reviewed-text.txt'; link.click(); URL.revokeObjectURL(url);
   };
+  const loadSample = () => { setText('The final report was written by Maya. The samples were stored overnight. Jordan reviews every result. The team was interested in the outcome.'); setSentences([]); setMessage('Example loaded. Select Scan voice patterns.'); };
+  const clearAll = () => { setText(''); setSentences([]); setMessage(''); };
 
-  const getFinalText = () => {
-    return analyzedSentences.map(s => s.rewritten || s.original).join(' ');
-  };
+  return <div className="voice-tool">
+    <section className="scanner" aria-labelledby="voice-title"><header><span>Private English voice review</span><h2 id="voice-title">Find likely passives and decide what serves the sentence</h2><p>The rule-based scanner flags “be/get + likely past participle” patterns. It can miss passives and flag adjectives, and it never assumes passive voice is automatically wrong.</p></header>
+      <form onSubmit={analyze}><div className="form-top"><label>Writing context<select value={profile} onChange={(event) => setProfile(event.target.value)}><option value="general">General writing</option><option value="academic">Academic / scientific</option><option value="business">Business / policy</option></select></label><p>{PROFILE_NOTES[profile]}</p></div><label className="editor"><span>Your English text</span><small>{text.length.toLocaleString()} / {LIMIT.toLocaleString()} characters</small><textarea value={text} onChange={(event) => { setText(event.target.value.slice(0, LIMIT)); setSentences([]); }} rows={10} placeholder="Paste sentences to scan for possible passive constructions…" /></label><p className="privacy">Analysis happens in this browser. No text is sent to a server.</p>{message && <p className="message" role="status">{message}</p>}<div className="actions"><button type="button" onClick={loadSample}>Load example</button><button type="button" onClick={clearAll}>Clear</button><button className="primary" type="submit">Scan voice patterns</button></div></form>
+    </section>
 
-  const copyResult = () => {
-    navigator.clipboard.writeText(getFinalText());
-    setToast({ message: 'Copied to clipboard!', type: 'success' });
-  };
+    {sentences.length > 0 && <section id="voice-review" className="review"><div className="review-head"><div><span>Sentence review</span><h3>{flagged} of {sentences.length} sentences need a closer look</h3></div><div><label>Show<select value={filter} onChange={(event) => setFilter(event.target.value)}><option value="all">All sentences</option><option value="flagged">Flagged patterns</option><option value="review">Ambiguous patterns</option></select></label><button type="button" onClick={copyFinal}>Copy final text</button><button type="button" onClick={downloadFinal}>Download</button></div></div>
+      <div className="sentence-list">{visible.map((sentence) => { const index = sentences.indexOf(sentence); return <article key={index} className={sentence.status}><div className="sentence-title"><span>{sentence.status === 'possible-passive' ? `Possible passive · ${sentence.confidence} confidence` : sentence.status === 'review' ? 'Participial adjective or passive—review context' : 'No passive pattern found'}</span>{sentence.phrase && <code>{sentence.phrase}</code>}</div><p>{sentence.original}</p>{sentence.status !== 'no-pattern' && <div className="guidance">{sentence.actorPresent ? 'An explicit “by” agent is present. Check whether moving that actor to the subject position improves the emphasis.' : 'No actor is named. Identify the real actor before rewriting, or keep the passive when the actor is unknown, irrelevant, or intentionally backgrounded.'}</div>}{sentence.status !== 'no-pattern' && <div className="rewrite"><label>Actor <span>optional planning note</span><input value={sentence.actor} onChange={(event) => update(index, { actor: event.target.value.slice(0, 100) })} placeholder="Who or what performs the action?" /></label><label>Reviewed sentence<textarea value={sentence.rewrite} onChange={(event) => update(index, { rewrite: event.target.value })} rows={3} placeholder="Rewrite manually after confirming actor, tense, meaning, and emphasis…" /></label><label className="keep"><input type="checkbox" checked={sentence.keep} onChange={(event) => update(index, { keep: event.target.checked })} /> Keep the original sentence intentionally</label></div>}</article>; })}</div>
+      <aside><strong>Automatic rewrite limit:</strong> a draft is offered only for a narrow simple-past pattern such as “The report was written by Maya.” Complex tenses, modals, coordinated clauses, agentless passives, pronouns, and ambiguous participles require manual review.</aside>
+    </section>}
 
-  const clearForm = () => {
-    setText('');
-    setAnalyzedSentences([]);
-    setActiveTab('analyze');
-  };
-
-  const passiveCount = analyzedSentences.filter(s => s.isPassive).length;
-
-  return (
-    <div className="tool-container-full">
-      <div className="tool-panel" style={{ border: '1px solid var(--border-light)', boxShadow: 'var(--shadow-card)' }}>
-        <div className="tool-panel-header" style={{ background: 'linear-gradient(90deg, #EFF6FF, var(--bg-white))', padding: '24px' }}>
-          <div className="tool-panel-title" style={{ color: '#2563EB', fontSize: '1.5rem', display: 'flex', alignItems: 'center', gap: '10px' }}>
-            <span>🔄</span> ACTIVE/PASSIVE VOICE CONVERTER
-          </div>
-          <p style={{ color: 'var(--text-secondary)', marginTop: '8px', fontWeight: 500 }}>
-            Identify weak passive voice in your writing and instantly rewrite it into strong active sentences.
-          </p>
-        </div>
-        
-        <form onSubmit={analyzeText} style={{ padding: '32px' }}>
-          
-          <div style={{ marginBottom: '24px' }}>
-             <label style={{ display: 'block', fontWeight: 700, marginBottom: '8px', color: 'var(--text-main)' }}>
-                Your Text
-              </label>
-              <textarea
-                value={text}
-                onChange={(e) => setText(e.target.value)}
-                placeholder="Paste your essay, email, or article here to detect passive voice (e.g. 'The ball was thrown by the boy.')."
-                style={{
-                  width: '100%', padding: '20px', fontSize: '1.1rem',
-                  border: '2px solid var(--border-light)', borderRadius: 'var(--radius-md)',
-                  background: 'var(--bg-section)', outline: 'none', transition: 'border-color 0.2s', 
-                  fontFamily: 'var(--font-sans)', minHeight: '200px', resize: 'vertical'
-                }}
-                onFocus={(e) => e.target.style.borderColor = '#2563EB'}
-                onBlur={(e) => e.target.style.borderColor = 'var(--border-light)'}
-                required
-              />
-          </div>
-
-          <div style={{ display: 'flex', gap: '16px', flexWrap: 'wrap' }}>
-            <button
-              type="submit"
-              className="btn btn-primary"
-              style={{ flex: '1 1 200px', padding: '16px', fontSize: '1.2rem', background: '#2563EB' }}
-            >
-              🔍 Analyze Sentences
-            </button>
-            <button
-              type="button"
-              onClick={clearForm}
-              className="btn btn-secondary"
-              style={{ padding: '16px 32px', fontSize: '1.1rem' }}
-            >
-              Clear
-            </button>
-          </div>
-        </form>
-      </div>
-
-      {analyzedSentences.length > 0 && (
-        <div id="voice-results" style={{ marginTop: '32px' }}>
-          
-          <div style={{ display: 'flex', gap: '24px', marginBottom: '24px' }}>
-            <div className="tool-panel" style={{ flex: 1, padding: '24px', textAlign: 'center', border: '1px solid var(--border-light)' }}>
-              <div style={{ fontSize: '3rem', fontWeight: 900, color: '#3B82F6' }}>{analyzedSentences.length}</div>
-              <div style={{ color: 'var(--text-secondary)', fontWeight: 600, textTransform: 'uppercase' }}>Total Sentences</div>
-            </div>
-            <div className="tool-panel" style={{ flex: 1, padding: '24px', textAlign: 'center', border: passiveCount > 0 ? '2px solid #EF4444' : '2px solid #10B981' }}>
-              <div style={{ fontSize: '3rem', fontWeight: 900, color: passiveCount > 0 ? '#EF4444' : '#10B981' }}>{passiveCount}</div>
-              <div style={{ color: 'var(--text-secondary)', fontWeight: 600, textTransform: 'uppercase' }}>Passive Sentences</div>
-            </div>
-          </div>
-
-          <div className="tool-panel" style={{ border: '1px solid var(--border-light)' }}>
-            <div style={{ background: 'var(--bg-section)', padding: '16px 24px', borderBottom: '1px solid var(--border-light)', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-              <h3 style={{ fontWeight: 800, margin: 0, color: 'var(--text-main)', fontSize: '1.2rem' }}>
-                Sentence-by-Sentence Rewrite
-              </h3>
-              <button onClick={copyResult} className="btn btn-primary" style={{ padding: '8px 16px', fontSize: '0.9rem' }}>
-                📋 Copy Final Text
-              </button>
-            </div>
-            
-            <div style={{ padding: '24px', display: 'grid', gap: '24px' }}>
-              {analyzedSentences.map((sentence, idx) => (
-                <div key={idx} style={{ 
-                  background: sentence.isPassive ? '#FEF2F2' : '#F9FAFB', 
-                  border: `1px solid ${sentence.isPassive ? '#FCA5A5' : '#E5E7EB'}`, 
-                  borderRadius: '12px', padding: '20px',
-                  display: 'flex', flexDirection: 'column', gap: '12px'
-                }}>
-                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
-                    <div style={{ fontSize: '1.1rem', color: 'var(--text-main)', fontWeight: sentence.isPassive ? 600 : 400 }}>
-                      {sentence.original}
-                    </div>
-                    {sentence.isPassive ? (
-                      <span style={{ background: '#EF4444', color: '#fff', padding: '4px 10px', borderRadius: '20px', fontSize: '0.8rem', fontWeight: 700, flexShrink: 0 }}>
-                        PASSIVE
-                      </span>
-                    ) : (
-                      <span style={{ background: '#10B981', color: '#fff', padding: '4px 10px', borderRadius: '20px', fontSize: '0.8rem', fontWeight: 700, flexShrink: 0 }}>
-                        ACTIVE
-                      </span>
-                    )}
-                  </div>
-                  
-                  {sentence.isPassive && (
-                    <>
-                      <div style={{ color: '#B91C1C', fontSize: '0.9rem', display: 'flex', alignItems: 'center', gap: '6px' }}>
-                        <span>💡</span> {sentence.hint}
-                      </div>
-                      <input
-                        type="text"
-                        value={sentence.rewritten}
-                        onChange={(e) => handleRewrite(idx, e.target.value)}
-                        placeholder="Rewrite this sentence in active voice here..."
-                        style={{
-                          width: '100%', padding: '12px 16px', fontSize: '1rem',
-                          border: '1px solid #FCA5A5', borderRadius: '6px',
-                          background: '#fff', outline: 'none',
-                          boxShadow: 'inset 0 2px 4px rgba(0,0,0,0.02)'
-                        }}
-                      />
-                    </>
-                  )}
-                  
-                  {!sentence.isPassive && sentence.rewritten && (
-                    <input
-                      type="text"
-                      value={sentence.rewritten}
-                      onChange={(e) => handleRewrite(idx, e.target.value)}
-                      style={{
-                        width: '100%', padding: '12px 16px', fontSize: '1rem',
-                        border: '1px solid #E5E7EB', borderRadius: '6px',
-                        background: '#fff', outline: 'none'
-                      }}
-                    />
-                  )}
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
-      )}
-      {toast && <Toast message={toast.message} type={toast.type} onClose={() => setToast(null)} />}
-    </div>
-  );
+    <style jsx>{`
+      .voice-tool{display:grid;gap:28px}.scanner,.review{overflow:hidden;border:1px solid var(--border-light);border-radius:22px;background:var(--bg-white);box-shadow:var(--shadow-card)}header{padding:30px;background:linear-gradient(135deg,#12304c,#164e63);color:white}header span,.review-head>div>span{font-size:.72rem;font-weight:900;letter-spacing:.13em;text-transform:uppercase;color:#a5f3fc}header h2{margin:7px 0 8px;font-size:clamp(1.55rem,4vw,2.2rem)}header p{max-width:800px;margin:0;color:#cffafe}form{display:grid;gap:16px;padding:24px}.form-top{display:grid;grid-template-columns:220px 1fr;align-items:end;gap:15px}.form-top label,.review-head label{display:grid;gap:5px;font-size:.76rem;font-weight:850}.form-top p{margin:0;padding:11px 13px;border-radius:10px;background:#ecfeff;color:#155e75;font-size:.83rem}.editor{display:grid;grid-template-columns:1fr auto;gap:7px;font-weight:850}.editor small{color:var(--text-secondary);font-weight:500}.editor textarea{grid-column:1/-1;min-height:250px;padding:14px;line-height:1.6;resize:vertical}textarea,input,select{border:1px solid var(--border-dark);border-radius:10px;background:var(--bg-white);color:var(--text-main);font:inherit}select,input{min-height:42px;padding:0 10px}textarea:focus,input:focus,select:focus{outline:3px solid #a5f3fc;border-color:#0891b2}.privacy{margin:0;color:var(--text-secondary);font-size:.8rem}.message{margin:0;padding:11px 13px;border-radius:9px;background:#ecfeff;color:#155e75}.actions{display:flex;justify-content:flex-end;gap:8px}button{min-height:43px;padding:0 15px;border:1px solid var(--border-light);border-radius:9px;background:var(--bg-white);color:var(--text-main);font-weight:850;cursor:pointer}.primary{margin-left:auto;border:0;background:#155e75;color:white}.review{scroll-margin-top:24px;padding-bottom:20px}.review-head{display:flex;justify-content:space-between;align-items:end;gap:16px;padding:21px;border-bottom:1px solid var(--border-light)}.review-head>div:first-child>span{color:#0e7490}.review-head h3{margin:5px 0 0}.review-head>div:last-child{display:flex;align-items:end;gap:7px}.sentence-list{display:grid;gap:11px;padding:20px}.sentence-list article{padding:15px;border:1px solid var(--border-light);border-left:4px solid #94a3b8;border-radius:12px}.sentence-list article.possible-passive{border-left-color:#dc2626;background:#fff7f7}.sentence-list article.review{border-left-color:#d97706;background:#fffbeb}.sentence-title{display:flex;justify-content:space-between;gap:10px;color:var(--text-secondary);font-size:.78rem;font-weight:800}.sentence-title code{padding:3px 6px;border-radius:6px;background:white;color:#334155}.sentence-list article>p{font-size:1.03rem;line-height:1.55}.guidance{padding:10px;border-radius:9px;background:white;color:var(--text-secondary);font-size:.83rem}.rewrite{display:grid;grid-template-columns:220px 1fr;gap:10px;margin-top:12px}.rewrite label{display:grid;align-content:start;gap:5px;font-size:.78rem;font-weight:850}.rewrite label span{color:var(--text-secondary);font-weight:500}.rewrite textarea{padding:10px;resize:vertical}.rewrite .keep{grid-column:1/-1;display:flex;align-items:center;gap:8px}.keep input{width:19px;min-height:19px}.review aside{margin:0 20px;padding:14px;border:1px solid #bfdbfe;border-radius:11px;background:#eff6ff;color:#1e3a8a;font-size:.84rem}@media(max-width:850px){.review-head{align-items:stretch;flex-direction:column}.review-head>div:last-child{flex-wrap:wrap}.rewrite{grid-template-columns:1fr}.rewrite .keep{grid-column:auto}}@media(max-width:620px){header,form{padding:18px}.form-top{grid-template-columns:1fr}.actions{display:grid;grid-template-columns:1fr 1fr}.actions .primary{grid-column:1/-1;margin:0}.sentence-list{padding:14px}.sentence-title{align-items:start;flex-direction:column}.review-head>div:last-child{display:grid;grid-template-columns:1fr 1fr}.review-head label{grid-column:1/-1}.review-head button{width:100%}.review aside{margin-inline:14px}}
+    `}</style>
+  </div>;
 }

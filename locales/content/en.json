@@ -182,34 +182,39 @@
       ]
     },
     "active-passive-converter": {
-      "name": "Active/Passive Voice Converter",
-      "description": "Detect and convert sentences between active and passive voice online.",
-      "metaTitle": "Free Active to Passive Voice Converter — Fix Sentence Voice Online",
-      "metaDescription": "Instantly convert sentences from active to passive voice with our free online voice converter tool. Perfect for students and writers looking to improve clarity. No signup required.",
-      "keywords": "convert active to passive voice sentence online, passive to active voice converter free online, active voice detector, passive voice checker, how to change passive voice, rewrite sentences active voice",
-      "whatIs": "Our free Active/Passive Voice Converter is an intelligent sentence analysis tool designed to help writers identify their sentence voice and restructure it instantly. **Passive voice** occurs when the subject of a sentence receives the action (e.g., \"The ball was thrown by the boy\"), which can make writing sound weak or evasive. **Active voice** occurs when the subject performs the action (e.g., \"The boy threw the ball\"), resulting in clearer, more direct, and more engaging sentences. Our tool uses smart text-parsing algorithms to detect passive structures and provides you with the framework to convert them into strong, active sentences.",
+      "name": "Passive Voice Checker — Guided Active Voice Rewriter",
+      "description": "Scan English sentences for likely passive patterns, review confidence and actors, preserve intentional passives, and edit a final copy locally.",
+      "metaTitle": "Passive Voice Checker — Guided Active Voice Rewriter",
+      "metaDescription": "Find likely English passive voice patterns locally, review ambiguous participles, identify missing actors and edit a final active-voice version sentence by sentence.",
+      "keywords": "passive voice checker online free, passive to active voice converter with explanation, find passive sentences in paragraph, active voice rewriter manual editor, passive voice detector for academic writing, identify actor in passive sentence, agentless passive voice checker, active and passive voice examples, convert was written by to active voice, English voice pattern scanner private, passive voice checker no signup",
+      "whatIs": "This private English Passive Voice Checker looks for forms of be or get followed by likely past participles, then presents each sentence for human review. It reports confidence, shows the detected phrase, asks who performs the action when the actor is missing, lets you keep a purposeful passive, and assembles your edited final text. Automatic suggestions are limited to narrow simple-past passives with an explicit by-agent. The rule-based scanner can miss passive constructions and can flag participial adjectives; it is not a full grammatical parser or a reliable two-way converter for every English tense and clause.",
+      "seoSections": [
+        { "title": "Find possible passive voice in an English paragraph", "paragraphs": ["A typical English passive combines a form of be with a past participle, while the grammatical subject receives the action. The actor may appear in a by-phrase or may be omitted. The scanner marks likely patterns and distinguishes stronger by-agent evidence from ambiguous cases.", "Not every be-plus-participle sequence is passive. Phrases such as 'was interested' can describe a state, and complex verb phrases need contextual analysis. Treat every flag as a prompt to inspect subject, action, receiver, tense, and meaning."] },
+        { "title": "Convert passive to active voice without inventing an actor", "paragraphs": ["To rewrite a passive clause, identify the actor, move that actor into the subject position, use the correctly inflected active verb, and place the former grammatical subject after the verb when it functions as the object. Preserve tense, aspect, modality, negation, and the intended meaning.", "Agentless passives cannot be converted responsibly until the writer knows who or what performed the action. This tool leaves those rewrites blank for manual work instead of guessing an actor or silently changing the claim."] },
+        { "title": "Know when passive voice is useful", "paragraphs": ["Passive voice is not automatically an error. It can keep attention on a process, result, or receiver; maintain cohesion with the previous sentence; or avoid naming an actor who is unknown or irrelevant. Academic, scientific, business, and creative genres use voice differently.", "Choose active voice when naming responsibility or making action easier to follow matters. Keep a passive deliberately when its emphasis serves the reader, and follow the expectations of your discipline, journal, organization, or instructor rather than targeting an arbitrary passive percentage."] }
+      ],
       "whyChoose": [
         {
-          "title": "Instant Voice Detection",
-          "description": "Instantly highlights sentences written in the passive voice."
+          "title": "Confidence-Aware Flags",
+          "description": "Separates explicit by-agent patterns from ambiguous participles that need context."
         },
         {
-          "title": "Two-Way Conversion",
-          "description": "Get hints to convert Active to Passive, OR Passive to Active."
+          "title": "Guided Rewriting",
+          "description": "Identify the actor, edit each sentence, or intentionally keep the original passive."
         },
         {
-          "title": "100% Free & Private",
-          "description": "All text analysis is processed locally in your browser."
+          "title": "Local Processing",
+          "description": "Up to 30,000 characters are analyzed in your browser without a server request."
         },
         {
-          "title": "Improves Writing Clarity",
-          "description": "Active voice makes your essays and articles much more professional."
+          "title": "Editable Export",
+          "description": "Copy or download the final text assembled from your reviewed sentences."
         }
       ],
       "useCases": [
-        "Students rewriting essays to meet 'use active voice' requirements.",
-        "Copywriters aiming for punchy, direct marketing copy by eliminating passive sentences.",
-        "Non-native speakers learning grammatical voice structures."
+        "Reviewing whether passive wording hides responsibility in business and policy writing.",
+        "Checking academic or scientific prose while preserving intentional process-focused passives.",
+        "Practicing how subjects, objects, agents, and verb forms change between voices."
       ],
       "faqs": [
         {
@@ -218,26 +223,36 @@
         },
         {
           "question": "Why do teachers prefer active voice?",
-          "answer": "Active voice is generally more concise, clear, and direct. Passive voice can be wordy and sometimes obscures who is actually performing the action."
+          "answer": "Many instructors prefer active voice when it makes responsibility and action clearer. Requirements vary, and passive voice can be appropriate when the receiver or result deserves emphasis."
         },
         {
           "question": "When should I use passive voice?",
-          "answer": "Passive voice is useful when the person performing the action is unknown or unimportant, such as in scientific reports ('The chemical was heated')."
+          "answer": "Passive voice can be useful when the actor is unknown or irrelevant, when a process or result should receive emphasis, or when it improves continuity with surrounding sentences. Genre conventions vary."
         },
         {
           "question": "How does this converter work?",
-          "answer": "The tool uses pattern recognition to find 'to be' verbs followed by past participles. It then helps you invert the Subject and Object to rewrite the sentence actively."
+          "answer": "It uses local pattern rules to find be/get auxiliaries followed by likely participles. It shows confidence and an editable rewrite area. Only narrow simple-past by-agent sentences receive an automatic starting suggestion."
         },
         {
-          "question": "Is this tool completely free?",
-          "answer": "Yes, our active and passive voice converter is 100% free with no word limits."
+          "question": "Can the tool convert every passive sentence automatically?",
+          "answer": "No. Reliable conversion requires grammatical roles, tense, aspect, modality, context, and sometimes an unstated actor. Ambiguous and complex sentences require manual review."
+        },
+        {
+          "question": "Does every flagged sentence contain passive voice?",
+          "answer": "No. Participial adjectives and other constructions can resemble passive voice. Flags are review candidates, not definitive grammar errors."
+        },
+        {
+          "question": "Is my text uploaded?",
+          "answer": "No. The scan and editing workflow run in your browser with a 30,000-character input limit."
         }
       ],
       "relatedSearches": [
-        "convert active to passive voice sentence online",
-        "passive to active voice converter free online",
-        "how to change a sentence to active voice",
-        "free passive voice checker online"
+        "passive voice checker online free",
+        "passive to active voice converter with explanation",
+        "find passive sentences in a paragraph",
+        "agentless passive voice checker",
+        "active voice rewriter for academic writing",
+        "identify actor in passive sentence"
       ]
     },
     "plagiarism-checker": {

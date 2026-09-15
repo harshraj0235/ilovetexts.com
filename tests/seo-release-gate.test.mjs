@@ -224,3 +224,19 @@ test('direct text comparison separates transparent metrics from plagiarism judgm
   assert.doesNotMatch(JSON.stringify(content), /detect heavy paraphrasing/i);
   assert.doesNotMatch(JSON.stringify(content), /any length/i);
 });
+
+test('passive voice tool uses confidence-aware detection and guided rewrites', () => {
+  const component = read('components/tools/VoiceConverter.jsx');
+  const engine = read('lib/voice-analysis.js');
+  const content = JSON.parse(read('locales/content/en.json')).tools['active-passive-converter'];
+
+  assert.match(engine, /STATIVE_PARTICIPLES/);
+  assert.match(engine, /trySimplePastRewrite/);
+  assert.match(component, /Keep the original sentence intentionally/);
+  assert.match(component, /Automatic rewrite limit/);
+  assert.match(component, /const LIMIT = 30000/);
+  assert.ok(content.seoSections.length >= 3);
+  assert.match(content.metaDescription, /ambiguous participles/);
+  assert.doesNotMatch(JSON.stringify(content), /instantly rewrite/i);
+  assert.doesNotMatch(JSON.stringify(content), /no word limits/i);
+});
