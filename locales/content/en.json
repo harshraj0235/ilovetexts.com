@@ -123,34 +123,40 @@
   },
   "tools": {
     "transition-word-generator": {
-      "name": "Transition Word Generator",
-      "description": "Find the perfect transition words for your essays, articles, and emails.",
-      "metaTitle": "Free Transition Word Generator for Essays — Connecting Words List",
-      "metaDescription": "Discover the perfect linking words with our free Transition Word Generator. Filter by category (addition, contrast, conclusion) to improve essay flow. 100% free.",
-      "keywords": "transition word generator for essays, connecting words list, linking words for writing, how to transition between paragraphs, transition words for conclusion",
-      "whatIs": "Our free Transition Word Generator is a writing aid designed to help students, bloggers, and professionals find the exact word or phrase needed to connect their ideas smoothly. Transition words (also known as connecting words or linking words) act as bridges between sentences and paragraphs, guiding the reader logically through your text. Whether you need to show contrast, add information, show cause and effect, or summarize a conclusion, our tool instantly provides categorized lists of transition phrases you can copy and paste directly into your writing.",
+      "name": "Transition Word Generator — Linking Words by Purpose",
+      "description": "Find linking words by logical relationship, register, and grammatical placement with punctuation patterns, search, favorites, and six-language reference lists.",
+      "metaTitle": "Transition Word Generator — Linking Words by Purpose",
+      "metaDescription": "Find transition words by purpose, formality and placement. See punctuation patterns for essays, search nine English categories and copy a custom shortlist.",
+      "keywords": "transition word generator for essays, linking words by purpose and function, transition words with punctuation examples, formal transition words for academic writing, connecting words for contrast cause effect, transition words between paragraphs, alternatives to however and therefore, transition words for examples and clarification, sentence opener transition list, transition phrase shortlist maker, multilingual linking words reference",
+      "whatIs": "This Transition Word Generator is a relationship-first reference for choosing connecting words and phrases. The English library covers addition, contrast, cause or result, examples, comparison, sequence, clarification, emphasis, and conclusion, with register, placement, and punctuation patterns for each choice. Search the full library, filter by formality or grammatical placement, save favorites, and copy a shortlist. Compact Spanish, Portuguese, German, Hindi, and Indonesian reference lists are also available, with a clear reminder to verify idiomatic use and punctuation with a native-language authority.",
+      "seoSections": [
+        { "title": "Choose transition words by logical relationship", "paragraphs": ["A connector tells the reader how one idea relates to another. Choose addition only when the next point extends the first, contrast when the direction changes, cause or result when one idea genuinely supports that inference, and example when the new material illustrates a broader claim.", "A transition cannot repair missing reasoning. Before inserting a word, state the relationship in plain language. If you cannot explain the link, revise the ideas or their order before choosing a connector."] },
+        { "title": "Use the correct placement and punctuation pattern", "paragraphs": ["Sentence adverbs such as however and therefore commonly open a new sentence followed by a comma. When they connect two independent clauses in one sentence, formal punctuation may require a semicolon before the connector and a comma after it. Coordinators and subordinators follow different grammatical patterns.", "The cards show a compact usage frame rather than pretending every transition is interchangeable. Replace the brackets with your own clauses or noun phrases, then check the result against the style guide required for your language, discipline, and publication."] },
+        { "title": "Improve paragraph flow without overusing connectors", "paragraphs": ["Transitions are one part of coherence. Repeated key terms, clear pronoun references, topic sentences, information order, and transition sentences can connect paragraphs without placing a formulaic word at the start of every sentence.", "Search for alternatives when a draft repeats however, moreover, or in conclusion, but vary wording only when the logical function remains accurate. Remove a transition when the connection is already obvious or when the connector promises a contrast or conclusion that the writing does not deliver."] }
+      ],
       "whyChoose": [
         {
-          "title": "Categorized Lists",
-          "description": "Easily find words based on intent (Addition, Contrast, Cause/Effect, Conclusion)."
+          "title": "Nine Logical Functions",
+          "description": "Explore English transitions for addition, contrast, cause, examples, comparison, sequence, clarification, emphasis, and conclusion."
         },
         {
-          "title": "Improves Flow",
-          "description": "Instantly upgrade choppy writing into smooth, professional text."
+          "title": "Usage Patterns",
+          "description": "Check register, grammatical placement, and a punctuation frame before inserting a phrase."
         },
         {
-          "title": "100% Free",
-          "description": "No signups, no paywalls, and no downloads required."
+          "title": "Search and Shortlist",
+          "description": "Search every category, save useful options, and copy a custom list."
         },
         {
-          "title": "Multilingual Support",
-          "description": "Explore transition words in multiple languages."
+          "title": "Six Language Lists",
+          "description": "Switch among English, Spanish, Portuguese, German, Hindi, and Indonesian reference lists."
         }
       ],
       "useCases": [
-        "Students writing academic essays who need strong transition words between paragraphs.",
-        "Copywriters aiming to improve the readability and flow of their marketing articles.",
-        "Non-native speakers expanding their vocabulary of connecting phrases."
+        "Choosing an accurate connector for contrast, concession, cause, result, or example.",
+        "Finding formal alternatives to an overused transition in an academic draft.",
+        "Learning whether a linking expression opens a sentence, joins clauses, or introduces a noun phrase.",
+        "Building a shortlist of connectors for an essay, report, article, or email revision."
       ],
       "faqs": [
         {
@@ -159,26 +165,36 @@
         },
         {
           "question": "Why are transition words important in essays?",
-          "answer": "They improve the logical flow of your essay, making it easier for the reader to follow your arguments."
+          "answer": "They signal relationships that help readers follow an argument or sequence. They work only when the underlying ideas are logically connected and clearly organized."
         },
         {
           "question": "How do I use this generator?",
-          "answer": "Select the purpose of your sentence (e.g., 'To show contrast'). The tool will generate a list of appropriate transition words for you."
+          "answer": "Select the relationship you intend, then filter by register and placement. Read the usage pattern, choose a phrase that accurately describes the connection, and check the completed sentence aloud."
         },
         {
           "question": "Can I use transition words at the beginning of a paragraph?",
-          "answer": "Yes! Starting a new paragraph with a transition word is a great way to link it to the previous paragraph."
+          "answer": "Sometimes. A connector can signal the relationship, but a transition sentence, repeated key term, or clear topic sentence may create a stronger bridge. Avoid starting every paragraph with a formulaic transition."
         },
         {
-          "question": "Is this tool free?",
-          "answer": "Absolutely. It is 100% free to use."
+          "question": "What punctuation follows however or therefore?",
+          "answer": "As sentence openers, they are commonly followed by a comma. Between two independent clauses, a semicolon before and comma after may be appropriate. Punctuation depends on sentence structure and the required style guide."
+        },
+        {
+          "question": "Are all transitions in one category interchangeable?",
+          "answer": "No. Words can differ in strength, register, grammar, and nuance. For example, although introduces a dependent clause, while however often functions as a sentence adverb."
+        },
+        {
+          "question": "Are the multilingual lists complete translations?",
+          "answer": "No. They are compact starting references. Idiom, register, placement, and punctuation vary by language and context, so confirm important usage with a native-language authority."
         }
       ],
       "relatedSearches": [
         "transition word generator for essays",
-        "connecting words list",
-        "transition words for conclusion",
-        "linking words for writing"
+        "transition words with punctuation examples",
+        "formal linking words for academic writing",
+        "alternatives to however and therefore",
+        "transition words for contrast cause and effect",
+        "linking words by purpose"
       ]
     },
     "active-passive-converter": {

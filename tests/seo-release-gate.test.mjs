@@ -240,3 +240,20 @@ test('passive voice tool uses confidence-aware detection and guided rewrites', (
   assert.doesNotMatch(JSON.stringify(content), /instantly rewrite/i);
   assert.doesNotMatch(JSON.stringify(content), /no word limits/i);
 });
+
+test('transition finder teaches logical function, placement, and punctuation', () => {
+  const component = read('components/tools/TransitionGenerator.jsx');
+  const content = JSON.parse(read('locales/content/en.json')).tools['transition-word-generator'];
+
+  assert.match(component, /clarification/);
+  assert.match(component, /comparison/);
+  assert.match(component, /register/);
+  assert.match(component, /placement/);
+  assert.match(component, /toggleSaved/);
+  assert.match(component, /LANGUAGE_NAMES/);
+  assert.match(component, /cannot create logic that is missing/);
+  assert.ok(content.seoSections.length >= 3);
+  assert.match(content.metaDescription, /nine English categories/);
+  assert.doesNotMatch(JSON.stringify(content), /perfect linking words/i);
+  assert.doesNotMatch(JSON.stringify(content), /Instantly upgrade choppy writing/i);
+});

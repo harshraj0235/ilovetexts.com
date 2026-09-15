@@ -1,178 +1,64 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useMemo, useState } from 'react';
 
-const transitionData = {
-  en: {
-    addition: ["Additionally", "Furthermore", "Moreover", "In addition", "Also", "Along with", "As well as", "Not to mention", "Equally important"],
-    contrast: ["However", "Nevertheless", "On the other hand", "In contrast", "Conversely", "Yet", "Although", "Despite this", "Even so"],
-    cause: ["Therefore", "Consequently", "Thus", "As a result", "Because of this", "Hence", "For this reason", "Due to"],
-    sequence: ["First of all", "Meanwhile", "Subsequently", "Following this", "Finally", "Next", "Previously", "Simultaneously"],
-    conclusion: ["In conclusion", "To sum up", "Ultimately", "Overall", "In summary", "All in all", "To summarize", "As shown above"]
-  },
-  es: {
-    addition: ["Además", "Asimismo", "También", "Por añadidura", "Igualmente", "Junto con", "Así como", "Sin mencionar", "De igual importancia"],
-    contrast: ["Sin embargo", "No obstante", "Por otro lado", "En contraste", "Por el contrario", "Aún así", "Aunque", "A pesar de esto", "Aun así"],
-    cause: ["Por lo tanto", "En consecuencia", "Así", "Como resultado", "Debido a esto", "Por ende", "Por esta razón", "Debido a"],
-    sequence: ["En primer lugar", "Mientras tanto", "Posteriormente", "Después de esto", "Finalmente", "Luego", "Previamente", "Simultáneamente"],
-    conclusion: ["En conclusión", "Para resumir", "En última instancia", "En general", "En resumen", "Considerando todo", "Para sintetizar", "Como se ha mostrado"]
-  },
-  pt: {
-    addition: ["Além disso", "Ademais", "Também", "Do mesmo modo", "Igualmente", "Juntamente com", "Bem como", "Sem mencionar", "De igual importância"],
-    contrast: ["No entanto", "Não obstante", "Por outro lado", "Em contraste", "Pelo contrário", "Ainda assim", "Embora", "Apesar disso", "Mesmo assim"],
-    cause: ["Portanto", "Consequentemente", "Assim", "Como resultado", "Devido a isso", "Por conseguinte", "Por esta razão", "Devido a"],
-    sequence: ["Em primeiro lugar", "Enquanto isso", "Subsequentemente", "Após isso", "Finalmente", "Em seguida", "Anteriormente", "Simultaneamente"],
-    conclusion: ["Em conclusão", "Para resumir", "Em última análise", "No geral", "Em suma", "Considerando tudo", "Para sintetizar", "Como mostrado acima"]
-  },
-  de: {
-    addition: ["Zusätzlich", "Darüber hinaus", "Außerdem", "Ebenso", "Des Weiteren", "Zusammen mit", "Sowie", "Ganz zu schweigen von", "Ebenso wichtig"],
-    contrast: ["Jedoch", "Dennoch", "Andererseits", "Im Gegensatz dazu", "Umgekehrt", "Trotzdem", "Obwohl", "Trotz dieses", "Auch so"],
-    cause: ["Daher", "Folglich", "Somit", "Als Ergebnis", "Deshalb", "Infolgedessen", "Aus diesem Grund", "Aufgrund von"],
-    sequence: ["Erstens", "Mittlerweile", "Anschließend", "Danach", "Schließlich", "Als nächstes", "Zuvor", "Gleichzeitig"],
-    conclusion: ["Zusammenfassend", "Um es zusammenzufassen", "Letztendlich", "Insgesamt", "Kurz gesagt", "Alles in allem", "Abschließend", "Wie oben gezeigt"]
-  },
-  hi: {
-    addition: ["इसके अतिरिक्त", "इसके अलावा", "तथा", "साथ ही", "समान रूप से", "के साथ", "और भी", "जिक्र ना करते हुए", "समान रूप से महत्वपूर्ण"],
-    contrast: ["हालाँकि", "तथापि", "दूसरी ओर", "इसके विपरीत", "उल्टे", "फिर भी", "भले ही", "इसके बावजूद", "ऐसा होने पर भी"],
-    cause: ["इसलिए", "नतीजतन", "इस प्रकार", "परिणामस्वरूप", "इस कारण से", "अतः", "इस वजह से", "के कारण"],
-    sequence: ["सबसे पहले", "इस बीच", "बाद में", "इसके बाद", "अंत में", "अगला", "पहले से", "एक साथ"],
-    conclusion: ["निष्कर्ष के तौर पर", "संक्षेप में", "अंततः", "कुल मिलाकर", "सारांश में", "सब मिलाकर", "संक्षेप करने के लिए", "जैसा कि ऊपर दिखाया गया है"]
-  },
-  id: {
-    addition: ["Selain itu", "Selanjutnya", "Terlebih lagi", "Tambahan pula", "Juga", "Bersama dengan", "Serta", "Belum lagi", "Sama pentingnya"],
-    contrast: ["Namun", "Meskipun demikian", "Di sisi lain", "Sebaliknya", "Sebaliknya", "Namun demikian", "Meskipun", "Meskipun begitu", "Walaupun demikian"],
-    cause: ["Oleh karena itu", "Akibatnya", "Dengan demikian", "Sebagai hasilnya", "Karena itu", "Maka dari itu", "Untuk alasan ini", "Disebabkan oleh"],
-    sequence: ["Pertama-tama", "Sementara itu", "Selanjutnya", "Setelah ini", "Akhirnya", "Berikutnya", "Sebelumnya", "Secara bersamaan"],
-    conclusion: ["Kesimpulannya", "Untuk meringkas", "Pada akhirnya", "Secara keseluruhan", "Singkatnya", "Secara keseluruhan", "Untuk menyimpulkan", "Seperti yang ditunjukkan"]
-  }
+const ENGLISH = {
+  addition: [['Moreover','formal','opener','Moreover, [add the next point].'],['Furthermore','formal','opener','Furthermore, [add supporting information].'],['In addition','neutral','opener','In addition, [add a related point].'],['Also','neutral','flexible','[Subject] also [adds a related action or quality].'],['Likewise','neutral','opener','Likewise, [state a parallel point].'],['Equally important','formal','opener','Equally important, [add a point of similar weight].']],
+  contrast: [['However','neutral','opener','[First sentence]. However, [contrasting sentence].'],['Nevertheless','formal','opener','Nevertheless, [state what remains true].'],['In contrast','formal','opener','In contrast, [show a clear difference].'],['On the other hand','neutral','opener','On the other hand, [present another side].'],['Yet','neutral','within','[Independent clause], yet [contrasting independent clause].'],['Although','neutral','clause','Although [concession], [main clause].']],
+  cause: [['Therefore','formal','opener','[Cause]. Therefore, [result].'],['Consequently','formal','opener','Consequently, [state the result].'],['As a result','neutral','opener','As a result, [state the consequence].'],['Thus','formal','opener','Thus, [state the inference or result].'],['Because','neutral','clause','[Result] because [cause].'],['Due to','formal','phrase','Due to [noun phrase], [result].']],
+  example: [['For example','neutral','opener','For example, [give a representative case].'],['For instance','neutral','opener','For instance, [give a specific case].'],['Specifically','formal','opener','Specifically, [add precise detail].'],['To illustrate','formal','opener','To illustrate, [show how the point works].'],['Such as','neutral','within','[General category], such as [examples], [continues].'],['In particular','neutral','opener','In particular, [focus on one case].']],
+  comparison: [['Similarly','neutral','opener','Similarly, [show a relevant likeness].'],['Likewise','neutral','opener','Likewise, [present a parallel case].'],['By comparison','formal','opener','By comparison, [evaluate the other case].'],['In the same way','neutral','opener','In the same way, [describe a parallel process].'],['Just as','neutral','clause','Just as [first relationship], [second relationship].'],['Compared with','formal','phrase','Compared with [A], [B shows the relevant difference or similarity].']],
+  sequence: [['First','neutral','opener','First, [state the initial step or point].'],['Next','neutral','opener','Next, [state what follows].'],['Meanwhile','neutral','opener','Meanwhile, [state a simultaneous event].'],['Subsequently','formal','opener','Subsequently, [state a later event].'],['Before this','neutral','opener','Before this, [state an earlier event].'],['Finally','neutral','opener','Finally, [state the last step or point].']],
+  clarification: [['In other words','neutral','opener','In other words, [restate the idea more clearly].'],['That is','formal','opener','That is, [clarify the exact meaning].'],['More precisely','formal','opener','More precisely, [narrow or correct the claim].'],['Put simply','neutral','opener','Put simply, [give a plainer version].'],['In this case','neutral','opener','In this case, [apply the idea to the situation].'],['Namely','formal','within','[General statement]—namely, [specific clarification].']],
+  emphasis: [['Indeed','formal','opener','Indeed, [reinforce the preceding claim].'],['Above all','neutral','opener','Above all, [identify the highest priority].'],['Notably','formal','opener','Notably, [highlight an important detail].'],['In fact','neutral','opener','In fact, [strengthen or correct the prior point].'],['Especially','neutral','within','[Claim], especially [important example or condition].'],['Most importantly','neutral','opener','Most importantly, [state the central consideration].']],
+  conclusion: [['Ultimately','neutral','opener','Ultimately, [state the final implication].'],['In summary','formal','opener','In summary, [synthesize the main points].'],['Overall','neutral','opener','Overall, [give the balanced final assessment].'],['Taken together','formal','opener','Taken together, [show what the evidence indicates].'],['In conclusion','formal','opener','In conclusion, [close the discussion without adding new evidence].'],['For these reasons','formal','opener','For these reasons, [return to the main claim].']],
 };
 
-const categoryLabels = {
-  en: { addition: "Addition & Agreement", contrast: "Opposition & Contrast", cause: "Cause & Effect", sequence: "Time & Sequence", conclusion: "Conclusion & Summary" },
-  es: { addition: "Adición y Acuerdo", contrast: "Oposición y Contraste", cause: "Causa y Efecto", sequence: "Tiempo y Secuencia", conclusion: "Conclusión y Resumen" },
-  pt: { addition: "Adição e Concordância", contrast: "Oposição e Contraste", cause: "Causa e Efeito", sequence: "Tempo e Sequência", conclusion: "Conclusão e Resumo" },
-  de: { addition: "Zusatz & Zustimmung", contrast: "Gegensatz & Kontrast", cause: "Ursache & Wirkung", sequence: "Zeit & Abfolge", conclusion: "Fazit & Zusammenfassung" },
-  hi: { addition: "जोड़ और सहमति", contrast: "विरोध और कंट्रास्ट", cause: "कारण और प्रभाव", sequence: "समय और क्रम", conclusion: "निष्कर्ष और सारांश" },
-  id: { addition: "Penambahan & Persetujuan", contrast: "Oposisi & Kontras", cause: "Sebab & Akibat", sequence: "Waktu & Urutan", conclusion: "Kesimpulan & Ringkasan" }
+const LOCALIZED = {
+  es: { addition:['Además','Asimismo','También','Igualmente'], contrast:['Sin embargo','No obstante','Por otro lado','En cambio'], cause:['Por lo tanto','En consecuencia','Como resultado','Por esta razón'], sequence:['En primer lugar','Mientras tanto','Después','Finalmente'], conclusion:['En conclusión','En resumen','En última instancia','En conjunto'] },
+  pt: { addition:['Além disso','Ademais','Também','Igualmente'], contrast:['No entanto','Contudo','Por outro lado','Em contraste'], cause:['Portanto','Consequentemente','Como resultado','Por essa razão'], sequence:['Em primeiro lugar','Enquanto isso','Em seguida','Finalmente'], conclusion:['Em conclusão','Em resumo','Em última análise','No geral'] },
+  de: { addition:['Außerdem','Darüber hinaus','Zusätzlich','Ebenso'], contrast:['Jedoch','Dennoch','Andererseits','Im Gegensatz dazu'], cause:['Daher','Folglich','Somit','Aus diesem Grund'], sequence:['Zunächst','Inzwischen','Anschließend','Schließlich'], conclusion:['Zusammenfassend','Abschließend','Letztendlich','Insgesamt'] },
+  hi: { addition:['इसके अतिरिक्त','इसके अलावा','साथ ही','इसी प्रकार'], contrast:['हालाँकि','फिर भी','दूसरी ओर','इसके विपरीत'], cause:['इसलिए','परिणामस्वरूप','इस कारण','अतः'], sequence:['सबसे पहले','इस बीच','इसके बाद','अंत में'], conclusion:['निष्कर्षतः','संक्षेप में','अंततः','कुल मिलाकर'] },
+  id: { addition:['Selain itu','Selanjutnya','Juga','Demikian pula'], contrast:['Namun','Meskipun demikian','Di sisi lain','Sebaliknya'], cause:['Oleh karena itu','Akibatnya','Dengan demikian','Karena itu'], sequence:['Pertama','Sementara itu','Kemudian','Akhirnya'], conclusion:['Kesimpulannya','Singkatnya','Pada akhirnya','Secara keseluruhan'] },
 };
+const LABELS = { addition:'Add a related point', contrast:'Contrast or concede', cause:'Cause, result, or inference', example:'Give an example', comparison:'Show similarity', sequence:'Order or time', clarification:'Clarify or restate', emphasis:'Emphasize', conclusion:'Synthesize or conclude' };
+const ICONS = { addition:'＋', contrast:'↔', cause:'→', example:'◎', comparison:'≈', sequence:'↳', clarification:'＝', emphasis:'!', conclusion:'✓' };
+const LANGUAGE_NAMES = { en:'English', es:'Español', pt:'Português', de:'Deutsch', hi:'हिन्दी', id:'Bahasa Indonesia' };
+const localizedItems = (language) => Object.fromEntries(Object.entries(LOCALIZED[language]).map(([category, values]) => [category, values.map((text) => [text, 'neutral', 'varies', 'Check placement and punctuation with a trusted reference for this language.'])]));
 
-function Toast({ message, type, onClose }) {
-  useEffect(() => {
-    const timer = setTimeout(onClose, 2500);
-    return () => clearTimeout(timer);
-  }, [onClose]);
-  return <div className={`toast ${type}`} style={{ position: 'fixed', bottom: '20px', left: '50%', transform: 'translateX(-50%)', background: '#10B981', color: '#fff', padding: '12px 24px', borderRadius: '30px', fontWeight: 600, boxShadow: '0 4px 6px rgba(0,0,0,0.1)', zIndex: 1000 }}>{type === 'success' ? '✅ ' : '⚠️ '}{message}</div>;
-}
+export default function TransitionGenerator({ lang = 'en' }) {
+  const initialLanguage = LANGUAGE_NAMES[lang] ? lang : 'en';
+  const [language, setLanguage] = useState(initialLanguage);
+  const [category, setCategory] = useState('addition');
+  const [register, setRegister] = useState('all');
+  const [placement, setPlacement] = useState('all');
+  const [query, setQuery] = useState('');
+  const [saved, setSaved] = useState([]);
+  const [message, setMessage] = useState('');
+  const data = language === 'en' ? ENGLISH : localizedItems(language);
+  const categories = Object.keys(data);
+  const activeCategory = categories.includes(category) ? category : categories[0];
+  const results = useMemo(() => Object.entries(data).flatMap(([group, items]) => items.map((item) => ({ category: group, text: item[0], register: item[1], placement: item[2], pattern: item[3] }))).filter((item) => (query ? `${item.text} ${item.pattern}`.toLocaleLowerCase().includes(query.toLocaleLowerCase()) : item.category === activeCategory) && (register === 'all' || item.register === register) && (placement === 'all' || item.placement === placement)), [data, query, activeCategory, register, placement]);
 
-export default function TransitionGenerator({ t = {}, lang = 'en' }) {
-  const [activeCategory, setActiveCategory] = useState('addition');
-  const [toast, setToast] = useState(null);
+  const toggleSaved = (item) => setSaved((current) => current.some((savedItem) => savedItem.text === item.text && savedItem.category === item.category) ? current.filter((savedItem) => !(savedItem.text === item.text && savedItem.category === item.category)) : [...current, item]);
+  const copyOne = async (text) => { await navigator.clipboard.writeText(text); setMessage(`Copied “${text}”.`); };
+  const copySaved = async () => { if (saved.length) { await navigator.clipboard.writeText(saved.map(({ text }) => text).join(', ')); setMessage(`Copied ${saved.length} saved transitions.`); } };
+  const surprise = () => { if (results.length) { const item = results[Math.floor(Math.random() * results.length)]; toggleSaved(item); setMessage(`Added “${item.text}” to your shortlist.`); } };
+  const changeLanguage = (value) => { setLanguage(value); setCategory('addition'); setRegister('all'); setPlacement('all'); setQuery(''); setSaved([]); };
 
-  // Fallback to english if language data is missing
-  const currentData = transitionData[lang] || transitionData['en'];
-  const currentLabels = categoryLabels[lang] || categoryLabels['en'];
-
-  const copyWord = (word) => {
-    navigator.clipboard.writeText(word);
-    setToast({ message: `Copied "${word}"!`, type: 'success' });
-  };
-
-  const categories = [
-    { id: 'addition', icon: '➕' },
-    { id: 'contrast', icon: '⚖️' },
-    { id: 'cause', icon: '🎯' },
-    { id: 'sequence', icon: '⏳' },
-    { id: 'conclusion', icon: '🏁' }
-  ];
-
-  return (
-    <div className="tool-container-full">
-      <div className="tool-panel" style={{ border: '1px solid var(--border-light)', boxShadow: 'var(--shadow-card)' }}>
-        <div className="tool-panel-header" style={{ background: 'linear-gradient(90deg, #FDF4FF, var(--bg-white))', padding: '24px' }}>
-          <div className="tool-panel-title" style={{ color: '#9333EA', fontSize: '1.5rem', display: 'flex', alignItems: 'center', gap: '10px' }}>
-            <span>🔗</span> TRANSITION WORD GENERATOR
-          </div>
-          <p style={{ color: 'var(--text-secondary)', marginTop: '8px', fontWeight: 500 }}>
-            Find the perfect connecting words to improve the flow and readability of your writing. Click any word to copy it instantly.
-          </p>
-        </div>
-        
-        <div style={{ display: 'flex', flexWrap: 'wrap', borderBottom: '1px solid var(--border-light)' }}>
-          {categories.map((cat) => (
-            <button
-              key={cat.id}
-              onClick={() => setActiveCategory(cat.id)}
-              style={{
-                flex: '1 1 auto',
-                padding: '16px 20px',
-                background: activeCategory === cat.id ? '#F3E8FF' : 'transparent',
-                color: activeCategory === cat.id ? '#7E22CE' : 'var(--text-secondary)',
-                border: 'none',
-                borderBottom: activeCategory === cat.id ? '3px solid #9333EA' : '3px solid transparent',
-                fontWeight: activeCategory === cat.id ? 700 : 500,
-                fontSize: '1rem',
-                cursor: 'pointer',
-                transition: 'all 0.2s',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                gap: '8px',
-                whiteSpace: 'nowrap'
-              }}
-            >
-              <span>{cat.icon}</span> {currentLabels[cat.id]}
-            </button>
-          ))}
-        </div>
-
-        <div style={{ padding: '32px', background: 'var(--bg-section)' }}>
-          <h3 style={{ marginTop: 0, marginBottom: '24px', color: 'var(--text-main)', fontSize: '1.2rem', fontWeight: 700 }}>
-            {currentLabels[activeCategory]} Phrases
-          </h3>
-          
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))', gap: '16px' }}>
-            {currentData[activeCategory].map((word, index) => (
-              <button
-                key={index}
-                onClick={() => copyWord(word)}
-                style={{
-                  padding: '20px',
-                  background: '#fff',
-                  border: '1px solid var(--border-light)',
-                  borderRadius: '12px',
-                  fontSize: '1.1rem',
-                  fontWeight: 600,
-                  color: '#4B5563',
-                  cursor: 'pointer',
-                  transition: 'all 0.2s',
-                  boxShadow: '0 2px 4px rgba(0,0,0,0.02)',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'space-between',
-                  textAlign: 'left'
-                }}
-                onMouseOver={(e) => {
-                  e.currentTarget.style.borderColor = '#C084FC';
-                  e.currentTarget.style.transform = 'translateY(-2px)';
-                  e.currentTarget.style.boxShadow = '0 4px 12px rgba(147,51,234,0.1)';
-                  e.currentTarget.style.color = '#7E22CE';
-                }}
-                onMouseOut={(e) => {
-                  e.currentTarget.style.borderColor = 'var(--border-light)';
-                  e.currentTarget.style.transform = 'translateY(0)';
-                  e.currentTarget.style.boxShadow = '0 2px 4px rgba(0,0,0,0.02)';
-                  e.currentTarget.style.color = '#4B5563';
-                }}
-              >
-                {word}
-                <span style={{ fontSize: '1.2rem', opacity: 0.3 }}>📋</span>
-              </button>
-            ))}
-          </div>
-        </div>
-      </div>
-
-      {toast && <Toast message={toast.message} type={toast.type} onClose={() => setToast(null)} />}
-    </div>
-  );
+  return <div className="transition-tool">
+    <section className="finder" aria-labelledby="transition-title"><header><span>Relationship-first writing reference</span><h2 id="transition-title">Choose the logical connection before the linking word</h2><p>A transition signals addition, contrast, cause, sequence, or another relationship—it cannot create logic that is missing between ideas.</p></header>
+      <div className="controls"><label>Language<select value={language} onChange={(event) => changeLanguage(event.target.value)}>{Object.entries(LANGUAGE_NAMES).map(([code, name]) => <option key={code} value={code}>{name}</option>)}</select></label><label className="search">Search every category<input type="search" value={query} onChange={(event) => setQuery(event.target.value)} placeholder="e.g. however, example, result…" /></label><label>Register<select value={register} onChange={(event) => setRegister(event.target.value)}><option value="all">All</option><option value="formal">Formal</option><option value="neutral">Neutral</option></select></label><label>Placement<select value={placement} onChange={(event) => setPlacement(event.target.value)}><option value="all">All</option><option value="opener">Sentence opener</option><option value="within">Within sentence</option><option value="clause">Clause linker</option><option value="phrase">Before noun phrase</option><option value="flexible">Flexible</option></select></label></div>
+      {!query && <nav className="categories" aria-label="Transition relationship">{categories.map((value) => <button type="button" key={value} aria-pressed={activeCategory === value} onClick={() => setCategory(value)}><span>{ICONS[value]}</span>{LABELS[value] || value}</button>)}</nav>}
+      {language !== 'en' && <p className="language-note">This built-in {LANGUAGE_NAMES[language]} reference is a compact starting list, not a complete grammar guide. Register, placement, punctuation, and idiomatic use should be checked with a native-language authority.</p>}
+      <div className="result-head"><div><strong>{results.length}</strong> choices {query ? `matching “${query}”` : `for “${LABELS[activeCategory] || activeCategory}”`}</div><div><button type="button" onClick={surprise} disabled={!results.length}>Surprise me</button><button type="button" onClick={copySaved} disabled={!saved.length}>Copy shortlist ({saved.length})</button></div></div>
+      <div className="cards">{results.map((item) => { const isSaved = saved.some((savedItem) => savedItem.text === item.text && savedItem.category === item.category); return <article key={`${item.category}-${item.text}`}><div><span>{LABELS[item.category] || item.category}</span><button type="button" aria-pressed={isSaved} onClick={() => toggleSaved(item)} aria-label={`${isSaved ? 'Remove' : 'Add'} ${item.text} ${isSaved ? 'from' : 'to'} shortlist`}>{isSaved ? '★' : '☆'}</button></div><h3>{item.text}</h3><p>{item.pattern}</p><footer><span>{item.register} · {item.placement}</span><button type="button" onClick={() => copyOne(item.text)}>Copy</button></footer></article>; })}</div>
+      {!results.length && <p className="empty">No transitions match these filters. Clear search or broaden register and placement.</p>}
+      {message && <p className="message" role="status">{message}</p>}
+    </section>
+    <aside className="editor-check"><h3>Quick fit check</h3><ol><li>Name the real relationship between the two ideas.</li><li>Choose a transition with the right grammar and register.</li><li>Apply the shown punctuation pattern, then read both sentences aloud.</li><li>Remove the connector if the relationship is already clear or the word overstates the logic.</li></ol></aside>
+    <style jsx>{`
+      .transition-tool{display:grid;gap:22px}.finder{overflow:hidden;border:1px solid var(--border-light);border-radius:22px;background:var(--bg-white);box-shadow:var(--shadow-card)}header{padding:30px;background:linear-gradient(135deg,#3b1d5d,#713a87);color:white}header span{font-size:.72rem;font-weight:900;letter-spacing:.13em;text-transform:uppercase;color:#e9d5ff}header h2{margin:7px 0 8px;font-size:clamp(1.55rem,4vw,2.2rem)}header p{max-width:780px;margin:0;color:#f3e8ff}.controls{display:grid;grid-template-columns:160px 1fr 140px 170px;gap:10px;padding:18px}.controls label{display:grid;gap:5px;font-size:.72rem;font-weight:850}.controls input,.controls select{min-width:0;min-height:44px;padding:0 10px;border:1px solid var(--border-dark);border-radius:10px;background:var(--bg-white);color:var(--text-main);font:inherit}.controls input:focus,.controls select:focus{outline:3px solid #e9d5ff;border-color:#9333ea}.categories{display:flex;overflow-x:auto;border-block:1px solid var(--border-light);scrollbar-width:thin}.categories button{display:grid;justify-items:center;gap:5px;min-width:130px;min-height:76px;padding:10px;border:0;border-right:1px solid var(--border-light);background:var(--bg-white);color:var(--text-secondary);font-size:.75rem;font-weight:800;cursor:pointer}.categories button span{font-size:1.25rem}.categories button[aria-pressed=true]{background:#faf5ff;color:#7e22ce;box-shadow:inset 0 -3px #9333ea}.language-note,.message{margin:14px 18px 0;padding:11px 13px;border-radius:9px;background:#fffbeb;color:#713f12;font-size:.82rem}.result-head{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:18px}.result-head>div:last-child{display:flex;gap:7px}button{min-height:40px;padding:0 13px;border:1px solid var(--border-light);border-radius:9px;background:var(--bg-white);color:var(--text-main);font-weight:800;cursor:pointer}button:disabled{opacity:.45;cursor:not-allowed}.cards{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;padding:0 18px 20px}.cards article{display:grid;grid-template-rows:auto auto 1fr auto;gap:9px;padding:15px;border:1px solid var(--border-light);border-radius:14px;background:var(--bg-section)}.cards article>div{display:flex;justify-content:space-between;align-items:center}.cards article>div>span{font-size:.7rem;font-weight:850;color:#7e22ce}.cards article>div button{min-height:32px;padding:0 8px;font-size:1.2rem}.cards article>div button[aria-pressed=true]{color:#a16207;background:#fef9c3}.cards h3{margin:0;font-size:1.25rem}.cards p{margin:0;color:var(--text-secondary);font-size:.84rem;line-height:1.5}.cards footer{display:flex;justify-content:space-between;align-items:center;padding-top:9px;border-top:1px solid var(--border-light)}.cards footer span{color:var(--text-secondary);font-size:.7rem;text-transform:capitalize}.cards footer button{min-height:34px}.empty{margin:0;padding:30px;text-align:center;color:var(--text-secondary)}.message{margin-bottom:18px;background:#f3e8ff;color:#6b21a8}.editor-check{padding:19px;border:1px solid #c7d2fe;border-radius:15px;background:#eef2ff;color:#312e81}.editor-check h3{margin:0 0 10px}.editor-check ol{display:grid;gap:7px;margin:0;padding-left:20px}@media(max-width:900px){.controls{grid-template-columns:1fr 1fr}.controls .search{grid-column:1/-1;grid-row:1}.cards{grid-template-columns:1fr 1fr}}@media(max-width:620px){header{padding:20px}.controls{grid-template-columns:1fr;padding:14px}.controls .search{grid-column:auto;grid-row:auto}.result-head{align-items:stretch;flex-direction:column;padding:14px}.result-head>div:last-child{display:grid;grid-template-columns:1fr 1fr}.cards{grid-template-columns:1fr;padding:0 14px 16px}.language-note,.message{margin-inline:14px}}
+    `}</style>
+  </div>;
 }
