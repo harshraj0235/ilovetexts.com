@@ -29,6 +29,13 @@ test('sentence, reading and speaking calculations are deterministic', () => {
   assert.deepEqual(getSpeakingTime(Array(151).fill('word').join(' ')), { minutes: 1, seconds: 1, words: 151 });
 });
 
+test('reading and speaking estimates support safe custom speeds', () => {
+  const text = Array(300).fill('word').join(' ');
+  assert.deepEqual(getReadingTime(text, 300), { minutes: 1, seconds: 0, words: 300, wpm: 300 });
+  assert.deepEqual(getSpeakingTime(text, 100), { minutes: 3, seconds: 0, words: 300, wpm: 100 });
+  assert.deepEqual(getReadingTime(text, 0), { minutes: 6, seconds: 0, words: 300, wpm: 50 });
+});
+
 test('readability and phrase analysis fail softly for empty input', () => {
   assert.deepEqual(getReadabilityScore(''), { score: 0, grade: 'N/A', level: 'N/A' });
   assert.deepEqual(getKeywordDensity(''), { single: [], biGrams: [], triGrams: [] });

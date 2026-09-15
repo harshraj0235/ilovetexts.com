@@ -1,17 +1,7 @@
 'use client';
 
 // ═══════════════════════════════════════════════════════
-// Word Counter — Advanced SEO Text Analyzer
-// Target keywords:
-//   • "word counter online free" (~550K/mo)
-//   • "character counter" (~450K/mo)
-//   • "word count checker" (~110K/mo)
-//   • "online word counter with keyword density" (long-tail)
-//   • "readability score checker free" (long-tail)
-//   • "free word counter for essays" (long-tail)
-//   • "count words in text" (~90K/mo)
-// Beats competitors: no signup, bi+trigrams, sentiment,
-//   social limits, SEO score, goals, export — all free.
+// Word Counter — private, client-side text analyzer.
 // ═══════════════════════════════════════════════════════
 
 import React, { useState, useEffect, useRef, useCallback } from 'react';
@@ -120,6 +110,9 @@ export default function WordCounter({ t, lang }) {
   const [copied, setCopied] = useState(false);
   const [exported, setExported] = useState(false);
   const [fileError, setFileError] = useState('');
+  const [readingWpm, setReadingWpm] = useState(238);
+  const [speakingWpm, setSpeakingWpm] = useState(150);
+  const [selection, setSelection] = useState({ words: 0, chars: 0 });
   const textareaRef = useRef(null);
   const historyTimer = useRef(null);
 
@@ -153,15 +146,22 @@ export default function WordCounter({ t, lang }) {
         return;
       }
       setHeavyStats({
-        readingTime:  getReadingTime(text),
-        speakingTime: getSpeakingTime(text),
+        readingTime:  getReadingTime(text, readingWpm),
+        speakingTime: getSpeakingTime(text, speakingWpm),
         readability:  getReadabilityScore(text),
         density:      getKeywordDensity(text, 12),
         sentiment:    getSentimentAnalysis(text),
       });
     }, 120); // debounce heavy ops
     return () => clearTimeout(timer);
-  }, [text]);
+  }, [text, readingWpm, speakingWpm]);
+
+  const updateSelection = () => {
+    const input = textareaRef.current;
+    if (!input) return;
+    const selected = input.value.slice(input.selectionStart, input.selectionEnd);
+    setSelection({ words: countWords(selected), chars: countCharacters(selected) });
+  };
 
   // ─── Undo / Redo ──────────────────────────────────────
   const pushHistory = useCallback((val) => {
@@ -274,6 +274,7 @@ export default function WordCounter({ t, lang }) {
     setFileError('');
     setHistory(['']);
     setHistoryIndex(0);
+    setSelection({ words: 0, chars: 0 });
   };
 
   const handlePaste = async () => {
@@ -296,8 +297,8 @@ export default function WordCounter({ t, lang }) {
       `Syllables:       ${syllables}`,
       '',
       '── TIMING ──',
-      `Reading Time:  ${readingTime.minutes}m ${readingTime.seconds % 60}s  (@ 238 wpm)`,
-      `Speaking Time: ${speakingTime.minutes}m ${speakingTime.seconds}s  (@ 150 wpm)`,
+      `Reading Time:  ${readingTime.minutes}m ${readingTime.seconds % 60}s  (@ ${readingWpm} wpm)`,
+      `Speaking Time: ${speakingTime.minutes}m ${speakingTime.seconds}s  (@ ${speakingWpm} wpm)`,
       '',
       '── READABILITY ──',
       `Score: ${readability.score}/100  Level: ${readability.level}  Grade: ${readability.grade}`,
@@ -366,7 +367,7 @@ export default function WordCounter({ t, lang }) {
             ? `${heavyStats.readingTime.minutes}m`
             : `${heavyStats.readingTime.seconds}s`}
           label="Read Time"
-          sub="@ 238 wpm"
+          sub={`@ ${readingWpm} wpm`}
           icon="⏱️"
         />
         <StatCard
@@ -374,7 +375,7 @@ export default function WordCounter({ t, lang }) {
             ? `${heavyStats.speakingTime.minutes}m`
             : `${heavyStats.speakingTime.seconds}s`}
           label="Speak Time"
-          sub="@ 150 wpm"
+          sub={`@ ${speakingWpm} wpm`}
           icon="🎤"
         />
       </div>
@@ -385,7 +386,7 @@ export default function WordCounter({ t, lang }) {
         {/* Left: Editor */}
         <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
           {/* Toolbar */}
-          <div style={{
+          <div className="wc-toolbar" style={{
             display: 'flex', gap: '8px', flexWrap: 'wrap', alignItems: 'center',
             padding: '10px 14px',
             background: 'var(--bg-secondary)',
@@ -415,6 +416,9 @@ export default function WordCounter({ t, lang }) {
               ref={textareaRef}
               value={text}
               onChange={handleChange}
+              onSelect={updateSelection}
+              onKeyUp={updateSelection}
+              onMouseUp={updateSelection}
               placeholder="Type or paste your text here to begin analyzing...
 
 💡 Tips:
@@ -455,6 +459,12 @@ export default function WordCounter({ t, lang }) {
           {fileError && (
             <div role="alert" style={{ padding: '10px 12px', borderRadius: 'var(--radius-sm)', background: '#fef2f2', border: '1px solid #fecaca', color: '#991b1b', fontSize: '0.84rem' }}>
               {fileError}
+            </div>
+          )}
+
+          {(selection.words > 0 || selection.chars > 0) && (
+            <div role="status" aria-live="polite" style={{ alignSelf: 'flex-start', padding: '7px 11px', borderRadius: 'var(--radius-full)', background: 'rgba(139,92,246,0.1)', color: 'var(--text-primary)', fontSize: '0.8rem', fontWeight: 650 }}>
+              Selected: {selection.words.toLocaleString()} words · {selection.chars.toLocaleString()} characters
             </div>
           )}
 
@@ -588,6 +598,7 @@ export default function WordCounter({ t, lang }) {
                   ['Syllables',        syllables],
                   ['Reading time',     fmtTime(heavyStats.readingTime)],
                   ['Speaking time',    fmtTime(heavyStats.speakingTime)],
+                  ['Estimated pages',  words ? `${(words / 500).toFixed(1)} single-spaced · ${(words / 250).toFixed(1)} double-spaced` : '—'],
                   ['Unique words',     text ? new Set(text.toLowerCase().match(/\b\w+\b/g) || []).size : 0],
                 ].map(([k, v]) => (
                   <div key={k} style={{ display: 'flex', justifyContent: 'space-between', padding: '6px 0', borderBottom: '1px solid var(--border-light)', fontSize: '0.84rem' }}>
@@ -808,16 +819,26 @@ export default function WordCounter({ t, lang }) {
               {/* Writing velocity estimate */}
               <div style={cardStyle()}>
                 <SectionTitle>Time Estimate</SectionTitle>
+                <div style={{ display: 'grid', gap: '12px', marginBottom: '16px' }}>
+                  <label style={{ fontSize: '0.78rem', color: 'var(--text-secondary)', fontWeight: 600 }}>
+                    Reading speed: <strong>{readingWpm} WPM</strong>
+                    <input aria-label="Reading speed in words per minute" type="range" min="100" max="500" step="10" value={readingWpm} onChange={e => setReadingWpm(Number(e.target.value))} style={{ width: '100%', marginTop: '6px', accentColor: 'var(--accent)' }} />
+                  </label>
+                  <label style={{ fontSize: '0.78rem', color: 'var(--text-secondary)', fontWeight: 600 }}>
+                    Speaking speed: <strong>{speakingWpm} WPM</strong>
+                    <input aria-label="Speaking speed in words per minute" type="range" min="80" max="220" step="5" value={speakingWpm} onChange={e => setSpeakingWpm(Number(e.target.value))} style={{ width: '100%', marginTop: '6px', accentColor: 'var(--accent)' }} />
+                  </label>
+                </div>
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', fontSize: '0.83rem' }}>
                   {[
-                    { label: '📖 Reading (238 wpm)',  val: fmtTime(heavyStats.readingTime) },
-                    { label: '🎤 Speaking (150 wpm)', val: fmtTime(heavyStats.speakingTime) },
+                    { label: `📖 Reading (${readingWpm} wpm)`,  val: fmtTime(heavyStats.readingTime) },
+                    { label: `🎤 Speaking (${speakingWpm} wpm)`, val: fmtTime(heavyStats.speakingTime) },
                     { label: '⌨️ Avg typing time',    val: words > 0 ? `~${Math.ceil(words / 40)}m` : '—' },
                     { label: '✍️ Avg writing time',   val: words > 0 ? `~${Math.ceil(words / 25)}m` : '—' },
-                  ].map(([l, v]) => typeof l === 'string' && (
-                    <div key={l} style={{ display: 'flex', justifyContent: 'space-between' }}>
-                      <span style={{ color: 'var(--text-secondary)' }}>{l}</span>
-                      <span style={{ fontWeight: 600 }}>{v}</span>
+                  ].map(({ label, val }) => (
+                    <div key={label} style={{ display: 'flex', justifyContent: 'space-between' }}>
+                      <span style={{ color: 'var(--text-secondary)' }}>{label}</span>
+                      <span style={{ fontWeight: 600 }}>{val}</span>
                     </div>
                   ))}
                 </div>
@@ -831,6 +852,10 @@ export default function WordCounter({ t, lang }) {
       <style dangerouslySetInnerHTML={{ __html: `
         @media (max-width: 900px) {
           .wc-layout { grid-template-columns: 1fr !important; }
+        }
+        @media (max-width: 560px) {
+          .wc-toolbar > button, .wc-toolbar > label { flex: 1 1 calc(50% - 8px); justify-content: center; margin-left: 0 !important; min-height: 42px; }
+          .wc-layout textarea { min-height: 360px !important; padding: 16px !important; }
         }
         textarea::placeholder { color: var(--text-tertiary); }
         textarea:focus { border-color: var(--highlight) !important; box-shadow: 0 0 0 3px rgba(0,112,243,0.08); }

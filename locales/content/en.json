@@ -933,16 +933,44 @@
       "relatedSearches": []
     },
     "word-counting-tools": {
-      "name": "Word Counter",
-      "description": "Count words and characters in text",
-      "metaTitle": "Word Counter — Count Words, Characters, Sentences & Paragraphs Free",
-      "metaDescription": "Count words, characters, sentences, and paragraphs in your text instantly. Free online word counter with reading time and keyword density. No signup needed.",
-      "keywords": "word counter online free, count words in text online, word counter with character count, how many words in my text, word count tool for essays free, online word counter for students, word counter with sentence count, free word counter no signup, count words characters sentences paragraphs, word counter for blog posts free",
-      "whatIs": "The Word Counter is the most comprehensive free online text analysis tool available. It instantly counts words, characters (with and without spaces), sentences, paragraphs, and lines in your text as you type. Whether you are a student checking essay word limits, a blogger optimizing article length, a copywriter meeting character requirements for ads, or a social media manager staying within post limits — this tool gives you all the metrics you need in real-time with zero delays.",
-      "whyChoose": [],
-      "useCases": [],
-      "faqs": [],
-      "relatedSearches": []
+      "name": "Word Counter & Text Analyzer",
+      "description": "Count words, characters, sentences, paragraphs, and selected text while checking reading time, readability, repeated phrases, and writing goals.",
+      "metaTitle": "Free Word Counter & Character Counter Online",
+      "metaDescription": "Count words and characters instantly. Check sentences, paragraphs, reading time, readability, repeated phrases, goals, and selected text—free and private.",
+      "keywords": "word counter, free word counter online, character counter, count words in text, word count checker for essay, word counter with reading time, word counter with keyword frequency",
+      "updatedAt": "2026-09-15",
+      "whatIs": "This free word counter measures the length and structure of text as you type. It counts Unicode words, visible characters, characters without spaces, sentences, paragraphs, lines, syllables, and unique words. Select part of the draft to measure only that passage, set an essay or custom writing goal, adjust reading and speaking speed, or review frequently repeated words and phrases. The Flesch Reading Ease result is a writing aid for English prose—not a quality score or a Google ranking signal. Processing happens in your browser, including supported text and PDF imports, so your draft is not sent to ilovetexts.com.",
+      "howToSteps": [
+        { "title": "Paste, type, or open your draft", "description": "Enter text in the editor or open a TXT, Markdown, CSV, JSON, HTML, XML, or text-based PDF file. Live totals update without a submit button." },
+        { "title": "Read the counts that matter", "description": "Use the summary for words and characters, then open Overview, Keywords, Social, or Goals for detailed analysis. Highlight a passage to see its selected word and character count." },
+        { "title": "Set a goal or export the report", "description": "Choose an essay, blog, social, or custom target. Adjust reading and speaking speeds when timing a script, then copy the text or download a plain-text analysis report." }
+      ],
+      "whyChoose": [
+        { "icon": "⚡", "title": "Useful counts while you write", "description": "Words, grapheme-aware characters, sentences, paragraphs, lines, and timing update together, including a count for selected text." },
+        { "icon": "🎯", "title": "Goals and timing you can control", "description": "Track a preset or custom word and character target, and change words-per-minute settings for your reader or speaker." },
+        { "icon": "🔒", "title": "Private browser processing", "description": "Your pasted draft is analyzed on the current device. No account is required, and the tool does not submit the text to a server." }
+      ],
+      "useCases": [
+        "Check an essay, assignment, cover letter, or application against a word limit.",
+        "Measure a blog post and estimate its reading time for a chosen audience speed.",
+        "Time a speech, podcast, presentation, or video script using a custom speaking pace.",
+        "Check a caption or metadata draft against common character limits.",
+        "Find repeated single words and two- or three-word phrases during editing."
+      ],
+      "seoSections": [
+        { "heading": "Word counter for essays and assignments", "content": "Paste an essay to compare its current word count with a preset or custom target. The character, sentence, paragraph, and estimated-page totals help you review structure, but they cannot decide whether an argument is complete. If an institution specifies that Microsoft Word, Google Docs, footnotes, captions, or references must be counted in a particular way, follow that stated rule." },
+        { "heading": "Word counter with reading and speaking time", "content": "Timing depends on the audience and delivery. A technical article may be read more slowly than a familiar story, while a presentation with pauses can take longer than its raw script estimate. Set a reading speed from 100 to 500 WPM or a speaking speed from 80 to 220 WPM to model the situation instead of relying on one universal average." },
+        { "heading": "Keyword frequency without a fake SEO score", "content": "The Keywords view lists repeated words plus two- and three-word phrases, which can reveal accidental repetition or a missing topic. Frequency is descriptive, not a recommendation to repeat a phrase. Search engines do not publish a preferred density or article length; clear, original, people-first writing is more useful than filling text to meet an arbitrary percentage." }
+      ],
+      "faqs": [
+        { "question": "How does this word counter decide what is a word?", "answer": "It uses the browser's Unicode-aware word segmenter when available, so words from many writing systems count correctly. Its fallback recognizes Unicode letters and numbers and keeps internal apostrophes or hyphens together. Different editors can apply slightly different rules to contractions, hyphenated terms, and symbols." },
+        { "question": "Can I count only one paragraph or selection?", "answer": "Yes. Highlight any passage inside the editor. A selection badge reports the words and characters in that passage while the main cards continue to show totals for the complete document." },
+        { "question": "Can I calculate reading or speaking time at my own speed?", "answer": "Yes. Open Goals and move the reading-speed or speaking-speed control. Reading can be set from 100 to 500 words per minute and speaking from 80 to 220 words per minute." },
+        { "question": "Does a longer article or a particular keyword density rank better on Google?", "answer": "No fixed word count or keyword-density percentage guarantees rankings. The repeated-word report helps with editing, but it is not an SEO score. Write complete, original content that satisfies the reader instead of repeating phrases to reach a target." },
+        { "question": "Are uploaded documents stored or sent to a server?", "answer": "No. Supported text files and text-based PDFs are read in your browser. Scanned image-only PDFs need OCR and cannot be counted here. Files larger than 10 MB are rejected." },
+        { "question": "Why can my count differ from Microsoft Word or Google Docs?", "answer": "Word-count rules are not universal. Editors may treat hyphenated words, contractions, URLs, emoji, and numbers differently. Use one counter consistently when a school, publisher, or platform does not mandate a specific application." }
+      ],
+      "relatedSearches": ["free word counter online", "character counter with spaces", "word count checker for essays", "count selected words online", "reading time calculator with custom WPM", "speaking time calculator for scripts", "word frequency and phrase counter", "paragraph and sentence counter"]
     },
     "character-counter": {
       "name": "Character Counter",

@@ -257,3 +257,20 @@ test('transition finder teaches logical function, placement, and punctuation', (
   assert.doesNotMatch(JSON.stringify(content), /perfect linking words/i);
   assert.doesNotMatch(JSON.stringify(content), /Instantly upgrade choppy writing/i);
 });
+
+test('word counter measures selections and uses adjustable timing without fake SEO promises', () => {
+  const component = read('components/tools/WordCounter.jsx');
+  const engine = read('lib/text-processors.js');
+  const content = JSON.parse(read('locales/content/en.json')).tools['word-counting-tools'];
+
+  assert.match(component, /Selected:/);
+  assert.match(component, /Reading speed:/);
+  assert.match(component, /Speaking speed:/);
+  assert.match(component, /Estimated pages/);
+  assert.match(engine, /normalizeWordsPerMinute/);
+  assert.ok(content.seoSections.length >= 3);
+  assert.match(content.metaTitle, /Word Counter & Character Counter/);
+  assert.match(JSON.stringify(content), /not an SEO score/i);
+  assert.doesNotMatch(JSON.stringify(content), /most comprehensive/i);
+  assert.doesNotMatch(JSON.stringify(content), /optimal keyword/i);
+});
