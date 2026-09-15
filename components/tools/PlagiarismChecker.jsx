@@ -1,334 +1,63 @@
 'use client';
 
-import React, { useState, useMemo } from 'react';
+import { useMemo, useState } from 'react';
+import { compareTexts } from '@/lib/text-similarity';
 
-export default function PlagiarismChecker({ t, lang }) {
+const LIMIT = 100000;
+const percent = (value) => `${Math.round(value * 100)}%`;
+
+export default function PlagiarismChecker() {
   const [sourceText, setSourceText] = useState('');
-  const [suspectText, setSuspectText] = useState('');
-  const [results, setResults] = useState(null);
-  const [isChecking, setIsChecking] = useState(false);
+  const [draftText, setDraftText] = useState('');
+  const [phraseSize, setPhraseSize] = useState(5);
+  const [caseSensitive, setCaseSensitive] = useState(false);
+  const [ignoreCommonWords, setIgnoreCommonWords] = useState(false);
+  const [report, setReport] = useState(null);
+  const [message, setMessage] = useState('');
+  const [filter, setFilter] = useState('all');
 
-  // Helper to extract sentences
-  const extractSentences = (text) => {
-    if (!text) return [];
-    return text.match(/[^.!?]+[.!?]+/g) || [text];
+  const visibleSentences = useMemo(() => !report ? [] : report.sentenceMatches.filter(({ score }) => filter === 'all' || (filter === 'strong' ? score >= 0.5 : score > 0)), [report, filter]);
+  const runComparison = () => {
+    if (!sourceText.trim() || !draftText.trim()) { setMessage('Paste both the known source and the draft you want to compare.'); return; }
+    setReport(compareTexts(sourceText, draftText, { phraseSize, caseSensitive, ignoreCommonWords }));
+    setMessage('Comparison complete. Review the matching passages—the percentages are overlap measures, not a plagiarism verdict.');
+    requestAnimationFrame(() => document.getElementById('comparison-report')?.scrollIntoView({ behavior: 'smooth', block: 'start' }));
   };
-
-  // Helper to extract words, lowercased, no punctuation
-  const extractWords = (text) => {
-    return text.toLowerCase().replace(/[^\w\s]|_/g, "").split(/\s+/).filter(w => w.length > 0);
-  };
-
-  // N-gram generator
-  const getNGrams = (words, n = 3) => {
-    const ngrams = [];
-    for (let i = 0; i <= words.length - n; i++) {
-      ngrams.push(words.slice(i, i + n).join(' '));
-    }
-    return ngrams;
-  };
-
-  const handleCheck = () => {
-    setIsChecking(true);
-    // Simulate slight delay for heavy processing illusion and UI feedback
-    setTimeout(() => {
-      if (!sourceText.trim() || !suspectText.trim()) {
-        setResults({ score: 0, highlights: [], error: 'Please enter both texts.' });
-        setIsChecking(false);
-        return;
-      }
-
-      const sourceSentences = extractSentences(sourceText);
-      const suspectSentences = extractSentences(suspectText);
-      const sourceWords = extractWords(sourceText);
-      const suspectWords = extractWords(suspectText);
-
-      if (sourceWords.length === 0 || suspectWords.length === 0) {
-        setResults({ score: 0, highlights: [], error: 'Texts must contain valid words.' });
-        setIsChecking(false);
-        return;
-      }
-
-      // 1. Overall Word Similarity (Jaccard Index)
-      const sourceSet = new Set(sourceWords);
-      const suspectSet = new Set(suspectWords);
-      const intersection = new Set([...sourceSet].filter(x => suspectSet.has(x)));
-      const union = new Set([...sourceSet, ...suspectSet]);
-      const wordScore = union.size === 0 ? 0 : (intersection.size / union.size) * 100;
-
-      // 2. Exact Phrase Match (3-grams)
-      const source3Grams = new Set(getNGrams(sourceWords, 3));
-      const suspect3Grams = getNGrams(suspectWords, 3);
-      let matchCount = 0;
-      suspect3Grams.forEach(gram => {
-        if (source3Grams.has(gram)) matchCount++;
-      });
-      const phraseScore = suspect3Grams.length === 0 ? 0 : (matchCount / suspect3Grams.length) * 100;
-
-      // Final Blended Score (Heavy weight on phrase matching for plagiarism)
-      let finalScore = Math.round((wordScore * 0.3) + (phraseScore * 0.7));
-      if (finalScore > 100) finalScore = 100;
-      if (sourceText === suspectText) finalScore = 100;
-
-      // 3. Sentence-level highlighting for the Suspect text
-      const highlights = suspectSentences.map(sentence => {
-        const sWords = extractWords(sentence);
-        const s3Grams = getNGrams(sWords, 3);
-        let sMatchCount = 0;
-        
-        s3Grams.forEach(gram => {
-          if (source3Grams.has(gram)) sMatchCount++;
-        });
-
-        const sScore = s3Grams.length === 0 ? 
-          (intersection.has(sWords[0]) ? 100 : 0) : 
-          (sMatchCount / s3Grams.length) * 100;
-
-        let status = 'unique'; // 0-20%
-        if (sScore > 80) status = 'identical'; // 80-100%
-        else if (sScore > 40) status = 'paraphrased'; // 40-80%
-
-        return { text: sentence, status, score: Math.round(sScore) };
-      });
-
-      setResults({
-        score: finalScore,
-        highlights,
-        metrics: {
-          identicalPhrases: matchCount,
-          totalWords: suspectWords.length,
-          commonWords: intersection.size
-        }
-      });
-      setIsChecking(false);
-    }, 600);
-  };
-
+  const swapTexts = () => { setSourceText(draftText); setDraftText(sourceText); setReport(null); };
+  const clearAll = () => { setSourceText(''); setDraftText(''); setReport(null); setMessage(''); };
   const loadSample = () => {
-    setSourceText("The mitochondria is the powerhouse of the cell. It is responsible for cellular respiration and energy production. Without it, complex life could not exist. This is a very important concept in biology and is widely taught in schools.");
-    setSuspectText("The mitochondria is known as the powerhouse of the cell. It handles cellular respiration and energy production. Complex life needs it to survive. Students learn this concept all the time.");
+    setSourceText('Urban trees cool streets by shading pavement and releasing water vapor. They can also reduce stormwater runoff and provide habitat for birds and insects.');
+    setDraftText('Urban trees cool streets by shading pavement and releasing water vapor. They also provide habitat, while their roots and surrounding soil can reduce stormwater runoff.');
+    setReport(null); setMessage('Example loaded. Select Compare texts to inspect the overlap.');
+  };
+  const reportText = () => {
+    if (!report) return '';
+    return [`DIRECT TEXT OVERLAP REPORT`, `Phrase size: ${report.phraseSize} words`, `Draft phrase coverage: ${percent(report.metrics.draftPhraseCoverage)}`, `Phrase-set Jaccard: ${percent(report.metrics.phraseJaccard)}`, `Vocabulary Jaccard: ${percent(report.metrics.vocabularyJaccard)}`, `Word-frequency cosine: ${percent(report.metrics.cosine)}`, '', 'These metrics compare only the two supplied texts. They do not search the web, detect ideas, or determine plagiarism.', '', ...report.sentenceMatches.map(({ text, score, source }, index) => [`${index + 1}. Draft overlap: ${percent(score)}`, `Draft: ${text.trim()}`, source ? `Closest source sentence: ${source}` : 'No exact phrase match', ''].join('\n'))].join('\n');
+  };
+  const copyReport = async () => { if (report) { await navigator.clipboard.writeText(reportText()); setMessage('Report copied.'); } };
+  const downloadReport = () => {
+    if (!report) return; const blob = new Blob([reportText()], { type: 'text/plain;charset=utf-8' }); const url = URL.createObjectURL(blob);
+    const link = document.createElement('a'); link.href = url; link.download = 'text-overlap-report.txt'; link.click(); URL.revokeObjectURL(url);
   };
 
-  const clearForm = () => {
-    setSourceText('');
-    setSuspectText('');
-    setResults(null);
-  };
+  return <div className="comparison-tool">
+    <section className="compare-card" aria-labelledby="comparison-title"><header><span>Local two-text analysis</span><h2 id="comparison-title">Inspect wording overlap—not a plagiarism verdict</h2><p>Compare one known source with one draft. Nothing is uploaded, but this tool does not search websites, publications, or student repositories and cannot identify authorship or intent.</p></header>
+      <div className="toolbar"><button type="button" onClick={loadSample}>Load example</button><button type="button" onClick={swapTexts}>Swap sides</button><button type="button" onClick={clearAll}>Clear</button></div>
+      <div className="editors"><label><strong>Known source</strong><small>{sourceText.length.toLocaleString()} / {LIMIT.toLocaleString()} characters</small><textarea value={sourceText} onChange={(event) => { setSourceText(event.target.value.slice(0, LIMIT)); setReport(null); }} placeholder="Paste the original or reference passage…" /></label><label><strong>Draft to compare</strong><small>{draftText.length.toLocaleString()} / {LIMIT.toLocaleString()} characters</small><textarea value={draftText} onChange={(event) => { setDraftText(event.target.value.slice(0, LIMIT)); setReport(null); }} placeholder="Paste the draft or second passage…" /></label></div>
+      <div className="settings"><label>Exact phrase length<select value={phraseSize} onChange={(event) => { setPhraseSize(Number(event.target.value)); setReport(null); }}>{[3,4,5,6,7,8].map((size) => <option key={size} value={size}>{size} words</option>)}</select></label><label className="check"><input type="checkbox" checked={caseSensitive} onChange={(event) => { setCaseSensitive(event.target.checked); setReport(null); }} /> Case-sensitive phrases</label><label className="check"><input type="checkbox" checked={ignoreCommonWords} onChange={(event) => { setIgnoreCommonWords(event.target.checked); setReport(null); }} /> Ignore common words in vocabulary metrics</label><button type="button" className="primary" onClick={runComparison}>Compare texts</button></div>
+      {message && <p className="message" role="status">{message}</p>}
+    </section>
 
-  // Circular Progress Component
-  const CircularProgress = ({ percentage }) => {
-    const radius = 60;
-    const circumference = 2 * Math.PI * radius;
-    const strokeDashoffset = circumference - (percentage / 100) * circumference;
-    
-    let color = '#10b981'; // Green (Safe)
-    if (percentage > 70) color = '#ef4444'; // Red (High Plagiarism)
-    else if (percentage > 30) color = '#f59e0b'; // Yellow (Moderate)
+    {report && <section id="comparison-report" className="report"><div className="report-head"><div><span>Transparent similarity report</span><h3>Four measures, four different questions</h3></div><div><button type="button" onClick={copyReport}>Copy report</button><button type="button" onClick={downloadReport}>Download .txt</button></div></div>
+      <div className="metrics"><article><strong>{percent(report.metrics.draftPhraseCoverage)}</strong><h4>Draft phrase coverage</h4><p>Share of the draft’s {report.phraseSize}-word sequences also found in the source.</p></article><article><strong>{percent(report.metrics.phraseJaccard)}</strong><h4>Phrase-set Jaccard</h4><p>Shared exact phrases divided by all unique phrases across both texts.</p></article><article><strong>{percent(report.metrics.vocabularyJaccard)}</strong><h4>Vocabulary Jaccard</h4><p>Shared unique words divided by all unique words in both texts.</p></article><article><strong>{percent(report.metrics.cosine)}</strong><h4>Word-frequency cosine</h4><p>Similarity of word-frequency profiles; word order is not considered.</p></article></div>
+      <div className="counts"><span><strong>{report.counts.sourceWords}</strong> source words</span><span><strong>{report.counts.draftWords}</strong> draft words</span><span><strong>{report.counts.matchingPhrases}</strong> matching draft phrases</span><span><strong>{report.counts.draftPhrases}</strong> draft phrases checked</span></div>
+      <div className="evidence-head"><div><h3>Draft sentence evidence</h3><p>Each sentence is compared with its closest source sentence using exact phrases.</p></div><label>Show<select value={filter} onChange={(event) => setFilter(event.target.value)}><option value="all">All sentences</option><option value="matched">Any overlap</option><option value="strong">50%+ overlap</option></select></label></div>
+      <div className="sentences">{visibleSentences.length ? visibleSentences.map(({ text, score, source }, index) => <article key={index} className={score >= .5 ? 'strong' : score > 0 ? 'partial' : ''}><div><strong>{percent(score)} exact-phrase coverage</strong><span>{score >= .5 ? 'Review closely' : score > 0 ? 'Some shared wording' : 'No exact phrase match'}</span></div><p>{text.trim()}</p>{source && <details><summary>Closest source sentence</summary><blockquote>{source}</blockquote></details>}</article>) : <p className="empty">No sentences match this filter.</p>}</div>
+      <aside><strong>Interpret carefully:</strong> shared quotations, references, technical phrases, and assignment wording can raise overlap legitimately. Reworded ideas may score low. Only a human with sources, citation context, and applicable policy can evaluate plagiarism.</aside>
+    </section>}
 
-    return (
-      <div style={{ position: 'relative', width: '160px', height: '160px', margin: '0 auto' }}>
-        <svg width="160" height="160" viewBox="0 0 160 160" style={{ transform: 'rotate(-90deg)' }}>
-          <circle 
-            cx="80" cy="80" r={radius} 
-            fill="transparent" 
-            stroke="var(--bg-secondary)" 
-            strokeWidth="12" 
-          />
-          <circle 
-            cx="80" cy="80" r={radius} 
-            fill="transparent" 
-            stroke={color} 
-            strokeWidth="12"
-            strokeDasharray={circumference}
-            strokeDashoffset={strokeDashoffset}
-            strokeLinecap="round"
-            style={{ transition: 'stroke-dashoffset 1s ease-out' }}
-          />
-        </svg>
-        <div style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
-          <span style={{ fontSize: '2rem', fontWeight: 800, color: 'var(--text-primary)', lineHeight: 1 }}>{percentage}%</span>
-          <span style={{ fontSize: '0.8rem', color: 'var(--text-secondary)', marginTop: '4px', fontWeight: 500 }}>Match</span>
-        </div>
-      </div>
-    );
-  };
-
-  return (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: '32px', maxWidth: '1400px', margin: '0 auto', width: '100%' }}>
-      
-      {/* Top Controls */}
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '16px' }}>
-        <p style={{ color: 'var(--text-secondary)', margin: 0, maxWidth: '700px', lineHeight: 1.6 }}>
-          Compare a suspect text against an original source. We use advanced n-gram and Jaccard similarity algorithms running entirely in your browser to detect identical copying and heavy paraphrasing.
-        </p>
-        <div className="tool-actions" style={{ marginTop: 0 }}>
-          <button className="btn btn-secondary" onClick={loadSample}>📝 Load Sample</button>
-          <button className="btn btn-secondary" onClick={clearForm}>🗑️ Clear</button>
-          <button className="btn btn-primary" onClick={handleCheck} disabled={isChecking}>
-            {isChecking ? '⏳ Analyzing...' : '🕵️ Check Plagiarism'}
-          </button>
-        </div>
-      </div>
-
-      <div className="plagiarism-grid" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '24px' }}>
-        {/* Source Text */}
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
-          <h3 style={{ fontSize: '1.1rem', fontWeight: 600, display: 'flex', alignItems: 'center', gap: '8px' }}>
-            <span style={{ display: 'inline-block', width: '12px', height: '12px', borderRadius: '50%', background: '#3b82f6' }}></span>
-            Original Source Text
-          </h3>
-          <textarea
-            className="tool-textarea"
-            value={sourceText}
-            onChange={(e) => setSourceText(e.target.value)}
-            placeholder="Paste the original source material here..."
-            style={{ 
-              height: '350px', 
-              fontSize: '1rem', 
-              lineHeight: 1.6, 
-              padding: '20px',
-              border: '1px solid var(--border-light)',
-              borderRadius: 'var(--radius-md)',
-              background: 'var(--bg-main)',
-              resize: 'vertical',
-            }}
-          />
-        </div>
-
-        {/* Suspect Text */}
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
-          <h3 style={{ fontSize: '1.1rem', fontWeight: 600, display: 'flex', alignItems: 'center', gap: '8px' }}>
-            <span style={{ display: 'inline-block', width: '12px', height: '12px', borderRadius: '50%', background: '#f59e0b' }}></span>
-            Suspect Text to Check
-          </h3>
-          <textarea
-            className="tool-textarea"
-            value={suspectText}
-            onChange={(e) => setSuspectText(e.target.value)}
-            placeholder="Paste the student essay or suspected copied text here..."
-            style={{ 
-              height: '350px', 
-              fontSize: '1rem', 
-              lineHeight: 1.6, 
-              padding: '20px',
-              border: '1px solid var(--border-light)',
-              borderRadius: 'var(--radius-md)',
-              background: 'var(--bg-main)',
-              resize: 'vertical',
-            }}
-          />
-        </div>
-      </div>
-
-      {/* Results Dashboard */}
-      {results && !results.error && (
-        <div style={{ display: 'grid', gridTemplateColumns: '300px 1fr', gap: '24px', marginTop: '16px' }} className="plagiarism-results-grid">
-          
-          {/* Score Card */}
-          <div className="trust-card" style={{ padding: '32px 24px', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '24px' }}>
-            <h3 style={{ fontSize: '1.2rem', fontWeight: 700, margin: 0 }}>Similarity Report</h3>
-            <CircularProgress percentage={results.score} />
-            
-            <div style={{ width: '100%', marginTop: '16px', display: 'flex', flexDirection: 'column', gap: '12px' }}>
-              <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.9rem' }}>
-                <span style={{ color: 'var(--text-secondary)' }}>Identical Phrases</span>
-                <span style={{ fontWeight: 600 }}>{results.metrics.identicalPhrases}</span>
-              </div>
-              <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.9rem' }}>
-                <span style={{ color: 'var(--text-secondary)' }}>Common Words</span>
-                <span style={{ fontWeight: 600 }}>{results.metrics.commonWords}</span>
-              </div>
-              <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.9rem' }}>
-                <span style={{ color: 'var(--text-secondary)' }}>Total Words (Suspect)</span>
-                <span style={{ fontWeight: 600 }}>{results.metrics.totalWords}</span>
-              </div>
-            </div>
-          </div>
-
-          {/* Detailed Highlight View */}
-          <div className="trust-card" style={{ padding: '24px' }}>
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px', borderBottom: '1px solid var(--border-light)', paddingBottom: '16px', flexWrap: 'wrap', gap: '16px' }}>
-              <h3 style={{ fontSize: '1.2rem', fontWeight: 700, margin: 0 }}>Detailed Sentence Analysis</h3>
-              <div style={{ display: 'flex', gap: '16px', fontSize: '0.85rem', flexWrap: 'wrap' }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-                  <span style={{ display: 'inline-block', width: '12px', height: '12px', borderRadius: '3px', background: '#fecaca', border: '1px solid #ef4444' }}></span>
-                  <span>Identical (&gt;80%)</span>
-                </div>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-                  <span style={{ display: 'inline-block', width: '12px', height: '12px', borderRadius: '3px', background: '#fde68a', border: '1px solid #f59e0b' }}></span>
-                  <span>Paraphrased (40-80%)</span>
-                </div>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-                  <span style={{ display: 'inline-block', width: '12px', height: '12px', borderRadius: '3px', background: 'transparent', border: '1px solid var(--border-strong)' }}></span>
-                  <span>Unique</span>
-                </div>
-              </div>
-            </div>
-            
-            <div style={{ 
-              fontSize: '1.05rem', 
-              lineHeight: 1.8, 
-              color: 'var(--text-primary)',
-              padding: '24px',
-              background: 'var(--bg-secondary)',
-              borderRadius: 'var(--radius-md)',
-              border: '1px solid var(--border-light)'
-            }}>
-              {results.highlights.map((h, i) => {
-                let bg = 'transparent';
-                let color = 'inherit';
-                let fw = 'normal';
-                
-                if (h.status === 'identical') {
-                  bg = '#fecaca'; // light red
-                  color = '#991b1b';
-                  fw = '500';
-                } else if (h.status === 'paraphrased') {
-                  bg = '#fde68a'; // light yellow
-                  color = '#92400e';
-                }
-                
-                return (
-                  <span 
-                    key={i} 
-                    title={`Similarity Score: ${h.score}%`}
-                    style={{ 
-                      backgroundColor: bg, 
-                      color: color,
-                      fontWeight: fw,
-                      borderRadius: '4px',
-                      padding: '2px 4px',
-                      marginRight: '4px',
-                      transition: 'background 0.2s',
-                      cursor: 'help',
-                      display: 'inline'
-                    }}
-                  >
-                    {h.text}
-                  </span>
-                );
-              })}
-            </div>
-            <p style={{ fontSize: '0.85rem', color: 'var(--text-tertiary)', marginTop: '16px', fontStyle: 'italic' }}>
-              Hover over highlighted sentences to see their exact similarity score.
-            </p>
-          </div>
-        </div>
-      )}
-
-      {/* Error Message */}
-      {results && results.error && (
-        <div style={{ padding: '16px', background: '#fef2f2', border: '1px solid #fca5a5', borderRadius: '8px', color: '#991b1b', textAlign: 'center', fontWeight: 500 }}>
-          {results.error}
-        </div>
-      )}
-      
-      <style dangerouslySetInnerHTML={{__html: `
-        @media (max-width: 900px) {
-          .plagiarism-grid { grid-template-columns: 1fr !important; }
-          .plagiarism-results-grid { grid-template-columns: 1fr !important; }
-        }
-      `}} />
-    </div>
-  );
+    <style jsx>{`
+      .comparison-tool{display:grid;gap:28px}.compare-card,.report{overflow:hidden;border:1px solid var(--border-light);border-radius:22px;background:var(--bg-white);box-shadow:var(--shadow-card)}header{padding:30px;background:linear-gradient(135deg,#20243a,#41345f);color:white}header span,.report-head span{font-size:.72rem;font-weight:900;letter-spacing:.13em;text-transform:uppercase;color:#d8b4fe}header h2{margin:7px 0 8px;font-size:clamp(1.55rem,4vw,2.2rem)}header p{max-width:800px;margin:0;color:#ede9fe}.toolbar{display:flex;justify-content:flex-end;gap:8px;padding:12px 20px;border-bottom:1px solid var(--border-light)}button{min-height:40px;padding:0 14px;border:1px solid var(--border-light);border-radius:9px;background:var(--bg-white);color:var(--text-main);font-weight:800;cursor:pointer}.editors{display:grid;grid-template-columns:1fr 1fr;gap:16px;padding:20px}.editors label{display:grid;grid-template-columns:1fr auto;gap:7px}.editors small{color:var(--text-secondary)}textarea,select{border:1px solid var(--border-dark);border-radius:11px;background:var(--bg-white);color:var(--text-main);font:inherit}.editors textarea{grid-column:1/-1;min-height:300px;padding:14px;line-height:1.6;resize:vertical}.settings{display:flex;align-items:end;gap:14px;padding:17px 20px;background:var(--bg-section);border-top:1px solid var(--border-light)}.settings>label:first-child,.evidence-head label{display:grid;gap:5px;font-size:.75rem;font-weight:850}.settings select,.evidence-head select{min-height:42px;padding:0 10px}.check{display:flex;align-items:center;gap:8px;min-height:42px;font-size:.82rem;font-weight:750}.check input{width:19px;height:19px}.settings .primary{margin-left:auto;min-height:46px;border:0;background:#553c78;color:white}.message{margin:0 20px 20px;padding:11px 13px;border-radius:9px;background:#f3e8ff;color:#581c87}.report{scroll-margin-top:24px;padding-bottom:20px}.report-head{display:flex;justify-content:space-between;align-items:end;gap:16px;padding:22px}.report-head span{color:#7e22ce}.report-head h3{margin:5px 0 0}.report-head>div:last-child{display:flex;gap:7px}.metrics{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;padding:0 22px 20px}.metrics article{padding:16px;border:1px solid var(--border-light);border-radius:13px;background:var(--bg-section)}.metrics article>strong{font-size:1.75rem;color:#6b21a8}.metrics h4{margin:6px 0}.metrics p{margin:0;color:var(--text-secondary);font-size:.78rem;line-height:1.45}.counts{display:flex;flex-wrap:wrap;gap:8px;padding:13px 22px;background:#faf5ff;border-block:1px solid #ead7f7}.counts span{padding:7px 10px;border-radius:999px;background:white;font-size:.8rem}.evidence-head{display:flex;justify-content:space-between;align-items:end;gap:15px;padding:22px 22px 12px}.evidence-head h3,.evidence-head p{margin:0}.evidence-head p{margin-top:4px;color:var(--text-secondary);font-size:.83rem}.sentences{display:grid;gap:10px;padding:0 22px 18px}.sentences article{padding:14px;border:1px solid var(--border-light);border-left:4px solid #94a3b8;border-radius:11px}.sentences article.partial{border-left-color:#d97706;background:#fffbeb}.sentences article.strong{border-left-color:#dc2626;background:#fff1f2}.sentences article>div{display:flex;justify-content:space-between;gap:10px;font-size:.78rem}.sentences article>div span{color:var(--text-secondary)}.sentences p{line-height:1.55}.sentences details{font-size:.82rem}.sentences blockquote{margin:9px 0 0;padding:10px;border-left:3px solid #c4b5fd;background:white}.empty{color:var(--text-secondary)}.report aside{margin:0 22px;padding:14px;border:1px solid #bfdbfe;border-radius:11px;background:#eff6ff;color:#1e3a8a;font-size:.84rem}@media(max-width:900px){.metrics{grid-template-columns:1fr 1fr}.settings{align-items:stretch;flex-wrap:wrap}.settings .primary{width:100%;margin:0}}@media(max-width:700px){header{padding:20px}.editors{grid-template-columns:1fr;padding:16px}.editors textarea{min-height:230px}.toolbar{justify-content:stretch}.toolbar button{flex:1;padding:0 6px}.metrics{grid-template-columns:1fr;padding-inline:16px}.report-head,.evidence-head{align-items:stretch;flex-direction:column;padding-inline:16px}.report-head>div:last-child{width:100%}.report-head button{flex:1}.sentences{padding-inline:16px}.report aside{margin-inline:16px}.settings{display:grid;padding:16px}.sentences article>div{flex-direction:column}}
+    `}</style>
+  </div>;
 }

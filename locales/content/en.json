@@ -241,62 +241,73 @@
       ]
     },
     "plagiarism-checker": {
-      "name": "Plagiarism Checker (Text Comparison)",
-      "description": "Compare two texts for similarity and detect duplicated content.",
-      "metaTitle": "Free Plagiarism Checker & Text Similarity Tool — Compare Texts Online",
-      "metaDescription": "Instantly compare two texts for duplicate content with our free plagiarism checker. Perfect for students, teachers, and SEO writers to check text similarity. 100% free, private, and no signup.",
-      "keywords": "free plagiarism checker compare two texts, text similarity checker online, check duplicate content, compare texts for plagiarism, free text comparator, find matching sentences in text",
-      "whatIs": "Our free Plagiarism Checker and Text Similarity Tool allows you to paste two different texts and instantly compare them for duplicated words, sentences, and overall similarity. Unlike traditional plagiarism checkers that scan the entire web (which often costs money), this tool specializes in **direct text-to-text comparison**. This is extremely useful to check if a student copied from a specific source, if an article has been spun, or if two versions of a document have significant overlaps. All analysis happens directly in your browser, guaranteeing absolute privacy.",
+      "name": "Text Similarity Checker — Compare Two Texts Privately",
+      "description": "Compare a known source and draft using exact phrase coverage, phrase and vocabulary Jaccard scores, cosine similarity, and sentence-level evidence.",
+      "metaTitle": "Text Similarity Checker — Compare Two Texts Privately",
+      "metaDescription": "Compare two texts locally with exact 3–8-word phrase coverage, Jaccard and cosine metrics, sentence evidence and a downloadable overlap report.",
+      "keywords": "compare two texts for similarity free, direct text to text plagiarism comparison, exact phrase overlap checker, text similarity checker Jaccard cosine, compare source and draft online, sentence similarity checker with highlights, duplicate wording detector private, n gram text comparison tool, vocabulary overlap calculator, downloadable text similarity report, plagiarism checker for two documents only",
+      "whatIs": "This private Text Similarity Checker compares one known source with one draft entirely in your browser. It reports directional exact-phrase coverage, phrase-set Jaccard similarity, vocabulary Jaccard similarity, word-frequency cosine similarity, and the closest source sentence for each draft sentence. You can adjust exact phrase length from three to eight words, use case-sensitive matching, filter sentence evidence, and export a plain-text report. It does not search the web, publications, institutional repositories, or other documents and cannot determine plagiarism, authorship, paraphrased meaning, citation quality, or intent.",
+      "seoSections": [
+        { "title": "Compare two known texts for exact phrase overlap", "paragraphs": ["Paste the reference passage as the known source and the second passage as the draft. Exact phrase coverage measures how many of the draft's word sequences also occur in the source, making the direction of the comparison explicit rather than hiding it inside a single blended score.", "Choose shorter phrases for a more sensitive scan or longer phrases for stronger evidence of sustained identical wording. Common expressions can match by coincidence, so inspect the sentence evidence and surrounding context instead of judging from a percentage alone."] },
+        { "title": "Understand Jaccard and cosine text similarity", "paragraphs": ["Phrase-set Jaccard compares the set of shared exact sequences with the union of sequences in both texts. Vocabulary Jaccard performs the same calculation on unique words. Word-frequency cosine compares how often words occur but ignores their order.", "Each metric answers a different mechanical question. High vocabulary similarity can occur when two original texts discuss the same technical subject, while a lightly edited copied passage can preserve ideas yet avoid longer exact phrases. None of these scores identifies plagiarism by itself."] },
+        { "title": "Review sentence matches before making a decision", "paragraphs": ["The evidence view pairs each draft sentence with its closest source sentence and reports exact-phrase coverage. Filter for any overlap or stronger matches, then check quotations, citations, required terminology, assignment wording, and legitimately reused material.", "This is a two-document comparison, not a database search. A human reviewer must evaluate attribution, permissions, policy, and intent. A low result cannot prove originality, and a high result does not automatically prove misconduct."] }
+      ],
       "whyChoose": [
         {
-          "title": "Instant Similarity Score",
-          "description": "Get a precise percentage of how much the two texts overlap."
+          "title": "Four Transparent Metrics",
+          "description": "Inspect exact phrase coverage, two Jaccard measures, and word-frequency cosine separately."
         },
         {
-          "title": "Highlighted Duplicates",
-          "description": "Easily spot the exact phrases that are identical."
+          "title": "Sentence-Level Evidence",
+          "description": "Review each draft sentence beside its closest source sentence instead of trusting one score."
         },
         {
-          "title": "100% Private & Secure",
-          "description": "Your text is NEVER uploaded. Processing happens in your browser."
+          "title": "Local Browser Processing",
+          "description": "The two texts are compared in this browser and are not sent to an external service."
         },
         {
-          "title": "No Limits",
-          "description": "Compare texts of any length without paywalls or accounts."
+          "title": "Adjustable and Exportable",
+          "description": "Choose a 3–8-word phrase length, filter evidence, and download the report as text."
         }
       ],
       "useCases": [
-        "Teachers verifying if an essay was copied from a known source.",
-        "SEO writers checking if their rewritten article is unique.",
-        "Students ensuring their paraphrases are sufficiently distinct from the source material."
+        "Reviewing wording overlap between a known source and a draft while checking citation context.",
+        "Comparing two versions of an article, policy, assignment, or document.",
+        "Finding sustained exact phrases that require quotation, attribution, or revision."
       ],
       "faqs": [
         {
-          "question": "How does this free plagiarism checker work?",
-          "answer": "It uses client-side text comparison algorithms to find overlapping words and exact sentence matches between the two texts you provide. It calculates a similarity percentage based on these matches."
+          "question": "Does this tool determine plagiarism?",
+          "answer": "No. It measures textual overlap between two supplied passages. Plagiarism requires human evaluation of sources, attribution, permissions, context, intent, and the applicable policy."
         },
         {
-          "question": "Does this tool search the internet for copied content?",
-          "answer": "No, this is a direct text-to-text comparator. It is designed to compare two known documents against each other, which ensures it remains 100% free and lightning fast."
+          "question": "Does it search the internet or academic databases?",
+          "answer": "No. It compares only the known source and draft pasted into the page. It cannot find matches in websites, publications, student repositories, or documents you did not provide."
         },
         {
-          "question": "Is my text saved or stored anywhere?",
-          "answer": "Absolutely not. All text processing is done locally in your browser. No data is sent to a backend server, making it perfectly safe for confidential documents."
+          "question": "What is exact phrase coverage?",
+          "answer": "It is the share of the draft's word sequences, at your chosen phrase length, that also occur in the known source. It is directional and will change if you swap the source and draft."
         },
         {
-          "question": "What does the similarity percentage mean?",
-          "answer": "The percentage represents the proportion of shared vocabulary and exact phrases. A score above 30% usually indicates heavy paraphrasing or direct copying."
+          "question": "What is the difference between Jaccard and cosine similarity?",
+          "answer": "Jaccard compares shared unique items with the union of items in both texts. Cosine compares word-frequency profiles. Cosine ignores word order, while phrase Jaccard retains local word order through n-grams."
         },
         {
-          "question": "Is there a word limit?",
-          "answer": "There are no hard limits. You can compare thousands of words at once."
+          "question": "Can it detect paraphrased ideas?",
+          "answer": "Not reliably. The tool compares words and exact word sequences, not meaning. A rewritten idea may score low even when attribution is still required."
+        },
+        {
+          "question": "Are my texts uploaded or stored?",
+          "answer": "No external comparison request is made. Analysis happens locally in the browser, with an explicit limit of 100,000 characters per text to keep the page responsive."
         }
       ],
       "relatedSearches": [
-        "free plagiarism checker compare two texts",
-        "text similarity checker online",
-        "check duplicate content",
-        "compare two essays for plagiarism"
+        "compare two texts for similarity",
+        "exact phrase overlap checker",
+        "Jaccard cosine text similarity",
+        "compare source and draft online",
+        "sentence similarity evidence report",
+        "private two document plagiarism comparison"
       ]
     },
     "essay-outliner": {

@@ -206,3 +206,21 @@ test('essay outliner provides editable evidence planning and exact word budgets'
   assert.match(content.metaDescription, /300–10,000-word/);
   assert.doesNotMatch(JSON.stringify(content), /perfectly structured/i);
 });
+
+test('direct text comparison separates transparent metrics from plagiarism judgment', () => {
+  const component = read('components/tools/PlagiarismChecker.jsx');
+  const engine = read('lib/text-similarity.js');
+  const content = JSON.parse(read('locales/content/en.json')).tools['plagiarism-checker'];
+
+  assert.match(engine, /jaccardScore/);
+  assert.match(engine, /cosineScore/);
+  assert.match(engine, /draftPhraseCoverage/);
+  assert.match(component, /phraseSize/);
+  assert.match(component, /downloadReport/);
+  assert.match(component, /not a plagiarism verdict/i);
+  assert.ok(content.seoSections.length >= 3);
+  assert.match(content.metaDescription, /3–8-word phrase coverage/);
+  assert.doesNotMatch(JSON.stringify(content), /score above 30%/i);
+  assert.doesNotMatch(JSON.stringify(content), /detect heavy paraphrasing/i);
+  assert.doesNotMatch(JSON.stringify(content), /any length/i);
+});
