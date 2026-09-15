@@ -38,7 +38,7 @@ export default function Footer({ lang, allToolsCount }) {
           <div>
             <h4 style={{ marginBottom: '16px', color: 'var(--text-primary)' }}>More Categories</h4>
             <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'flex', flexDirection: 'column', gap: '12px' }}>
-              {CATEGORIES.slice(5, 10).map(cat => (
+              {CATEGORIES.slice(5).map(cat => (
                 <li key={cat.id}>
                   <Link href={lp(`/${cat.id}`)} style={{ color: 'var(--text-secondary)', textDecoration: 'none', fontSize: '0.9rem' }} className="hover-text-primary">
                     {cat.name}

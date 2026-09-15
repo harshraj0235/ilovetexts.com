@@ -8,16 +8,20 @@ import WorkspaceSwitch from '@/components/WorkspaceSwitch';
 export async function generateMetadata({ params }) {
   const { lang } = await params;
   const t = getTranslations(lang);
+  const isEn = lang === 'en';
 
   return {
     title: t.siteTitle,
     description: t.siteDescription,
     keywords: t.siteKeywords,
-    alternates: generateAlternates(lang, '/'),
+    alternates: {
+      canonical: isEn ? SITE.url : undefined,
+      languages: generateAlternates(lang, '/').languages,
+    },
     openGraph: {
       title: t.siteTitle,
       description: t.siteDescription,
-      url: lang === 'en' ? SITE.url : `${SITE.url}/${lang}`,
+      url: isEn ? SITE.url : `${SITE.url}/${lang}`,
       siteName: SITE.name,
       type: 'website',
       locale: { en: 'en_US', hi: 'hi_IN', pt: 'pt_BR', es: 'es_ES', de: 'de_DE', id: 'id_ID' }[lang] || 'en_US',
@@ -38,10 +42,10 @@ export async function generateMetadata({ params }) {
       creator: '@ilovetexts',
     },
     robots: {
-      index: true,
+      index: isEn,
       follow: true,
       googleBot: {
-        index: true,
+        index: isEn,
         follow: true,
         'max-snippet': -1,
         'max-image-preview': 'large',

@@ -61,6 +61,8 @@ const CONTENT_LAST_UPDATED = '2026-09-15'; // Update this when you update conten
 function getAlternatesXml(path, locales = LANG_CODES) {
   let xml = `  <xhtml:link rel="alternate" hreflang="x-default" href="${buildCanonical('en', path)}" />\n`;
   locales.forEach(code => {
+    xml += `  <xhtml:link rel="alternate" hreflang="${code}" href="${buildCanonical(code, path)}" />\n`;
+  });
   return xml;
 }
 
