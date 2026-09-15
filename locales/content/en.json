@@ -802,15 +802,43 @@
     },
     "uppercase": {
       "name": "Uppercase Converter",
-      "description": "Convert text to UPPERCASE",
-      "metaTitle": "Convert Text to UPPERCASE Online — Free Instant Capitalizer Tool",
-      "metaDescription": "Instantly convert any text to UPPERCASE letters online for free. Capitalize entire paragraphs, sentences, or words in one click. No signup, 100% private browser-based tool.",
-      "keywords": "convert text to uppercase online free, how to capitalize all letters in text, change lowercase to uppercase without word, uppercase text converter copy paste, make all letters capital online tool, bulk text capitalizer free no signup, capitalize entire paragraph online instantly, uppercase converter for social media posts, convert small letters to capital letters online, free online caps lock text converter",
-      "whatIs": "The Uppercase Converter is a powerful free online tool that transforms any text into ALL CAPITAL LETTERS instantly. Whether you need to capitalize a single word, a full sentence, or multiple paragraphs — simply paste your text and get the UPPERCASE version in real-time. This tool is perfect for creating attention-grabbing headlines, formatting titles for documents, preparing data for databases that require uppercase entries, or creating emphasis in social media posts. Unlike desktop software like Microsoft Word, our converter works directly in your browser with zero downloads, zero signups, and complete privacy — your text never leaves your device.",
-      "whyChoose": [],
-      "useCases": [],
-      "faqs": [],
-      "relatedSearches": []
+      "description": "Change lowercase or mixed-case text to capital letters while preserving layout and optionally protecting URLs and email addresses.",
+      "metaTitle": "Uppercase Converter — Convert Text to Capital Letters",
+      "metaDescription": "Convert text to UPPERCASE online. Preserve spacing, line breaks, URLs, and emails; choose locale-aware rules; copy or download privately. Free, no signup.",
+      "keywords": "uppercase converter, convert text to uppercase, capital letters converter, lowercase to uppercase online, all caps converter, uppercase text copy and paste",
+      "updatedAt": "2026-09-15",
+      "whatIs": "An uppercase converter changes every cased letter in a passage to its capital form while retaining punctuation, numbers, spaces, and line breaks. This editor adds controls that matter for real documents: choose locale-aware rules for languages such as Turkish or Azerbaijani, keep case-sensitive URL paths unchanged, and preserve email addresses when required. It reports how many characters changed and lets you copy or download the result. Conversion occurs in your browser and accepts up to 250,000 characters. Uppercase formatting does not correct spelling, grammar, or proper-name capitalization, so review the result before publishing.",
+      "howToSteps": [
+        { "title": "Paste, type, or open text", "description": "Enter lowercase or mixed-case content, paste from the clipboard, or open a UTF-8 text file smaller than 1 MB. The uppercase preview updates immediately." },
+        { "title": "Choose language and protection options", "description": "Use Automatic for normal conversion, or select a locale when its alphabet has special case rules. Leave URL and email protection enabled if those tokens must remain unchanged." },
+        { "title": "Review, copy, or download", "description": "Compare the source with the result and check the changed-character summary. Copy the uppercase text or download it as a UTF-8 TXT file." }
+      ],
+      "whyChoose": [
+        { "icon": "🌍", "title": "Locale-aware capital letters", "description": "Select Turkish, Azerbaijani, Lithuanian, German, or English casing instead of assuming every language follows the same letter rules." },
+        { "icon": "🔗", "title": "Protect case-sensitive tokens", "description": "Optionally preserve URLs and email addresses while capitalizing the surrounding prose, labels, or headings." },
+        { "icon": "🔒", "title": "Private large-text workflow", "description": "Process up to 250,000 characters locally, retain line breaks, and export the result without creating an account." }
+      ],
+      "useCases": [
+        "Convert spreadsheet labels, product codes, or database values to consistent capital letters.",
+        "Prepare an all-caps heading, sign, slide label, or short design element.",
+        "Repair mixed-case copied text without changing its paragraph layout.",
+        "Capitalize surrounding instructions while keeping case-sensitive links unchanged.",
+        "Convert multilingual text using locale-specific uppercase rules."
+      ],
+      "seoSections": [
+        { "heading": "Lowercase to uppercase converter that keeps formatting", "content": "The output retains spaces, tabs, punctuation, numbers, and line breaks while converting letters with uppercase equivalents. That makes it suitable for a single word, a multi-line list, or a long document. The result may contain a different number of Unicode characters in rare language-specific conversions, which is why the tool reports the produced character count instead of assuming a one-to-one replacement." },
+        { "heading": "Convert text to capital letters without breaking links", "content": "Capitalizing a complete paragraph can also capitalize a URL path, and paths can be case-sensitive on some servers. Email casing is usually treated flexibly in practice, but its local part is technically not safe to rewrite in every system. Keep the protection options enabled when the exact token must survive, or disable them when you deliberately need every letter converted." },
+        { "heading": "UPPERCASE is not the same as capitalization correction", "content": "All caps can work for short labels and visual emphasis, but it does not identify proper nouns or restore sentence case. It also cannot infer whether a brand intentionally uses mixed letters. For ordinary paragraphs, uppercase may be harder to scan; use the Sentence Case, Title Case, or Toggle Case tool when that better matches the writing task." }
+      ],
+      "faqs": [
+        { "question": "How do I convert lowercase text to uppercase online?", "answer": "Paste or type the text in the Original Text editor. The capital-letter result appears beside it automatically. Review it, then choose Copy or Download." },
+        { "question": "Will uppercase conversion remove punctuation or line breaks?", "answer": "No. It changes letters with uppercase forms while preserving punctuation, digits, whitespace, and paragraph breaks. Locale-aware Unicode conversion can occasionally expand or transform a character according to that language's rules." },
+        { "question": "Why does Turkish uppercase produce İ instead of I?", "answer": "Turkish and Azerbaijani distinguish dotted i from dotless ı. Select the appropriate locale so i becomes İ and ı becomes I. Automatic or English casing may produce a different result." },
+        { "question": "Why should I keep URLs or email addresses unchanged?", "answer": "Some URL paths are case-sensitive, so changing their letters may lead to a different or missing page. Email domains are case-insensitive, but the part before @ is not guaranteed to be. Protection keeps the complete detected token untouched." },
+        { "question": "Does the tool upload or store my text?", "answer": "No. Conversion, counting, copy, and text-file generation run in your browser. The editor does not send the entered content to ilovetexts.com." },
+        { "question": "Is uppercase suitable for a complete article or email?", "answer": "Usually not. Large blocks of all-caps text can feel like shouting and can be harder to scan. Uppercase is most useful for short labels, identifiers, and deliberate emphasis; use Sentence Case for normal prose." }
+      ],
+      "relatedSearches": ["convert lowercase to uppercase online", "capital letters converter copy and paste", "all caps text generator", "uppercase converter preserving line breaks", "Turkish uppercase converter", "convert text to uppercase without changing URLs", "bulk uppercase text converter", "make all letters capital online"]
     },
     "lowercase": {
       "name": "Lowercase Converter",

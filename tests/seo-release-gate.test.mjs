@@ -274,3 +274,21 @@ test('word counter measures selections and uses adjustable timing without fake S
   assert.doesNotMatch(JSON.stringify(content), /most comprehensive/i);
   assert.doesNotMatch(JSON.stringify(content), /optimal keyword/i);
 });
+
+test('uppercase converter protects tokens and explains locale-aware casing', () => {
+  const component = read('components/tools/UppercaseConverter.jsx');
+  const engine = read('lib/case-conversion.js');
+  const route = read('app/[lang]/[category]/[tool]/page.js');
+  const content = JSON.parse(read('locales/content/en.json')).tools.uppercase;
+
+  assert.match(route, /<UppercaseConverter lang=\{lang\}/);
+  assert.match(component, /Keep URLs unchanged/);
+  assert.match(component, /Uppercase language rules/);
+  assert.match(component, /const LIMIT = 250000/);
+  assert.match(engine, /toLocaleUpperCase/);
+  assert.match(engine, /preserveEmails/);
+  assert.ok(content.seoSections.length >= 3);
+  assert.match(content.metaTitle, /Uppercase Converter/);
+  assert.doesNotMatch(JSON.stringify(content), /powerful free online tool/i);
+  assert.doesNotMatch(JSON.stringify(content), /zero delays/i);
+});

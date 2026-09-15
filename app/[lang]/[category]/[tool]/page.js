@@ -27,6 +27,7 @@ import VoiceConverter from '@/components/tools/VoiceConverter';
 import TransitionGenerator from '@/components/tools/TransitionGenerator';
 import TextCompare from '@/components/tools/TextCompare';
 import WordCounter from '@/components/tools/WordCounter';
+import UppercaseConverter from '@/components/tools/UppercaseConverter';
 import JsonFormatter from '@/components/tools/JsonFormatter';
 import PiiRedactor from '@/components/tools/PiiRedactor';
 import PromptMinifier from '@/components/tools/PromptMinifier';
@@ -308,6 +309,8 @@ export default async function ToolPage({ params }) {
           <TextCompare t={t} lang={lang} />
         ) : toolData.slug === 'word-counter' ? (
           <WordCounter t={t} lang={lang} />
+        ) : toolData.slug === 'uppercase' ? (
+          <UppercaseConverter lang={lang} />
         ) : toolData.slug === 'json-formatter' ? (
           <JsonFormatter t={t} lang={lang} />
         ) : toolData.slug === 'extract-emails' ? (
