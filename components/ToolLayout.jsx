@@ -71,6 +71,13 @@ const PUBLISHED_BLOG_SLUGS = new Set([
   'text-to-speech-online-free-guide',
   'sha256-hash-generator-guide',
   'remove-line-breaks-from-pdf-text',
+  'regex-tester-online-guide',
+  'word-counter-online-complete-guide',
+  'best-free-sejda-alternative',
+  'best-free-grammarly-alternative',
+  'best-free-ilovepdf-alternative',
+  'best-free-chatgpt-text-humanizer',
+  'best-free-smallpdf-alternative',
 ]);
 
 // Category-level fallback links

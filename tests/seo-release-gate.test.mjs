@@ -309,3 +309,21 @@ test('lowercase converter uses the shared locale-aware studio with dedicated gui
   assert.match(JSON.stringify(content), /dotted-I/i);
   assert.doesNotMatch(JSON.stringify(content), /fixes it in seconds/i);
 });
+
+test('title case converter compares styles and protects intentional capitalization', () => {
+  const component = read('components/tools/TitleCaseConverter.jsx');
+  const engine = read('lib/case-conversion.js');
+  const route = read('app/[lang]/[category]/[tool]/page.js');
+  const content = JSON.parse(read('locales/content/en.json')).tools['title-case'];
+
+  assert.match(route, /<TitleCaseConverter lang=\{lang\}/);
+  assert.match(component, /Style comparison/);
+  assert.match(component, /Preserve ALL-CAPS acronyms/);
+  assert.match(component, /Protected words/);
+  assert.match(engine, /convertToTitleCase/);
+  assert.match(engine, /capitalizeNext/);
+  assert.ok(content.seoSections.length >= 3);
+  assert.match(content.metaTitle, /AP, APA, Chicago & MLA/);
+  assert.match(JSON.stringify(content), /rule-based approximations/i);
+  assert.doesNotMatch(JSON.stringify(content), /perfectly formatted/i);
+});

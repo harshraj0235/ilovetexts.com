@@ -10,8 +10,6 @@ export default function HtmlDirectory({ categories, lang }) {
         paddingBottom: '100px',
         borderTop: '1px solid var(--border-light)',
         paddingTop: '64px',
-        contentVisibility: 'auto',
-        containIntrinsicSize: '0 800px',
       }}
     >
       <h2 style={{ marginBottom: '32px', textAlign: 'center', fontSize: '2rem' }}>Browse All Tools</h2>

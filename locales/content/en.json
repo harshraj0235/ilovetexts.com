@@ -882,15 +882,43 @@
     },
     "title-case": {
       "name": "Title Case Converter",
-      "description": "Convert text to Title Case",
-      "metaTitle": "Title Case Converter — Capitalize First Letter of Each Word Online Free",
-      "metaDescription": "Convert text to Title Case instantly — capitalize the first letter of every word. Perfect for headlines, titles, and headings. Free online tool, no signup required.",
-      "keywords": "title case converter online free, capitalize first letter of each word online, convert text to title case for headlines, headline capitalization tool free, title case generator for blog posts, AP style title case converter online, capitalize words in sentence online tool, proper case converter for titles free, how to capitalize title correctly online, title capitalization rules checker free",
-      "whatIs": "The Title Case Converter capitalizes the first letter of every word in your text, following standard title capitalization rules. Minor words like \"a\", \"an\", \"the\", \"and\", \"but\", \"or\", \"for\" are kept lowercase (unless they start the sentence), following AP/Chicago style guidelines. This is the go-to tool for bloggers, journalists, content writers, and students who need perfectly formatted headlines, article titles, email subject lines, presentation headings, and book titles.",
-      "whyChoose": [],
-      "useCases": [],
-      "faqs": [],
-      "relatedSearches": []
+      "description": "Capitalize headlines using selectable general, AP-style, APA-style, Chicago-style, or MLA-style rules and preserve acronyms or brand names.",
+      "metaTitle": "Title Case Converter — AP, APA, Chicago & MLA",
+      "metaDescription": "Convert headlines to title case and compare AP, APA, Chicago, and MLA-style results. Preserve acronyms and brand names. Free, private, no signup.",
+      "keywords": "title case converter, AP title case converter, APA title case converter, Chicago title capitalization, MLA title case, headline capitalization checker",
+      "updatedAt": "2026-09-15",
+      "whatIs": "A title case converter capitalizes the major words in a headline or title while leaving selected articles, conjunctions, and prepositions lowercase. The first and last word—and the first word after a subtitle colon—are capitalized. Because AP, APA, Chicago, and MLA do not apply identical rules, this tool shows selectable presets and a four-style comparison. It can process one title per line, retain ALL-CAPS abbreviations such as NASA, preserve mixed-case brands such as iPhone, and enforce a custom list such as OpenAI. These are transparent rule-based approximations: software cannot always determine whether a word is a preposition, adverb, particle, or part of a proper name, so difficult titles still need editorial review.",
+      "howToSteps": [
+        { "title": "Enter one or more titles", "description": "Paste, type, or open a text file. Put each headline on a separate line; blank lines and the original list structure are retained." },
+        { "title": "Choose a capitalization preset", "description": "Select General, AP-style, Chicago-style, MLA-style, or APA-style. Decide whether existing acronyms and mixed-case brands should remain untouched, and add custom protected spellings." },
+        { "title": "Compare and verify", "description": "Review the main result and the four style previews. Copy the chosen title or download the complete list, then check names, phrasal verbs, hyphenated compounds, and publication-specific exceptions." }
+      ],
+      "whyChoose": [
+        { "icon": "⇄", "title": "Compare styles instead of guessing", "description": "View AP-, APA-, Chicago-, and MLA-style outputs together and select the rule set requested by your publisher, newsroom, or course." },
+        { "icon": "NASA", "title": "Keep intentional capitalization", "description": "Preserve acronyms and mixed-case words, then add up to 50 protected spellings for product names, people, or organizations." },
+        { "icon": "☰", "title": "Format a complete title list", "description": "Treat every line as a separate title, retain spacing, import a UTF-8 text file, and export the results without uploading the draft." }
+      ],
+      "useCases": [
+        "Format article headlines and blog post titles using a consistent house style.",
+        "Compare capitalization for an APA or MLA paper title before submission.",
+        "Prepare book, chapter, report, presentation, and video titles in batches.",
+        "Protect company names such as OpenAI and product spellings such as iPhone.",
+        "Check how a subtitle after a colon looks across multiple title-case conventions."
+      ],
+      "seoSections": [
+        { "heading": "AP, APA, Chicago, and MLA title case compared", "content": "All four presets capitalize the first and last word and major words, but their treatment of prepositions and short words differs. The AP-style preset lowercases recognized prepositions of three letters or fewer. The APA-style preset similarly uses a four-letter threshold for recognized minor words. The Chicago- and MLA-style presets lowercase the tool's broader list of prepositions regardless of length. Consult the current official manual when a required style or unusual construction matters." },
+        { "heading": "Title capitalization with acronyms and brand names", "content": "A naive converter can turn NASA into Nasa or iPhone into Iphone. Keep the preservation controls enabled to retain existing ALL-CAPS abbreviations and intentional internal capitals. The protected-word field handles spellings the converter cannot infer, including OpenAI, YouTube, eBay, surnames, and project names. Protection matches without case sensitivity but outputs the exact spelling entered." },
+        { "heading": "Why automated headline capitalization needs review", "content": "The same word can serve different grammatical roles. In “Turn the Radio On,” on is an adverbial particle, not simply a preposition, and should be treated accordingly by some guides. Hyphenated compounds, Latin species names, URLs, and titles in languages other than English add further exceptions. This tool applies documented simplified patterns and exposes comparisons; it does not claim to replace a copy editor or a licensed style manual." }
+      ],
+      "faqs": [
+        { "question": "What words are lowercase in title case?", "answer": "Most systems lowercase articles such as a, an, and the; coordinating conjunctions such as and, but, and or; the infinitive marker to; and some prepositions. The exact preposition rule differs among style guides. First and last words remain capitalized." },
+        { "question": "What is the difference between title case and capitalizing every word?", "answer": "Capitalizing every word produces The Art Of Writing A Clear Headline. Title case applies minor-word rules and commonly produces The Art of Writing a Clear Headline. The correct result depends on the chosen editorial style and how each word functions." },
+        { "question": "Does this implement the complete AP, APA, Chicago, or MLA manual?", "answer": "No. The presets implement common mechanical capitalization patterns and are labelled style-like approximations. Complete manuals include grammatical and publication-specific exceptions that a short rule-based tool cannot reliably infer. Verify high-stakes or ambiguous titles against the current official guide." },
+        { "question": "Can it preserve NASA, iPhone, eBay, or OpenAI?", "answer": "Yes. Keep acronym and mixed-case preservation enabled. Add any required spelling to Protected words, separated by commas, and the converter will output that spelling exactly when it encounters the word." },
+        { "question": "Can I convert multiple headlines at once?", "answer": "Yes. Put one title on each line. Every non-empty line gets its own first- and last-word treatment, while blank lines remain in place. The download contains the entire converted list." },
+        { "question": "Is my draft uploaded?", "answer": "No. Title conversion, comparisons, statistics, clipboard actions, and text-file export run in this browser. The tool does not autosave or transmit your titles to ilovetexts.com." }
+      ],
+      "relatedSearches": ["AP title case converter", "APA 7 title capitalization converter", "Chicago title case checker", "MLA headline capitalization tool", "capitalize title with acronyms", "title case converter preserving brand names", "batch headline capitalization converter", "title case style comparison"]
     },
     "sentence-case": {
       "name": "Sentence Case Converter",

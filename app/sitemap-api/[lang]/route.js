@@ -39,20 +39,28 @@ const EN_BLOG_SLUGS = [
   { slug: 'muft-typing-speed-test-hindi', date: '2026-10-17', lang: 'hi' },
   { slug: 'pdf-compress-kaise-kare', date: '2026-10-18', lang: 'hi' },
   { slug: 'shabd-ginti-online-muft', date: '2026-10-19', lang: 'hi' },
+  { slug: 'convertir-texto-mayusculas-minusculas', date: '2026-10-20', lang: 'es' },
+  { slug: 'como-juntar-pdf-gratis', date: '2026-10-16', lang: 'pt' },
+  { slug: 'melhor-alternativa-grammarly-gratis', date: '2026-10-17', lang: 'pt' },
+  { slug: 'comprimir-pdf-gratis-online-pt', date: '2026-10-18', lang: 'pt' },
+  { slug: 'contador-palavras-online-gratis', date: '2026-10-19', lang: 'pt' },
+  { slug: 'converter-texto-maiusculas-minusculas', date: '2026-10-20', lang: 'pt' },
+  { slug: 'pdf-merge-kaise-kare-free', date: '2026-10-16', lang: 'hi' },
+  { slug: 'muft-typing-speed-test-hindi', date: '2026-10-17', lang: 'hi' },
+  { slug: 'pdf-compress-kaise-kare', date: '2026-10-18', lang: 'hi' },
+  { slug: 'shabd-ginti-online-muft', date: '2026-10-19', lang: 'hi' },
   { slug: 'grammarly-ka-muft-alternative', date: '2026-10-20', lang: 'hi' },
 ];
 
 // Stable dates — only update when content actually changes
 // Using a fixed deploy date prevents "everything changed today" signal to Google
 const SITE_LAUNCH = '2025-08-01';
-const TOOLS_LAST_UPDATED = '2026-09-06';  // Update this when you add/update tools
-const CONTENT_LAST_UPDATED = '2026-09-06'; // Update this when you update content
+const TOOLS_LAST_UPDATED = '2026-09-15';  // Update this when you add/update tools
+const CONTENT_LAST_UPDATED = '2026-09-15'; // Update this when you update content
 
 function getAlternatesXml(path, locales = LANG_CODES) {
   let xml = `  <xhtml:link rel="alternate" hreflang="x-default" href="${buildCanonical('en', path)}" />\n`;
   locales.forEach(code => {
-    xml += `  <xhtml:link rel="alternate" hreflang="${code}" href="${buildCanonical(code, path)}" />\n`;
-  });
   return xml;
 }
 
