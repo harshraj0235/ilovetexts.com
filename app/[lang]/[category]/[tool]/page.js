@@ -311,6 +311,8 @@ export default async function ToolPage({ params }) {
           <WordCounter t={t} lang={lang} />
         ) : toolData.slug === 'uppercase' ? (
           <UppercaseConverter lang={lang} />
+        ) : toolData.slug === 'lowercase' ? (
+          <UppercaseConverter lang={lang} mode="lowercase" />
         ) : toolData.slug === 'json-formatter' ? (
           <JsonFormatter t={t} lang={lang} />
         ) : toolData.slug === 'extract-emails' ? (

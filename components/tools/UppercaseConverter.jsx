@@ -2,7 +2,7 @@
 
 import { useMemo, useRef, useState } from 'react';
 import Link from 'next/link';
-import { convertToUppercase, getUppercaseStats } from '@/lib/case-conversion';
+import { convertToLowercase, convertToUppercase, getUppercaseStats } from '@/lib/case-conversion';
 
 const LIMIT = 250000;
 const LOCALES = [
@@ -10,14 +10,19 @@ const LOCALES = [
   ['lt', 'Lithuanian'], ['de', 'German'],
 ];
 
-export default function UppercaseConverter({ lang = 'en' }) {
+export default function UppercaseConverter({ lang = 'en', mode = 'uppercase' }) {
+  const isLowercase = mode === 'lowercase';
+  const caseLabel = isLowercase ? 'lowercase' : 'UPPERCASE';
   const [input, setInput] = useState('');
   const [locale, setLocale] = useState('');
   const [preserveUrls, setPreserveUrls] = useState(true);
   const [preserveEmails, setPreserveEmails] = useState(true);
   const [notice, setNotice] = useState('');
   const fileRef = useRef(null);
-  const output = useMemo(() => convertToUppercase(input, { locale, preserveUrls, preserveEmails }), [input, locale, preserveUrls, preserveEmails]);
+  const output = useMemo(() => {
+    const convert = isLowercase ? convertToLowercase : convertToUppercase;
+    return convert(input, { locale, preserveUrls, preserveEmails });
+  }, [input, isLowercase, locale, preserveUrls, preserveEmails]);
   const stats = useMemo(() => getUppercaseStats(input, output), [input, output]);
 
   const updateInput = (value) => {
@@ -39,7 +44,7 @@ export default function UppercaseConverter({ lang = 'en' }) {
     if (!output) return;
     try {
       await navigator.clipboard.writeText(output);
-      setNotice('Uppercase text copied.');
+      setNotice(`${caseLabel} text copied.`);
     } catch { setNotice('Copy was blocked. Select the result and copy it manually.'); }
   };
 
@@ -59,12 +64,12 @@ export default function UppercaseConverter({ lang = 'en' }) {
     const url = URL.createObjectURL(new Blob([output], { type: 'text/plain;charset=utf-8' }));
     const anchor = document.createElement('a');
     anchor.href = url;
-    anchor.download = 'uppercase-text.txt';
+    anchor.download = `${isLowercase ? 'lowercase' : 'uppercase'}-text.txt`;
     anchor.click();
     URL.revokeObjectURL(url);
   };
 
-  return <section className="uppercase-studio">
+  return <section className="uppercase-studio" data-case-mode={mode}>
     <style>{`
       .uppercase-studio{--uc:#4f46e5;display:grid;gap:18px}.uc-shell{overflow:hidden;border:1px solid var(--border-light);border-radius:22px;background:var(--bg-white);box-shadow:var(--shadow-card)}
       .uc-head{display:flex;justify-content:space-between;gap:20px;padding:25px 27px;background:linear-gradient(135deg,#1e1b4b,#4338ca);color:white}.uc-head span{font-size:.72rem;font-weight:900;letter-spacing:.13em;text-transform:uppercase;color:#c7d2fe}.uc-head h2{margin:6px 0;font-size:clamp(1.45rem,4vw,2rem)}.uc-head p{max-width:720px;margin:0;color:#e0e7ff;line-height:1.55}.uc-badge{align-self:center;min-width:140px;padding:13px;border:1px solid #6366f1;border-radius:13px;background:#ffffff10;text-align:center}.uc-badge strong{display:block;font-size:1.45rem}.uc-badge small{color:#c7d2fe}
@@ -76,22 +81,22 @@ export default function UppercaseConverter({ lang = 'en' }) {
     `}</style>
     <div className="uc-shell">
       <div className="uc-head">
-        <div><span>Private case studio</span><h2>Turn text into UPPERCASE without retyping</h2><p>Keep spacing and line breaks intact, choose language-aware casing, and optionally leave URLs or email addresses unchanged.</p></div>
+        <div><span>Private case studio</span><h2>{isLowercase ? 'Turn capital letters into lowercase without retyping' : 'Turn text into UPPERCASE without retyping'}</h2><p>Keep spacing and line breaks intact, choose language-aware casing, and optionally leave URLs or email addresses unchanged.</p></div>
         <div className="uc-badge"><strong>{stats.changed.toLocaleString()}</strong><small>characters changed</small></div>
       </div>
       <div className="uc-controls">
-        <label>Uppercase language rules<select value={locale} onChange={e => setLocale(e.target.value)}>{LOCALES.map(([value, label]) => <option key={label} value={value}>{label}</option>)}</select></label>
+        <label>{isLowercase ? 'Lowercase' : 'Uppercase'} language rules<select value={locale} onChange={e => setLocale(e.target.value)}>{LOCALES.map(([value, label]) => <option key={label} value={value}>{label}</option>)}</select></label>
         <label className="uc-check"><input type="checkbox" checked={preserveUrls} onChange={e => setPreserveUrls(e.target.checked)} />Keep URLs unchanged</label>
         <label className="uc-check"><input type="checkbox" checked={preserveEmails} onChange={e => setPreserveEmails(e.target.checked)} />Keep email addresses unchanged</label>
       </div>
       <div className="uc-workspace">
-        <div className="uc-pane"><header><strong>ORIGINAL TEXT</strong><div className="uc-actions"><button onClick={paste}>Paste</button><button onClick={() => fileRef.current?.click()}>Open file</button><input ref={fileRef} hidden type="file" accept=".txt,.md,.csv,.json,.html,.xml,text/plain" onChange={e => openFile(e.target.files?.[0])} /></div></header><textarea value={input} onChange={e => updateInput(e.target.value)} placeholder="Type or paste lowercase or mixed-case text…" aria-label="Text to convert to uppercase" spellCheck="true" /></div>
-        <div className="uc-pane"><header><strong>UPPERCASE RESULT</strong><div className="uc-actions"><button className="primary" disabled={!output} onClick={copy}>Copy</button><button disabled={!output} onClick={download}>Download</button></div></header><textarea value={output} readOnly placeholder="YOUR UPPERCASE RESULT APPEARS HERE" aria-label="Uppercase result" /></div>
+        <div className="uc-pane"><header><strong>ORIGINAL TEXT</strong><div className="uc-actions"><button onClick={paste}>Paste</button><button onClick={() => fileRef.current?.click()}>Open file</button><input ref={fileRef} hidden type="file" accept=".txt,.md,.csv,.json,.html,.xml,text/plain" onChange={e => openFile(e.target.files?.[0])} /></div></header><textarea value={input} onChange={e => updateInput(e.target.value)} placeholder={isLowercase ? 'Type or paste uppercase or mixed-case text…' : 'Type or paste lowercase or mixed-case text…'} aria-label={`Text to convert to ${isLowercase ? 'lowercase' : 'uppercase'}`} spellCheck="true" /></div>
+        <div className="uc-pane"><header><strong>{isLowercase ? 'LOWERCASE' : 'UPPERCASE'} RESULT</strong><div className="uc-actions"><button className="primary" disabled={!output} onClick={copy}>Copy</button><button disabled={!output} onClick={download}>Download</button></div></header><textarea value={output} readOnly placeholder={isLowercase ? 'your lowercase result appears here' : 'YOUR UPPERCASE RESULT APPEARS HERE'} aria-label={`${isLowercase ? 'Lowercase' : 'Uppercase'} result`} /></div>
       </div>
       <div className="uc-status" aria-live="polite"><span>{stats.words.toLocaleString()} words</span><span>{stats.characters.toLocaleString()} characters</span><span>{stats.lines.toLocaleString()} lines</span><span>{Math.max(0, LIMIT - input.length).toLocaleString()} characters available</span></div>
-      <div className="uc-footer"><p>Runs locally in this browser. Review brand names, code, URLs, and email addresses before publishing.</p><div><button onClick={() => { setInput(''); setNotice(''); }} disabled={!input}>Clear both</button></div></div>
+      <div className="uc-footer"><p>Runs locally in this browser. Review brand names, acronyms, code, URLs, and email addresses before publishing.</p><div><button onClick={() => { setInput(''); setNotice(''); }} disabled={!input}>Clear both</button></div></div>
     </div>
     {notice && <p className="uc-notice" role="status">{notice}</p>}
-    <nav className="uc-links" aria-label="Other text case converters"><Link href={`/${lang}/text-case-converter/lowercase`}>lowercase</Link><Link href={`/${lang}/text-case-converter/title-case`}>Title Case</Link><Link href={`/${lang}/text-case-converter/sentence-case`}>Sentence case</Link><Link href={`/${lang}/text-case-converter/toggle-case`}>tOGGLE cASE</Link></nav>
+    <nav className="uc-links" aria-label="Other text case converters">{isLowercase ? <Link href={`/${lang}/text-case-converter/uppercase`}>UPPERCASE</Link> : <Link href={`/${lang}/text-case-converter/lowercase`}>lowercase</Link>}<Link href={`/${lang}/text-case-converter/title-case`}>Title Case</Link><Link href={`/${lang}/text-case-converter/sentence-case`}>Sentence case</Link><Link href={`/${lang}/text-case-converter/toggle-case`}>tOGGLE cASE</Link></nav>
   </section>;
 }

@@ -842,15 +842,43 @@
     },
     "lowercase": {
       "name": "Lowercase Converter",
-      "description": "Convert text to lowercase",
-      "metaTitle": "Convert Text to lowercase Online — Free Instant Decapitalizer",
-      "metaDescription": "Convert UPPERCASE or mixed case text to lowercase instantly online. Free tool to change capital letters to small letters. No signup, works in browser.",
-      "keywords": "convert text to lowercase online free, change uppercase to lowercase without word, how to make text lowercase online, remove capital letters from text online, lowercase converter for paragraphs free, decapitalize text online tool free, turn off caps lock text converter, convert capital letters to small letters online, lowercase text generator copy paste, bulk lowercase converter free no signup",
-      "whatIs": "The Lowercase Converter is a free online tool that converts any text to all lowercase letters instantly. If you accidentally typed in CAPS LOCK or received text in ALL CAPS, this tool fixes it in seconds. It is widely used by developers for normalizing text data, writers for fixing formatting issues, social media managers for maintaining consistent brand tone, and students for reformatting copied text. Processing happens entirely in your browser — your text never touches our servers.",
-      "whyChoose": [],
-      "useCases": [],
-      "faqs": [],
-      "relatedSearches": []
+      "description": "Convert uppercase or mixed-case text to small letters while retaining layout and optionally protecting URLs and email addresses.",
+      "metaTitle": "Lowercase Converter — Change Capital Letters Online",
+      "metaDescription": "Convert uppercase text to lowercase online. Preserve spacing, URLs, and emails; choose language-aware rules; copy or download privately. Free, no signup.",
+      "keywords": "lowercase converter, uppercase to lowercase converter, convert text to lowercase, capital letters to small letters, caps to lowercase online, lowercase text copy and paste",
+      "updatedAt": "2026-09-15",
+      "whatIs": "A lowercase converter replaces each cased letter with its small-letter form while keeping punctuation, digits, spaces, tabs, and paragraph breaks. Use it to repair accidental Caps Lock text, normalize labels or search data, and prepare content that requires consistent lowercase. This editor supports locale-aware conversions, including Turkish and Azerbaijani dotted-I rules, plus optional protection for URLs and email addresses whose case should not be rewritten. It processes up to 250,000 characters in your browser and provides copy and UTF-8 download actions. Lowercasing cannot recognize acronyms, proper nouns, or brand styling, so it should not be confused with sentence-case correction.",
+      "howToSteps": [
+        { "title": "Enter the capitalized text", "description": "Paste, type, or open a UTF-8 text file smaller than 1 MB. A lowercase preview appears immediately without changing the original panel." },
+        { "title": "Set the language and protected tokens", "description": "Choose locale-specific casing when needed. Keep URL and email protection on if detected addresses must remain exactly as entered." },
+        { "title": "Compare and export", "description": "Check the number of characters changed, review names and acronyms, then copy the result or download lowercase-text.txt." }
+      ],
+      "whyChoose": [
+        { "icon": "Aa", "title": "Real lowercase characters", "description": "The copied result contains lowercase Unicode text rather than a visual CSS effect that disappears in another application." },
+        { "icon": "🌍", "title": "Language-aware conversion", "description": "Apply explicit Turkish, Azerbaijani, Lithuanian, German, or English rules instead of relying only on one default mapping." },
+        { "icon": "🛡️", "title": "Safer bulk cleanup", "description": "Keep URLs and emails unchanged, retain line structure, process large drafts locally, and see how much text changed." }
+      ],
+      "useCases": [
+        "Fix a paragraph or message typed accidentally with Caps Lock enabled.",
+        "Normalize imported spreadsheet values before comparison or deduplication.",
+        "Prepare lowercase tags, labels, search terms, or plain-text identifiers.",
+        "Change surrounding copy while retaining the exact case of links and email addresses.",
+        "Convert accented, Greek, Cyrillic, Turkish, or Azerbaijani cased letters with Unicode-aware rules."
+      ],
+      "seoSections": [
+        { "heading": "Uppercase to lowercase converter for long text", "content": "Paste a word, list, paragraph, or document and the output keeps the original spacing and line layout. Numbers, punctuation, and emoji remain present because only letters with lowercase mappings are transformed. The change summary makes it easy to tell whether the source actually contained capital letters before copying the result." },
+        { "heading": "Lowercase conversion for data normalization", "content": "Lowercasing can make human-facing labels easier to compare when capitalization should not matter, but it is not a complete data-cleaning strategy. File paths, passwords, API keys, database identifiers, and some URL components may be case-sensitive. Work on a copy and verify the destination system before changing technical values in bulk." },
+        { "heading": "Small letters do not restore sentence case", "content": "Converting NASA, London, and iPhone to lowercase produces nasa, london, and iphone because a mechanical converter does not know which capitals carry meaning. Use lowercase when every cased letter should change. Choose Sentence Case for ordinary prose, then manually review proper names, abbreviations, and brand spellings." }
+      ],
+      "faqs": [
+        { "question": "How do I change capital letters to lowercase?", "answer": "Enter the text in the Original Text panel. The lowercase version updates live in the result panel. Select Copy to place it on the clipboard or Download to save a UTF-8 text file." },
+        { "question": "Does lowercase conversion preserve punctuation and paragraphs?", "answer": "Yes. Numbers, punctuation, whitespace, tabs, and line breaks remain. Only characters with lowercase forms are transformed, although some Unicode mappings can change the resulting character sequence." },
+        { "question": "Does it lowercase accented and non-English letters?", "answer": "Yes, for writing systems that have letter case. Accented Latin, Greek, and Cyrillic letters use Unicode mappings. Japanese, Chinese, Arabic, and other scripts without uppercase/lowercase distinctions remain unchanged." },
+        { "question": "Which language should I choose for Turkish text?", "answer": "Choose Turkish so I becomes dotless ı and İ becomes i. Azerbaijani uses the same relevant dotted-I distinction. Automatic or English casing can produce a linguistically different result." },
+        { "question": "Should URLs and email addresses be converted to lowercase?", "answer": "Not blindly. URL schemes and hosts are case-insensitive, but paths, query values, fragments, and shortened-link codes may be case-sensitive. Email domains are case-insensitive, while the local part before @ is not universally safe to change. The protection options keep complete detected tokens untouched." },
+        { "question": "Is the text saved or uploaded?", "answer": "No. The conversion and export are performed in your browser. The dedicated editor does not autosave the text or submit it to ilovetexts.com." }
+      ],
+      "relatedSearches": ["uppercase to lowercase converter", "capital letters to small letters online", "lowercase text generator copy and paste", "caps lock to lowercase converter", "Unicode lowercase converter", "Turkish lowercase converter", "bulk lowercase text converter", "convert to lowercase without changing URLs"]
     },
     "title-case": {
       "name": "Title Case Converter",
