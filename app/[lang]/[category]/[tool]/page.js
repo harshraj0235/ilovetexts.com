@@ -17,6 +17,7 @@ import ExtractEmails from '@/components/tools/ExtractEmails';
 import ExtractUrls from '@/components/tools/ExtractUrls';
 import ExtractPhones from '@/components/tools/ExtractPhones';
 import RemoveDuplicateLines from '@/components/tools/RemoveDuplicateLines';
+import RemoveLineBreaks from '@/components/tools/RemoveLineBreaks';
 import BcryptGenerator from '@/components/tools/BcryptGenerator';
 import JwtDecoder from '@/components/tools/JwtDecoder';
 import UuidGenerator from '@/components/tools/UuidGenerator';
@@ -326,6 +327,8 @@ export default async function ToolPage({ params }) {
           <ExtractPhones t={t} lang={lang} />
         ) : toolData.slug === 'remove-duplicate-lines' ? (
           <RemoveDuplicateLines t={t} lang={lang} />
+        ) : toolData.slug === 'remove-line-breaks' ? (
+          <RemoveLineBreaks lang={lang} />
         ) : toolData.slug === 'bcrypt-generator' ? (
           <BcryptGenerator t={t} lang={lang} />
         ) : toolData.slug === 'jwt-decoder' ? (
