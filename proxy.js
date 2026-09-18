@@ -119,7 +119,7 @@ export function proxy(request) {
     // This prevents GSC "Alternate page with proper canonical tag" issues.
     const ENGLISH_ONLY_PATHS = new Set([
       'about', 'contact', 'resources', 'tools', 'privacy', 'terms',
-      'workflows', 'office',
+      'workflows', 'office', 'pricing',
     ]);
     if (ENGLISH_ONLY_PATHS.has(secondSegment)) {
       return NextResponse.redirect(new URL(restPath, request.url), 301);

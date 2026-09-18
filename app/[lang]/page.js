@@ -15,7 +15,7 @@ export async function generateMetadata({ params }) {
     description: t.siteDescription,
     keywords: t.siteKeywords,
     alternates: {
-      canonical: isEn ? SITE.url : undefined,
+      canonical: isEn ? SITE.url : `${SITE.url}/${lang}`,
       languages: generateAlternates(lang, '/').languages,
     },
     openGraph: {
@@ -42,10 +42,10 @@ export async function generateMetadata({ params }) {
       creator: '@ilovetexts',
     },
     robots: {
-      index: isEn,
+      index: true,
       follow: true,
       googleBot: {
-        index: isEn,
+        index: true,
         follow: true,
         'max-snippet': -1,
         'max-image-preview': 'large',
