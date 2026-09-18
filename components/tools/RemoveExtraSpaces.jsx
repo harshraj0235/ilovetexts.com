@@ -136,8 +136,15 @@ export default function RemoveExtraSpaces({ lang = 'en' }) {
 
       <nav className="tc-links" aria-label="Other cleaner tools">
         <Link href={`/${lang}/text-cleaner/remove-line-breaks`}>Remove Line Breaks</Link>
+        <Link href={`/${lang}/text-cleaner/remove-extra-spaces`}>Remove Extra Spaces</Link>
         <Link href={`/${lang}/text-cleaner/remove-duplicate-lines`}>Remove Duplicate Lines</Link>
         <Link href={`/${lang}/text-cleaner/remove-empty-lines`}>Remove Empty Lines</Link>
+        <Link href={`/${lang}/text-cleaner/remove-whitespace`}>Remove All Whitespace</Link>
+        <Link href={`/${lang}/text-cleaner/add-line-numbers`}>Add Line Numbers</Link>
+        <Link href={`/${lang}/text-cleaner/add-prefix-suffix`}>Add Prefix / Suffix</Link>
+        <Link href={`/${lang}/text-cleaner/sort-lines`}>Sort Lines</Link>
+        <Link href={`/${lang}/text-cleaner/reverse-text`}>Reverse Text</Link>
+        <Link href={`/${lang}/text-cleaner/reverse-lines`}>Reverse Lines Order</Link>
       </nav>
     </section>
   );

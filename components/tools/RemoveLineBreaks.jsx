@@ -158,6 +158,7 @@ export default function RemoveLineBreaks({ lang = 'en' }) {
       {notice && <p className="tc-note" role="status">{notice}</p>}
 
       <nav className="tc-links" aria-label="Other cleaner tools">
+        <Link href={`/${lang}/text-cleaner/remove-line-breaks`}>Remove Line Breaks</Link>
         <Link href={`/${lang}/text-cleaner/remove-extra-spaces`}>Remove Extra Spaces</Link>
         <Link href={`/${lang}/text-cleaner/remove-duplicate-lines`}>Remove Duplicate Lines</Link>
         <Link href={`/${lang}/text-cleaner/remove-empty-lines`}>Remove Empty Lines</Link>
