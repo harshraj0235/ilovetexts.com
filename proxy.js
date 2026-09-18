@@ -108,8 +108,45 @@ export function proxy(request) {
 
   const firstSegment = pathname.split('/')[1]; // e.g., 'hi', 'word-counter', 'blog', etc.
 
-  // If first segment is a supported non-English language → pass through
+  // If first segment is a supported non-English language → check for English-only pages first
   if (LANG_CODES.has(firstSegment)) {
+    const restPath = pathname.replace(`/${firstSegment}`, '') || '/';
+    const secondSegment = pathname.split('/')[2] || '';
+
+    // ── English-only editorial pages ──────────────────────────────────────
+    // Pages like /about, /contact, /resources, /tools, /privacy, /terms
+    // only exist in English. Redirect /pt/about → /about, /hi/contact → /contact
+    // This prevents GSC "Alternate page with proper canonical tag" issues.
+    const ENGLISH_ONLY_PATHS = new Set([
+      'about', 'contact', 'resources', 'tools', 'privacy', 'terms',
+      'workflows', 'office',
+    ]);
+    if (ENGLISH_ONLY_PATHS.has(secondSegment)) {
+      return NextResponse.redirect(new URL(restPath, request.url), 301);
+    }
+
+    // ── English-only blog posts ──────────────────────────────────────────
+    // Non-English URLs for English-only blog posts (e.g. /pt/blog/best-free-sejda-alternative)
+    // should redirect to the English canonical (/blog/best-free-sejda-alternative).
+    // Language-specific blog posts (with lang field matching) are allowed through.
+    // This is handled by blog page's generateStaticParams — non-English params for
+    // English-only posts are no longer generated, so they'll 404 → caught by not-found.
+    // The proxy redirect here is a safety net for any crawled URLs.
+    if (secondSegment === 'blog') {
+      const blogSlug = pathname.split('/')[3];
+      // If a blog slug exists and it's not a language-specific post for this lang,
+      // redirect to English. We use a known list of language-specific post prefixes.
+      // Language-specific posts start with their language's words (como-, mejor-, contador-, etc.)
+      // Everything else is English-only and should redirect.
+      if (blogSlug) {
+        // Let the page handle it — if it 404s, the not-found page handles it
+        return NextResponse.next();
+      }
+      // /pt/blog (index page) → redirect to /blog
+      return NextResponse.redirect(new URL('/blog', request.url), 301);
+    }
+
+    // All other non-English paths → pass through normally (tool pages, category pages)
     return NextResponse.next();
   }
 

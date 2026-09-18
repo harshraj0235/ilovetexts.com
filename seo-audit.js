@@ -385,6 +385,42 @@ try {
   }
 } catch (e) { warn('Could not verify tool-to-blog links: ' + e.message); }
 
+// ── 24. Proxy must redirect English-only editorial pages at non-English URLs ──
+try {
+  const proxyJs = fs.readFileSync('proxy.js', 'utf8');
+  const requiredPaths = ['about', 'contact', 'resources', 'tools', 'privacy', 'terms'];
+  const hasEnglishOnlyPaths = proxyJs.includes('ENGLISH_ONLY_PATHS');
+  const hasRedirectLogic = requiredPaths.every(p => proxyJs.includes(`'${p}'`));
+  if (!hasEnglishOnlyPaths || !hasRedirectLogic) {
+    error('proxy.js does not redirect English-only editorial pages at non-English URLs — this causes GSC "Alternate page with proper canonical tag" for /pt/about, /hi/contact etc.');
+  } else {
+    ok('proxy.js redirects English-only editorial pages from non-English URLs to English');
+  }
+} catch (e) { warn('Could not check proxy English-only page redirects: ' + e.message); }
+
+// ── 25. Blog generateStaticParams must NOT generate non-English pages for English-only posts ──
+try {
+  const blogSlugPage = fs.readFileSync('app/[lang]/blog/[slug]/page.js', 'utf8');
+  // The old pattern: for (const lang of LANG_CODES) { params.push({ lang, slug: post.slug }); }
+  if (blogSlugPage.includes('for (const lang of LANG_CODES)') && blogSlugPage.includes('params.push({ lang, slug: post.slug })')) {
+    error('blog/[slug]/page.js: generateStaticParams generates non-English pages for English-only blog posts — this creates 100+ GSC "Alternate page with proper canonical" entries. Only generate {lang: "en"} for English-only posts.');
+  } else {
+    ok('blog/[slug]/page.js: English-only posts only generate English static pages');
+  }
+} catch (e) { warn('Could not check blog generateStaticParams: ' + e.message); }
+
+// ── 26. Removed tools must have redirects to prevent persistent 404s ──────────
+try {
+  const config = fs.readFileSync('next.config.mjs', 'utf8');
+  const removedTools = ['gov-doc-translator'];
+  const missing = removedTools.filter(tool => !config.includes(tool));
+  if (missing.length > 0) {
+    error(`next.config.mjs: removed tools without redirects: [${missing.join(', ')}] — these cause persistent 404 errors in GSC`);
+  } else {
+    ok('All removed tools have 301 redirects configured');
+  }
+} catch (e) { warn('Could not check removed tool redirects: ' + e.message); }
+
 // ── Summary ───────────────────────────────────────────────
 console.log('\n' + '='.repeat(50));
 if (errors > 0) {

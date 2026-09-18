@@ -17,9 +17,7 @@ export async function generateStaticParams() {
       params.push({ lang: 'en', slug: post.slug });
     } else {
       // English-only post — generate for all languages (they all point canonical → English)
-      for (const lang of LANG_CODES) {
-        params.push({ lang, slug: post.slug });
-      }
+      params.push({ lang: 'en', slug: post.slug });
     }
   }
   return params;

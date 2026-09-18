@@ -224,6 +224,52 @@ const nextConfig = {
         permanent: true,
       },
 
+      // ── Removed/moved tools — prevent 404s in GSC ─────────────────────────
+      // gov-doc-translator was removed — redirect to homepage
+      {
+        source: '/gov-doc-translator',
+        destination: '/',
+        permanent: true,
+      },
+      {
+        source: '/:lang(hi|pt|es|de|id)/gov-doc-translator',
+        destination: '/:lang',
+        permanent: true,
+      },
+      // writing-grammar-tools/word-counter is an old slug — redirect to correct category
+      {
+        source: '/writing-grammar-tools/word-counter',
+        destination: '/word-counting-tools/word-counter',
+        permanent: true,
+      },
+      {
+        source: '/:lang(hi|pt|es|de|id)/writing-grammar-tools/word-counter',
+        destination: '/:lang/word-counting-tools/word-counter',
+        permanent: true,
+      },
+      // text-converter/pdf-to-text → pdf-text-tools category
+      {
+        source: '/text-converter/pdf-to-text',
+        destination: '/pdf-text-tools/pdf-to-text',
+        permanent: true,
+      },
+      {
+        source: '/:lang(hi|pt|es|de|id)/text-converter/pdf-to-text',
+        destination: '/:lang/pdf-text-tools/pdf-to-text',
+        permanent: true,
+      },
+      // image-tools/pdf-to-jpg → pdf-text-tools
+      {
+        source: '/image-tools/pdf-to-jpg',
+        destination: '/pdf-text-tools/pdf-to-text',
+        permanent: true,
+      },
+      {
+        source: '/:lang(hi|pt|es|de|id)/image-tools/pdf-to-jpg',
+        destination: '/:lang/pdf-text-tools/pdf-to-text',
+        permanent: true,
+      },
+
     ];
   },
   async rewrites() {
