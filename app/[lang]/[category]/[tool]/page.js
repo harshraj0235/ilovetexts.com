@@ -335,8 +335,7 @@ export default async function ToolPage({ params }) {
         ) : toolData.slug === 'extract-phones' ? (
           <ExtractPhones t={t} lang={lang} />
         ) : toolData.slug === 'remove-duplicate-lines' ? (
-          <RemoveDuplicateLines t={t} lang={lang} />
-        ) : toolData.slug === 'remove-empty-lines' ? (
+        
           <RemoveEmptyLines t={t} lang={lang} />
         ) : toolData.slug === 'remove-whitespace' ? (
           <RemoveWhitespace t={t} lang={lang} />
@@ -350,6 +349,8 @@ export default async function ToolPage({ params }) {
           <ReverseText t={t} lang={lang} />
         ) : toolData.slug === 'reverse-lines' ? (
           <ReverseLines t={t} lang={lang} />
+
+          <RemoveDuplicateLines t={t} lang={lang} />
         ) : toolData.slug === 'remove-line-breaks' ? (
           <RemoveLineBreaks lang={lang} />
         ) : toolData.slug === 'remove-extra-spaces' ? (
@@ -377,7 +378,7 @@ export default async function ToolPage({ params }) {
         ) : BYTE_TOOLS[toolData.slug] ? (
           <ByteConverter key={toolData.slug} toolSlug={toolData.slug} lang={lang} />
         ) : ALPHABET_TOOLS[toolData.slug] ? (
-          <AlphabetTranslator key={toolData.slug} toolSlug={toolData.slug} lang={lang} />
+          <AlphabetTranslator key={toolData.slug} toolSlug={toolData.slug} />
         ) : toolData.slug === 'base64-encode-decode' ? (
           <Base64EncodeDecode t={t} lang={lang} />
         ) : toolData.slug === 'url-encode-decode' ? (
