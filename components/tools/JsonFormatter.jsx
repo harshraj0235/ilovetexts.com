@@ -1,6 +1,7 @@
 'use client';
 
 import { useMemo, useState } from 'react';
+import Link from 'next/link';
 import JsonView from '@uiw/react-json-view';
 import { jsonrepair } from 'jsonrepair';
 import { JSONPath } from 'jsonpath-plus';
@@ -43,7 +44,7 @@ function formatBytes(bytes) {
   return `${(bytes / 1024).toFixed(1)} KB`;
 }
 
-export default function JsonFormatter() {
+export default function JsonFormatter({ lang = 'en' }) {
   const [input, setInput] = useState('');
   const [viewMode, setViewMode] = useState('tree');
   const [indent, setIndent] = useState(2);
@@ -251,6 +252,18 @@ export default function JsonFormatter() {
           </div>
         </div>
       </div>
+    
+      <nav className="tc-links" aria-label="Other code formatters">
+        <Link href={`/${lang || 'en'}/code-formatter/json-formatter`}>JSON Formatter</Link>
+        <Link href={`/${lang || 'en'}/code-formatter/json-validator`}>JSON Validator</Link>
+        <Link href={`/${lang || 'en'}/code-formatter/json-minifier`}>JSON Minifier</Link>
+        <Link href={`/${lang || 'en'}/code-formatter/xml-formatter`}>XML Formatter</Link>
+        <Link href={`/${lang || 'en'}/code-formatter/sql-formatter`}>SQL Formatter</Link>
+        <Link href={`/${lang || 'en'}/code-formatter/html-formatter`}>HTML Formatter</Link>
+        <Link href={`/${lang || 'en'}/code-formatter/css-formatter`}>CSS Formatter</Link>
+        <Link href={`/${lang || 'en'}/code-formatter/js-formatter`}>JS Formatter</Link>
+        <Link href={`/${lang || 'en'}/code-formatter/json-to-typescript`}>JSON to TS</Link>
+      </nav>
     </section>
   );
 }
