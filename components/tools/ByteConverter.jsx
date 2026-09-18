@@ -216,7 +216,24 @@ export default function ByteConverter({ toolSlug = 'binary-text', lang = 'en' })
         <p className={styles.tableNote}>Offsets start at 0. The table shows up to 120 code points; byte-report downloads include every byte. Combining marks and joined emoji can contain several code points.</p>
       </section>
 
-      <div className={styles.learning}><div><span className={styles.lessonIcon} aria-hidden="true">{config.mark}</span><h3>A small detail that makes a big difference</h3><p>{config.tip}</p></div><div className={styles.exampleCard}><span>Try it yourself</span><code>{config.example}</code><strong>↓ {config.exampleText}</strong><button type="button" onClick={() => { setEncoding('utf8'); setMode('decode'); changeInput(formatBytes(exampleBytes, config.format)); }}>Decode this example →</button></div></div>
+      <div className={styles.learning}><div><span className={styles.lessonIcon} aria-hidden="true">{config.mark}</span><h3>A small detail that makes a big difference</h3><p>{config.tip}</p></div><div className={styles.exampleCard}><span>Try it yourself</span><code>{config.example}</code><strong>↓ {config.exampleText}</strong><button type="button" onClick={() => { setEncoding('utf8'); setMode('decode'); changeInput(formatBytes(exampleBytes, config.format)); }}>Decode this example →</button></div>
+      <nav className="tc-links" aria-label="Related tools">
+        <Link href={`/${lang || 'en'}/text-encoder-decoder/base64-encode-decode`}>Base64 Encode/Decode</Link>
+        <Link href={`/${lang || 'en'}/text-encoder-decoder/url-encode-decode`}>URL Encode/Decode</Link>
+        <Link href={`/${lang || 'en'}/text-encoder-decoder/html-encode-decode`}>HTML Encode/Decode</Link>
+        <Link href={`/${lang || 'en'}/text-encoder-decoder/binary-text`}>Binary to Text</Link>
+        <Link href={`/${lang || 'en'}/text-encoder-decoder/hex-text`}>Hex to Text</Link>
+        <Link href={`/${lang || 'en'}/text-encoder-decoder/octal-text`}>Octal to Text</Link>
+        <Link href={`/${lang || 'en'}/text-encoder-decoder/ascii-text`}>ASCII to Text</Link>
+        <Link href={`/${lang || 'en'}/text-encoder-decoder/rot13`}>ROT13</Link>
+        <Link href={`/${lang || 'en'}/text-encoder-decoder/utf8-encode-decode`}>UTF-8 Encode/Decode</Link>
+        <Link href={`/${lang || 'en'}/text-encoder-decoder/morse-code`}>Morse Code</Link>
+        <Link href={`/${lang || 'en'}/text-encoder-decoder/braille-translator`}>Braille</Link>
+        <Link href={`/${lang || 'en'}/text-encoder-decoder/sign-language-translator`}>Sign Language</Link>
+        <Link href={`/${lang || 'en'}/text-encoder-decoder/nato-phonetic-translator`}>NATO Phonetic</Link>
+        <Link href={`/${lang || 'en'}/text-encoder-decoder/wingdings-translator`}>Wingdings</Link>
+      </nav>
+</div>
       <nav className={styles.related} aria-label="Related byte converters"><span>Keep exploring</span>{Object.entries(BYTE_TOOLS).filter(([slug]) => slug !== toolSlug).map(([slug, tool]) => <Link key={slug} href={lp(`/text-encoder-decoder/${slug}`)}>{tool.label} converter <span aria-hidden="true">↗</span></Link>)}</nav>
       <noscript>This tool needs JavaScript for local conversion. The examples and instructions below remain available without it.</noscript>
     </section>

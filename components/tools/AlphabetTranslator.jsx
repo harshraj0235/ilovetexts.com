@@ -1,5 +1,6 @@
 'use client';
 
+import Link from 'next/link';
 import { useDeferredValue, useId, useMemo, useState } from 'react';
 import { ALPHABET_TOOLS, referenceRows, translateAlphabet } from '@/lib/alphabet-translator.mjs';
 import styles from './AlphabetTranslator.module.css';
@@ -14,7 +15,7 @@ function downloadText(text, name) {
   URL.revokeObjectURL(link.href);
 }
 
-export default function AlphabetTranslator({ toolSlug }) {
+export default function AlphabetTranslator({ toolSlug, lang = 'en' }) {
   const config = ALPHABET_TOOLS[toolSlug];
   const [direction, setDirection] = useState('encode');
   const [input, setInput] = useState('');
@@ -122,7 +123,24 @@ export default function AlphabetTranslator({ toolSlug }) {
             <b>{row.from}</b><span>{row.to}</span><small>{row.note}</small>
           </div>
         ))}
-      </div>
+      
+      <nav className="tc-links" aria-label="Related tools">
+        <Link href={`/${lang || 'en'}/text-encoder-decoder/base64-encode-decode`}>Base64 Encode/Decode</Link>
+        <Link href={`/${lang || 'en'}/text-encoder-decoder/url-encode-decode`}>URL Encode/Decode</Link>
+        <Link href={`/${lang || 'en'}/text-encoder-decoder/html-encode-decode`}>HTML Encode/Decode</Link>
+        <Link href={`/${lang || 'en'}/text-encoder-decoder/binary-text`}>Binary to Text</Link>
+        <Link href={`/${lang || 'en'}/text-encoder-decoder/hex-text`}>Hex to Text</Link>
+        <Link href={`/${lang || 'en'}/text-encoder-decoder/octal-text`}>Octal to Text</Link>
+        <Link href={`/${lang || 'en'}/text-encoder-decoder/ascii-text`}>ASCII to Text</Link>
+        <Link href={`/${lang || 'en'}/text-encoder-decoder/rot13`}>ROT13</Link>
+        <Link href={`/${lang || 'en'}/text-encoder-decoder/utf8-encode-decode`}>UTF-8 Encode/Decode</Link>
+        <Link href={`/${lang || 'en'}/text-encoder-decoder/morse-code`}>Morse Code</Link>
+        <Link href={`/${lang || 'en'}/text-encoder-decoder/braille-translator`}>Braille</Link>
+        <Link href={`/${lang || 'en'}/text-encoder-decoder/sign-language-translator`}>Sign Language</Link>
+        <Link href={`/${lang || 'en'}/text-encoder-decoder/nato-phonetic-translator`}>NATO Phonetic</Link>
+        <Link href={`/${lang || 'en'}/text-encoder-decoder/wingdings-translator`}>Wingdings</Link>
+      </nav>
+</div>
       <noscript>This translator needs JavaScript to convert text in your browser.</noscript>
     </section>
   );

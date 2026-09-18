@@ -1,5 +1,6 @@
 'use client';
 
+import Link from 'next/link';
 import { useState, useMemo, useRef } from 'react';
 
 function isValidBase64(str) {
@@ -219,6 +220,23 @@ export default function Base64EncodeDecode({ t, lang }) {
           {toast.message}
         </div>
       )}
-    </div>
+    
+      <nav className="tc-links" aria-label="Related tools">
+        <Link href={`/${lang || 'en'}/text-encoder-decoder/base64-encode-decode`}>Base64 Encode/Decode</Link>
+        <Link href={`/${lang || 'en'}/text-encoder-decoder/url-encode-decode`}>URL Encode/Decode</Link>
+        <Link href={`/${lang || 'en'}/text-encoder-decoder/html-encode-decode`}>HTML Encode/Decode</Link>
+        <Link href={`/${lang || 'en'}/text-encoder-decoder/binary-text`}>Binary to Text</Link>
+        <Link href={`/${lang || 'en'}/text-encoder-decoder/hex-text`}>Hex to Text</Link>
+        <Link href={`/${lang || 'en'}/text-encoder-decoder/octal-text`}>Octal to Text</Link>
+        <Link href={`/${lang || 'en'}/text-encoder-decoder/ascii-text`}>ASCII to Text</Link>
+        <Link href={`/${lang || 'en'}/text-encoder-decoder/rot13`}>ROT13</Link>
+        <Link href={`/${lang || 'en'}/text-encoder-decoder/utf8-encode-decode`}>UTF-8 Encode/Decode</Link>
+        <Link href={`/${lang || 'en'}/text-encoder-decoder/morse-code`}>Morse Code</Link>
+        <Link href={`/${lang || 'en'}/text-encoder-decoder/braille-translator`}>Braille</Link>
+        <Link href={`/${lang || 'en'}/text-encoder-decoder/sign-language-translator`}>Sign Language</Link>
+        <Link href={`/${lang || 'en'}/text-encoder-decoder/nato-phonetic-translator`}>NATO Phonetic</Link>
+        <Link href={`/${lang || 'en'}/text-encoder-decoder/wingdings-translator`}>Wingdings</Link>
+      </nav>
+</div>
   );
 }

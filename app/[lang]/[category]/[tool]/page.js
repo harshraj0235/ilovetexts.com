@@ -377,7 +377,7 @@ export default async function ToolPage({ params }) {
         ) : BYTE_TOOLS[toolData.slug] ? (
           <ByteConverter key={toolData.slug} toolSlug={toolData.slug} lang={lang} />
         ) : ALPHABET_TOOLS[toolData.slug] ? (
-          <AlphabetTranslator key={toolData.slug} toolSlug={toolData.slug} />
+          <AlphabetTranslator key={toolData.slug} toolSlug={toolData.slug} lang={lang} />
         ) : toolData.slug === 'base64-encode-decode' ? (
           <Base64EncodeDecode t={t} lang={lang} />
         ) : toolData.slug === 'url-encode-decode' ? (
