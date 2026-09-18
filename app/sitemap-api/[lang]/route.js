@@ -39,16 +39,6 @@ const EN_BLOG_SLUGS = [
   { slug: 'muft-typing-speed-test-hindi', date: '2026-10-17', lang: 'hi' },
   { slug: 'pdf-compress-kaise-kare', date: '2026-10-18', lang: 'hi' },
   { slug: 'shabd-ginti-online-muft', date: '2026-10-19', lang: 'hi' },
-  { slug: 'convertir-texto-mayusculas-minusculas', date: '2026-10-20', lang: 'es' },
-  { slug: 'como-juntar-pdf-gratis', date: '2026-10-16', lang: 'pt' },
-  { slug: 'melhor-alternativa-grammarly-gratis', date: '2026-10-17', lang: 'pt' },
-  { slug: 'comprimir-pdf-gratis-online-pt', date: '2026-10-18', lang: 'pt' },
-  { slug: 'contador-palavras-online-gratis', date: '2026-10-19', lang: 'pt' },
-  { slug: 'converter-texto-maiusculas-minusculas', date: '2026-10-20', lang: 'pt' },
-  { slug: 'pdf-merge-kaise-kare-free', date: '2026-10-16', lang: 'hi' },
-  { slug: 'muft-typing-speed-test-hindi', date: '2026-10-17', lang: 'hi' },
-  { slug: 'pdf-compress-kaise-kare', date: '2026-10-18', lang: 'hi' },
-  { slug: 'shabd-ginti-online-muft', date: '2026-10-19', lang: 'hi' },
   { slug: 'grammarly-ka-muft-alternative', date: '2026-10-20', lang: 'hi' },
 ];
 
@@ -77,8 +67,15 @@ export async function GET(request, { params }) {
   const allTools = getAllTools();
   let urlsXml = '';
 
+  // ── Deduplication guard ─────────────────────────────────────────────
+  // Prevents duplicate <url> entries even if source data has duplicates.
+  // This ensures the issue never recurs regardless of data quality.
+  const seen = new Set();
   const addUrl = (path, priority, changefreq, date, locales = LANG_CODES) => {
-    urlsXml += `<url>\n  <loc>${buildCanonical(lang, path)}</loc>\n${getAlternatesXml(path, locales)}  <lastmod>${date}</lastmod>\n  <changefreq>${changefreq}</changefreq>\n  <priority>${priority}</priority>\n</url>\n`;
+    const loc = buildCanonical(lang, path);
+    if (seen.has(loc)) return; // skip duplicate
+    seen.add(loc);
+    urlsXml += `<url>\n  <loc>${loc}</loc>\n${getAlternatesXml(path, locales)}  <lastmod>${date}</lastmod>\n  <changefreq>${changefreq}</changefreq>\n  <priority>${priority}</priority>\n</url>\n`;
   };
 
   // Home
@@ -131,3 +128,4 @@ ${urlsXml}</urlset>`;
     },
   });
 }
+

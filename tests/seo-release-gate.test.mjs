@@ -4,10 +4,28 @@ import test from 'node:test';
 
 const read = (path) => fs.readFileSync(path, 'utf8');
 
-test('only reviewed tool locales are advertised as indexable', () => {
+test('all supported locales are marked as indexable for tool pages', () => {
   const policy = read('lib/search-indexing.js');
-  assert.match(policy, /INDEXABLE_TOOL_LOCALES\s*=\s*\['en'\]/);
+  const i18n = read('lib/i18n.js');
+
+  // Extract LANG_CODES from i18n.js
+  const langMatch = i18n.match(/code:\s*'([a-z]{2})'/g) || [];
+  const langCodes = langMatch.map(m => m.match(/'([a-z]{2})'/)[1]);
+
+  // Extract INDEXABLE_TOOL_LOCALES from search-indexing.js
+  const indexableMatch = policy.match(/INDEXABLE_TOOL_LOCALES\s*=\s*\[([^\]]*)\]/);
+  assert.ok(indexableMatch, 'INDEXABLE_TOOL_LOCALES must exist in search-indexing.js');
+  const indexable = indexableMatch[1].match(/'([a-z]{2})'/g).map(m => m.replace(/'/g, ''));
+
+  // Every LANG_CODE must be in INDEXABLE_TOOL_LOCALES
+  const missing = langCodes.filter(code => !indexable.includes(code));
+  assert.equal(missing.length, 0,
+    `These locales are in LANG_CODES but missing from INDEXABLE_TOOL_LOCALES: [${missing.join(', ')}]. ` +
+    `This means their sitemaps will only contain the homepage URL, and Google will not discover their tool pages. ` +
+    `Add them to INDEXABLE_TOOL_LOCALES in lib/search-indexing.js.`
+  );
 });
+
 
 test('English-only editorial pages are gated to the English sitemap', () => {
   const sitemap = read('app/sitemap-api/[lang]/route.js');

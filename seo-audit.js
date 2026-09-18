@@ -216,20 +216,71 @@ try {
   }
 } catch (e) { warn('Could not check robots.js embed blocking: ' + e.message); }
 
-// ── 15. Hreflang must only advertise reviewed tool locales ─────────────────
+// ── 15. All supported locales must be in INDEXABLE_TOOL_LOCALES ─────────────
+// This check was previously enforcing ['en'] only — which CAUSED the sitemap bug
+// where non-English sitemaps had only 1-2 URLs. Now it enforces that every
+// supported locale gets full tool/category URLs in its sitemap.
 try {
   const seoJs = fs.readFileSync('lib/seo.js', 'utf8');
   const sitemapJs = fs.readFileSync('app/sitemap-api/[lang]/route.js', 'utf8');
   const indexingPolicy = fs.readFileSync('lib/search-indexing.js', 'utf8');
-  const reviewedLocales = (indexingPolicy.match(/INDEXABLE_TOOL_LOCALES\s*=\s*\[([^\]]*)\]/) || [])[1] || '';
-  if (!seoJs.includes('INDEXABLE_TOOL_LOCALES') || !seoJs.includes('index: canIndex') || !sitemapJs.includes('INDEXABLE_TOOL_LOCALES.includes(lang)')) {
-    error('Tool/catalog locale gating is incomplete: hreflang, robots, and sitemap must agree');
-  } else if (reviewedLocales.replace(/\s/g, '') !== "'en'") {
-    error(`Tool locales are advertised before full translation review: [${reviewedLocales}]`);
+  const i18nJs = fs.readFileSync('lib/i18n.js', 'utf8');
+
+  // Extract all LANG_CODES from i18n.js
+  const langMatches = i18nJs.match(/code:\s*'([a-z]{2})'/g) || [];
+  const allLangCodes = langMatches.map(m => m.match(/'([a-z]{2})'/)[1]);
+
+  // Extract INDEXABLE_TOOL_LOCALES
+  const indexableMatch = indexingPolicy.match(/INDEXABLE_TOOL_LOCALES\s*=\s*\[([^\]]*)\]/);
+  const indexableLocales = indexableMatch
+    ? (indexableMatch[1].match(/'([a-z]{2})'/g) || []).map(m => m.replace(/'/g, ''))
+    : [];
+
+  // Every LANG_CODE must appear in INDEXABLE_TOOL_LOCALES
+  const missingLocales = allLangCodes.filter(code => !indexableLocales.includes(code));
+  if (missingLocales.length > 0) {
+    error(`INDEXABLE_TOOL_LOCALES is missing locales: [${missingLocales.join(', ')}]. ` +
+      `Their sitemaps will only contain the homepage URL — Google will NOT discover tool pages for these languages. ` +
+      `Add them to INDEXABLE_TOOL_LOCALES in lib/search-indexing.js.`);
   } else {
-    ok('Tool/catalog hreflang, robots, and sitemap use the reviewed-locale policy');
+    ok(`All ${allLangCodes.length} locales are in INDEXABLE_TOOL_LOCALES — every language sitemap will include tool URLs`);
+  }
+
+  // Verify hreflang, robots, and sitemap all use the locale policy
+  if (!seoJs.includes('INDEXABLE_TOOL_LOCALES') || !seoJs.includes('index: canIndex') || !sitemapJs.includes('INDEXABLE_TOOL_LOCALES.includes(lang)')) {
+    error('Tool/catalog locale gating is incomplete: hreflang, robots, and sitemap must all reference INDEXABLE_TOOL_LOCALES');
+  } else {
+    ok('Tool/catalog hreflang, robots, and sitemap all use the reviewed-locale policy');
   }
 } catch (e) { warn('Could not check reviewed-locale policy: ' + e.message); }
+
+// ── 15b. Sitemap must have deduplication guard ──────────────────────────────
+try {
+  const sitemapJs = fs.readFileSync('app/sitemap-api/[lang]/route.js', 'utf8');
+  if (!sitemapJs.includes('const seen = new Set()') || !sitemapJs.includes('seen.has(')) {
+    error('Sitemap route has no deduplication guard — duplicate blog entries or tool entries can produce duplicate <url> entries, confusing Google crawlers');
+  } else {
+    ok('Sitemap route has Set-based deduplication guard against duplicate URLs');
+  }
+} catch (e) { warn('Could not check sitemap deduplication guard: ' + e.message); }
+
+// ── 15c. No duplicate blog slugs in sitemap source data ─────────────────────
+try {
+  const sitemapJs = fs.readFileSync('app/sitemap-api/[lang]/route.js', 'utf8');
+  const blogEntries = [...sitemapJs.matchAll(/\{\s*slug:\s*'([^']+)',\s*date:\s*'[^']+',\s*lang:\s*'([^']+)'/g)];
+  const seen = new Set();
+  const dupes = [];
+  blogEntries.forEach(([, slug, lang]) => {
+    const key = `${lang}:${slug}`;
+    if (seen.has(key)) dupes.push(key);
+    else seen.add(key);
+  });
+  if (dupes.length > 0) {
+    error(`Duplicate blog slug entries in sitemap source: ${dupes.join(', ')} — remove duplicates to avoid confusing crawlers`);
+  } else {
+    ok(`All ${blogEntries.length} multilingual blog entries are unique (no duplicates)`);
+  }
+} catch (e) { warn('Could not check blog slug duplicates: ' + e.message); }
 
 // ── 16. Global trust copy must not promise zero tracking or universal local processing ─
 try {
