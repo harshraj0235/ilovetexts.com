@@ -97,6 +97,21 @@ export default function UppercaseConverter({ lang = 'en', mode = 'uppercase' }) 
       <div className="uc-footer"><p>Runs locally in this browser. Review brand names, acronyms, code, URLs, and email addresses before publishing.</p><div><button onClick={() => { setInput(''); setNotice(''); }} disabled={!input}>Clear both</button></div></div>
     </div>
     {notice && <p className="uc-notice" role="status">{notice}</p>}
-    <nav className="uc-links" aria-label="Other text case converters">{isLowercase ? <Link href={`/${lang}/text-case-converter/uppercase`}>UPPERCASE</Link> : <Link href={`/${lang}/text-case-converter/lowercase`}>lowercase</Link>}<Link href={`/${lang}/text-case-converter/title-case`}>Title Case</Link><Link href={`/${lang}/text-case-converter/sentence-case`}>Sentence case</Link><Link href={`/${lang}/text-case-converter/toggle-case`}>tOGGLE cASE</Link></nav>
+    <nav className="uc-links" aria-label="Other text case converters">
+        <Link href={`/${lang}/text-case-converter/uppercase`}>UPPERCASE</Link>
+        <Link href={`/${lang}/text-case-converter/lowercase`}>lowercase</Link>
+        <Link href={`/${lang}/text-case-converter/title-case`}>Title Case</Link>
+        <Link href={`/${lang}/text-case-converter/sentence-case`}>Sentence case</Link>
+        <Link href={`/${lang}/text-case-converter/camel-case`}>camelCase</Link>
+        <Link href={`/${lang}/text-case-converter/snake-case`}>snake_case</Link>
+        <Link href={`/${lang}/text-case-converter/kebab-case`}>kebab-case</Link>
+        <Link href={`/${lang}/text-case-converter/toggle-case`}>tOGGLE cASE</Link>
+        <Link href={`/${lang}/text-case-converter/alternating-case`}>aLtErNaTiNg</Link>
+        <Link href={`/${lang}/text-case-converter/mocking-case`}>mOcKiNg</Link>
+        <Link href={`/${lang}/text-case-converter/cursive-text-generator`}>𝒞𝓊𝓇𝓈𝒾𝓋𝑒</Link>
+        <Link href={`/${lang}/text-case-converter/strikethrough-text`}>S̶t̶r̶i̶k̶e̶</Link>
+        <Link href={`/${lang}/text-case-converter/bubble-text-generator`}>Ⓑⓤⓑⓑⓛⓔ</Link>
+        <Link href={`/${lang}/text-case-converter/small-text-generator`}>ˢᵐᵃˡˡ</Link>
+      </nav>
   </section>;
 }

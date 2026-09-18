@@ -74,6 +74,21 @@ export default function TitleCaseConverter({ lang = 'en' }) {
     </div>
     {notice && <p className="tc-note" role="status">{notice}</p>}
     <section className="tc-compare"><div className="tc-section-head"><div><span>Style comparison</span><h3>See four results side by side</h3></div><p>Automated rules cannot always identify parts of speech or house-style exceptions. Use these previews as an editing aid and verify difficult titles.</p></div><div className="tc-grid">{comparisons.map(item => <article className="tc-card" key={item.id}><strong>{item.name}</strong><button onClick={() => copy(item.value)} disabled={!item.value}>Copy</button><p>{item.value || 'Your comparison appears here.'}</p><small>{item.note}</small></article>)}</div></section>
-    <nav className="tc-links" aria-label="Other case tools"><Link href={`/${lang}/text-case-converter/sentence-case`}>Sentence case</Link><Link href={`/${lang}/text-case-converter/uppercase`}>UPPERCASE</Link><Link href={`/${lang}/text-case-converter/lowercase`}>lowercase</Link></nav>
+    <nav className="tc-links" aria-label="Other text case converters">
+        <Link href={`/${lang}/text-case-converter/uppercase`}>UPPERCASE</Link>
+        <Link href={`/${lang}/text-case-converter/lowercase`}>lowercase</Link>
+        <Link href={`/${lang}/text-case-converter/title-case`}>Title Case</Link>
+        <Link href={`/${lang}/text-case-converter/sentence-case`}>Sentence case</Link>
+        <Link href={`/${lang}/text-case-converter/camel-case`}>camelCase</Link>
+        <Link href={`/${lang}/text-case-converter/snake-case`}>snake_case</Link>
+        <Link href={`/${lang}/text-case-converter/kebab-case`}>kebab-case</Link>
+        <Link href={`/${lang}/text-case-converter/toggle-case`}>tOGGLE cASE</Link>
+        <Link href={`/${lang}/text-case-converter/alternating-case`}>aLtErNaTiNg</Link>
+        <Link href={`/${lang}/text-case-converter/mocking-case`}>mOcKiNg</Link>
+        <Link href={`/${lang}/text-case-converter/cursive-text-generator`}>𝒞𝓊𝓇𝓈𝒾𝓋𝑒</Link>
+        <Link href={`/${lang}/text-case-converter/strikethrough-text`}>S̶t̶r̶i̶k̶e̶</Link>
+        <Link href={`/${lang}/text-case-converter/bubble-text-generator`}>Ⓑⓤⓑⓑⓛⓔ</Link>
+        <Link href={`/${lang}/text-case-converter/small-text-generator`}>ˢᵐᵃˡˡ</Link>
+      </nav>
   </section>;
 }
