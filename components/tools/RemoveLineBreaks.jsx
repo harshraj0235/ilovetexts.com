@@ -12,10 +12,13 @@ export default function RemoveLineBreaks({ lang = 'en' }) {
   const [separator, setSeparator] = useState('space');
   const [customSeparator, setCustomSeparator] = useState('');
   const [trim, setTrim] = useState(true);
+  const [htmlMode, setHtmlMode] = useState('none');
+  const [targetOs, setTargetOs] = useState('all');
+  const [fixCapitalization, setFixCapitalization] = useState(false);
   const [notice, setNotice] = useState('');
   const fileRef = useRef(null);
 
-  const options = useMemo(() => ({ mode, separator, customSeparator, trim }), [mode, separator, customSeparator, trim]);
+  const options = useMemo(() => ({ mode, separator, customSeparator, trim, htmlMode, targetOs, fixCapitalization }), [mode, separator, customSeparator, trim, htmlMode, targetOs, fixCapitalization]);
   const output = useMemo(() => removeLineBreaks(input, options), [input, options]);
 
   const stats = useMemo(() => {
@@ -94,13 +97,27 @@ export default function RemoveLineBreaks({ lang = 'en' }) {
           
           <fieldset>
             <legend>Replacement Character</legend>
-            <label><input type="radio" name="separator" value="space" checked={separator === 'space'} onChange={e => setSeparator(e.target.value)} /> Replace with Space (Recommended)</label>
-            <label><input type="radio" name="separator" value="none" checked={separator === 'none'} onChange={e => setSeparator(e.target.value)} /> No Separator (Join words directly)</label>
-            <label><input type="radio" name="separator" value="comma" checked={separator === 'comma'} onChange={e => setSeparator(e.target.value)} /> Replace with Comma</label>
+            <label><input type="radio" name="separator" value="space" checked={separator === 'space' && htmlMode === 'none'} onChange={e => {setSeparator(e.target.value); setHtmlMode('none')}} /> Replace with Space (Recommended)</label>
+            <label><input type="radio" name="separator" value="none" checked={separator === 'none' && htmlMode === 'none'} onChange={e => {setSeparator(e.target.value); setHtmlMode('none')}} /> No Separator (Join words directly)</label>
+            <label><input type="radio" name="separator" value="comma" checked={separator === 'comma' && htmlMode === 'none'} onChange={e => {setSeparator(e.target.value); setHtmlMode('none')}} /> Replace with Comma</label>
             <label style={{alignItems: 'center'}}>
-              <input type="radio" name="separator" value="custom" checked={separator === 'custom'} onChange={e => setSeparator(e.target.value)} /> 
-              Custom: <input type="text" value={customSeparator} onChange={e => { setSeparator('custom'); setCustomSeparator(e.target.value); }} placeholder="e.g. | " />
+              <input type="radio" name="separator" value="custom" checked={separator === 'custom' && htmlMode === 'none'} onChange={e => {setSeparator(e.target.value); setHtmlMode('none')}} /> 
+              Custom: <input type="text" value={customSeparator} onChange={e => { setSeparator('custom'); setCustomSeparator(e.target.value); setHtmlMode('none'); }} placeholder="e.g. | " />
             </label>
+          </fieldset>
+
+          <fieldset>
+            <legend>HTML & Advanced Formatting</legend>
+            <label><input type="radio" name="htmlMode" value="br" checked={htmlMode === 'br'} onChange={e => setHtmlMode(e.target.value)} /> Replace with &lt;br /&gt; tags</label>
+            <label><input type="radio" name="htmlMode" value="p" checked={htmlMode === 'p'} onChange={e => setHtmlMode(e.target.value)} /> Wrap in &lt;p&gt; tags</label>
+            <label style={{marginTop: '8px'}}><input type="checkbox" checked={fixCapitalization} onChange={e => setFixCapitalization(e.target.checked)} /> Fix Capitalization (Auto-capitalize broken sentences from PDFs)</label>
+          </fieldset>
+          
+          <fieldset>
+            <legend>Target specific line breaks</legend>
+            <label><input type="radio" name="targetOs" value="all" checked={targetOs === 'all'} onChange={e => setTargetOs(e.target.value)} /> All (Any operating system)</label>
+            <label><input type="radio" name="targetOs" value="windows" checked={targetOs === 'windows'} onChange={e => setTargetOs(e.target.value)} /> Windows only (\r\n)</label>
+            <label><input type="radio" name="targetOs" value="unix" checked={targetOs === 'unix'} onChange={e => setTargetOs(e.target.value)} /> Linux / Unix only (\n)</label>
           </fieldset>
         </div>
 
@@ -144,6 +161,12 @@ export default function RemoveLineBreaks({ lang = 'en' }) {
         <Link href={`/${lang}/text-cleaner/remove-extra-spaces`}>Remove Extra Spaces</Link>
         <Link href={`/${lang}/text-cleaner/remove-duplicate-lines`}>Remove Duplicate Lines</Link>
         <Link href={`/${lang}/text-cleaner/remove-empty-lines`}>Remove Empty Lines</Link>
+        <Link href={`/${lang}/text-cleaner/remove-whitespace`}>Remove All Whitespace</Link>
+        <Link href={`/${lang}/text-cleaner/add-line-numbers`}>Add Line Numbers</Link>
+        <Link href={`/${lang}/text-cleaner/add-prefix-suffix`}>Add Prefix / Suffix</Link>
+        <Link href={`/${lang}/text-cleaner/sort-lines`}>Sort Lines</Link>
+        <Link href={`/${lang}/text-cleaner/reverse-text`}>Reverse Text</Link>
+        <Link href={`/${lang}/text-cleaner/reverse-lines`}>Reverse Lines Order</Link>
       </nav>
     </section>
   );
