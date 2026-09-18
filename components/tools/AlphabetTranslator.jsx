@@ -15,7 +15,7 @@ function downloadText(text, name) {
   URL.revokeObjectURL(link.href);
 }
 
-export default function AlphabetTranslator({ toolSlug }) {
+export default function AlphabetTranslator({ toolSlug, lang = 'en' }) {
   const config = ALPHABET_TOOLS[toolSlug];
   const [direction, setDirection] = useState('encode');
   const [input, setInput] = useState('');

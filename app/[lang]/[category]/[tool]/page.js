@@ -17,13 +17,7 @@ import ExtractEmails from '@/components/tools/ExtractEmails';
 import ExtractUrls from '@/components/tools/ExtractUrls';
 import ExtractPhones from '@/components/tools/ExtractPhones';
 import RemoveDuplicateLines from '@/components/tools/RemoveDuplicateLines';
-import RemoveEmptyLines from '@/components/tools/RemoveEmptyLines';
-import RemoveWhitespace from '@/components/tools/RemoveWhitespace';
-import AddLineNumbers from '@/components/tools/AddLineNumbers';
-import AddPrefixSuffix from '@/components/tools/AddPrefixSuffix';
-import SortLines from '@/components/tools/SortLines';
-import ReverseText from '@/components/tools/ReverseText';
-import ReverseLines from '@/components/tools/ReverseLines';
+
 
 import RemoveLineBreaks from '@/components/tools/RemoveLineBreaks';
 import RemoveExtraSpaces from '@/components/tools/RemoveExtraSpaces';
@@ -335,21 +329,6 @@ export default async function ToolPage({ params }) {
         ) : toolData.slug === 'extract-phones' ? (
           <ExtractPhones t={t} lang={lang} />
         ) : toolData.slug === 'remove-duplicate-lines' ? (
-        
-          <RemoveEmptyLines t={t} lang={lang} />
-        ) : toolData.slug === 'remove-whitespace' ? (
-          <RemoveWhitespace t={t} lang={lang} />
-        ) : toolData.slug === 'add-line-numbers' ? (
-          <AddLineNumbers t={t} lang={lang} />
-        ) : toolData.slug === 'add-prefix-suffix' ? (
-          <AddPrefixSuffix t={t} lang={lang} />
-        ) : toolData.slug === 'sort-lines' ? (
-          <SortLines t={t} lang={lang} />
-        ) : toolData.slug === 'reverse-text' ? (
-          <ReverseText t={t} lang={lang} />
-        ) : toolData.slug === 'reverse-lines' ? (
-          <ReverseLines t={t} lang={lang} />
-
           <RemoveDuplicateLines t={t} lang={lang} />
         ) : toolData.slug === 'remove-line-breaks' ? (
           <RemoveLineBreaks lang={lang} />
@@ -378,7 +357,7 @@ export default async function ToolPage({ params }) {
         ) : BYTE_TOOLS[toolData.slug] ? (
           <ByteConverter key={toolData.slug} toolSlug={toolData.slug} lang={lang} />
         ) : ALPHABET_TOOLS[toolData.slug] ? (
-          <AlphabetTranslator key={toolData.slug} toolSlug={toolData.slug} />
+          <AlphabetTranslator key={toolData.slug} toolSlug={toolData.slug} lang={lang} />
         ) : toolData.slug === 'base64-encode-decode' ? (
           <Base64EncodeDecode t={t} lang={lang} />
         ) : toolData.slug === 'url-encode-decode' ? (
