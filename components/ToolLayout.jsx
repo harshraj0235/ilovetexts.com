@@ -473,6 +473,7 @@ export default function ToolLayout({
             <button type="button" onClick={toggleFocusMode} aria-pressed={isFocusMode}>
               <span aria-hidden="true">{isFocusMode ? '⊟' : '⛶'}</span> {isFocusMode ? 'Exit focus' : 'Focus'}
             </button>
+            <EmbedWidgetButton tool={tool} category={category} lang={lang} />
           </div>
         </div>
         {children}
@@ -790,5 +791,84 @@ function SoftwareApplicationSchema({ tool, category }) {
       type="application/ld+json"
       dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }}
     />
+  );
+}
+
+// ── Embed Widget Button ────────────────────
+function EmbedWidgetButton({ tool, category, lang }) {
+  const [showModal, setShowModal] = useState(false);
+  const [copied, setCopied] = useState(false);
+
+  // The embed URL matching the existing /embed/... routes
+  const embedUrl = \`https://ilovetexts.com/embed/\${lang}/\${category.id}/\${tool.slug}\`;
+  
+  const iframeCode = \`<iframe src="\${embedUrl}" width="100%" height="600" style="border: 1px solid #e2e8f0; border-radius: 8px; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);" title="\${tool.name} Embed" allowfullscreen></iframe>
+<p style="text-align: center; font-size: 12px; margin-top: 8px;">Powered by <a href="https://ilovetexts.com/\${lang}/\${category.id}/\${tool.slug}" target="_blank" rel="noopener noreferrer">ilovetexts.com</a></p>\`;
+
+  const copyToClipboard = async () => {
+    try {
+      await navigator.clipboard.writeText(iframeCode);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    } catch {}
+  };
+
+  return (
+    <>
+      <button 
+        type="button" 
+        onClick={() => setShowModal(true)}
+        title="Embed this tool on your website"
+      >
+        <span aria-hidden="true">{"< />"}</span> Embed
+      </button>
+
+      {showModal && (
+        <div style={{
+          position: 'fixed', top: 0, left: 0, right: 0, bottom: 0,
+          backgroundColor: 'rgba(0,0,0,0.5)', zIndex: 9999,
+          display: 'flex', alignItems: 'center', justifyContent: 'center'
+        }} onClick={() => setShowModal(false)}>
+          <div style={{
+            background: 'var(--bg-main)', padding: '24px', borderRadius: '12px',
+            maxWidth: '500px', width: '90%', boxShadow: '0 20px 25px -5px rgba(0, 0, 0, 0.1)'
+          }} onClick={e => e.stopPropagation()}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px' }}>
+              <h3 style={{ margin: 0, fontSize: '1.2rem' }}>Embed {tool.name}</h3>
+              <button onClick={() => setShowModal(false)} style={{ background: 'none', border: 'none', fontSize: '1.5rem', cursor: 'pointer', color: 'var(--text-secondary)' }}>&times;</button>
+            </div>
+            
+            <p style={{ fontSize: '0.9rem', color: 'var(--text-secondary)', marginBottom: '16px' }}>
+              Copy the HTML below to embed this free tool directly onto your blog or website. Your users will love it!
+            </p>
+
+            <textarea 
+              readOnly 
+              value={iframeCode} 
+              style={{
+                width: '100%', height: '120px', padding: '12px', 
+                background: 'var(--bg-section)', color: 'var(--text-main)',
+                border: '1px solid var(--border-light)', borderRadius: '6px',
+                fontFamily: 'monospace', fontSize: '0.85rem', resize: 'none',
+                marginBottom: '16px'
+              }}
+              onClick={(e) => e.target.select()}
+            />
+
+            <button 
+              onClick={copyToClipboard}
+              style={{
+                width: '100%', padding: '12px', borderRadius: '6px',
+                background: copied ? '#16a34a' : 'var(--accent)', 
+                color: 'white', border: 'none', fontWeight: 600,
+                cursor: 'pointer', transition: 'background 0.2s'
+              }}
+            >
+              {copied ? '✓ Copied to Clipboard' : 'Copy HTML Code'}
+            </button>
+          </div>
+        </div>
+      )}
+    </>
   );
 }
