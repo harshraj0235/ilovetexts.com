@@ -10,10 +10,14 @@ const LOCALES = [
   ['lt', 'Lithuanian'], ['de', 'German'],
 ];
 
+const DEMO_TEXT = `hello world! this is a DEMO TEXT.
+It contains https://example.com and user@email.com.
+Let's convert the case!`;
+
 export default function UppercaseConverter({ lang = 'en', mode = 'uppercase' }) {
   const isLowercase = mode === 'lowercase';
   const caseLabel = isLowercase ? 'lowercase' : 'UPPERCASE';
-  const [input, setInput] = useState('');
+  const [input, setInput] = useState(DEMO_TEXT);
   const [locale, setLocale] = useState('');
   const [preserveUrls, setPreserveUrls] = useState(true);
   const [preserveEmails, setPreserveEmails] = useState(true);

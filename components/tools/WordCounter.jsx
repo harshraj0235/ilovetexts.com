@@ -98,8 +98,12 @@ function SectionTitle({ children, badge }) {
 }
 
 // ─── Main Component ────────────────────────────────────
+const DEMO_TEXT = `This is a demo paragraph to showcase the word counter. It analyzes everything instantly as you type!
+
+Whether you are optimizing an article for SEO, writing an essay for school, or drafting a social media post, hitting your target word count is essential. The tool automatically extracts keyword density, calculates readability scores, and even estimates reading time. Try clearing this text and pasting your own content to see it in action.`;
+
 export default function WordCounter({ t, lang }) {
-  const [text, setText] = useState('');
+  const [text, setText] = useState(DEMO_TEXT);
   const [activeTab, setActiveTab] = useState('overview'); // overview | seo | social | goals
   const [goalIndex, setGoalIndex] = useState(0);
   const [customGoalWords, setCustomGoalWords] = useState(500);

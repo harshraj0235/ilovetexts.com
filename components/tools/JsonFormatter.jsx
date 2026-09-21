@@ -45,7 +45,7 @@ function formatBytes(bytes) {
 }
 
 export default function JsonFormatter({ lang = 'en' }) {
-  const [input, setInput] = useState('');
+  const [input, setInput] = useState(SAMPLE_JSON);
   const [viewMode, setViewMode] = useState('tree');
   const [indent, setIndent] = useState(2);
   const [sortKeys, setSortKeys] = useState(false);

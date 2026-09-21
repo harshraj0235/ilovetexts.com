@@ -6,8 +6,16 @@ import { removeLineBreaks } from '@/lib/text-processors';
 
 const LIMIT = 500000;
 
+const DEMO_TEXT = `This text is copied from a PDF file
+and it contains unwanted line breaks
+in the middle of sentences.
+
+We want to remove these hard returns
+so that the text flows naturally
+as a single, continuous paragraph.`;
+
 export default function RemoveLineBreaks({ lang = 'en' }) {
-  const [input, setInput] = useState('');
+  const [input, setInput] = useState(DEMO_TEXT);
   const [mode, setMode] = useState('all');
   const [separator, setSeparator] = useState('space');
   const [customSeparator, setCustomSeparator] = useState('');
