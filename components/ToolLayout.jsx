@@ -800,10 +800,10 @@ function EmbedWidgetButton({ tool, category, lang }) {
   const [copied, setCopied] = useState(false);
 
   // The embed URL matching the existing /embed/... routes
-  const embedUrl = \`https://ilovetexts.com/embed/\${lang}/\${category.id}/\${tool.slug}\`;
+  const embedUrl = `https://ilovetexts.com/embed/${lang}/${category.id}/${tool.slug}`;
   
-  const iframeCode = \`<iframe src="\${embedUrl}" width="100%" height="600" style="border: 1px solid #e2e8f0; border-radius: 8px; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);" title="\${tool.name} Embed" allowfullscreen></iframe>
-<p style="text-align: center; font-size: 12px; margin-top: 8px;">Powered by <a href="https://ilovetexts.com/\${lang}/\${category.id}/\${tool.slug}" target="_blank" rel="noopener noreferrer">ilovetexts.com</a></p>\`;
+  const iframeCode = `<iframe src="${embedUrl}" width="100%" height="600" style="border: 1px solid #e2e8f0; border-radius: 8px; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);" title="${tool.name} Embed" allowfullscreen></iframe>
+<p style="text-align: center; font-size: 12px; margin-top: 8px;">Powered by <a href="https://ilovetexts.com/${lang}/${category.id}/${tool.slug}" target="_blank" rel="noopener noreferrer">ilovetexts.com</a></p>`;
 
   const copyToClipboard = async () => {
     try {
