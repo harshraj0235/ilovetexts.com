@@ -19,9 +19,54 @@ function Toast({ message, type, onClose }) {
 
   return (
     <div className={`toast ${type}`}>
-      {type === 'success' && '✅ '}
-      {message}
+      {type === 'success' ? '✅ ' : '⚠️ '}{message}
     </div>
+  );
+}
+
+// ── Share Result Button ────────────────────
+function ShareResultButton() {
+  const [copied, setCopied] = useState(false);
+
+  const handleShare = () => {
+    // Attempt to find the primary textarea in the tool
+    const textAreas = document.querySelectorAll('.tool-textarea, textarea');
+    if (textAreas.length > 0) {
+      const text = textAreas[0].value;
+      if (!text) return; // Nothing to share
+      
+      try {
+        // Encode using Base64, safe for unicode
+        const encoded = btoa(unescape(encodeURIComponent(text)));
+        const url = new URL(window.location.href);
+        url.searchParams.set('input', encoded);
+        navigator.clipboard.writeText(url.toString());
+        setCopied(true);
+        setTimeout(() => setCopied(false), 2000);
+      } catch (e) {
+        console.error("Failed to encode input for sharing", e);
+      }
+    }
+  };
+
+  return (
+    <button
+      onClick={handleShare}
+      title="Share a link with this exact input text"
+      style={{
+        display: 'inline-flex', alignItems: 'center', gap: '7px',
+        padding: '9px 20px', borderRadius: '8px',
+        background: copied ? '#10b981' : '#f1f5f9', 
+        color: copied ? '#fff' : '#475569',
+        border: '1px solid ' + (copied ? '#10b981' : '#cbd5e1'),
+        cursor: 'pointer',
+        fontWeight: 600, fontSize: '0.88rem',
+        whiteSpace: 'nowrap', flexShrink: 0,
+        transition: 'all 0.15s',
+      }}
+    >
+      {copied ? '✓ Copied Link' : '🔗 Share Link'}
+    </button>
   );
 }
 
@@ -199,21 +244,24 @@ function EmbedCTA({ toolUrl, toolName }) {
               </div>
             </div>
           </div>
-          <button
-            onClick={() => setOpen(true)}
-            style={{
-              display: 'inline-flex', alignItems: 'center', gap: '7px',
-              padding: '9px 20px', borderRadius: '8px',
-              background: '#0284c7', color: '#fff',
-              border: 'none', cursor: 'pointer',
-              fontWeight: 700, fontSize: '0.88rem',
-              boxShadow: '0 2px 8px rgba(2,132,199,0.35)',
-              whiteSpace: 'nowrap', flexShrink: 0,
-              transition: 'background 0.15s',
-            }}
-          >
-            📎 Get Embed Code
-          </button>
+          <div style={{ display: 'flex', gap: '8px' }}>
+            <ShareResultButton />
+            <button
+              onClick={() => setOpen(true)}
+              style={{
+                display: 'inline-flex', alignItems: 'center', gap: '7px',
+                padding: '9px 20px', borderRadius: '8px',
+                background: '#0284c7', color: '#fff',
+                border: 'none', cursor: 'pointer',
+                fontWeight: 700, fontSize: '0.88rem',
+                boxShadow: '0 2px 8px rgba(2,132,199,0.35)',
+                whiteSpace: 'nowrap', flexShrink: 0,
+                transition: 'background 0.15s',
+              }}
+            >
+              📎 Get Embed Code
+            </button>
+          </div>
         </div>
       </div>
 
@@ -348,6 +396,41 @@ export default function ToolLayout({
       localStorage.setItem('ilt-recent-tools', JSON.stringify(filtered.slice(0, 10)));
     } catch (e) { /* localStorage might be full or unavailable */ }
   }, [category.id, tool.slug]);
+
+  // ── Universal Hydration from ?input= Share Link ──
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+    const params = new URLSearchParams(window.location.search);
+    const sharedInput = params.get('input');
+    
+    if (sharedInput) {
+      try {
+        const decoded = decodeURIComponent(escape(atob(sharedInput)));
+        
+        // Find the primary input textarea
+        setTimeout(() => {
+          const textAreas = document.querySelectorAll('.tool-textarea, textarea');
+          if (textAreas.length > 0) {
+            const el = textAreas[0];
+            // React overrides the value setter, so we must call the native HTMLTextAreaElement setter
+            const nativeInputValueSetter = Object.getOwnPropertyDescriptor(window.HTMLTextAreaElement.prototype, "value").set;
+            if (nativeInputValueSetter) {
+              nativeInputValueSetter.call(el, decoded);
+              const event = new Event('input', { bubbles: true });
+              el.dispatchEvent(event);
+              el.dispatchEvent(new Event('change', { bubbles: true }));
+            } else {
+              el.value = decoded;
+              el.dispatchEvent(new Event('input', { bubbles: true }));
+            }
+          }
+        }, 300); // Wait for tool components to render
+        
+      } catch (e) {
+        console.error("Failed to decode shared input", e);
+      }
+    }
+  }, []);
 
   // Saved tools stay on the user's device: useful, private, and account-free.
   useEffect(() => {

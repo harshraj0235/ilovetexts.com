@@ -1674,3 +1674,9 @@ button, a, [role="button"] {
 .hub-hero {
   contain: layout style paint;
 }
+
+/* ── Prevent Cumulative Layout Shift (CLS) ── */
+/* Reserve space for the client-side rendered tool workspace before hydration */
+.tool-workspace {
+  min-height: 500px;
+}
