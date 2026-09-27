@@ -1,0 +1,63 @@
+'use client';
+
+import { useMemo, useState } from 'react';
+import { compareTexts } from '@/lib/text-similarity';
+
+const LIMIT = 100000;
+const percent = (value) => `${Math.round(value * 100)}%`;
+
+export default function PlagiarismChecker() {
+  const [sourceText, setSourceText] = useState('');
+  const [draftText, setDraftText] = useState('');
+  const [phraseSize, setPhraseSize] = useState(5);
+  const [caseSensitive, setCaseSensitive] = useState(false);
+  const [ignoreCommonWords, setIgnoreCommonWords] = useState(false);
+  const [report, setReport] = useState(null);
+  const [message, setMessage] = useState('');
+  const [filter, setFilter] = useState('all');
+
+  const visibleSentences = useMemo(() => !report ? [] : report.sentenceMatches.filter(({ score }) => filter === 'all' || (filter === 'strong' ? score >= 0.5 : score > 0)), [report, filter]);
+  const runComparison = () => {
+    if (!sourceText.trim() || !draftText.trim()) { setMessage('Paste both the known source and the draft you want to compare.'); return; }
+    setReport(compareTexts(sourceText, draftText, { phraseSize, caseSensitive, ignoreCommonWords }));
+    setMessage('Comparison complete. Review the matching passages—the percentages are overlap measures, not a plagiarism verdict.');
+    requestAnimationFrame(() => document.getElementById('comparison-report')?.scrollIntoView({ behavior: 'smooth', block: 'start' }));
+  };
+  const swapTexts = () => { setSourceText(draftText); setDraftText(sourceText); setReport(null); };
+  const clearAll = () => { setSourceText(''); setDraftText(''); setReport(null); setMessage(''); };
+  const loadSample = () => {
+    setSourceText('Urban trees cool streets by shading pavement and releasing water vapor. They can also reduce stormwater runoff and provide habitat for birds and insects.');
+    setDraftText('Urban trees cool streets by shading pavement and releasing water vapor. They also provide habitat, while their roots and surrounding soil can reduce stormwater runoff.');
+    setReport(null); setMessage('Example loaded. Select Compare texts to inspect the overlap.');
+  };
+  const reportText = () => {
+    if (!report) return '';
+    return [`DIRECT TEXT OVERLAP REPORT`, `Phrase size: ${report.phraseSize} words`, `Draft phrase coverage: ${percent(report.metrics.draftPhraseCoverage)}`, `Phrase-set Jaccard: ${percent(report.metrics.phraseJaccard)}`, `Vocabulary Jaccard: ${percent(report.metrics.vocabularyJaccard)}`, `Word-frequency cosine: ${percent(report.metrics.cosine)}`, '', 'These metrics compare only the two supplied texts. They do not search the web, detect ideas, or determine plagiarism.', '', ...report.sentenceMatches.map(({ text, score, source }, index) => [`${index + 1}. Draft overlap: ${percent(score)}`, `Draft: ${text.trim()}`, source ? `Closest source sentence: ${source}` : 'No exact phrase match', ''].join('\n'))].join('\n');
+  };
+  const copyReport = async () => { if (report) { await navigator.clipboard.writeText(reportText()); setMessage('Report copied.'); } };
+  const downloadReport = () => {
+    if (!report) return; const blob = new Blob([reportText()], { type: 'text/plain;charset=utf-8' }); const url = URL.createObjectURL(blob);
+    const link = document.createElement('a'); link.href = url; link.download = 'text-overlap-report.txt'; link.click(); URL.revokeObjectURL(url);
+  };
+
+  return <div className="comparison-tool">
+    <section className="compare-card" aria-labelledby="comparison-title"><header><span>Local two-text analysis</span><h2 id="comparison-title">Inspect wording overlap—not a plagiarism verdict</h2><p>Compare one known source with one draft. Nothing is uploaded, but this tool does not search websites, publications, or student repositories and cannot identify authorship or intent.</p></header>
+      <div className="toolbar"><button type="button" onClick={loadSample}>Load example</button><button type="button" onClick={swapTexts}>Swap sides</button><button type="button" onClick={clearAll}>Clear</button></div>
+      <div className="editors"><label><strong>Known source</strong><small>{sourceText.length.toLocaleString()} / {LIMIT.toLocaleString()} characters</small><textarea value={sourceText} onChange={(event) => { setSourceText(event.target.value.slice(0, LIMIT)); setReport(null); }} placeholder="Paste the original or reference passage…" /></label><label><strong>Draft to compare</strong><small>{draftText.length.toLocaleString()} / {LIMIT.toLocaleString()} characters</small><textarea value={draftText} onChange={(event) => { setDraftText(event.target.value.slice(0, LIMIT)); setReport(null); }} placeholder="Paste the draft or second passage…" /></label></div>
+      <div className="settings"><label>Exact phrase length<select value={phraseSize} onChange={(event) => { setPhraseSize(Number(event.target.value)); setReport(null); }}>{[3,4,5,6,7,8].map((size) => <option key={size} value={size}>{size} words</option>)}</select></label><label className="check"><input type="checkbox" checked={caseSensitive} onChange={(event) => { setCaseSensitive(event.target.checked); setReport(null); }} /> Case-sensitive phrases</label><label className="check"><input type="checkbox" checked={ignoreCommonWords} onChange={(event) => { setIgnoreCommonWords(event.target.checked); setReport(null); }} /> Ignore common words in vocabulary metrics</label><button type="button" className="primary" onClick={runComparison}>Compare texts</button></div>
+      {message && <p className="message" role="status">{message}</p>}
+    </section>
+
+    {report && <section id="comparison-report" className="report"><div className="report-head"><div><span>Transparent similarity report</span><h3>Four measures, four different questions</h3></div><div><button type="button" onClick={copyReport}>Copy report</button><button type="button" onClick={downloadReport}>Download .txt</button></div></div>
+      <div className="metrics"><article><strong>{percent(report.metrics.draftPhraseCoverage)}</strong><h4>Draft phrase coverage</h4><p>Share of the draft’s {report.phraseSize}-word sequences also found in the source.</p></article><article><strong>{percent(report.metrics.phraseJaccard)}</strong><h4>Phrase-set Jaccard</h4><p>Shared exact phrases divided by all unique phrases across both texts.</p></article><article><strong>{percent(report.metrics.vocabularyJaccard)}</strong><h4>Vocabulary Jaccard</h4><p>Shared unique words divided by all unique words in both texts.</p></article><article><strong>{percent(report.metrics.cosine)}</strong><h4>Word-frequency cosine</h4><p>Similarity of word-frequency profiles; word order is not considered.</p></article></div>
+      <div className="counts"><span><strong>{report.counts.sourceWords}</strong> source words</span><span><strong>{report.counts.draftWords}</strong> draft words</span><span><strong>{report.counts.matchingPhrases}</strong> matching draft phrases</span><span><strong>{report.counts.draftPhrases}</strong> draft phrases checked</span></div>
+      <div className="evidence-head"><div><h3>Draft sentence evidence</h3><p>Each sentence is compared with its closest source sentence using exact phrases.</p></div><label>Show<select value={filter} onChange={(event) => setFilter(event.target.value)}><option value="all">All sentences</option><option value="matched">Any overlap</option><option value="strong">50%+ overlap</option></select></label></div>
+      <div className="sentences">{visibleSentences.length ? visibleSentences.map(({ text, score, source }, index) => <article key={index} className={score >= .5 ? 'strong' : score > 0 ? 'partial' : ''}><div><strong>{percent(score)} exact-phrase coverage</strong><span>{score >= .5 ? 'Review closely' : score > 0 ? 'Some shared wording' : 'No exact phrase match'}</span></div><p>{text.trim()}</p>{source && <details><summary>Closest source sentence</summary><blockquote>{source}</blockquote></details>}</article>) : <p className="empty">No sentences match this filter.</p>}</div>
+      <aside><strong>Interpret carefully:</strong> shared quotations, references, technical phrases, and assignment wording can raise overlap legitimately. Reworded ideas may score low. Only a human with sources, citation context, and applicable policy can evaluate plagiarism.</aside>
+    </section>}
+
+    <style jsx>{`
+      .comparison-tool{display:grid;gap:28px}.compare-card,.report{overflow:hidden;border:1px solid var(--border-light);border-radius:22px;background:var(--bg-white);box-shadow:var(--shadow-card)}header{padding:30px;background:linear-gradient(135deg,#20243a,#41345f);color:white}header span,.report-head span{font-size:.72rem;font-weight:900;letter-spacing:.13em;text-transform:uppercase;color:#d8b4fe}header h2{margin:7px 0 8px;font-size:clamp(1.55rem,4vw,2.2rem)}header p{max-width:800px;margin:0;color:#ede9fe}.toolbar{display:flex;justify-content:flex-end;gap:8px;padding:12px 20px;border-bottom:1px solid var(--border-light)}button{min-height:40px;padding:0 14px;border:1px solid var(--border-light);border-radius:9px;background:var(--bg-white);color:var(--text-main);font-weight:800;cursor:pointer}.editors{display:grid;grid-template-columns:1fr 1fr;gap:16px;padding:20px}.editors label{display:grid;grid-template-columns:1fr auto;gap:7px}.editors small{color:var(--text-secondary)}textarea,select{border:1px solid var(--border-dark);border-radius:11px;background:var(--bg-white);color:var(--text-main);font:inherit}.editors textarea{grid-column:1/-1;min-height:300px;padding:14px;line-height:1.6;resize:vertical}.settings{display:flex;align-items:end;gap:14px;padding:17px 20px;background:var(--bg-section);border-top:1px solid var(--border-light)}.settings>label:first-child,.evidence-head label{display:grid;gap:5px;font-size:.75rem;font-weight:850}.settings select,.evidence-head select{min-height:42px;padding:0 10px}.check{display:flex;align-items:center;gap:8px;min-height:42px;font-size:.82rem;font-weight:750}.check input{width:19px;height:19px}.settings .primary{margin-left:auto;min-height:46px;border:0;background:#553c78;color:white}.message{margin:0 20px 20px;padding:11px 13px;border-radius:9px;background:#f3e8ff;color:#581c87}.report{scroll-margin-top:24px;padding-bottom:20px}.report-head{display:flex;justify-content:space-between;align-items:end;gap:16px;padding:22px}.report-head span{color:#7e22ce}.report-head h3{margin:5px 0 0}.report-head>div:last-child{display:flex;gap:7px}.metrics{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;padding:0 22px 20px}.metrics article{padding:16px;border:1px solid var(--border-light);border-radius:13px;background:var(--bg-section)}.metrics article>strong{font-size:1.75rem;color:#6b21a8}.metrics h4{margin:6px 0}.metrics p{margin:0;color:var(--text-secondary);font-size:.78rem;line-height:1.45}.counts{display:flex;flex-wrap:wrap;gap:8px;padding:13px 22px;background:#faf5ff;border-block:1px solid #ead7f7}.counts span{padding:7px 10px;border-radius:999px;background:white;font-size:.8rem}.evidence-head{display:flex;justify-content:space-between;align-items:end;gap:15px;padding:22px 22px 12px}.evidence-head h3,.evidence-head p{margin:0}.evidence-head p{margin-top:4px;color:var(--text-secondary);font-size:.83rem}.sentences{display:grid;gap:10px;padding:0 22px 18px}.sentences article{padding:14px;border:1px solid var(--border-light);border-left:4px solid #94a3b8;border-radius:11px}.sentences article.partial{border-left-color:#d97706;background:#fffbeb}.sentences article.strong{border-left-color:#dc2626;background:#fff1f2}.sentences article>div{display:flex;justify-content:space-between;gap:10px;font-size:.78rem}.sentences article>div span{color:var(--text-secondary)}.sentences p{line-height:1.55}.sentences details{font-size:.82rem}.sentences blockquote{margin:9px 0 0;padding:10px;border-left:3px solid #c4b5fd;background:white}.empty{color:var(--text-secondary)}.report aside{margin:0 22px;padding:14px;border:1px solid #bfdbfe;border-radius:11px;background:#eff6ff;color:#1e3a8a;font-size:.84rem}@media(max-width:900px){.metrics{grid-template-columns:1fr 1fr}.settings{align-items:stretch;flex-wrap:wrap}.settings .primary{width:100%;margin:0}}@media(max-width:700px){header{padding:20px}.editors{grid-template-columns:1fr;padding:16px}.editors textarea{min-height:230px}.toolbar{justify-content:stretch}.toolbar button{flex:1;padding:0 6px}.metrics{grid-template-columns:1fr;padding-inline:16px}.report-head,.evidence-head{align-items:stretch;flex-direction:column;padding-inline:16px}.report-head>div:last-child{width:100%}.report-head button{flex:1}.sentences{padding-inline:16px}.report aside{margin-inline:16px}.settings{display:grid;padding:16px}.sentences article>div{flex-direction:column}}
+    `}</style>
+  </div>;
+}

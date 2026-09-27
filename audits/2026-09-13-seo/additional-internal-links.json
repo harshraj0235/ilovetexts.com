@@ -1,0 +1,20 @@
+[
+  "/de/gov-doc-extractor",
+  "/de/gov-doc-translator",
+  "/de/word-counter/speaking-time",
+  "/es/gov-doc-extractor",
+  "/es/gov-doc-translator",
+  "/es/word-counter/speaking-time",
+  "/gov-doc-extractor",
+  "/gov-doc-translator",
+  "/hi/gov-doc-extractor",
+  "/hi/gov-doc-translator",
+  "/hi/word-counter/speaking-time",
+  "/id/gov-doc-extractor",
+  "/id/gov-doc-translator",
+  "/id/word-counter/speaking-time",
+  "/pt/gov-doc-extractor",
+  "/pt/gov-doc-translator",
+  "/pt/word-counter/speaking-time",
+  "/word-counter/speaking-time"
+]

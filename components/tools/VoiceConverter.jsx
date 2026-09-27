@@ -1,0 +1,53 @@
+'use client';
+
+import { useMemo, useState } from 'react';
+import { analyzeVoice } from '@/lib/voice-analysis';
+
+const LIMIT = 30000;
+const PROFILE_NOTES = {
+  general: 'Choose active voice when naming the actor improves clarity; keep purposeful passives.',
+  academic: 'Discipline and journal conventions vary. Passive voice may appropriately emphasize a method, result, or receiver.',
+  business: 'Check whether passive wording hides responsibility, ownership, or the next action.',
+};
+
+export default function VoiceConverter() {
+  const [text, setText] = useState('');
+  const [sentences, setSentences] = useState([]);
+  const [profile, setProfile] = useState('general');
+  const [filter, setFilter] = useState('all');
+  const [message, setMessage] = useState('');
+  const flagged = sentences.filter(({ status }) => status !== 'no-pattern').length;
+  const visible = useMemo(() => sentences.filter(({ status }) => filter === 'all' || (filter === 'flagged' ? status !== 'no-pattern' : status === 'review')), [sentences, filter]);
+
+  const analyze = (event) => {
+    event.preventDefault();
+    if (!text.trim()) { setMessage('Enter English text before scanning.'); return; }
+    const results = analyzeVoice(text).map((item) => ({ ...item, rewrite: item.suggestion, actor: '', keep: false }));
+    setSentences(results); setMessage('Scan complete. Every flag is a review prompt, not a grammar error.');
+    requestAnimationFrame(() => document.getElementById('voice-review')?.scrollIntoView({ behavior: 'smooth', block: 'start' }));
+  };
+  const update = (index, changes) => setSentences((current) => current.map((sentence, sentenceIndex) => sentenceIndex === index ? { ...sentence, ...changes } : sentence));
+  const finalText = () => sentences.map((sentence) => sentence.keep || !sentence.rewrite.trim() ? sentence.original : sentence.rewrite.trim()).join(' ');
+  const copyFinal = async () => { if (sentences.length) { await navigator.clipboard.writeText(finalText()); setMessage('Reviewed text copied.'); } };
+  const downloadFinal = () => {
+    if (!sentences.length) return; const url = URL.createObjectURL(new Blob([finalText()], { type: 'text/plain;charset=utf-8' }));
+    const link = document.createElement('a'); link.href = url; link.download = 'voice-reviewed-text.txt'; link.click(); URL.revokeObjectURL(url);
+  };
+  const loadSample = () => { setText('The final report was written by Maya. The samples were stored overnight. Jordan reviews every result. The team was interested in the outcome.'); setSentences([]); setMessage('Example loaded. Select Scan voice patterns.'); };
+  const clearAll = () => { setText(''); setSentences([]); setMessage(''); };
+
+  return <div className="voice-tool">
+    <section className="scanner" aria-labelledby="voice-title"><header><span>Private English voice review</span><h2 id="voice-title">Find likely passives and decide what serves the sentence</h2><p>The rule-based scanner flags “be/get + likely past participle” patterns. It can miss passives and flag adjectives, and it never assumes passive voice is automatically wrong.</p></header>
+      <form onSubmit={analyze}><div className="form-top"><label>Writing context<select value={profile} onChange={(event) => setProfile(event.target.value)}><option value="general">General writing</option><option value="academic">Academic / scientific</option><option value="business">Business / policy</option></select></label><p>{PROFILE_NOTES[profile]}</p></div><label className="editor"><span>Your English text</span><small>{text.length.toLocaleString()} / {LIMIT.toLocaleString()} characters</small><textarea value={text} onChange={(event) => { setText(event.target.value.slice(0, LIMIT)); setSentences([]); }} rows={10} placeholder="Paste sentences to scan for possible passive constructions…" /></label><p className="privacy">Analysis happens in this browser. No text is sent to a server.</p>{message && <p className="message" role="status">{message}</p>}<div className="actions"><button type="button" onClick={loadSample}>Load example</button><button type="button" onClick={clearAll}>Clear</button><button className="primary" type="submit">Scan voice patterns</button></div></form>
+    </section>
+
+    {sentences.length > 0 && <section id="voice-review" className="review"><div className="review-head"><div><span>Sentence review</span><h3>{flagged} of {sentences.length} sentences need a closer look</h3></div><div><label>Show<select value={filter} onChange={(event) => setFilter(event.target.value)}><option value="all">All sentences</option><option value="flagged">Flagged patterns</option><option value="review">Ambiguous patterns</option></select></label><button type="button" onClick={copyFinal}>Copy final text</button><button type="button" onClick={downloadFinal}>Download</button></div></div>
+      <div className="sentence-list">{visible.map((sentence) => { const index = sentences.indexOf(sentence); return <article key={index} className={sentence.status}><div className="sentence-title"><span>{sentence.status === 'possible-passive' ? `Possible passive · ${sentence.confidence} confidence` : sentence.status === 'review' ? 'Participial adjective or passive—review context' : 'No passive pattern found'}</span>{sentence.phrase && <code>{sentence.phrase}</code>}</div><p>{sentence.original}</p>{sentence.status !== 'no-pattern' && <div className="guidance">{sentence.actorPresent ? 'An explicit “by” agent is present. Check whether moving that actor to the subject position improves the emphasis.' : 'No actor is named. Identify the real actor before rewriting, or keep the passive when the actor is unknown, irrelevant, or intentionally backgrounded.'}</div>}{sentence.status !== 'no-pattern' && <div className="rewrite"><label>Actor <span>optional planning note</span><input value={sentence.actor} onChange={(event) => update(index, { actor: event.target.value.slice(0, 100) })} placeholder="Who or what performs the action?" /></label><label>Reviewed sentence<textarea value={sentence.rewrite} onChange={(event) => update(index, { rewrite: event.target.value })} rows={3} placeholder="Rewrite manually after confirming actor, tense, meaning, and emphasis…" /></label><label className="keep"><input type="checkbox" checked={sentence.keep} onChange={(event) => update(index, { keep: event.target.checked })} /> Keep the original sentence intentionally</label></div>}</article>; })}</div>
+      <aside><strong>Automatic rewrite limit:</strong> a draft is offered only for a narrow simple-past pattern such as “The report was written by Maya.” Complex tenses, modals, coordinated clauses, agentless passives, pronouns, and ambiguous participles require manual review.</aside>
+    </section>}
+
+    <style jsx>{`
+      .voice-tool{display:grid;gap:28px}.scanner,.review{overflow:hidden;border:1px solid var(--border-light);border-radius:22px;background:var(--bg-white);box-shadow:var(--shadow-card)}header{padding:30px;background:linear-gradient(135deg,#12304c,#164e63);color:white}header span,.review-head>div>span{font-size:.72rem;font-weight:900;letter-spacing:.13em;text-transform:uppercase;color:#a5f3fc}header h2{margin:7px 0 8px;font-size:clamp(1.55rem,4vw,2.2rem)}header p{max-width:800px;margin:0;color:#cffafe}form{display:grid;gap:16px;padding:24px}.form-top{display:grid;grid-template-columns:220px 1fr;align-items:end;gap:15px}.form-top label,.review-head label{display:grid;gap:5px;font-size:.76rem;font-weight:850}.form-top p{margin:0;padding:11px 13px;border-radius:10px;background:#ecfeff;color:#155e75;font-size:.83rem}.editor{display:grid;grid-template-columns:1fr auto;gap:7px;font-weight:850}.editor small{color:var(--text-secondary);font-weight:500}.editor textarea{grid-column:1/-1;min-height:250px;padding:14px;line-height:1.6;resize:vertical}textarea,input,select{border:1px solid var(--border-dark);border-radius:10px;background:var(--bg-white);color:var(--text-main);font:inherit}select,input{min-height:42px;padding:0 10px}textarea:focus,input:focus,select:focus{outline:3px solid #a5f3fc;border-color:#0891b2}.privacy{margin:0;color:var(--text-secondary);font-size:.8rem}.message{margin:0;padding:11px 13px;border-radius:9px;background:#ecfeff;color:#155e75}.actions{display:flex;justify-content:flex-end;gap:8px}button{min-height:43px;padding:0 15px;border:1px solid var(--border-light);border-radius:9px;background:var(--bg-white);color:var(--text-main);font-weight:850;cursor:pointer}.primary{margin-left:auto;border:0;background:#155e75;color:white}.review{scroll-margin-top:24px;padding-bottom:20px}.review-head{display:flex;justify-content:space-between;align-items:end;gap:16px;padding:21px;border-bottom:1px solid var(--border-light)}.review-head>div:first-child>span{color:#0e7490}.review-head h3{margin:5px 0 0}.review-head>div:last-child{display:flex;align-items:end;gap:7px}.sentence-list{display:grid;gap:11px;padding:20px}.sentence-list article{padding:15px;border:1px solid var(--border-light);border-left:4px solid #94a3b8;border-radius:12px}.sentence-list article.possible-passive{border-left-color:#dc2626;background:#fff7f7}.sentence-list article.review{border-left-color:#d97706;background:#fffbeb}.sentence-title{display:flex;justify-content:space-between;gap:10px;color:var(--text-secondary);font-size:.78rem;font-weight:800}.sentence-title code{padding:3px 6px;border-radius:6px;background:white;color:#334155}.sentence-list article>p{font-size:1.03rem;line-height:1.55}.guidance{padding:10px;border-radius:9px;background:white;color:var(--text-secondary);font-size:.83rem}.rewrite{display:grid;grid-template-columns:220px 1fr;gap:10px;margin-top:12px}.rewrite label{display:grid;align-content:start;gap:5px;font-size:.78rem;font-weight:850}.rewrite label span{color:var(--text-secondary);font-weight:500}.rewrite textarea{padding:10px;resize:vertical}.rewrite .keep{grid-column:1/-1;display:flex;align-items:center;gap:8px}.keep input{width:19px;min-height:19px}.review aside{margin:0 20px;padding:14px;border:1px solid #bfdbfe;border-radius:11px;background:#eff6ff;color:#1e3a8a;font-size:.84rem}@media(max-width:850px){.review-head{align-items:stretch;flex-direction:column}.review-head>div:last-child{flex-wrap:wrap}.rewrite{grid-template-columns:1fr}.rewrite .keep{grid-column:auto}}@media(max-width:620px){header,form{padding:18px}.form-top{grid-template-columns:1fr}.actions{display:grid;grid-template-columns:1fr 1fr}.actions .primary{grid-column:1/-1;margin:0}.sentence-list{padding:14px}.sentence-title{align-items:start;flex-direction:column}.review-head>div:last-child{display:grid;grid-template-columns:1fr 1fr}.review-head label{grid-column:1/-1}.review-head button{width:100%}.review aside{margin-inline:14px}}
+    `}</style>
+  </div>;
+}

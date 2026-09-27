@@ -1,0 +1,55 @@
+{
+  "checkedAt": "2026-09-13T08:16:52.518Z",
+  "catalogueTools": 275,
+  "categories": 27,
+  "declaredAndSitemapUrls": 1944,
+  "crawled": 1944,
+  "sitemapEntries": 1938,
+  "statuses": {
+    "200": 1944
+  },
+  "noindex": 100,
+  "sitemapNoindex": 100,
+  "sitemapNonSelfCanonical": 1610,
+  "multipleH1": 12,
+  "missingH1": 0,
+  "extraInternalLinks": 18,
+  "coverage": [
+    {
+      "lang": "en",
+      "missingRecords": 60,
+      "sameEnglishWhatIs": 0,
+      "missingWhatIs": 65
+    },
+    {
+      "lang": "hi",
+      "missingRecords": 83,
+      "sameEnglishWhatIs": 151,
+      "missingWhatIs": 88
+    },
+    {
+      "lang": "pt",
+      "missingRecords": 83,
+      "sameEnglishWhatIs": 151,
+      "missingWhatIs": 88
+    },
+    {
+      "lang": "es",
+      "missingRecords": 83,
+      "sameEnglishWhatIs": 36,
+      "missingWhatIs": 88
+    },
+    {
+      "lang": "de",
+      "missingRecords": 83,
+      "sameEnglishWhatIs": 36,
+      "missingWhatIs": 88
+    },
+    {
+      "lang": "id",
+      "missingRecords": 83,
+      "sameEnglishWhatIs": 36,
+      "missingWhatIs": 88
+    }
+  ]
+}

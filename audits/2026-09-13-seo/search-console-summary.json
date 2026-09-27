@@ -1,0 +1,46 @@
+{
+  "source": {
+    "coverageSheet": "https://docs.google.com/spreadsheets/d/1DdRCjAgRLfgxK0WbfQrQgvDNZsA43rd2GrUH3nOiS5A/edit?usp=sharing",
+    "performanceSheet": "https://docs.google.com/spreadsheets/d/1Vb1c4_9ZjpcPuJB1HKlb-CpIxbU1-bSH5QRGZs2er0M/edit?usp=sharing",
+    "access": "public view-only",
+    "coverageLatestDate": "2026-09-04",
+    "performanceLatestDate": "2026-09-10",
+    "performanceFilter": "Web, Last 3 months"
+  },
+  "coverage": {
+    "indexed": 1020,
+    "notIndexed": 771,
+    "knownUrlPopulation": 1791,
+    "reasons": [
+      { "reason": "Alternate page with proper canonical tag", "source": "Website", "validation": "Started", "pages": 101 },
+      { "reason": "Not found (404)", "source": "Website", "validation": "Started", "pages": 30 },
+      { "reason": "Page with redirect", "source": "Website", "validation": "Started", "pages": 12 },
+      { "reason": "Discovered - currently not indexed", "source": "Google systems", "validation": "Started", "pages": 553 },
+      { "reason": "Crawled - currently not indexed", "source": "Google systems", "validation": "Started", "pages": 57 },
+      { "reason": "Duplicate, Google chose different canonical than user", "source": "Google systems", "validation": "Started", "pages": 18 },
+      { "reason": "Server error (5xx)", "source": "Website", "validation": "Passed", "pages": 0 }
+    ]
+  },
+  "performanceChart": {
+    "clicks": 30,
+    "impressions": 4487,
+    "calculatedCtr": 0.006686,
+    "approximateImpressionWeightedPositionFromRoundedDailyRows": 59.66
+  },
+  "pageDimension": { "clicks": 31, "impressions": 4665, "rows": 527 },
+  "queryDimensionReviewed": { "clicks": 2, "impressions": 2225, "rows": 999, "note": "Query rows may omit anonymized queries and may not reconcile with chart or page totals." },
+  "devices": [
+    { "device": "Desktop", "clicks": 20, "impressions": 3970, "ctr": 0.005, "position": 62.95 },
+    { "device": "Mobile", "clicks": 10, "impressions": 496, "ctr": 0.0202, "position": 34.77 },
+    { "device": "Tablet", "clicks": 0, "impressions": 21, "ctr": 0, "position": 24.71 }
+  ],
+  "prioritySignals": [
+    { "type": "query", "value": "contador de palabras online", "impressions": 35, "position": 15.49 },
+    { "type": "page", "value": "/blog/contador-palabras-online-gratis", "impressions": 34, "position": 17.65, "liveStatusOnAudit": 404 },
+    { "type": "page", "value": "/de/text-cleaner/sort-lines", "clicks": 1, "impressions": 17, "position": 12.29 },
+    { "type": "page", "value": "/text-hasher-cryptography/des-encrypt-decrypt", "impressions": 21, "position": 8.05 },
+    { "type": "page", "value": "/social-media-tools/teleprompter-formatter", "clicks": 1, "impressions": 7, "position": 5.43 },
+    { "type": "query", "value": "bcrypt", "impressions": 8, "position": 9.25 },
+    { "type": "query", "value": "how can i add pages to a pdf online?", "impressions": 6, "position": 6.33 }
+  ]
+}

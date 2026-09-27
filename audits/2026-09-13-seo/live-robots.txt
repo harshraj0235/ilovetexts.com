@@ -1,0 +1,58 @@
+User-Agent: Googlebot
+Allow: /
+Disallow: /api/
+Disallow: /private/
+Disallow: /embed/
+Disallow: /_next/image
+Disallow: /*?*
+
+User-Agent: Bingbot
+Allow: /
+Disallow: /api/
+Disallow: /private/
+Disallow: /embed/
+Disallow: /_next/image
+Disallow: /*?*
+
+User-Agent: GPTBot
+Allow: /
+Disallow: /api/
+Disallow: /_next/image
+Disallow: /embed/
+Disallow: /*?*
+
+User-Agent: Google-Extended
+Allow: /
+Disallow: /api/
+Disallow: /_next/image
+Disallow: /embed/
+Disallow: /*?*
+
+User-Agent: PerplexityBot
+Allow: /
+Disallow: /api/
+Disallow: /embed/
+Disallow: /*?*
+
+User-Agent: ClaudeBot
+Allow: /
+Disallow: /api/
+Disallow: /embed/
+Disallow: /*?*
+
+User-Agent: OAI-SearchBot
+Allow: /
+Disallow: /api/
+Disallow: /embed/
+Disallow: /*?*
+
+User-Agent: *
+Allow: /
+Disallow: /api/
+Disallow: /private/
+Disallow: /embed/
+Disallow: /_next/image
+Disallow: /*?*
+
+Host: https://ilovetexts.com
+Sitemap: https://ilovetexts.com/sitemap_index.xml

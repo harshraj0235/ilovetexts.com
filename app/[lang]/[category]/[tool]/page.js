@@ -1,0 +1,593 @@
+import { getAllTools, getTool, getRelatedTools, getCrossLinks, CATEGORIES, SITE } from '@/lib/tools-config';
+import { generateToolMeta, generateFAQSchema, generateToolSchema, generateBreadcrumbSchema, generateHowToSchema } from '@/lib/seo';
+import { getToolSEO } from '@/lib/tools-seo-data';
+import { LANG_CODES, buildCanonical } from '@/lib/i18n';
+import ToolLayout from '@/components/ToolLayout';
+import ClientTool from '@/components/ClientTool';
+import GrammarChecker from '@/components/tools/GrammarChecker';
+import SpellChecker from '@/components/tools/SpellChecker';
+import PunctuationChecker from '@/components/tools/PunctuationChecker';
+import OnlineTypingTool from '@/components/tools/OnlineTypingTool';
+import RhymingDictionary from '@/components/tools/RhymingDictionary';
+import AnagramGenerator from '@/components/tools/AnagramGenerator';
+import WordleFinder from '@/components/tools/WordleFinder';
+import ThesisGenerator from '@/components/tools/ThesisGenerator';
+import EssayOutliner from '@/components/tools/EssayOutliner';
+import ExtractEmails from '@/components/tools/ExtractEmails';
+import ExtractUrls from '@/components/tools/ExtractUrls';
+import ExtractPhones from '@/components/tools/ExtractPhones';
+import RemoveDuplicateLines from '@/components/tools/RemoveDuplicateLines';
+
+
+import RemoveLineBreaks from '@/components/tools/RemoveLineBreaks';
+import RemoveExtraSpaces from '@/components/tools/RemoveExtraSpaces';
+import BcryptGenerator from '@/components/tools/BcryptGenerator';
+import JwtDecoder from '@/components/tools/JwtDecoder';
+import UuidGenerator from '@/components/tools/UuidGenerator';
+import FindReplace from '@/components/tools/FindReplace';
+import RegexTester from '@/components/tools/RegexTester';
+import PlagiarismChecker from '@/components/tools/PlagiarismChecker';
+import VoiceConverter from '@/components/tools/VoiceConverter';
+import TransitionGenerator from '@/components/tools/TransitionGenerator';
+import TextCompare from '@/components/tools/TextCompare';
+import WordCounter from '@/components/tools/WordCounter';
+import UppercaseConverter from '@/components/tools/UppercaseConverter';
+import TitleCaseConverter from '@/components/tools/TitleCaseConverter';
+import JsonFormatter from '@/components/tools/JsonFormatter';
+import PiiRedactor from '@/components/tools/PiiRedactor';
+import PromptMinifier from '@/components/tools/PromptMinifier';
+import CaptionFormatter from '@/components/tools/CaptionFormatter';
+import JsonToMarkdown from '@/components/tools/JsonToMarkdown';
+import ViceCityHeadlineGenerator from '@/components/tools/ViceCityHeadlineGenerator';
+import ViceCityLicensePlate from '@/components/tools/ViceCityLicensePlate';
+import Gta6PcBuilder from '@/components/tools/Gta6PcBuilder';
+import ViceCitySpeculationMap from '@/components/tools/ViceCitySpeculationMap';
+import ViceCityRapSheet from '@/components/tools/ViceCityRapSheet';
+import ExcelEditor from '@/components/tools/ExcelEditor';
+import PdfTextEditor from '@/components/tools/PdfTextEditor';
+import MergePdfTool from '@/components/tools/MergePdfTool';
+import ImageTextEditor from '@/components/tools/ImageTextEditor';
+import WordDocumentEditor from '@/components/tools/WordDocumentEditor';
+import TextFileEditor from '@/components/tools/TextFileEditor';
+import TypingSpeedTest from '@/components/tools/TypingSpeedTest';
+import OnlineNotepad from '@/components/tools/OnlineNotepad';
+import SpeechToText from '@/components/tools/SpeechToText';
+import AITextHumanizer from '@/components/tools/AITextHumanizer';
+import TextToHandwriting from '@/components/tools/TextToHandwriting';
+import ImageCompressor from '@/components/tools/ImageCompressor';
+import ImageResizer from '@/components/tools/ImageResizer';
+import ImageConverter from '@/components/tools/ImageConverter';
+import UniversalImageConverter from '@/components/tools/UniversalImageConverter';
+import UniversalUnitConverter from '@/components/tools/UniversalUnitConverter';
+import UniversalDataConverter from '@/components/tools/UniversalDataConverter';
+import JpgToPdf from '@/components/tools/JpgToPdf';
+import PdfToJpg from '@/components/tools/PdfToJpg';
+import SplitPdf from '@/components/tools/SplitPdf';
+import PdfPageNumbers from '@/components/tools/PdfPageNumbers';
+import FlipbookMaker from '@/components/tools/FlipbookMaker';
+import ExcelToCsv from '@/components/tools/ExcelToCsv';
+import PdfDiffChecker from '@/components/tools/PdfDiffChecker';
+import ScreenshotToExcel from '@/components/tools/ScreenshotToExcel';
+import BankStatementAnalyzer from '@/components/tools/BankStatementAnalyzer';
+import ScannedPdfToData from '@/components/tools/ScannedPdfToData';
+import ScreenshotToDocument from '@/components/tools/ScreenshotToDocument';
+import PdfToMcq from '@/components/tools/PdfToMcq';
+import LectureToNotes from '@/components/tools/LectureToNotes';
+import DocumentToExcel from '@/components/tools/DocumentToExcel';
+import RupeesToWords from '@/components/tools/RupeesToWords';
+import AgeCalculator from '@/components/tools/AgeCalculator';
+import SalarySlipGenerator from '@/components/tools/SalarySlipGenerator';
+import RtiApplicationGenerator from '@/components/tools/RtiApplicationGenerator';
+import GstInvoiceGenerator from '@/components/tools/GstInvoiceGenerator';
+import GovDocTranslator from '@/components/tools/GovDocTranslator';
+import GovDocExtractor from '@/components/tools/GovDocExtractor';
+import RtiFirstAppeal from '@/components/tools/RtiFirstAppeal';
+import IncomeCertificateGenerator from '@/components/tools/IncomeCertificateGenerator';
+import RentAgreementGenerator from '@/components/tools/RentAgreementGenerator';
+import PfWithdrawalForm19 from '@/components/tools/PfWithdrawalForm19';
+import Form16Explainer from '@/components/tools/Form16Explainer';
+import BankStatementConverter from '@/components/tools/BankStatementConverter';
+import ContractAnalyzer from '@/components/tools/ContractAnalyzer';
+import BackgroundRemover from '@/components/tools/BackgroundRemover';
+import ResumeBuilder from '@/components/tools/ResumeBuilder';
+import JobApplicationAutoPack from '@/components/tools/JobApplicationAutoPack';
+import BankStatementReport from '@/components/tools/BankStatementReport';
+import PdfToWord from '@/components/tools/PdfToWord';
+import HeicToJpg from '@/components/tools/HeicToJpg';
+import PassportPhotoMaker from '@/components/tools/PassportPhotoMaker';
+import BatchPdfProcessor from '@/components/tools/BatchPdfProcessor';
+import PdfToExcel from '@/components/tools/PdfToExcel';
+import OcrUnlimited from '@/components/tools/OcrUnlimited';
+import PdfRedactor from '@/components/tools/PdfRedactor';
+import PdfWatermarkRemover from '@/components/tools/PdfWatermarkRemover';
+import PdfSummarizer from '@/components/tools/PdfSummarizer';
+import PdfCompressor from '@/components/tools/PdfCompressor';
+import MemeGenerator from '@/components/tools/MemeGenerator';
+import PasswordGenerator from '@/components/tools/PasswordGenerator';
+import ColorConverter from '@/components/tools/ColorConverter';
+import LoremIpsumGenerator from '@/components/tools/LoremIpsumGenerator';
+import PasswordStrengthAnalyzer from '@/components/tools/PasswordStrengthAnalyzer';
+import Base64EncodeDecode from '@/components/tools/Base64EncodeDecode';
+import MorseCodeTranslator from '@/components/tools/MorseCodeTranslator';
+import UrlEncodeDecode from '@/components/tools/UrlEncodeDecode';
+import HtmlEncodeDecode from '@/components/tools/HtmlEncodeDecode';
+import ByteConverter from '@/components/tools/ByteConverter';
+import { BYTE_TOOLS } from '@/lib/byte-tool-config.mjs';
+import AlphabetTranslator from '@/components/tools/AlphabetTranslator';
+import { ALPHABET_TOOLS } from '@/lib/alphabet-translator.mjs';
+import VideoConverter from '@/components/tools/VideoConverter';
+import { notFound } from 'next/navigation';
+import Link from 'next/link';
+
+export async function generateStaticParams() {
+  return getAllTools('en').map((tool) => ({
+    lang: 'en',
+    category: tool.categoryId,
+    tool: tool.slug,
+  }));
+}
+
+export const revalidate = 86400;
+
+export async function generateMetadata({ params }) {
+  const { lang, category, tool } = await params;
+  const toolData = getTool(category, tool, lang);
+  if (!toolData) return {};
+  return generateToolMeta(toolData, toolData.category, lang);
+}
+
+// ΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉ
+
+// ==========================================
+// DYNAMIC CONTENT GENERATORS
+// Pulls localized data from content JSONs
+// ==========================================
+
+function generateWhatIs(toolData, t, seoData) {
+  return toolData.content?.whatIs || seoData?.whatIs || `${t.schema.howToDesc.replace('{toolName}', toolData.name).replace('{domain}', 'ilovetexts.com')} ${toolData.description}`;
+}
+
+function generateWhyChoose(toolData, t, seoData) {
+  if (toolData.content?.whyChoose?.length > 0) return toolData.content.whyChoose;
+  if (seoData?.whyChoose?.length > 0) return seoData.whyChoose;
+  
+  return [
+    { icon: '🚀', title: t.trust.instantTitle, description: t.trust.instantDesc },
+    { icon: '🔒', title: t.trust.privateTitle, description: t.trust.privateDesc },
+    { icon: '💻', title: t.trust.freeTitle, description: t.trust.freeDesc }
+  ];
+}
+
+function generateUseCases(toolData, category, seoData) {
+  return toolData.content?.useCases?.length ? toolData.content.useCases : seoData?.useCases || [];
+}
+
+function generateFAQs(toolData, t, seoData) {
+  if (toolData.content?.faqs?.length > 0) return toolData.content.faqs;
+  if (seoData?.faqs?.length > 0) return seoData.faqs;
+  
+  const toolName = toolData.name;
+  
+  return [
+    { question: t.ui.fallbackFaqQ?.replace('{toolName}', toolName) || `Is the ${toolName} free to use?`, answer: t.ui.fallbackFaqA || `Yes, it is 100% free with no limits.` },
+    { question: t.ui.fallbackFaqQ2?.replace('{toolName}', toolName) || `Do you save my text when using ${toolName}?`, answer: t.ui.fallbackFaqA2 || `No, all processing happens locally in your browser. We never see or store your data.` }
+  ];
+}
+
+function generateRelatedSearches(toolData, seoData) {
+  return toolData.content?.relatedSearches?.length ? toolData.content.relatedSearches : seoData?.keywords || [];
+}
+
+function getSmartCrossLinks(categoryId, toolSlug, lang = 'en') {
+  const allTools = getAllTools(lang);
+  const otherTools = allTools.filter(t => t.categoryId !== categoryId);
+  
+  // Deterministic pseudo-random selection based on the tool's slug
+  // This ensures the same tool always recommends the same 6 cross-links (stable for SEO),
+  // but distributes the PageRank perfectly across all 120+ tools instead of just the first 6.
+  let hash = 0;
+  for (let i = 0; i < toolSlug.length; i++) {
+    hash = ((hash << 5) - hash) + toolSlug.charCodeAt(i);
+    hash |= 0; 
+  }
+  
+  const seed = Math.abs(hash);
+  const selected = [];
+  const available = [...otherTools];
+  
+  for (let i = 0; i < 6; i++) {
+    if (available.length === 0) break;
+    const index = (seed + i * 17) % available.length;
+    selected.push(available[index]);
+    available.splice(index, 1);
+  }
+  
+  return selected;
+}
+
+export default async function ToolPage({ params }) {
+  const { lang, category: categoryId, tool } = await params;
+  const toolData = getTool(categoryId, tool, lang);
+  const t = (await import('@/lib/i18n')).getTranslations(lang);
+  
+  if (!toolData) {
+    notFound();
+  }
+
+  const category = toolData.category;
+  const seoData = getToolSEO(toolData.slug);
+  const relatedTools = getRelatedTools(category.id, toolData.slug, lang, 12);
+  const crossLinks = getCrossLinks(category.id, lang, 6);
+  const smartCrossLinks = getSmartCrossLinks(category.id, toolData.slug, lang);
+
+  // Generate all SEO content
+  const whatIs = generateWhatIs(toolData, t, seoData);
+  const whyChoose = generateWhyChoose(toolData, t, seoData);
+  const useCases = generateUseCases(toolData, category, seoData);
+  const faqs = generateFAQs(toolData, t, seoData);
+  const relatedSearches = generateRelatedSearches(toolData, seoData);
+  const seoSections = toolData.content?.seoSections || [];
+
+  const howToSteps = toolData.content?.howToSteps?.length ? toolData.content.howToSteps : [
+    {
+      title: t.schema.step1Title,
+      description: t.schema.step1Desc
+    },
+    {
+      title: t.schema.step2Title,
+      description: t.schema.step2Desc.replace('{toolName}', toolData.name)
+    },
+    {
+      title: t.schema.step3Title,
+      description: t.schema.step3Desc
+    }
+  ];
+
+  // Generate all structured data schemas
+  const faqSchema = generateFAQSchema(faqs);
+  const toolSchema = generateToolSchema(toolData, category, t, lang);
+  const howToSchema = generateHowToSchema(toolData, howToSteps, t);
+  const breadcrumbSchema = generateBreadcrumbSchema([
+    { name: t.nav.home, url: buildCanonical(lang, '/') },
+    { name: category.name, url: buildCanonical(lang, `/${category.id}`) },
+    { name: toolData.name, url: buildCanonical(lang, `/${category.id}/${toolData.slug}`) }
+  ]);
+
+  // Deduplicate crossLinks
+  const combinedCrossLinks = [];
+  const seenSlugs = new Set();
+  for (const item of [...smartCrossLinks, ...crossLinks]) {
+    const key = `${item.categoryId || category.id}-${item.slug}`;
+    if (!seenSlugs.has(key)) {
+      seenSlugs.add(key);
+      combinedCrossLinks.push(item);
+    }
+  }
+
+  return (
+    <>
+      <script id="schema-faq" type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }} />
+      <script id="schema-tool" type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(toolSchema) }} />
+      <script id="schema-howto" type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(howToSchema) }} />
+      <script id="schema-breadcrumbs" type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }} />
+
+      <ToolLayout 
+        tool={toolData} 
+        category={category} 
+        relatedTools={relatedTools}
+        crossLinks={combinedCrossLinks.slice(0, 8)}
+        faqs={faqs}
+        howToSteps={howToSteps}
+        whatIs={whatIs}
+        whyChoose={whyChoose}
+        useCases={useCases}
+        seoSections={seoSections}
+        relatedSearches={relatedSearches}
+        allCategories={CATEGORIES}
+        lang={lang}
+      >
+        {toolData.slug === 'grammar-checker' ? (
+          <GrammarChecker t={t} />
+        ) : toolData.slug === 'spell-checker' ? (
+          <SpellChecker t={t} />
+        ) : toolData.slug === 'punctuation-checker' ? (
+          <PunctuationChecker t={t} lang={lang} />
+        ) : toolData.slug === 'online-typing-tool' ? (
+          <OnlineTypingTool t={t} lang={lang} />
+        ) : toolData.slug === 'rhyming-dictionary' ? (
+          <RhymingDictionary t={t} lang={lang} />
+        ) : toolData.slug === 'anagram-generator' ? (
+          <AnagramGenerator t={t} lang={lang} />
+        ) : toolData.slug === 'wordle-word-finder' ? (
+          <WordleFinder t={t} lang={lang} />
+        ) : toolData.slug === 'thesis-statement-generator' ? (
+          <ThesisGenerator t={t} lang={lang} />
+        ) : toolData.slug === 'essay-outliner' ? (
+          <EssayOutliner t={t} lang={lang} />
+        ) : toolData.slug === 'plagiarism-checker' ? (
+          <PlagiarismChecker t={t} lang={lang} />
+        ) : toolData.slug === 'active-passive-converter' ? (
+          <VoiceConverter t={t} lang={lang} />
+        ) : toolData.slug === 'transition-word-generator' ? (
+          <TransitionGenerator t={t} lang={lang} />
+        ) : toolData.slug === 'text-compare' ? (
+          <TextCompare t={t} lang={lang} />
+        ) : toolData.slug === 'word-counter' ? (
+          <WordCounter t={t} lang={lang} />
+        ) : toolData.slug === 'uppercase' ? (
+          <UppercaseConverter lang={lang} />
+        ) : toolData.slug === 'lowercase' ? (
+          <UppercaseConverter lang={lang} mode="lowercase" />
+        ) : toolData.slug === 'title-case' ? (
+          <TitleCaseConverter lang={lang} />
+        ) : toolData.slug === 'json-formatter' ? (
+          <JsonFormatter t={t} lang={lang} />
+        ) : toolData.slug === 'extract-emails' ? (
+          <ExtractEmails t={t} lang={lang} />
+        ) : toolData.slug === 'extract-urls' ? (
+          <ExtractUrls t={t} lang={lang} />
+        ) : toolData.slug === 'extract-phones' ? (
+          <ExtractPhones t={t} lang={lang} />
+        ) : toolData.slug === 'remove-duplicate-lines' ? (
+          <RemoveDuplicateLines t={t} lang={lang} />
+        ) : toolData.slug === 'remove-line-breaks' ? (
+          <RemoveLineBreaks lang={lang} />
+        ) : toolData.slug === 'remove-extra-spaces' ? (
+          <RemoveExtraSpaces lang={lang} />
+        ) : toolData.slug === 'bcrypt-generator' ? (
+          <BcryptGenerator t={t} lang={lang} />
+        ) : toolData.slug === 'jwt-decoder' ? (
+          <JwtDecoder t={t} lang={lang} />
+        ) : toolData.slug === 'uuid-generator' ? (
+          <UuidGenerator t={t} lang={lang} />
+        ) : toolData.slug === 'find-replace' ? (
+          <FindReplace t={t} lang={lang} />
+        ) : toolData.slug === 'regex-tester' ? (
+          <RegexTester t={t} lang={lang} />
+        ) : toolData.slug === 'pii-redactor' ? (
+          <PiiRedactor t={t} lang={lang} />
+        ) : toolData.slug === 'password-generator' ? (
+          <PasswordGenerator t={t} lang={lang} />
+        ) : toolData.slug === 'color-converter' ? (
+          <ColorConverter t={t} lang={lang} />
+        ) : toolData.slug === 'lorem-ipsum' ? (
+          <LoremIpsumGenerator t={t} lang={lang} />
+        ) : toolData.slug === 'password-strength' ? (
+          <PasswordStrengthAnalyzer t={t} lang={lang} />
+        ) : BYTE_TOOLS[toolData.slug] ? (
+          <ByteConverter key={toolData.slug} toolSlug={toolData.slug} lang={lang} />
+        ) : ALPHABET_TOOLS[toolData.slug] ? (
+          <AlphabetTranslator key={toolData.slug} toolSlug={toolData.slug} lang={lang} />
+        ) : toolData.slug === 'base64-encode-decode' ? (
+          <Base64EncodeDecode t={t} lang={lang} />
+        ) : toolData.slug === 'url-encode-decode' ? (
+          <UrlEncodeDecode t={t} lang={lang} />
+        ) : toolData.slug === 'html-encode-decode' ? (
+          <HtmlEncodeDecode t={t} lang={lang} />
+        ) : toolData.slug === 'morse-code' ? (
+          <MorseCodeTranslator t={t} lang={lang} />
+        ) : toolData.slug === 'prompt-minifier' ? (
+          <PromptMinifier t={t} lang={lang} />
+        ) : toolData.slug === 'caption-formatter' ? (
+          <CaptionFormatter t={t} lang={lang} />
+        ) : toolData.slug === 'json-to-markdown' ? (
+          <JsonToMarkdown t={t} lang={lang} />
+        ) : toolData.slug === 'vice-city-headline-generator' ? (
+          <ViceCityHeadlineGenerator t={t} lang={lang} />
+        ) : toolData.slug === 'vice-city-license-plate' ? (
+          <ViceCityLicensePlate t={t} lang={lang} />
+        ) : toolData.slug === 'gta-6-pc-requirements' ? (
+          <Gta6PcBuilder t={t} lang={lang} />
+        ) : toolData.slug === 'vice-city-speculation-map' ? (
+          <ViceCitySpeculationMap t={t} lang={lang} />
+        ) : toolData.slug === 'vice-city-rap-sheet' ? (
+          <ViceCityRapSheet t={t} lang={lang} />
+        ) : toolData.slug === 'excel-editor' ? (
+          <ExcelEditor t={t} lang={lang} />
+        ) : toolData.slug === 'pdf-text-editor' ? (
+          <PdfTextEditor t={t} lang={lang} />
+        ) : toolData.slug === 'merge-pdf' ? (
+          <MergePdfTool />
+        ) : toolData.slug === 'annotate-pdf' ? (
+          <PdfTextEditor t={t} lang={lang} initialMode="annotate" />
+        ) : toolData.slug === 'sign-pdf' ? (
+          <PdfTextEditor t={t} lang={lang} initialMode="sign" />
+        ) : toolData.slug === 'redact-pdf' ? (
+          <PdfTextEditor t={t} lang={lang} initialMode="redact" />
+        ) : toolData.slug === 'watermark-pdf' ? (
+          <PdfTextEditor t={t} lang={lang} initialMode="watermark" />
+        ) : toolData.slug === 'compress-pdf' ? (
+          <PdfTextEditor t={t} lang={lang} initialMode="compress" />
+        ) : toolData.slug === 'protect-pdf' ? (
+          <PdfTextEditor t={t} lang={lang} initialMode="protect" />
+        ) : toolData.slug === 'image-text-editor' ? (
+          <ImageTextEditor t={t} lang={lang} />
+        ) : toolData.slug === 'word-document-editor' ? (
+          <WordDocumentEditor t={t} lang={lang} />
+        ) : toolData.slug === 'text-file-editor' ? (
+          <TextFileEditor t={t} lang={lang} />
+        ) : toolData.slug === 'universal-file-editor' ? (
+          <PdfTextEditor t={t} lang={lang} />
+        ) : toolData.slug === 'typing-speed-test' ? (
+          <TypingSpeedTest t={t} lang={lang} />
+        ) : toolData.slug === 'online-notepad' ? (
+          <OnlineNotepad t={t} lang={lang} />
+        ) : toolData.slug === 'speech-to-text' ? (
+          <SpeechToText t={t} lang={lang} />
+        ) : toolData.slug === 'ai-text-humanizer' ? (
+          <AITextHumanizer t={t} lang={lang} />
+        ) : toolData.slug === 'text-to-handwriting' ? (
+          <TextToHandwriting t={t} lang={lang} />
+        ) : toolData.slug === 'compress-image' ? (
+          <ImageCompressor t={t} lang={lang} />
+        ) : toolData.slug === 'resize-image' ? (
+          <ImageResizer t={t} lang={lang} />
+        ) : toolData.slug === 'json-to-xml' ? (
+          <UniversalDataConverter from="json" to="xml" />
+        ) : toolData.slug === 'xml-to-json' ? (
+          <UniversalDataConverter from="xml" to="json" />
+        ) : toolData.slug === 'json-to-yaml' ? (
+          <UniversalDataConverter from="json" to="yaml" />
+        ) : toolData.slug === 'yaml-to-json' ? (
+          <UniversalDataConverter from="yaml" to="json" />
+        ) : toolData.slug === 'json-to-csv' ? (
+          <UniversalDataConverter from="json" to="csv" />
+        ) : toolData.slug === 'csv-to-json' ? (
+          <UniversalDataConverter from="csv" to="json" />
+        ) : toolData.slug === 'csv-to-xml' ? (
+          <UniversalDataConverter from="csv" to="xml" />
+        ) : toolData.slug === 'xml-to-csv' ? (
+          <UniversalDataConverter from="xml" to="csv" />
+        ) : toolData.slug === 'length-converter' ? (
+          <UniversalUnitConverter type="length" />
+        ) : toolData.slug === 'weight-converter' ? (
+          <UniversalUnitConverter type="weight" />
+        ) : toolData.slug === 'temperature-converter' ? (
+          <UniversalUnitConverter type="temperature" />
+        ) : toolData.slug === 'area-converter' ? (
+          <UniversalUnitConverter type="area" />
+        ) : toolData.slug === 'volume-converter' ? (
+          <UniversalUnitConverter type="volume" />
+        ) : toolData.slug === 'speed-converter' ? (
+          <UniversalUnitConverter type="speed" />
+        ) : toolData.slug === 'time-converter' ? (
+          <UniversalUnitConverter type="time" />
+        ) : toolData.slug === 'data-storage-converter' ? (
+          <UniversalUnitConverter type="data" />
+        ) : toolData.slug === 'pressure-converter' ? (
+          <UniversalUnitConverter type="pressure" />
+        ) : toolData.slug === 'energy-converter' ? (
+          <UniversalUnitConverter type="energy" />
+        ) : toolData.slug === 'power-converter' ? (
+          <UniversalUnitConverter type="power" />
+        ) : toolData.slug === 'angle-converter' ? (
+          <UniversalUnitConverter type="angle" />
+        ) : toolData.slug === 'convert-image' ? (
+          <ImageConverter t={t} lang={lang} />
+        ) : toolData.slug === 'png-to-jpg' ? (
+          <UniversalImageConverter t={t} lang={lang} from="png" to="jpg" />
+        ) : toolData.slug === 'jpg-to-png' ? (
+          <UniversalImageConverter t={t} lang={lang} from="jpg" to="png" />
+        ) : toolData.slug === 'webp-to-jpg' ? (
+          <UniversalImageConverter t={t} lang={lang} from="webp" to="jpg" />
+        ) : toolData.slug === 'webp-to-png' ? (
+          <UniversalImageConverter t={t} lang={lang} from="webp" to="png" />
+        ) : toolData.slug === 'jpg-to-webp' ? (
+          <UniversalImageConverter t={t} lang={lang} from="jpg" to="webp" />
+        ) : toolData.slug === 'png-to-webp' ? (
+          <UniversalImageConverter t={t} lang={lang} from="png" to="webp" />
+        ) : toolData.slug === 'svg-to-png' ? (
+          <UniversalImageConverter t={t} lang={lang} from="svg" to="png" />
+        ) : toolData.slug === 'svg-to-jpg' ? (
+          <UniversalImageConverter t={t} lang={lang} from="svg" to="jpg" />
+        ) : toolData.slug === 'image-to-base64' ? (
+          <UniversalImageConverter t={t} lang={lang} to="base64" />
+        ) : toolData.slug === 'base64-to-image' ? (
+          <UniversalImageConverter t={t} lang={lang} from="base64" to="jpg" />
+        ) : toolData.slug === 'heic-to-png' ? (
+          <UniversalImageConverter t={t} lang={lang} from="heic" to="png" />
+        ) : toolData.slug === 'gif-to-png' ? (
+          <UniversalImageConverter t={t} lang={lang} from="gif" to="png" />
+        ) : toolData.slug === 'bmp-to-jpg' ? (
+          <UniversalImageConverter t={t} lang={lang} from="bmp" to="jpg" />
+        ) : toolData.slug === 'ico-to-png' ? (
+          <UniversalImageConverter t={t} lang={lang} from="ico" to="png" />
+        ) : toolData.slug === 'image-to-pdf' ? (
+          <JpgToPdf t={t} lang={lang} />
+        ) : toolData.slug === 'jpg-to-pdf' ? (
+          <JpgToPdf t={t} lang={lang} />
+        ) : toolData.slug === 'pdf-to-jpg' ? (
+          <PdfToJpg t={t} lang={lang} />
+        ) : toolData.slug === 'split-pdf' ? (
+          <SplitPdf t={t} lang={lang} />
+        ) : toolData.slug === 'pdf-page-numbers' ? (
+          <PdfPageNumbers t={t} lang={lang} />
+        ) : toolData.slug === 'flipbook-maker' ? (
+          <FlipbookMaker />
+        ) : toolData.slug === 'excel-to-csv' ? (
+          <ExcelToCsv t={t} lang={lang} />
+        ) : toolData.slug === 'csv-to-excel' ? (
+          <ExcelToCsv t={t} lang={lang} />
+        ) : toolData.slug === 'pdf-diff-checker' ? (
+          <PdfDiffChecker t={t} lang={lang} />
+        ) : toolData.slug === 'screenshot-to-excel' ? (
+          <ScreenshotToExcel t={t} lang={lang} />
+        ) : toolData.slug === 'bank-statement-analyzer' ? (
+          <BankStatementAnalyzer t={t} lang={lang} />
+        ) : toolData.slug === 'scanned-pdf-to-data' ? (
+          <ScannedPdfToData t={t} lang={lang} />
+        ) : toolData.slug === 'screenshot-to-document' ? (
+          <ScreenshotToDocument t={t} lang={lang} />
+        ) : toolData.slug === 'pdf-to-mcq' ? (
+          <PdfToMcq t={t} lang={lang} />
+        ) : toolData.slug === 'lecture-to-notes' ? (
+          <LectureToNotes t={t} lang={lang} />
+        ) : toolData.slug === 'document-to-excel' ? (
+          <DocumentToExcel t={t} lang={lang} />
+        ) : toolData.slug === 'rupees-to-words' ? (
+          <RupeesToWords t={t} lang={lang} />
+        ) : toolData.slug === 'age-calculator' ? (
+          <AgeCalculator t={t} lang={lang} />
+        ) : toolData.slug === 'salary-slip-generator' ? (
+          <SalarySlipGenerator t={t} lang={lang} />
+        ) : toolData.slug === 'rti-application-generator' ? (
+          <RtiApplicationGenerator t={t} lang={lang} />
+        ) : toolData.slug === 'gst-invoice-generator' ? (
+          <GstInvoiceGenerator t={t} lang={lang} />
+        ) : toolData.slug === 'gov-doc-translator' ? (
+          <GovDocTranslator t={t} lang={lang} />
+        ) : toolData.slug === 'gov-doc-extractor' ? (
+          <GovDocExtractor t={t} lang={lang} />
+        ) : toolData.slug === 'rti-first-appeal' ? (
+          <RtiFirstAppeal t={t} lang={lang} />
+        ) : toolData.slug === 'income-certificate-generator' ? (
+          <IncomeCertificateGenerator t={t} lang={lang} />
+        ) : toolData.slug === 'rent-agreement-generator' ? (
+          <RentAgreementGenerator t={t} lang={lang} />
+        ) : toolData.slug === 'pf-withdrawal-form-19' ? (
+          <PfWithdrawalForm19 t={t} lang={lang} />
+        ) : toolData.slug === 'form-16-explainer' ? (
+          <Form16Explainer t={t} lang={lang} />
+        ) : toolData.slug === 'bank-statement-converter' ? (
+          <BankStatementConverter t={t} lang={lang} />
+        ) : toolData.slug === 'contract-analyzer' ? (
+          <ContractAnalyzer t={t} lang={lang} />
+        ) : toolData.slug === 'remove-background' ? (
+          <BackgroundRemover t={t} lang={lang} />
+        ) : toolData.slug === 'resume-builder' ? (
+          <ResumeBuilder t={t} lang={lang} />
+        ) : toolData.slug === 'job-application-pack' ? (
+          <JobApplicationAutoPack t={t} lang={lang} />
+        ) : toolData.slug === 'bank-statement-financial-report' ? (
+          <BankStatementReport t={t} lang={lang} />
+        ) : toolData.slug === 'pdf-to-word' ? (
+          <PdfToWord t={t} lang={lang} />
+        ) : toolData.slug === 'heic-to-jpg' ? (
+          <HeicToJpg t={t} lang={lang} />
+        ) : toolData.slug === 'passport-photo-maker' ? (
+          <PassportPhotoMaker t={t} lang={lang} />
+        ) : toolData.slug === 'meme-generator' ? (
+          <MemeGenerator t={t} lang={lang} />
+        ) : toolData.slug === 'batch-pdf-processor' ? (
+          <BatchPdfProcessor t={t} lang={lang} />
+        ) : toolData.slug === 'pdf-to-excel' ? (
+          <PdfToExcel t={t} lang={lang} />
+        ) : toolData.slug === 'ocr-unlimited' ? (
+          <OcrUnlimited t={t} lang={lang} />
+        ) : toolData.slug === 'pdf-redactor' ? (
+          <PdfRedactor t={t} lang={lang} />
+        ) : toolData.slug === 'pdf-watermark-remover' ? (
+          <PdfWatermarkRemover t={t} lang={lang} />
+        ) : toolData.slug === 'pdf-summarizer' ? (
+          <PdfSummarizer t={t} lang={lang} />
+        ) : toolData.slug === 'pdf-compressor' ? (
+          <PdfCompressor t={t} lang={lang} />
+        ) : toolData.category?.id === 'video-converter-tools' ? (
+          <VideoConverter key={toolData.slug} toolSlug={toolData.slug} lang={lang} t={t} />
+        ) : (
+          <ClientTool categoryId={category.id} toolSlug={toolData.slug} t={t} />
+        )}
+      </ToolLayout>
+    </>
+  );
+}

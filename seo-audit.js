@@ -1,0 +1,435 @@
+#!/usr/bin/env node
+// seo-audit.js — Run before every deploy: node seo-audit.js
+// Catches SEO issues that cause pages not to be indexed by Google
+// Add to package.json scripts: "prebuild": "node seo-audit.js"
+
+const fs = require('fs');
+const path = require('path');
+
+let errors = 0;
+let warnings = 0;
+
+function error(msg) { console.error(`❌ ERROR: ${msg}`); errors++; }
+function warn(msg) { console.warn(`⚠️  WARN:  ${msg}`); warnings++; }
+function ok(msg) { console.log(`✅ OK:    ${msg}`); }
+
+console.log('\n🔍 ilovetexts.com SEO Audit\n' + '='.repeat(50) + '\n');
+
+// ── 1. proxy.js must exist (this project uses proxy.js not middleware.js) ───
+// This Next.js build targets Cloudflare Workers and uses proxy.js as the edge middleware
+const proxyExists = fs.existsSync('proxy.js');
+const middlewareExists = fs.existsSync('middleware.js');
+if (middlewareExists) {
+  error('middleware.js should NOT exist in this project — it uses proxy.js as edge middleware. Delete middleware.js.');
+} else if (!proxyExists) {
+  error('proxy.js missing! /en/ redirect and URL rewriting will NOT work. This project uses proxy.js as the Cloudflare Workers edge middleware.');
+} else {
+  const mw = fs.readFileSync('proxy.js', 'utf8');
+  if (!mw.includes('export function proxy') && !mw.includes('export default')) {
+    error('proxy.js does not export a proxy function — edge routing will not work');
+  } else if (!mw.includes('firstSegment === \'en\'')) {
+    error('proxy.js does not handle /en/ redirect — duplicate English content will be served at both /en/... and /...');
+  } else {
+    ok('proxy.js exists with /en/ redirect and URL rewriting');
+  }
+}
+
+// ── 2. No force-dynamic + revalidate together ────────────
+const pageFiles = [
+  'app/[lang]/[category]/page.js',
+  'app/[lang]/[category]/[tool]/page.js',
+];
+pageFiles.forEach(f => {
+  if (!fs.existsSync(f)) return;
+  const content = fs.readFileSync(f, 'utf8');
+  if (content.includes('force-dynamic') && content.includes('export const revalidate')) {
+    error(`${f}: has both force-dynamic AND revalidate — these are contradictory. Remove revalidate.`);
+  } else {
+    ok(`${f}: no contradictory dynamic/revalidate`);
+  }
+});
+
+// ── 3. Sitemap must not duplicate /blog ──────────────────
+const sitemapFile = 'app/sitemap-api/[lang]/route.js';
+if (fs.existsSync(sitemapFile)) {
+  const sm = fs.readFileSync(sitemapFile, 'utf8');
+  const blogMatches = (sm.match(/addUrl\(`\/blog`/g) || []).length;
+  if (blogMatches > 1) {
+    error(`${sitemapFile}: /blog URL added ${blogMatches} times — duplicate sitemap entries`);
+  } else {
+    ok('Sitemap: no duplicate /blog entries');
+  }
+  // Check BUILD_DATE is not new Date()
+  if (sm.includes('new Date()') || sm.includes('new Date().toISOString')) {
+    warn(`${sitemapFile}: BUILD_DATE uses new Date() — will show all pages as updated daily, degrading Google's trust in lastmod. Use a fixed date and update manually when content changes.`);
+  } else {
+    ok('Sitemap: fixed lastmod dates (not today\'s date)');
+  }
+}
+
+// ── 4. Privacy/Terms should noindex non-English ──────────
+['app/[lang]/privacy/page.js', 'app/[lang]/terms/page.js'].forEach(f => {
+  if (!fs.existsSync(f)) return;
+  const content = fs.readFileSync(f, 'utf8');
+  if (!content.includes('lang === \'en\'') && !content.includes('lang === "en"')) {
+    warn(`${f}: indexes all 6 language variants of identical content — consider noindex for non-English`);
+  } else {
+    ok(`${f}: correctly noindexes non-English duplicates`);
+  }
+});
+
+// ── 5. compress-pdf and protect-pdf must have different initialMode ──
+const toolPage = 'app/[lang]/[category]/[tool]/page.js';
+if (fs.existsSync(toolPage)) {
+  const tp = fs.readFileSync(toolPage, 'utf8');
+  // Find compress-pdf and protect-pdf sections
+  const compressMatch = tp.match(/compress-pdf.*?initialMode="([^"]+)"/s);
+  const protectMatch = tp.match(/protect-pdf.*?initialMode="([^"]+)"/s);
+  if (compressMatch && protectMatch && compressMatch[1] === protectMatch[1]) {
+    error(`compress-pdf and protect-pdf both use initialMode="${compressMatch[1]}" — identical rendered content, Google treats as duplicate pages`);
+  } else {
+    ok('compress-pdf and protect-pdf have distinct initialModes');
+  }
+}
+
+// ── 6. robots.js must list sitemaps ──────────────────────
+const robotsFile = 'app/robots.js';
+if (fs.existsSync(robotsFile)) {
+  const r = fs.readFileSync(robotsFile, 'utf8');
+  if (!r.includes('sitemap')) {
+    error('robots.js does not list any sitemaps — Google may not find your sitemap');
+  } else {
+    ok('robots.js includes sitemap URLs');
+  }
+  if (r.includes('/*?*') || r.includes("'/*?*'") || r.includes('"/*?*"') || r.includes("query")) {
+    ok('robots.js blocks query string URLs (saves crawl budget)');
+  } else {
+    warn('robots.js does not block /*?* — query string URLs may waste crawl budget');
+  }
+}
+
+// ── 7. Check for tool slug collisions ────────────────────
+try {
+  // Read tools-config and check for duplicate slugs in same category
+  const configContent = fs.readFileSync('lib/tools-config.js', 'utf8');
+  const slugMatches = configContent.match(/slug:\s*['"]([^'"]+)['"]/g) || [];
+  const slugs = slugMatches.map(m => m.match(/['"]([^'"]+)['"]/)[1]);
+  const seen = new Set();
+  const dupes = [];
+  slugs.forEach(s => { if (seen.has(s)) dupes.push(s); else seen.add(s); });
+  if (dupes.length > 0) {
+    error(`Duplicate tool slugs found: ${dupes.join(', ')} — creates duplicate content pages`);
+  } else {
+    ok(`All ${slugs.length} tool slugs are unique`);
+  }
+} catch (e) {
+  warn('Could not check tool slug uniqueness: ' + e.message);
+}
+
+// ── 8. Unpublished articles must stay out of sitemap discovery ─────────────
+try {
+  const blogPage = fs.readFileSync('app/[lang]/blog/page.js', 'utf8');
+  const sitemapContent = fs.readFileSync('app/sitemap-api/[lang]/route.js', 'utf8');
+  const indexingPolicy = fs.readFileSync('lib/search-indexing.js', 'utf8');
+  const cutoff = (indexingPolicy.match(/PUBLISHED_ON_OR_BEFORE\s*=\s*['"]([^'"]+)/) || [])[1];
+  const dates = [...blogPage.matchAll(/date:\s*['"](\d{4}-\d{2}-\d{2})['"]/g)].map(match => match[1]);
+
+  if (!cutoff) {
+    error('lib/search-indexing.js: PUBLISHED_ON_OR_BEFORE is missing');
+  } else if (dates.some(date => date > cutoff) && !sitemapContent.includes('isPublishedDate(post.date)')) {
+    error('Sitemap can advertise posts dated after the publication cutoff');
+  } else if (!blogPage.includes('ALL_BLOG_POSTS.filter((post) => isPublishedDate(post.date))')) {
+    error('Blog index can show articles before their publication date');
+  } else {
+    ok('Unpublished blog posts are excluded from navigation and sitemap discovery');
+  }
+} catch (e) {
+  warn('Could not verify blog publication policy: ' + e.message);
+}
+
+// ── 9. Indexable English catalog pages should be statically generated ───────
+[
+  'app/[lang]/[category]/page.js',
+  'app/[lang]/[category]/[tool]/page.js',
+].forEach(f => {
+  if (!fs.existsSync(f)) return;
+  const c = fs.readFileSync(f, 'utf8');
+  if (!c.includes("lang: 'en'") || !c.includes('export const revalidate')) {
+    error(`${f}: English catalog pages are not pre-rendered with controlled revalidation`);
+  } else {
+    ok(`${f}: English catalog pages are statically generated and revalidated`);
+  }
+});
+
+// ── 10. Do not override per-page noindex metadata with a global index header ─
+const nextConfig = fs.existsSync('next.config.mjs') ? fs.readFileSync('next.config.mjs', 'utf8') : '';
+if (nextConfig.includes("value: 'index, follow'")) {
+  error('next.config.mjs: a global X-Robots-Tag index header conflicts with per-page noindex metadata');
+} else if (nextConfig.includes("value: 'noindex, nofollow'")) {
+  ok('next.config.mjs: API routes are noindex without overriding page metadata');
+} else {
+  warn('next.config.mjs: API noindex header is missing');
+}
+
+// ── 11. Home page must have OG image ─────────────────────
+try {
+  const homePage = fs.readFileSync('app/[lang]/page.js', 'utf8');
+  if (!homePage.includes('og-image') && !homePage.includes('openGraph')) {
+    error('app/[lang]/page.js: home page missing openGraph.images — social previews will be blank, hurting click-through rate from social shares');
+  } else {
+    ok('app/[lang]/page.js: home page has openGraph metadata with image');
+  }
+} catch (e) { warn('Could not check home page OG image: ' + e.message); }
+
+// ── 12. Tool schema must NOT use new Date() for datePublished ─
+try {
+  const seoJs = fs.readFileSync('lib/seo.js', 'utf8');
+  if (seoJs.includes("datePublished: '2025-01-15'")) {
+    error("lib/seo.js: generateToolSchema uses stale datePublished '2025-01-15'. Use the actual site launch date '2025-08-01'.");
+  } else if (seoJs.match(/datePublished:\s*new Date\(\)/)) {
+    error('lib/seo.js: generateToolSchema uses new Date() for datePublished — this tells Google every tool was published today on every deploy. Use a fixed launch date string instead.');
+  } else {
+    ok('lib/seo.js: generateToolSchema datePublished is correctly set');
+  }
+} catch (e) { warn('Could not check tool schema datePublished: ' + e.message); }
+
+// ── 13. robots.js must block query strings ────────────────
+try {
+  const robotsJs = fs.readFileSync('app/robots.js', 'utf8');
+  if (!robotsJs.includes('/*?*')) {
+    error('app/robots.js: does not block /*?* — query-string URLs like ?ref=peerlist and ?utm_source=twitter will be crawled, wasting crawl budget and creating "Alternate page with proper canonical" entries in GSC');
+  } else {
+    ok('app/robots.js: query-string URLs blocked via /*?* disallow');
+  }
+} catch (e) { warn('Could not check robots.js query string blocking: ' + e.message); }
+
+// ── 14. robots.js must block /embed/ for all bots ─────────
+try {
+  const robotsJs = fs.readFileSync('app/robots.js', 'utf8');
+  // Count how many disallow arrays contain /embed/
+  const embedDisallowCount = (robotsJs.match(/\/embed\//g) || []).length;
+  // We have 8 bot rules — embed should appear in all of them
+  if (embedDisallowCount < 3) {
+    warn('app/robots.js: /embed/ may not be blocked for all bots — verify each userAgent rule includes /embed/ in its disallow list');
+  } else {
+    ok(`app/robots.js: /embed/ blocked in ${embedDisallowCount} bot rules`);
+  }
+} catch (e) { warn('Could not check robots.js embed blocking: ' + e.message); }
+
+// ── 15. All supported locales must be in INDEXABLE_TOOL_LOCALES ─────────────
+// This check was previously enforcing ['en'] only — which CAUSED the sitemap bug
+// where non-English sitemaps had only 1-2 URLs. Now it enforces that every
+// supported locale gets full tool/category URLs in its sitemap.
+try {
+  const seoJs = fs.readFileSync('lib/seo.js', 'utf8');
+  const sitemapJs = fs.readFileSync('app/sitemap-api/[lang]/route.js', 'utf8');
+  const indexingPolicy = fs.readFileSync('lib/search-indexing.js', 'utf8');
+  const i18nJs = fs.readFileSync('lib/i18n.js', 'utf8');
+
+  // Extract all LANG_CODES from i18n.js
+  const langMatches = i18nJs.match(/code:\s*'([a-z]{2})'/g) || [];
+  const allLangCodes = langMatches.map(m => m.match(/'([a-z]{2})'/)[1]);
+
+  // Extract INDEXABLE_TOOL_LOCALES
+  const indexableMatch = indexingPolicy.match(/INDEXABLE_TOOL_LOCALES\s*=\s*\[([^\]]*)\]/);
+  const indexableLocales = indexableMatch
+    ? (indexableMatch[1].match(/'([a-z]{2})'/g) || []).map(m => m.replace(/'/g, ''))
+    : [];
+
+  // Every LANG_CODE must appear in INDEXABLE_TOOL_LOCALES
+  const missingLocales = allLangCodes.filter(code => !indexableLocales.includes(code));
+  if (missingLocales.length > 0) {
+    error(`INDEXABLE_TOOL_LOCALES is missing locales: [${missingLocales.join(', ')}]. ` +
+      `Their sitemaps will only contain the homepage URL — Google will NOT discover tool pages for these languages. ` +
+      `Add them to INDEXABLE_TOOL_LOCALES in lib/search-indexing.js.`);
+  } else {
+    ok(`All ${allLangCodes.length} locales are in INDEXABLE_TOOL_LOCALES — every language sitemap will include tool URLs`);
+  }
+
+  // Verify hreflang, robots, and sitemap all use the locale policy
+  if (!seoJs.includes('INDEXABLE_TOOL_LOCALES') || !seoJs.includes('index: canIndex') || !sitemapJs.includes('INDEXABLE_TOOL_LOCALES.includes(lang)')) {
+    error('Tool/catalog locale gating is incomplete: hreflang, robots, and sitemap must all reference INDEXABLE_TOOL_LOCALES');
+  } else {
+    ok('Tool/catalog hreflang, robots, and sitemap all use the reviewed-locale policy');
+  }
+} catch (e) { warn('Could not check reviewed-locale policy: ' + e.message); }
+
+// ── 15b. Sitemap must have deduplication guard ──────────────────────────────
+try {
+  const sitemapJs = fs.readFileSync('app/sitemap-api/[lang]/route.js', 'utf8');
+  if (!sitemapJs.includes('const seen = new Set()') || !sitemapJs.includes('seen.has(')) {
+    error('Sitemap route has no deduplication guard — duplicate blog entries or tool entries can produce duplicate <url> entries, confusing Google crawlers');
+  } else {
+    ok('Sitemap route has Set-based deduplication guard against duplicate URLs');
+  }
+} catch (e) { warn('Could not check sitemap deduplication guard: ' + e.message); }
+
+// ── 15c. No duplicate blog slugs in sitemap source data ─────────────────────
+try {
+  const sitemapJs = fs.readFileSync('app/sitemap-api/[lang]/route.js', 'utf8');
+  const blogEntries = [...sitemapJs.matchAll(/\{\s*slug:\s*'([^']+)',\s*date:\s*'[^']+',\s*lang:\s*'([^']+)'/g)];
+  const seen = new Set();
+  const dupes = [];
+  blogEntries.forEach(([, slug, lang]) => {
+    const key = `${lang}:${slug}`;
+    if (seen.has(key)) dupes.push(key);
+    else seen.add(key);
+  });
+  if (dupes.length > 0) {
+    error(`Duplicate blog slug entries in sitemap source: ${dupes.join(', ')} — remove duplicates to avoid confusing crawlers`);
+  } else {
+    ok(`All ${blogEntries.length} multilingual blog entries are unique (no duplicates)`);
+  }
+} catch (e) { warn('Could not check blog slug duplicates: ' + e.message); }
+
+// ── 16. Global trust copy must not promise zero tracking or universal local processing ─
+try {
+  const locale = fs.readFileSync('locales/en.json', 'utf8');
+  const layout = fs.readFileSync('components/ToolLayout.jsx', 'utf8');
+  if (locale.includes('zero tracking, zero cookies') || layout.includes('Your work stays on this device') || layout.includes('<span>Runs locally in your browser</span>')) {
+    error('Global trust copy makes an unsupported universal privacy claim');
+  } else if (!layout.includes('EXTERNAL_PROCESSING_NOTICES')) {
+    error('External-processing tools do not have a workspace disclosure');
+  } else {
+    ok('Tool pages distinguish browser processing from external processing');
+  }
+} catch (e) { warn('Could not verify processing disclosures: ' + e.message); }
+
+// ── 16. FAQs must be non-empty on tool pages ──────────────
+try {
+  const toolPage = fs.readFileSync('app/[lang]/[category]/[tool]/page.js', 'utf8');
+  if (!toolPage.includes('generateFAQs') && !toolPage.includes('faqs')) {
+    warn('app/[lang]/[category]/[tool]/page.js: tool pages may not be generating FAQs — FAQPage schema requires non-empty FAQ items for rich snippet eligibility');
+  } else {
+    ok('app/[lang]/[category]/[tool]/page.js: FAQ generation present');
+  }
+} catch (e) { warn('Could not check FAQ generation: ' + e.message); }
+
+// ── 17. No JS truncation of tool descriptions ─────────────
+try {
+  const commandCenter = fs.readFileSync('components/CommandCenter.jsx', 'utf8');
+  if (commandCenter.includes('description.length > 60') || commandCenter.includes('substring(0, 60)')) {
+    error('components/CommandCenter.jsx: tool descriptions are truncated in JS before rendering — Google reads the rendered HTML and sees cut-off descriptions, which hurts content quality signals. Remove JS truncation; use CSS line-clamp instead.');
+  } else {
+    ok('components/CommandCenter.jsx: tool descriptions not JS-truncated (full text in DOM)');
+  }
+} catch (e) { warn('Could not check CommandCenter truncation: ' + e.message); }
+
+// ── 18. Organization schema must have correct foundingDate ─
+try {
+  const seoJs = fs.readFileSync('lib/seo.js', 'utf8');
+  if (seoJs.includes("foundingDate: '2024'")) {
+    error("lib/seo.js: Organization foundingDate is '2024' but site launched in 2025 — incorrect E-E-A-T signal");
+  } else {
+    ok('lib/seo.js: Organization foundingDate is correct');
+  }
+} catch (e) { warn('Could not check Organization foundingDate: ' + e.message); }
+
+// ── 19. Content-Security-Policy header must be set ────────
+if (nextConfig.includes('Content-Security-Policy')) {
+  ok('next.config.mjs: Content-Security-Policy header set');
+} else {
+  warn('next.config.mjs: Content-Security-Policy header not set — add CSP to prevent XSS and signal site quality to Google');
+}
+
+// ── 22. Tool workspace must not nest a second main landmark ────────────────
+try {
+  const toolLayout = fs.readFileSync('components/ToolLayout.jsx', 'utf8');
+  if (toolLayout.includes('<main id="tool-workspace"')) {
+    error('components/ToolLayout.jsx: tool workspace nests a second main landmark');
+  } else if (!toolLayout.includes('<section id="tool-workspace"')) {
+    warn('components/ToolLayout.jsx: tool workspace semantic section not found');
+  } else {
+    ok('components/ToolLayout.jsx: tool workspace uses one page-level main landmark');
+  }
+} catch (e) { warn('Could not verify tool workspace landmark: ' + e.message); }
+
+// ── 23. LanguageTool clients must use the same-origin proxy ────────────────
+try {
+  ['GrammarChecker.jsx', 'SpellChecker.jsx', 'PunctuationChecker.jsx'].forEach((name) => {
+    const component = fs.readFileSync(`components/tools/${name}`, 'utf8');
+    const sharedMode = name === 'SpellChecker.jsx' ? 'spelling' : name === 'PunctuationChecker.jsx' ? 'punctuation' : null;
+    const usesSharedValidatedClient = sharedMode && component.includes("import GrammarChecker from './GrammarChecker'") && component.includes(`mode="${sharedMode}"`);
+    if (!usesSharedValidatedClient && !component.includes("const API_URL = '/api/language-check'")) {
+      error(`${name}: LanguageTool request bypasses the validated same-origin proxy`);
+    }
+    if (!usesSharedValidatedClient && !component.includes('Your text has not been verified')) {
+      error(`${name}: failure state can be mistaken for a clean result`);
+    }
+  });
+  if (!fs.existsSync('app/api/language-check/route.js')) {
+    error('app/api/language-check/route.js is missing');
+  } else {
+    ok('LanguageTool clients use a same-origin proxy with explicit failure states');
+  }
+} catch (e) { warn('Could not verify LanguageTool proxy: ' + e.message); }
+
+// ── 20. FAQ answers must be in DOM (not JS-hidden) ────────
+try {
+  const toolLayout = fs.readFileSync('components/ToolLayout.jsx', 'utf8');
+  // The old pattern used useState + CSS to hide answers from crawlers
+  if (toolLayout.includes("useState(false)") && toolLayout.includes('faq-answer') && !toolLayout.includes('<details')) {
+    warn('components/ToolLayout.jsx: FAQ answers use JS toggle (useState) — Google may not read collapsed accordion content. Use native <details>/<summary> instead.');
+  } else if (toolLayout.includes('<details')) {
+    ok('components/ToolLayout.jsx: FAQs use native <details>/<summary> — Googlebot reads content regardless of open/closed state');
+  }
+} catch (e) { warn('Could not check FAQ DOM visibility: ' + e.message); }
+
+// ── 21. Tool-to-blog links must not point to planned articles ───────────────
+try {
+  const toolLayout = fs.readFileSync('components/ToolLayout.jsx', 'utf8');
+  if (!toolLayout.includes('PUBLISHED_BLOG_SLUGS') || !toolLayout.includes('PUBLISHED_BLOG_SLUGS.has(post.slug)')) {
+    error('Tool pages can link to unpublished blog URLs that return 404');
+  } else {
+    ok('Tool-to-blog internal links are limited to published guides');
+  }
+} catch (e) { warn('Could not verify tool-to-blog links: ' + e.message); }
+
+// ── 24. Proxy must redirect English-only editorial pages at non-English URLs ──
+try {
+  const proxyJs = fs.readFileSync('proxy.js', 'utf8');
+  const requiredPaths = ['about', 'contact', 'resources', 'tools', 'privacy', 'terms'];
+  const hasEnglishOnlyPaths = proxyJs.includes('ENGLISH_ONLY_PATHS');
+  const hasRedirectLogic = requiredPaths.every(p => proxyJs.includes(`'${p}'`));
+  if (!hasEnglishOnlyPaths || !hasRedirectLogic) {
+    error('proxy.js does not redirect English-only editorial pages at non-English URLs — this causes GSC "Alternate page with proper canonical tag" for /pt/about, /hi/contact etc.');
+  } else {
+    ok('proxy.js redirects English-only editorial pages from non-English URLs to English');
+  }
+} catch (e) { warn('Could not check proxy English-only page redirects: ' + e.message); }
+
+// ── 25. Blog generateStaticParams must NOT generate non-English pages for English-only posts ──
+try {
+  const blogSlugPage = fs.readFileSync('app/[lang]/blog/[slug]/page.js', 'utf8');
+  // The old pattern: for (const lang of LANG_CODES) { params.push({ lang, slug: post.slug }); }
+  if (blogSlugPage.includes('for (const lang of LANG_CODES)') && blogSlugPage.includes('params.push({ lang, slug: post.slug })')) {
+    error('blog/[slug]/page.js: generateStaticParams generates non-English pages for English-only blog posts — this creates 100+ GSC "Alternate page with proper canonical" entries. Only generate {lang: "en"} for English-only posts.');
+  } else {
+    ok('blog/[slug]/page.js: English-only posts only generate English static pages');
+  }
+} catch (e) { warn('Could not check blog generateStaticParams: ' + e.message); }
+
+// ── 26. Removed tools must have redirects to prevent persistent 404s ──────────
+try {
+  const config = fs.readFileSync('next.config.mjs', 'utf8');
+  const removedTools = ['gov-doc-translator'];
+  const missing = removedTools.filter(tool => !config.includes(tool));
+  if (missing.length > 0) {
+    error(`next.config.mjs: removed tools without redirects: [${missing.join(', ')}] — these cause persistent 404 errors in GSC`);
+  } else {
+    ok('All removed tools have 301 redirects configured');
+  }
+} catch (e) { warn('Could not check removed tool redirects: ' + e.message); }
+
+// ── Summary ───────────────────────────────────────────────
+console.log('\n' + '='.repeat(50));
+if (errors > 0) {
+  console.error(`\n🚨 ${errors} error(s), ${warnings} warning(s) found. Fix errors before deploying.\n`);
+  process.exit(1);
+} else if (warnings > 0) {
+  console.warn(`\n⚠️  0 errors, ${warnings} warning(s). Safe to deploy but consider fixing warnings.\n`);
+  process.exit(0);
+} else {
+  console.log(`\n🎉 All SEO checks passed! Safe to deploy.\n`);
+  process.exit(0);
+}

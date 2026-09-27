@@ -1,0 +1,1682 @@
+/* ═══════════════════════════════════════════════════════
+   ilovetexts.com — Design System v5 (Radical Minimalist App)
+   Search-first, ultra-fast, premium developer aesthetic.
+   ═══════════════════════════════════════════════════════ */
+
+/* ── Reset & Fundamentals ── */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+:root {
+  /* Ultra-minimalist Palette */
+  --bg-main: #FFFFFF;
+  --bg-secondary: #FAFAFA;
+  --bg-tertiary: #F1F1F1;
+  --bg-glass: rgba(255, 255, 255, 0.7);
+  
+  --text-primary: #111111;
+  --text-secondary: #666666;
+  --text-tertiary: #888888;
+  
+  --border-light: #EAEAEA;
+  --border-strong: #333333;
+  
+  --accent: #000000;
+  --accent-text: #FFFFFF;
+  --accent-hover: #333333;
+  --highlight: #0070F3; /* Subtle Vercel Blue for focus states */
+  
+  /* Typography */
+  --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+  --font-mono: 'JetBrains Mono', 'Fira Code', ui-monospace, Menlo, Monaco, Consolas, monospace;
+  
+  /* Layout & Sizing */
+  --max-width: 1200px;
+  --app-max-width: 1400px;
+  --nav-height: 60px;
+  --radius-sm: 4px;
+  --radius-md: 8px;
+  --radius-lg: 12px;
+  --radius-full: 9999px;
+  
+  /* Shadows */
+  --shadow-sm: 0 1px 2px rgba(0,0,0,0.04);
+  --shadow-md: 0 4px 12px rgba(0,0,0,0.08);
+  --shadow-float: 0 12px 32px rgba(0,0,0,0.12);
+  --shadow-glow: 0 0 0 2px rgba(0, 112, 243, 0.2);
+  
+  /* Backward Compatibility Aliases for Custom Tools */
+  --text-main: var(--text-primary);
+  --text-muted: var(--text-secondary);
+  --brand-color: var(--highlight);
+  --error-color: #ef4444;
+}
+
+html.dark {
+  --bg-main: #000000;
+  --bg-secondary: #0A0A0A;
+  --bg-tertiary: #111111;
+  --bg-glass: rgba(0, 0, 0, 0.7);
+  
+  --text-primary: #EDEDED;
+  --text-secondary: #A0A0A0;
+  --text-tertiary: #666666;
+  
+  --border-light: #333333;
+  --border-strong: #EDEDED;
+  
+  --accent: #FFFFFF;
+  --accent-text: #000000;
+  --accent-hover: #CCCCCC;
+  --highlight: #3291FF;
+  
+  --shadow-sm: 0 1px 2px rgba(255,255,255,0.04);
+  --shadow-md: 0 4px 12px rgba(0,0,0,0.5);
+  --shadow-float: 0 12px 32px rgba(0,0,0,0.8);
+}
+
+html {
+  font-family: var(--font-sans);
+  background-color: var(--bg-main);
+  color: var(--text-primary);
+  scroll-behavior: smooth;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+}
+
+body {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  overflow-x: hidden;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+button {
+  font-family: inherit;
+  border: none;
+  background: none;
+  cursor: pointer;
+}
+
+.highlight {
+  color: var(--highlight);
+  background-clip: text;
+  -webkit-background-clip: text;
+}
+
+/* ── Layout Utilities ── */
+.container {
+  width: 100%;
+  max-width: var(--max-width);
+  margin: 0 auto;
+  padding: 0 24px;
+}
+
+.app-container {
+  width: 100%;
+  max-width: var(--app-max-width);
+  margin: 0 auto;
+  padding: 0 24px;
+}
+
+.footer-container {
+  padding-top: 64px;
+  padding-bottom: 32px;
+}
+
+@media (max-width: 767px) {
+  .footer-container {
+    padding-top: 32px;
+    padding-bottom: 24px;
+  }
+}
+
+/* ── Navigation (Ultra-Minimal) ── */
+.nav-header {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: var(--bg-glass);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--border-light);
+  height: var(--nav-height);
+  display: flex;
+  align-items: center;
+}
+
+.nav-inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.nav-brand {
+  font-weight: 700;
+  font-size: 1.1rem;
+  letter-spacing: -0.02em;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.nav-brand-icon {
+  font-size: 1.2rem;
+}
+
+.nav-actions {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+/* ── The Command Center (Homepage Search) ── */
+.command-center {
+  padding: 80px 24px 60px;
+  text-align: center;
+  max-width: 800px;
+  margin: 0 auto;
+  width: 100%;
+}
+
+.command-title {
+  font-size: 3rem;
+  font-weight: 800;
+  letter-spacing: -0.04em;
+  margin-bottom: 12px;
+  line-height: 1.1;
+}
+
+@media (max-width: 767px) {
+  .command-title {
+    font-size: 2rem;
+  }
+}
+
+.command-subtitle {
+  font-size: 1.1rem;
+  color: var(--text-secondary);
+  margin-bottom: 40px;
+}
+
+.command-search-wrapper {
+  position: relative;
+  width: 100%;
+  max-width: 680px;
+  margin: 0 auto;
+}
+
+.command-input {
+  width: 100%;
+  padding: 20px 24px 20px 56px;
+  font-size: 1.2rem;
+  font-weight: 500;
+  color: var(--text-primary);
+  background: var(--bg-main);
+  border: 1px solid var(--border-light);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-md);
+  transition: all 0.2s ease;
+  font-family: var(--font-sans);
+}
+
+@media (max-width: 767px) {
+  .command-input {
+    padding: 16px 16px 16px 48px;
+    font-size: 1rem;
+  }
+}
+
+.command-input:focus {
+  outline: none;
+  border-color: var(--highlight);
+  box-shadow: var(--shadow-glow), var(--shadow-md);
+}
+
+.command-icon {
+  position: absolute;
+  left: 20px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 1.4rem;
+  color: var(--text-tertiary);
+  pointer-events: none;
+}
+
+.command-shortcut {
+  position: absolute;
+  right: 16px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-light);
+  padding: 4px 8px;
+  border-radius: var(--radius-sm);
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+  font-family: var(--font-mono);
+  pointer-events: none;
+}
+
+@media (max-width: 767px) {
+  .command-shortcut {
+    display: none;
+  }
+}
+
+/* ── Search Results / Grid ── */
+.tools-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 16px;
+  margin-top: 40px;
+  text-align: left;
+}
+
+.tool-card {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+  padding: 20px;
+  background: var(--bg-main);
+  border: 1px solid var(--border-light);
+  border-radius: var(--radius-md);
+  transition: all 0.2s ease;
+}
+
+.tool-card:hover {
+  border-color: var(--border-strong);
+  box-shadow: var(--shadow-md);
+  transform: translateY(-2px);
+}
+
+.tool-card-icon {
+  font-size: 1.5rem;
+  flex-shrink: 0;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--bg-secondary);
+  border-radius: var(--radius-md);
+}
+
+.tool-card-content h3 {
+  font-size: 1rem;
+  font-weight: 600;
+  margin-bottom: 4px;
+  color: var(--text-primary);
+}
+
+.tool-card-content p {
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+  line-height: 1.5;
+  /* Clamp to 2 lines visually — full text stays in DOM for Googlebot */
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* ── Category Sidebar Layout ── */
+.app-layout {
+  display: flex;
+  flex: 1;
+  max-width: var(--app-max-width);
+  margin: 0 auto;
+  width: 100%;
+}
+
+.app-sidebar {
+  width: 260px;
+  flex-shrink: 0;
+  padding: 32px 24px 32px 0;
+  border-right: 1px solid var(--border-light);
+  display: none;
+}
+
+@media (min-width: 900px) {
+  .app-sidebar {
+    display: block;
+  }
+}
+
+.app-sidebar-nav {
+  position: sticky;
+  top: calc(var(--nav-height) + 32px);
+  max-height: calc(100vh - var(--nav-height) - 64px);
+  overflow-y: auto;
+}
+
+.app-sidebar-nav h4 {
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--text-tertiary);
+  margin-bottom: 12px;
+  font-weight: 600;
+}
+
+.app-sidebar-link {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 8px 12px;
+  margin: 0 -12px 2px;
+  border-radius: var(--radius-sm);
+  color: var(--text-secondary);
+  font-size: 0.9rem;
+  font-weight: 500;
+}
+
+.app-sidebar-link:hover, .app-sidebar-link.active {
+  background: var(--bg-secondary);
+  color: var(--text-primary);
+}
+
+.app-main {
+  flex: 1;
+  padding: 32px 0 64px 24px;
+  min-width: 0;
+}
+
+@media (max-width: 899px) {
+  .app-main {
+    padding-left: 0;
+    padding-top: 16px;
+    padding-bottom: 32px;
+  }
+}
+
+@media (max-width: 479px) {
+  .app-main {
+    padding-left: 0;
+    padding-top: 8px;
+    padding-bottom: 24px;
+  }
+  .app-container {
+    padding: 0 16px;
+  }
+  .container {
+    padding: 0 16px;
+  }
+}
+
+/* ── Split-Pane Tool Workspace (Code Editor Style) ── */
+.workspace-header {
+  margin-bottom: 24px;
+}
+
+.workspace-header h1 {
+  font-size: 2rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  margin-bottom: 8px;
+}
+
+.workspace-header p {
+  color: var(--text-secondary);
+  font-size: 1rem;
+}
+
+.workspace-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 24px;
+}
+
+@media (min-width: 1024px) {
+  .workspace-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+.editor-panel {
+  display: flex;
+  flex-direction: column;
+  background: var(--bg-main);
+  border: 1px solid var(--border-light);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  box-shadow: var(--shadow-sm);
+}
+
+.editor-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 16px;
+  background: var(--bg-secondary);
+  border-bottom: 1px solid var(--border-light);
+}
+
+.editor-title {
+  font-size: 0.8rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--text-secondary);
+}
+
+.editor-actions {
+  display: flex;
+  gap: 8px;
+}
+
+.action-btn {
+  padding: 4px 12px;
+  font-size: 0.8rem;
+  font-weight: 500;
+  border-radius: var(--radius-sm);
+  background: var(--bg-main);
+  border: 1px solid var(--border-light);
+  color: var(--text-primary);
+  transition: all 0.2s ease;
+}
+
+.action-btn:hover {
+  background: var(--bg-secondary);
+  border-color: var(--border-strong);
+}
+
+.action-btn.primary {
+  background: var(--accent);
+  color: var(--accent-text);
+  border: 1px solid var(--accent);
+}
+
+.action-btn.primary:hover {
+  background: var(--accent-hover);
+}
+
+.editor-textarea {
+  width: 100%;
+  min-height: 400px;
+  padding: 16px;
+  border: none;
+  resize: vertical;
+  background: var(--bg-main);
+  color: var(--text-primary);
+  font-family: var(--font-mono);
+  font-size: 0.9rem;
+  line-height: 1.6;
+}
+
+.editor-textarea:focus {
+  outline: none;
+}
+
+/* Specific tool controls (switches, inputs) */
+.tool-controls {
+  padding: 16px;
+  border-top: 1px solid var(--border-light);
+  background: var(--bg-secondary);
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  align-items: center;
+}
+
+/* ── Footer ── */
+.app-footer {
+  margin-top: auto;
+  padding: 32px 0;
+  border-top: 1px solid var(--border-light);
+  background: var(--bg-main);
+}
+
+.footer-inner {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  text-align: center;
+}
+
+@media (min-width: 768px) {
+  .footer-inner {
+    flex-direction: row;
+    justify-content: space-between;
+    text-align: left;
+  }
+}
+
+.footer-links {
+  display: flex;
+  gap: 24px;
+  justify-content: center;
+}
+
+.footer-links a {
+  color: var(--text-secondary);
+  font-size: 0.9rem;
+}
+
+.footer-links a:hover {
+  color: var(--text-primary);
+}
+
+.footer-copyright {
+  color: var(--text-tertiary);
+  font-size: 0.85rem;
+}
+
+/* ── Legacy Tool Components Auto-Upgraded to Split-Pane ── */
+.tool-actions {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 24px;
+}
+
+.btn {
+  padding: 8px 16px;
+  font-size: 0.9rem;
+  font-weight: 500;
+  border-radius: var(--radius-sm);
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-light);
+  color: var(--text-primary);
+  transition: all 0.2s ease;
+  font-family: var(--font-sans);
+}
+
+.btn:hover {
+  background: var(--bg-tertiary);
+  border-color: var(--border-strong);
+}
+
+.btn-primary {
+  background: var(--accent);
+  color: var(--accent-text);
+  border: 1px solid var(--accent);
+}
+
+.btn-primary:hover {
+  background: var(--accent-hover);
+}
+
+.tool-container {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 24px;
+}
+
+@media (min-width: 1024px) {
+  .tool-container {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+.tool-panel {
+  display: flex;
+  flex-direction: column;
+  background: var(--bg-main);
+  border: 1px solid var(--border-light);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-sm);
+  overflow: hidden;
+}
+
+.tool-panel-header {
+  padding: 12px 16px;
+  background: var(--bg-secondary);
+  border-bottom: 1px solid var(--border-light);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.tool-panel-title {
+  font-size: 0.8rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--text-secondary);
+}
+
+.tool-textarea {
+  width: 100%;
+  min-height: 400px;
+  padding: 16px;
+  border: none;
+  resize: vertical;
+  background: var(--bg-main);
+  color: var(--text-primary);
+  font-family: var(--font-mono);
+  font-size: 0.9rem;
+  line-height: 1.6;
+}
+
+.tool-textarea:focus {
+  outline: none;
+}
+
+/* ── Tool Meta Info (Share / Shortcuts) ── */
+.tool-share-bar, .keyboard-shortcuts-bar {
+  padding: 16px;
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-light);
+  border-radius: var(--radius-md);
+  margin-top: 32px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.share-bar-inner, .shortcuts-inner {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.share-buttons {
+  display: flex;
+  gap: 8px;
+}
+
+.share-btn {
+  width: 32px;
+  height: 32px;
+  border-radius: var(--radius-full);
+  border: 1px solid var(--border-light);
+  background: var(--bg-main);
+  color: var(--text-primary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.9rem;
+}
+
+.share-btn:hover {
+  background: var(--bg-tertiary);
+}
+
+.shortcut-item {
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+kbd {
+  background: var(--bg-main);
+  border: 1px solid var(--border-light);
+  border-radius: 4px;
+  padding: 2px 6px;
+  font-size: 0.75rem;
+  font-family: var(--font-mono);
+  color: var(--text-primary);
+}
+
+/* ── Tool Content Sections ── */
+.tool-content-sections {
+  margin-top: 48px;
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+}
+
+.tool-content-sections h2 {
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin-bottom: 16px;
+}
+
+.tool-content-sections p {
+  color: var(--text-secondary);
+  line-height: 1.6;
+}
+
+/* ── Global Overrides for Custom React Tools (Grammar, Spell, etc.) ── */
+.editor-container {
+  background: var(--bg-main) !important;
+  border: 1px solid var(--border-light) !important;
+}
+
+.grammar-textarea, .tool-textarea {
+  color: var(--text-primary) !important;
+}
+
+.grammar-sidebar {
+  background: var(--bg-main) !important;
+  border-color: var(--border-light) !important;
+}
+
+.issue-card {
+  background: var(--bg-secondary) !important;
+  border-color: var(--border-light) !important;
+}
+
+.issue-card:hover {
+  border-color: var(--border-strong) !important;
+  box-shadow: var(--shadow-sm) !important;
+}
+
+.issue-message {
+  color: var(--text-primary) !important;
+}
+
+.replacement-btn {
+  background: var(--accent) !important;
+  color: var(--accent-text) !important;
+  border: 1px solid var(--accent) !important;
+}
+
+.replacement-btn:hover {
+  background: var(--accent-hover) !important;
+}
+
+/* ── Backward Compatibility for Legacy Tool Classes ── */
+.btn, .btn-primary, .btn-secondary {
+  padding: 8px 16px;
+  font-size: 0.9rem;
+  font-weight: 500;
+  border-radius: var(--radius-sm);
+  background: var(--bg-main);
+  border: 1px solid var(--border-light);
+  color: var(--text-primary);
+  transition: all 0.2s ease;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+.btn:hover, .btn-secondary:hover {
+  background: var(--bg-secondary);
+  border-color: var(--border-strong);
+}
+
+.btn-primary {
+  background: var(--accent) !important;
+  color: var(--accent-text) !important;
+  border: 1px solid var(--accent) !important;
+}
+
+.btn-primary:hover {
+  background: var(--accent-hover) !important;
+  border-color: var(--accent) !important;
+}
+
+.btn-secondary {
+  background: var(--bg-secondary) !important;
+  border: 1px solid var(--border-light) !important;
+}
+
+/* ── Backward Compatibility for Legacy Tool Panels ── */
+.tool-container-full {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.tool-panel {
+  background: var(--bg-main) !important;
+  border: 1px solid var(--border-light) !important;
+  border-radius: var(--radius-md) !important;
+  overflow: hidden !important;
+  box-shadow: var(--shadow-sm) !important;
+  margin-bottom: 24px;
+}
+
+.tool-panel-header {
+  padding: 16px 20px !important;
+  background: var(--bg-secondary) !important;
+  border-bottom: 1px solid var(--border-light) !important;
+}
+
+.tool-panel-title {
+  font-size: 1.25rem !important;
+  font-weight: 600 !important;
+  color: var(--text-primary) !important;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+/* ── ToolLayout Bottom Sections ── */
+.trust-section h2, .related-tools h2, .explore-categories-section h2, .faq-section h2, .related-searches-section h2 {
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin-bottom: 24px;
+}
+
+.trust-grid, .related-tools-grid, .explore-categories-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 16px;
+  margin-top: 16px;
+}
+
+@media (min-width: 768px) {
+  .trust-grid, .related-tools-grid, .explore-categories-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (min-width: 1024px) {
+  .trust-grid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+.trust-card, .related-tool-card, .explore-category-card {
+  background: var(--bg-main);
+  border: 1px solid var(--border-light);
+  border-radius: var(--radius-md);
+  padding: 20px;
+  transition: all 0.2s ease;
+  display: flex;
+  flex-direction: column;
+}
+
+.related-tool-card {
+  flex-direction: row;
+  align-items: flex-start;
+  gap: 16px;
+}
+
+.trust-card:hover, .related-tool-card:hover, .explore-category-card:hover {
+  border-color: var(--border-strong);
+  box-shadow: var(--shadow-sm);
+}
+
+.trust-icon, .related-tool-icon, .explore-cat-icon {
+  font-size: 1.5rem;
+  margin-bottom: 12px;
+}
+
+.related-tool-icon {
+  margin-bottom: 0;
+}
+
+.trust-card h3, .related-tool-info h4, .explore-category-card h4 {
+  font-size: 1rem;
+  font-weight: 600;
+  margin-bottom: 4px;
+}
+
+.trust-card p, .related-tool-info p, .explore-category-card p {
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+}
+
+.faq-item {
+  border-bottom: 1px solid var(--border-light);
+  padding: 0;
+}
+
+/* Native <details>/<summary> accordion — Googlebot reads content regardless of open state */
+.faq-item summary {
+  font-weight: 600;
+  font-size: 1rem;
+  cursor: pointer;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px 0;
+  list-style: none;
+  color: var(--text-primary);
+}
+
+/* Hide the default disclosure triangle — we use .chevron instead */
+.faq-item summary::-webkit-details-marker { display: none; }
+.faq-item summary::marker { display: none; }
+
+.faq-item .chevron {
+  transition: transform 0.2s ease;
+  flex-shrink: 0;
+  font-size: 0.75rem;
+  color: var(--text-tertiary);
+}
+
+.faq-item[open] .chevron {
+  transform: rotate(180deg);
+}
+
+.faq-question {
+  font-weight: 600;
+  font-size: 1rem;
+  cursor: pointer;
+  display: flex;
+  justify-content: space-between;
+}
+
+.faq-answer {
+  padding: 0 0 16px;
+  color: var(--text-secondary);
+  font-size: 0.95rem;
+  line-height: 1.6;
+}
+
+
+/* ── ToolLayout Top Header & Content Sections ── */
+.tool-hero {
+  padding: 32px 0;
+  background: var(--bg-main);
+  border-bottom: 1px solid var(--border-light);
+  margin-bottom: 32px;
+}
+
+.breadcrumbs {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: var(--text-tertiary);
+  margin-bottom: 24px;
+  flex-wrap: wrap;
+}
+
+.breadcrumbs a {
+  color: var(--text-secondary);
+  transition: color 0.2s ease;
+}
+
+.breadcrumbs a:hover {
+  color: var(--text-primary);
+}
+
+.breadcrumbs .separator {
+  color: var(--border-strong);
+}
+
+.tool-hero h1 {
+  font-size: 2.5rem;
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  margin-bottom: 12px;
+  color: var(--text-primary);
+}
+
+.tool-hero-desc {
+  font-size: 1.1rem;
+  color: var(--text-secondary);
+  max-width: 800px;
+  margin-bottom: 24px;
+  line-height: 1.5;
+}
+
+.tool-hero-badges {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.tool-hero-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-light);
+  border-radius: var(--radius-full);
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: var(--text-secondary);
+}
+
+.tool-content-sections {
+  margin-top: 64px;
+  display: flex;
+  flex-direction: column;
+  gap: 64px;
+}
+
+.howto-steps {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  margin-top: 16px;
+}
+
+.howto-step {
+  display: flex;
+  align-items: flex-start;
+  gap: 20px;
+  padding: 24px;
+  background: var(--bg-main);
+  border: 1px solid var(--border-light);
+  border-radius: var(--radius-md);
+  transition: all 0.2s ease;
+}
+
+.howto-step:hover {
+  border-color: var(--border-strong);
+  box-shadow: var(--shadow-sm);
+}
+
+.howto-step-number {
+  flex-shrink: 0;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: white;
+  background: var(--accent) !important;
+}
+
+.howto-step h4 {
+  font-size: 1.1rem;
+  font-weight: 600;
+  margin-bottom: 8px;
+  color: var(--text-primary);
+}
+
+.why-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 24px;
+  margin-top: 24px;
+}
+
+@media (min-width: 768px) {
+  .why-grid { grid-template-columns: repeat(2, 1fr); }
+}
+@media (min-width: 1024px) {
+  .why-grid { grid-template-columns: repeat(3, 1fr); }
+}
+
+.why-card {
+  padding: 32px 24px;
+  background: var(--bg-main);
+  border: 1px solid var(--border-light);
+  border-radius: var(--radius-md);
+  text-align: center;
+  transition: all 0.2s ease;
+}
+
+.why-card:hover {
+  border-color: var(--border-strong);
+  box-shadow: var(--shadow-sm);
+}
+
+.why-card-icon {
+  font-size: 2.5rem;
+  margin-bottom: 16px;
+}
+
+.usecases-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 24px;
+}
+
+.usecase-item {
+  padding: 12px 20px;
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-light);
+  border-radius: var(--radius-full);
+  font-size: 0.95rem;
+  font-weight: 500;
+}
+
+/* ── ClientTool Input Helper Bar & Split-Pane Layout ── */
+.tool-container {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 24px;
+}
+
+@media (min-width: 1024px) {
+  .tool-container {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+.tool-helper-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 20px;
+  background: var(--bg-secondary);
+  border-bottom: 1px solid var(--border-light);
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.tool-helper-actions {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.btn-helper {
+  padding: 6px 12px;
+  font-size: 0.85rem;
+  font-weight: 500;
+  border-radius: var(--radius-sm);
+  background: var(--bg-white);
+  border: 1px solid var(--border-light);
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.btn-helper:hover {
+  background: var(--bg-main);
+  border-color: var(--border-strong);
+  color: var(--text-primary);
+  box-shadow: var(--shadow-sm);
+}
+
+.tool-helper-stats {
+  font-size: 0.85rem;
+  font-family: var(--font-mono);
+  color: var(--text-muted);
+  display: flex;
+  gap: 12px;
+}
+
+.tool-textarea {
+  width: 100%;
+  min-height: 350px;
+  padding: 20px;
+  font-size: 0.95rem;
+  font-family: var(--font-mono);
+  color: var(--text-primary) !important;
+  background: var(--bg-main);
+  border: none;
+  resize: vertical;
+  line-height: 1.6;
+}
+
+.tool-textarea:focus {
+  outline: none;
+}
+
+.tool-textarea.dragging {
+  background: var(--bg-secondary);
+  box-shadow: inset 0 0 0 2px var(--accent);
+}
+
+.tool-output {
+  width: 100%;
+  min-height: 350px;
+  padding: 24px;
+  font-size: 0.95rem;
+  font-family: var(--font-mono);
+  color: var(--text-primary);
+  background: var(--bg-main);
+  border: none;
+  line-height: 1.6;
+  white-space: pre-wrap;
+  word-break: break-word;
+  overflow-y: auto;
+}
+
+.tool-output.empty {
+  color: var(--text-tertiary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-sans);
+  font-style: italic;
+  font-size: 1rem;
+  text-align: center;
+}
+
+/* ── File Editor Tools — shared animations ── */
+@keyframes ilt-spin {
+  to { transform: rotate(360deg); }
+}
+
+/* File editor fullscreen container */
+:fullscreen .ilt-editor-container,
+:-webkit-full-screen .ilt-editor-container {
+  border-radius: 0 !important;
+  height: 100vh !important;
+}
+
+/* ═══════════════════════════════════════════════════════
+   PDF Editor — Mobile Responsive Styles
+   ═══════════════════════════════════════════════════════ */
+
+/* ── PDF Toolbar — scrollable tab row on mobile ── */
+.pdf-toolbar-tabs {
+  display: flex;
+  align-items: center;
+  gap: 0;
+  padding: 0 10px;
+  border-bottom: 1px solid var(--border-light);
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none; /* Firefox */
+}
+.pdf-toolbar-tabs::-webkit-scrollbar { display: none; }
+
+.pdf-toolbar-tab {
+  padding: 9px 12px;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  font-size: 0.78rem;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  white-space: nowrap;
+  flex-shrink: 0;
+  transition: all 0.15s;
+  position: relative;
+}
+
+.pdf-toolbar-tabs {
+  display: flex;
+  align-items: center;
+  overflow-x: auto;
+  white-space: nowrap;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+  min-height: 48px;
+  position: relative;
+}
+.pdf-toolbar-tabs::-webkit-scrollbar { display: none; }
+
+.pdf-toolbar-right {
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding-left: 8px;
+  flex-shrink: 0;
+}
+
+.pdf-subtoolbar {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 5px 12px;
+  min-height: 42px;
+  overflow-x: auto;
+  flex-wrap: nowrap;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+}
+.pdf-subtoolbar::-webkit-scrollbar { display: none; }
+
+/* ── PDF Editor Body Layout ── */
+.pdf-editor-body {
+  display: flex;
+  flex: 1;
+  overflow: hidden;
+  position: relative;
+}
+
+.pdf-canvas-scroll {
+  flex: 1;
+  overflow: auto;
+  padding: 24px;
+  background: var(--bg-tertiary);
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+}
+
+/* ── PDF Page Sidebar ── */
+.pdf-page-sidebar {
+  width: 100px;
+  flex-shrink: 0;
+  overflow-y: auto;
+  background: var(--bg-secondary);
+  border-right: 1px solid var(--border-light);
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 8px 6px;
+}
+
+/* ── PDF Comment Panel (right sidebar) ── */
+.pdf-comment-panel {
+  width: 280px;
+  flex-shrink: 0;
+  border-left: 1px solid var(--border-light);
+  background: var(--bg-main);
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+}
+
+/* ── PDF Status Bar ── */
+.pdf-status-bar {
+  padding: 4px 14px;
+  background: var(--bg-secondary);
+  border-top: 1px solid var(--border-light);
+  display: flex;
+  gap: 16px;
+  flex-shrink: 0;
+  font-size: 0.73rem;
+  color: var(--text-secondary);
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+/* ── PDF Modals ── */
+.pdf-modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.6);
+  z-index: 500;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+
+.pdf-modal-content {
+  background: var(--bg-main);
+  border-radius: var(--radius-lg);
+  box-shadow: 0 24px 48px rgba(0,0,0,0.22);
+  padding: 28px;
+  max-width: 100%;
+  max-height: 90vh;
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+}
+
+/* ── Feature Grid ── */
+.pdf-feature-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 14px;
+  margin-top: 28px;
+}
+
+/* ═══════════════════════════════════════════════════════
+   MOBILE BREAKPOINTS
+   ═══════════════════════════════════════════════════════ */
+
+/* ── Tablets & below (< 768px) ── */
+@media (max-width: 767px) {
+  /* Hide page sidebar on mobile */
+  .pdf-page-sidebar {
+    display: none;
+  }
+
+  /* Comment panel becomes bottom drawer */
+  .pdf-comment-panel {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    width: 100%;
+    max-height: 50vh;
+    border-left: none;
+    border-top: 1px solid var(--border-light);
+    z-index: 90;
+    border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+    box-shadow: 0 -4px 16px rgba(0,0,0,0.1);
+  }
+
+  /* Compact canvas padding */
+  .pdf-canvas-scroll {
+    padding: 8px;
+  }
+
+  /* Toolbar — hide labels, only show icons on right side */
+  .pdf-toolbar-right .pdf-toolbar-btn-label {
+    display: none;
+  }
+
+  .pdf-toolbar-right {
+    gap: 2px;
+    padding-left: 4px;
+  }
+
+  .pdf-toolbar-tab {
+    padding: 8px 8px;
+    font-size: 0.74rem;
+    gap: 3px;
+  }
+  .pdf-toolbar-tab-label {
+    display: none;
+  }
+
+  .pdf-subtoolbar {
+    padding: 4px 8px;
+    min-height: 38px;
+    gap: 3px;
+  }
+
+  /* Status bar — hide less important info */
+  .pdf-status-bar {
+    padding: 3px 8px;
+    gap: 8px;
+    font-size: 0.68rem;
+  }
+  .pdf-status-bar .status-secondary {
+    display: none;
+  }
+
+  /* Modals — fill more of the screen */
+  .pdf-modal-overlay {
+    padding: 8px;
+    align-items: flex-end;
+  }
+
+  .pdf-modal-content {
+    padding: 18px;
+    border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+    max-height: 92vh;
+    width: 100% !important;
+  }
+
+  /* Feature grid — 2 columns on mobile */
+  .pdf-feature-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+    margin-top: 20px;
+  }
+
+  /* Editor container — use all height */
+  .pdf-editor-container {
+    height: calc(100vh - 60px) !important;
+    min-height: 0 !important;
+    border-radius: 0 !important;
+  }
+  /* Responsive tables */
+  .responsive-table-wrapper {
+    width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    margin-bottom: 12px;
+    display: block;
+  }
+}
+
+/* ── Small phones (< 480px) ── */
+@media (max-width: 479px) {
+  .pdf-toolbar-tab {
+    padding: 7px 6px;
+    font-size: 0.72rem;
+  }
+
+  .pdf-subtoolbar {
+    padding: 3px 6px;
+    gap: 2px;
+  }
+
+  .pdf-modal-content {
+    padding: 14px;
+  }
+
+  .pdf-feature-grid {
+    grid-template-columns: 1fr;
+    gap: 8px;
+  }
+
+  .pdf-canvas-scroll {
+    padding: 4px;
+  }
+
+  /* Even more compact status bar */
+  .pdf-status-bar {
+    padding: 2px 6px;
+    gap: 6px;
+    font-size: 0.65rem;
+  }
+}
+
+/* ── Wide screens — ensure editor doesn't spread too wide ── */
+@media (min-width: 1200px) {
+  .pdf-comment-panel {
+    width: 320px;
+  }
+}
+
+
+/* ═══════════════════════════════════════════════════════
+   PERFORMANCE OPTIMIZATIONS — Mobile score boost
+   Targets: LCP, CLS, FID/INP improvements
+   ═══════════════════════════════════════════════════════ */
+
+/* content-visibility — skip rendering offscreen sections */
+.tool-content-sections,
+.faq-section,
+.related-tools,
+.explore-categories-section,
+.trust-section,
+.seo-block,
+.blog-content,
+footer.app-footer {
+  content-visibility: auto;
+  contain-intrinsic-size: 0 400px;
+}
+
+/* Prevent layout shift on images — always set explicit dimensions */
+img {
+  height: auto;
+  max-width: 100%;
+}
+
+/* Font-display fallback vars — used when custom font hasn't loaded */
+:root {
+  --font-sans-fallback: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --font-mono-fallback: ui-monospace, SFMono-Regular, 'Cascadia Code', Consolas, monospace;
+}
+
+/* Reduce CLS — reserve space for dynamic components */
+.tool-hero {
+  min-height: 160px;
+  contain: layout style;
+}
+
+/* Reduce paint complexity on non-critical elements */
+.related-tool-card,
+.explore-category-card,
+.trust-card {
+  will-change: auto;
+  transform: translateZ(0); /* promote to own layer only when needed */
+}
+
+/* Reduce reflow on hover — use opacity not layout props */
+.related-tool-card:hover,
+.explore-category-card:hover {
+  transform: translateY(-2px);
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+/* Mobile: reduce paint area for sidebar (already hidden via display:none) */
+@media (max-width: 899px) {
+  .app-sidebar {
+    display: none !important;
+    pointer-events: none;
+  }
+
+  /* Tighten padding on mobile for more content area */
+  .tool-hero {
+    padding: 24px 16px 20px;
+  }
+
+  /* Reduce hero min-height on mobile */
+  .tool-hero {
+    min-height: 120px;
+  }
+
+  /* Prevent overflow causing horizontal scroll on mobile */
+  .app-layout,
+  .app-main,
+  .container {
+    overflow-x: hidden;
+  }
+}
+
+/* Reduce JS bundle impact — defer non-critical animations */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* Optimize text rendering for LCP element */
+h1, h2 {
+  text-rendering: optimizeSpeed;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Prevent invisible text during font load (FOIT) */
+.tool-hero h1,
+.hub-hero h1,
+h1 {
+  font-display: optional;
+}
+
+/* Lazy load images below fold */
+img[loading="lazy"] {
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+img[loading="lazy"].loaded,
+img[loading="lazy"]:not([src=""]) {
+  opacity: 1;
+}
+
+/* ── Improve INP (Interaction to Next Paint) ── */
+/* Buttons should respond instantly */
+button, a, [role="button"] {
+  touch-action: manipulation; /* removes 300ms tap delay on mobile */
+}
+
+/* Reduce layout thrash on scroll */
+.app-sidebar-nav {
+  will-change: scroll-position;
+}
+
+/* ── Critical above-fold styles inlined ── */
+/* These ensure LCP element (hero) paints without waiting for full CSS */
+.tool-hero,
+.hub-hero {
+  contain: layout style paint;
+}
+
+/* ── Prevent Cumulative Layout Shift (CLS) ── */
+/* Reserve space for the client-side rendered tool workspace before hydration */
+.tool-workspace {
+  min-height: 500px;
+}
