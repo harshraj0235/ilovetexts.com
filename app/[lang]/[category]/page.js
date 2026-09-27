@@ -5,7 +5,14 @@ import Link from 'next/link';
 import { notFound } from 'next/navigation';
 
 export async function generateStaticParams() {
-  return CATEGORIES.map((category) => ({ lang: 'en', category: category.id }));
+  // Generate ALL language × category combos to prevent 404s on non-EN URLs.
+  const params = [];
+  for (const lang of LANG_CODES) {
+    for (const category of CATEGORIES) {
+      params.push({ lang, category: category.id });
+    }
+  }
+  return params;
 }
 
 export const revalidate = 86400;

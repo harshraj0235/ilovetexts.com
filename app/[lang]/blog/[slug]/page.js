@@ -7,17 +7,15 @@ import { LANG_CODES, buildCanonical } from '@/lib/i18n';
 import { generateAlternates } from '@/lib/seo';
 
 export async function generateStaticParams() {
+  // Generate ALL language combinations for every post.
+  // This prevents 404s when Google crawls /de/blog/english-slug or
+  // /es/blog/portuguese-slug. The page still correctly handles canonical
+  // via generateMetadata (noindex for wrong-language combos, canonical →
+  // the post's actual language).
   const params = [];
   for (const post of BLOG_POSTS) {
-    if (post.lang) {
-      // Language-specific post — only generate for its own language
-      params.push({ lang: post.lang, slug: post.slug });
-      // Also generate the English route so the slug renders for /en/blog/... if visited
-      // (though canonical points to post.lang URL, having a valid EN page avoids 404)
-      params.push({ lang: 'en', slug: post.slug });
-    } else {
-      // English-only post — generate for all languages (they all point canonical → English)
-      params.push({ lang: 'en', slug: post.slug });
+    for (const lang of LANG_CODES) {
+      params.push({ lang, slug: post.slug });
     }
   }
   return params;

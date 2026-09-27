@@ -270,6 +270,104 @@ const nextConfig = {
         permanent: true,
       },
 
+      // ── /ai-tools/ category never existed — blog had wrong links ────────
+      // ai-text-humanizer lives in productivity-tools
+      {
+        source: '/ai-tools/ai-text-humanizer',
+        destination: '/productivity-tools/ai-text-humanizer',
+        permanent: true,
+      },
+      {
+        source: '/:lang(hi|pt|es|de|id)/ai-tools/ai-text-humanizer',
+        destination: '/:lang/productivity-tools/ai-text-humanizer',
+        permanent: true,
+      },
+      // prompt-minifier lives in text-converter
+      {
+        source: '/ai-tools/prompt-minifier',
+        destination: '/text-converter/prompt-minifier',
+        permanent: true,
+      },
+      {
+        source: '/:lang(hi|pt|es|de|id)/ai-tools/prompt-minifier',
+        destination: '/:lang/text-converter/prompt-minifier',
+        permanent: true,
+      },
+      // Generic catch-all for any /ai-tools/ path → homepage
+      {
+        source: '/ai-tools/:slug*',
+        destination: '/',
+        permanent: true,
+      },
+      {
+        source: '/:lang(hi|pt|es|de|id)/ai-tools/:slug*',
+        destination: '/:lang',
+        permanent: true,
+      },
+
+      // ── Phantom / stale blog slugs — Google crawled these from old ──────
+      // sitemaps or hreflang tags. Redirect to the correct current slug.
+      {
+        source: '/:lang(en|hi|pt|es|de|id)/blog/how-to-convert-text-to-uppercase-online',
+        destination: '/:lang/blog/convert-text-case-uppercase-lowercase-title-case',
+        permanent: true,
+      },
+      {
+        source: '/blog/how-to-convert-text-to-uppercase-online',
+        destination: '/blog/convert-text-case-uppercase-lowercase-title-case',
+        permanent: true,
+      },
+      {
+        source: '/:lang(en|hi|pt|es|de|id)/blog/text-to-speech-online-guide',
+        destination: '/:lang/blog/text-to-speech-online-free-guide',
+        permanent: true,
+      },
+      {
+        source: '/blog/text-to-speech-online-guide',
+        destination: '/blog/text-to-speech-online-free-guide',
+        permanent: true,
+      },
+      {
+        source: '/:lang(en|hi|pt|es|de|id)/blog/base64-encode-decode-guide',
+        destination: '/:lang/blog/base64-encoding-decoding-explained',
+        permanent: true,
+      },
+      {
+        source: '/blog/base64-encode-decode-guide',
+        destination: '/blog/base64-encoding-decoding-explained',
+        permanent: true,
+      },
+      {
+        source: '/:lang(en|hi|pt|es|de|id)/blog/json-formatter-online-guide',
+        destination: '/:lang/blog/format-json-online-beautify-validate-minify',
+        permanent: true,
+      },
+      {
+        source: '/blog/json-formatter-online-guide',
+        destination: '/blog/format-json-online-beautify-validate-minify',
+        permanent: true,
+      },
+      {
+        source: '/:lang(en|hi|pt|es|de|id)/blog/free-password-generator-guide',
+        destination: '/:lang/blog/generate-strong-password-guide',
+        permanent: true,
+      },
+      {
+        source: '/blog/free-password-generator-guide',
+        destination: '/blog/generate-strong-password-guide',
+        permanent: true,
+      },
+      {
+        source: '/:lang(en|hi|pt|es|de|id)/blog/instagram-caption-spacer-guide',
+        destination: '/:lang/blog/instagram-caption-formatting-tips',
+        permanent: true,
+      },
+      {
+        source: '/blog/instagram-caption-spacer-guide',
+        destination: '/blog/instagram-caption-formatting-tips',
+        permanent: true,
+      },
+
     ];
   },
   async rewrites() {

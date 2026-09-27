@@ -2034,15 +2034,15 @@ Our [JWT Decoder](/developer-tools/jwt-decoder) uses pure client-side JavaScript
     date: '2026-09-15',
     readTime: '5 min',
     toolLinks: [
-      { slug: 'ai-tools/ai-text-humanizer', name: 'AI Text Humanizer' },
-      { slug: 'ai-tools/prompt-minifier', name: 'Prompt Minifier' }
+      { slug: 'productivity-tools/ai-text-humanizer', name: 'AI Text Humanizer' },
+      { slug: 'text-converter/prompt-minifier', name: 'Prompt Minifier' }
     ],
     content: `
 ## Why AI Text Sounds Robotic
 Large Language Models (LLMs) like ChatGPT tend to use predictable sentence structures, highly complex vocabulary, and lack "burstiness" (the human tendency to mix very short sentences with long ones).
 
 ## How to Humanize AI Text
-Our [AI Text Humanizer](/ai-tools/ai-text-humanizer) analyzes your text and rewrites it to:
+Our [AI Text Humanizer](/productivity-tools/ai-text-humanizer) analyzes your text and rewrites it to:
 1. Increase burstiness.
 2. Introduce natural idioms.
 3. Lower the perplexity score used by AI detectors like Turnitin and Originality.ai.

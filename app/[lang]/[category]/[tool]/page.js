@@ -120,11 +120,17 @@ import { notFound } from 'next/navigation';
 import Link from 'next/link';
 
 export async function generateStaticParams() {
-  return getAllTools('en').map((tool) => ({
-    lang: 'en',
-    category: tool.categoryId,
-    tool: tool.slug,
-  }));
+  // Generate ALL language × tool combos to prevent 404s on non-EN URLs.
+  // With only 'en' generated, localized tool pages relied on dynamic
+  // rendering which could fail or return 404s.
+  const params = [];
+  const enTools = getAllTools('en');
+  for (const lang of LANG_CODES) {
+    for (const tool of enTools) {
+      params.push({ lang, category: tool.categoryId, tool: tool.slug });
+    }
+  }
+  return params;
 }
 
 export const revalidate = 86400;
