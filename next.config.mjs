@@ -368,6 +368,29 @@ const nextConfig = {
         permanent: true,
       },
 
+      // ── Cross-language blog 404s from GSC ───────────────────────────────
+      // Google crawled these invalid language combinations. Redirect them to their true canonicals.
+      {
+        source: '/es/blog/comprimir-pdf-gratis-online-pt',
+        destination: '/pt/blog/comprimir-pdf-gratis-online-pt',
+        permanent: true,
+      },
+      {
+        source: '/hi/blog/comprimir-pdf-gratis-online',
+        destination: '/es/blog/comprimir-pdf-gratis-online',
+        permanent: true,
+      },
+      {
+        source: '/de/blog/csv-to-json-converter-guide',
+        destination: '/blog/csv-to-json-converter-guide',
+        permanent: true,
+      },
+      {
+        source: '/de/blog/mejor-alternativa-grammarly-gratis',
+        destination: '/es/blog/mejor-alternativa-grammarly-gratis',
+        permanent: true,
+      },
+
     ];
   },
   async rewrites() {

@@ -127,7 +127,11 @@ export async function generateStaticParams() {
   const enTools = getAllTools('en');
   for (const lang of LANG_CODES) {
     for (const tool of enTools) {
-      params.push({ lang, category: tool.categoryId, tool: tool.slug });
+      if (lang === 'en') {
+        params.push({ lang: 'en', category: tool.categoryId, tool: tool.slug });
+      } else {
+        params.push({ lang, category: tool.categoryId, tool: tool.slug });
+      }
     }
   }
   return params;

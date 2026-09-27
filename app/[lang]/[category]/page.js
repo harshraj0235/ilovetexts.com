@@ -9,7 +9,11 @@ export async function generateStaticParams() {
   const params = [];
   for (const lang of LANG_CODES) {
     for (const category of CATEGORIES) {
-      params.push({ lang, category: category.id });
+      if (lang === 'en') {
+        params.push({ lang: 'en', category: category.id });
+      } else {
+        params.push({ lang, category: category.id });
+      }
     }
   }
   return params;
