@@ -1110,6 +1110,54 @@
         <span class="toast-text" id="toastText">Progress saved!</span>
     </div>
 
+    <!-- Problem Detail Modal -->
+    <div class="problem-modal-overlay" id="problemModal">
+        <div class="problem-modal">
+            <div class="modal-header">
+                <h2 id="modalTitle">Problem Name</h2>
+                <button class="modal-close" id="modalClose">✕</button>
+            </div>
+            <div class="modal-body">
+                <div class="modal-problem-info">
+                    <div class="modal-meta" id="modalMeta"></div>
+                    <div class="modal-description" id="modalDescription"></div>
+                    <a href="#" id="modalLeetcodeLink" target="_blank" style="display:inline-block;padding:8px 16px;background:var(--accent-primary);color:white;border-radius:var(--radius-xs);text-decoration:none;font-size:0.85rem;font-weight:600;">Open on LeetCode →</a>
+                </div>
+                <details class="modal-hints">
+                    <summary>💡 Hints & Approach</summary>
+                    <p id="modalHints">Think about the optimal data structure and time complexity...</p>
+                </details>
+                <div class="compiler-section">
+                    <div class="compiler-header">
+                        <h3>💻 Code Editor</h3>
+                        <select class="compiler-lang-select" id="compilerLang">
+                            <option value="javascript">JavaScript</option>
+                            <option value="python">Python</option>
+                            <option value="java">Java</option>
+                            <option value="cpp">C++</option>
+                        </select>
+                    </div>
+                    <div class="code-editor-wrapper">
+                        <textarea class="code-editor" id="codeEditor" placeholder="// Write your solution here..." spellcheck="false"></textarea>
+                    </div>
+                    <div class="compiler-actions">
+                        <button class="btn-run" id="runCode">▶ Run Code</button>
+                        <button class="btn-submit" id="submitCode">✓ Submit</button>
+                    </div>
+                </div>
+                <div class="test-cases-section">
+                    <h4>Test Cases</h4>
+                    <div class="test-case-tabs" id="testCaseTabs"></div>
+                    <div class="test-case-content" id="testCaseContent"></div>
+                </div>
+                <div class="output-section">
+                    <h4>Output</h4>
+                    <div class="output-result" id="outputResult">Click "Run Code" to see output...</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <script src="app.js"></script>
 </body>
 </html>
