@@ -72,9 +72,29 @@ export default async function Home({ params }) {
         <h1 style={{ fontSize: 'clamp(2rem, 5vw, 2.5rem)', fontWeight: '800', marginBottom: '1rem', lineHeight: '1.2' }}>
           {t.siteTitle}
         </h1>
-        <p style={{ fontSize: '1.1rem', color: 'var(--text-secondary)', lineHeight: '1.6', margin: '0 auto', maxWidth: '650px' }}>
+        <p style={{ fontSize: '1.1rem', color: 'var(--text-secondary)', lineHeight: '1.6', margin: '0 auto 1.5rem', maxWidth: '650px' }}>
           {t.siteDescription} All tools run instantly in your browser with no server uploads, ensuring your data remains 100% private. No registration required.
         </p>
+        <a 
+          href="/faang-tracker/index.html"
+          target="_blank"
+          style={{
+            display: 'inline-block',
+            padding: '12px 24px',
+            backgroundColor: 'var(--primary, #3b82f6)',
+            color: '#fff',
+            borderRadius: '8px',
+            fontWeight: '600',
+            textDecoration: 'none',
+            boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)',
+            marginBottom: '1rem',
+            transition: 'transform 0.2s ease'
+          }}
+          onMouseOver={(e) => e.currentTarget.style.transform = 'translateY(-2px)'}
+          onMouseOut={(e) => e.currentTarget.style.transform = 'translateY(0)'}
+        >
+          🚀 Open FAANG Interview Tracker
+        </a>
       </section>
 
       <CommandCenter 

@@ -1,0 +1,1115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FAANG Crack - 60-Day Interview Preparation Tracker</title>
+    <meta name="description" content="Complete 60-day FAANG interview preparation roadmap with real questions, daily schedule, and progress tracking">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- Animated Background -->
+    <div class="bg-animation">
+        <div class="floating-orb orb-1"></div>
+        <div class="floating-orb orb-2"></div>
+        <div class="floating-orb orb-3"></div>
+        <div class="floating-orb orb-4"></div>
+    </div>
+
+    <!-- Navigation -->
+    <nav class="navbar" id="navbar">
+        <div class="nav-brand">
+            <span class="brand-icon">🚀</span>
+            <span class="brand-text">FAANG<span class="brand-accent">Crack</span></span>
+        </div>
+        <div class="nav-links">
+            <a href="#dashboard" class="nav-link active" data-section="dashboard">Dashboard</a>
+            <a href="#roadmap" class="nav-link" data-section="roadmap">Roadmap</a>
+            <a href="#schedule" class="nav-link" data-section="schedule">Schedule</a>
+            <a href="#dsa" class="nav-link" data-section="dsa">DSA Problems</a>
+            <a href="#system-design" class="nav-link" data-section="system-design">System Design</a>
+            <a href="#behavioral" class="nav-link" data-section="behavioral">Behavioral</a>
+            <a href="#resources" class="nav-link" data-section="resources">Resources</a>
+        </div>
+        <div class="nav-streak">
+            <span class="streak-fire">🔥</span>
+            <span class="streak-count" id="streakCount">0</span>
+            <span class="streak-label">day streak</span>
+        </div>
+        <button class="mobile-menu-btn" id="mobileMenuBtn">☰</button>
+    </nav>
+
+    <!-- Mobile Menu -->
+    <div class="mobile-menu" id="mobileMenu">
+        <a href="#dashboard" class="mobile-link" data-section="dashboard">Dashboard</a>
+        <a href="#roadmap" class="mobile-link" data-section="roadmap">Roadmap</a>
+        <a href="#schedule" class="mobile-link" data-section="schedule">Schedule</a>
+        <a href="#dsa" class="mobile-link" data-section="dsa">DSA Problems</a>
+        <a href="#system-design" class="mobile-link" data-section="system-design">System Design</a>
+        <a href="#behavioral" class="mobile-link" data-section="behavioral">Behavioral</a>
+        <a href="#resources" class="mobile-link" data-section="resources">Resources</a>
+    </div>
+
+    <main class="main-content">
+
+        <!-- ==================== DASHBOARD SECTION ==================== -->
+        <section id="dashboard" class="section active">
+            <div class="section-header">
+                <h1>Your FAANG Journey Dashboard</h1>
+                <p class="section-subtitle">60 days to crack FAANG • Night Warrior Mode (9 PM - 1 AM)</p>
+            </div>
+
+            <!-- Stats Cards -->
+            <div class="stats-grid">
+                <div class="stat-card stat-primary">
+                    <div class="stat-icon">📅</div>
+                    <div class="stat-info">
+                        <span class="stat-value" id="daysRemaining">60</span>
+                        <span class="stat-label">Days Remaining</span>
+                    </div>
+                    <div class="stat-progress-ring">
+                        <svg viewBox="0 0 36 36">
+                            <path class="ring-bg" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"/>
+                            <path class="ring-fill" id="daysRing" stroke-dasharray="0, 100" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"/>
+                        </svg>
+                    </div>
+                </div>
+                <div class="stat-card stat-success">
+                    <div class="stat-icon">✅</div>
+                    <div class="stat-info">
+                        <span class="stat-value" id="problemsSolved">0</span>
+                        <span class="stat-label">Problems Solved</span>
+                    </div>
+                </div>
+                <div class="stat-card stat-warning">
+                    <div class="stat-icon">🎯</div>
+                    <div class="stat-info">
+                        <span class="stat-value" id="topicsCompleted">0</span>
+                        <span class="stat-label">Topics Completed</span>
+                    </div>
+                </div>
+                <div class="stat-card stat-info">
+                    <div class="stat-icon">⏱️</div>
+                    <div class="stat-info">
+                        <span class="stat-value" id="totalHours">0</span>
+                        <span class="stat-label">Hours Studied</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Progress Overview -->
+            <div class="dashboard-grid">
+                <div class="card progress-card">
+                    <h3>📊 Overall Progress</h3>
+                    <div class="progress-bars">
+                        <div class="progress-item">
+                            <div class="progress-header">
+                                <span>DSA & Coding</span>
+                                <span class="progress-pct" id="dsaProgress">0%</span>
+                            </div>
+                            <div class="progress-bar"><div class="progress-fill dsa-fill" id="dsaBar" style="width: 0%"></div></div>
+                        </div>
+                        <div class="progress-item">
+                            <div class="progress-header">
+                                <span>System Design</span>
+                                <span class="progress-pct" id="sdProgress">0%</span>
+                            </div>
+                            <div class="progress-bar"><div class="progress-fill sd-fill" id="sdBar" style="width: 0%"></div></div>
+                        </div>
+                        <div class="progress-item">
+                            <div class="progress-header">
+                                <span>Behavioral Prep</span>
+                                <span class="progress-pct" id="behProgress">0%</span>
+                            </div>
+                            <div class="progress-bar"><div class="progress-fill beh-fill" id="behBar" style="width: 0%"></div></div>
+                        </div>
+                        <div class="progress-item">
+                            <div class="progress-header">
+                                <span>CS Fundamentals</span>
+                                <span class="progress-pct" id="csProgress">0%</span>
+                            </div>
+                            <div class="progress-bar"><div class="progress-fill cs-fill" id="csBar" style="width: 0%"></div></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card today-card">
+                    <h3>🌙 Tonight's Focus</h3>
+                    <div id="tonightFocus">
+                        <p class="tonight-phase" id="currentPhase">Loading...</p>
+                        <ul class="tonight-tasks" id="tonightTasks"></ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Weekly Heatmap -->
+            <div class="card heatmap-card">
+                <h3>🗓️ 60-Day Activity Heatmap</h3>
+                <div class="heatmap-container" id="heatmapContainer"></div>
+                <div class="heatmap-legend">
+                    <span>Less</span>
+                    <div class="heatmap-box level-0"></div>
+                    <div class="heatmap-box level-1"></div>
+                    <div class="heatmap-box level-2"></div>
+                    <div class="heatmap-box level-3"></div>
+                    <div class="heatmap-box level-4"></div>
+                    <span>More</span>
+                </div>
+            </div>
+
+            <!-- Daily Check-in -->
+            <div class="card checkin-card">
+                <h3>✍️ Daily Check-in</h3>
+                <div class="checkin-form">
+                    <div class="checkin-row">
+                        <label>Problems solved today:</label>
+                        <input type="number" id="dailyProblems" min="0" max="20" value="0">
+                    </div>
+                    <div class="checkin-row">
+                        <label>Hours studied:</label>
+                        <input type="number" id="dailyHours" min="0" max="8" step="0.5" value="0">
+                    </div>
+                    <div class="checkin-row">
+                        <label>Confidence level:</label>
+                        <div class="confidence-btns">
+                            <button class="conf-btn" data-level="1">😰</button>
+                            <button class="conf-btn" data-level="2">😐</button>
+                            <button class="conf-btn" data-level="3">🙂</button>
+                            <button class="conf-btn" data-level="4">😊</button>
+                            <button class="conf-btn" data-level="5">🔥</button>
+                        </div>
+                    </div>
+                    <div class="checkin-row">
+                        <label>Notes:</label>
+                        <textarea id="dailyNotes" placeholder="What did you learn today? Any struggles?"></textarea>
+                    </div>
+                    <button class="btn btn-primary" id="saveCheckin">💾 Save Today's Progress</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- ==================== ROADMAP SECTION ==================== -->
+        <section id="roadmap" class="section">
+            <div class="section-header">
+                <h1>60-Day Battle Plan</h1>
+                <p class="section-subtitle">Your week-by-week roadmap to crack FAANG interviews</p>
+            </div>
+
+            <div class="roadmap-timeline">
+                <!-- Week 1-2 -->
+                <div class="roadmap-phase">
+                    <div class="phase-marker phase-1">
+                        <span class="phase-number">Phase 1</span>
+                        <span class="phase-dates">Week 1-2 (Day 1-14)</span>
+                    </div>
+                    <div class="phase-content">
+                        <h2>🏗️ Foundation Building — Arrays, Strings, Hashing</h2>
+                        <div class="phase-grid">
+                            <div class="phase-card">
+                                <h4>📚 Topics to Master</h4>
+                                <ul class="topic-list">
+                                    <li><input type="checkbox" class="roadmap-check" data-topic="arrays-basics"> Arrays — Traversal, Insertion, Deletion</li>
+                                    <li><input type="checkbox" class="roadmap-check" data-topic="strings-basics"> Strings — Manipulation, Comparison</li>
+                                    <li><input type="checkbox" class="roadmap-check" data-topic="hashmaps"> HashMaps & HashSets</li>
+                                    <li><input type="checkbox" class="roadmap-check" data-topic="two-pointers"> Two Pointers Pattern</li>
+                                    <li><input type="checkbox" class="roadmap-check" data-topic="sliding-window"> Sliding Window Pattern</li>
+                                    <li><input type="checkbox" class="roadmap-check" data-topic="prefix-sum"> Prefix Sum Pattern</li>
+                                    <li><input type="checkbox" class="roadmap-check" data-topic="sorting-basics"> Sorting Algorithms (Merge, Quick, Heap)</li>
+                                    <li><input type="checkbox" class="roadmap-check" data-topic="binary-search"> Binary Search</li>
+                                </ul>
+                            </div>
+                            <div class="phase-card">
+                                <h4>🎯 Key Problems (NeetCode/Blind 75)</h4>
+                                <ul class="problem-list">
+                                    <li><input type="checkbox" class="roadmap-check" data-topic="p-two-sum"> <a href="https://leetcode.com/problems/two-sum/" target="_blank">Two Sum</a> <span class="diff easy">Easy</span></li>
+                                    <li><input type="checkbox" class="roadmap-check" data-topic="p-best-time-stock"> <a href="https://leetcode.com/problems/best-time-to-buy-and-sell-stock/" target="_blank">Best Time to Buy & Sell Stock</a> <span class="diff easy">Easy</span></li>
+                                    <li><input type="checkbox" class="roadmap-check" data-topic="p-contains-dup"> <a href="https://leetcode.com/problems/contains-duplicate/" target="_blank">Contains Duplicate</a> <span class="diff easy">Easy</span></li>
+                                    <li><input type="checkbox" class="roadmap-check" data-topic="p-prod-array"> <a href="https://leetcode.com/problems/product-of-array-except-self/" target="_blank">Product of Array Except Self</a> <span class="diff medium">Medium</span></li>
+                                    <li><input type="checkbox" class="roadmap-check" data-topic="p-max-subarray"> <a href="https://leetcode.com/problems/maximum-subarray/" target="_blank">Maximum Subarray</a> <span class="diff medium">Medium</span></li>
+                                    <li><input type="checkbox" class="roadmap-check" data-topic="p-3sum"> <a href="https://leetcode.com/problems/3sum/" target="_blank">3Sum</a> <span class="diff medium">Medium</span></li>
+                                    <li><input type="checkbox" class="roadmap-check" data-topic="p-longest-substr"> <a href="https://leetcode.com/problems/longest-substring-without-repeating-characters/" target="_blank">Longest Substring Without Repeating Characters</a> <span class="diff medium">Medium</span></li>
+                                    <li><input type="checkbox" class="roadmap-check" data-topic="p-group-anagrams"> <a href="https://leetcode.com/problems/group-anagrams/" target="_blank">Group Anagrams</a> <span class="diff medium">Medium</span></li>
+                                    <li><input type="checkbox" class="roadmap-check" data-topic="p-valid-anagram"> <a href="https://leetcode.com/problems/valid-anagram/" target="_blank">Valid Anagram</a> <span class="diff easy">Easy</span></li>
+                                    <li><input type="checkbox" class="roadmap-check" data-topic="p-search-rotated"> <a href="https://leetcode.com/problems/search-in-rotated-sorted-array/" target="_blank">Search in Rotated Sorted Array</a> <span class="diff medium">Medium</span></li>
+                                    <li><input type="checkbox" class="roadmap-check" data-topic="p-min-rotated"> <a href="https://leetcode.com/problems/find-minimum-in-rotated-sorted-array/" target="_blank">Find Minimum in Rotated Sorted Array</a> <span class="diff medium">Medium</span></li>
+                                    <li><input type="checkbox" class="roadmap-check" data-topic="p-container-water"> <a href="https://leetcode.com/problems/container-with-most-water/" target="_blank">Container With Most Water</a> <span class="diff medium">Medium</span></li>
+                                </ul>
+                            </div>
+                            <div class="phase-card">
+                                <h4>📖 Resources</h4>
+                                <ul class="resource-list">
+                                    <li><a href="https://neetcode.io/roadmap" target="_blank">NeetCode Roadmap</a></li>
+                                    <li><a href="https://takeuforward.org/strivers-a2z-dsa-course/strivers-a2z-dsa-course-sheet-2" target="_blank">Striver's A2Z DSA Sheet</a></li>
+                                    <li><a href="https://www.youtube.com/watch?v=0IAPZzGSbME&list=PLDN4rrl48XKpZkf03iYFl-O29szjTrs_O" target="_blank">Abdul Bari — Algorithms</a></li>
+                                    <li><a href="https://www.youtube.com/c/NeetCode" target="_blank">NeetCode YouTube</a></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Week 3-4 -->
+                <div class="roadmap-phase">
+                    <div class="phase-marker phase-2">
+                        <span class="phase-number">Phase 2</span>
+                        <span class="phase-dates">Week 3-4 (Day 15-28)</span>
+                    </div>
+                    <div class="phase-content">
+                        <h2>🌲 Data Structures Deep Dive — Linked Lists, Stacks, Trees</h2>
+                        <div class="phase-grid">
+                            <div class="phase-card">
+                                <h4>📚 Topics to Master</h4>
+                                <ul class="topic-list">
+                                    <li><input type="checkbox" class="roadmap-check" data-topic="linked-lists"> Linked Lists (Singly, Doubly, Circular)</li>
+                                    <li><input type="checkbox" class="roadmap-check" data-topic="stacks"> Stacks & Monotonic Stacks</li>
+                                    <li><input type="checkbox" class="roadmap-check" data-topic="queues"> Queues & Deques</li>
+                                    <li><input type="checkbox" class="roadmap-check" data-topic="binary-trees"> Binary Trees (Traversals, DFS, BFS)</li>
+                                    <li><input type="checkbox" class="roadmap-check" data-topic="bst"> Binary Search Trees</li>
+                                    <li><input type="checkbox" class="roadmap-check" data-topic="heaps"> Heaps / Priority Queues</li>
+                                    <li><input type="checkbox" class="roadmap-check" data-topic="tries"> Tries (Prefix Trees)</li>
+                                    <li><input type="checkbox" class="roadmap-check" data-topic="recursion"> Recursion & Backtracking fundamentals</li>
+                                </ul>
+                            </div>
+                            <div class="phase-card">
+                                <h4>🎯 Key Problems</h4>
+                                <ul class="problem-list">
+                                    <li><input type="checkbox" class="roadmap-check" data-topic="p-reverse-ll"> <a href="https://leetcode.com/problems/reverse-linked-list/" target="_blank">Reverse Linked List</a> <span class="diff easy">Easy</span></li>
+                                    <li><input type="checkbox" class="roadmap-check" data-topic="p-merge-ll"> <a href="https://leetcode.com/problems/merge-two-sorted-lists/" target="_blank">Merge Two Sorted Lists</a> <span class="diff easy">Easy</span></li>
+                                    <li><input type="checkbox" class="roadmap-check" data-topic="p-ll-cycle"> <a href="https://leetcode.com/problems/linked-list-cycle/" target="_blank">Linked List Cycle</a> <span class="diff easy">Easy</span></li>
+                                    <li><input type="checkbox" class="roadmap-check" data-topic="p-valid-paren"> <a href="https://leetcode.com/problems/valid-parentheses/" target="_blank">Valid Parentheses</a> <span class="diff easy">Easy</span></li>
+                                    <li><input type="checkbox" class="roadmap-check" data-topic="p-max-depth-tree"> <a href="https://leetcode.com/problems/maximum-depth-of-binary-tree/" target="_blank">Maximum Depth of Binary Tree</a> <span class="diff easy">Easy</span></li>
+                                    <li><input type="checkbox" class="roadmap-check" data-topic="p-invert-tree"> <a href="https://leetcode.com/problems/invert-binary-tree/" target="_blank">Invert Binary Tree</a> <span class="diff easy">Easy</span></li>
+                                    <li><input type="checkbox" class="roadmap-check" data-topic="p-validate-bst"> <a href="https://leetcode.com/problems/validate-binary-search-tree/" target="_blank">Validate Binary Search Tree</a> <span class="diff medium">Medium</span></li>
+                                    <li><input type="checkbox" class="roadmap-check" data-topic="p-lca"> <a href="https://leetcode.com/problems/lowest-common-ancestor-of-a-binary-search-tree/" target="_blank">Lowest Common Ancestor of BST</a> <span class="diff medium">Medium</span></li>
+                                    <li><input type="checkbox" class="roadmap-check" data-topic="p-level-order"> <a href="https://leetcode.com/problems/binary-tree-level-order-traversal/" target="_blank">Binary Tree Level Order Traversal</a> <span class="diff medium">Medium</span></li>
+                                    <li><input type="checkbox" class="roadmap-check" data-topic="p-kth-largest"> <a href="https://leetcode.com/problems/kth-largest-element-in-an-array/" target="_blank">Kth Largest Element in Array</a> <span class="diff medium">Medium</span></li>
+                                    <li><input type="checkbox" class="roadmap-check" data-topic="p-merge-k-ll"> <a href="https://leetcode.com/problems/merge-k-sorted-lists/" target="_blank">Merge K Sorted Lists</a> <span class="diff hard">Hard</span></li>
+                                    <li><input type="checkbox" class="roadmap-check" data-topic="p-implement-trie"> <a href="https://leetcode.com/problems/implement-trie-prefix-tree/" target="_blank">Implement Trie</a> <span class="diff medium">Medium</span></li>
+                                </ul>
+                            </div>
+                            <div class="phase-card">
+                                <h4>📖 Resources</h4>
+                                <ul class="resource-list">
+                                    <li><a href="https://www.youtube.com/watch?v=RBSGKlAvoiM" target="_blank">freeCodeCamp — DS Full Course</a></li>
+                                    <li><a href="https://visualgo.net/" target="_blank">VisuAlgo — Visualize DS & Algo</a></li>
+                                    <li><a href="https://www.youtube.com/@takeUforward" target="_blank">Striver (Take U Forward) YouTube</a></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Week 5-6 -->
+                <div class="roadmap-phase">
+                    <div class="phase-marker phase-3">
+                        <span class="phase-number">Phase 3</span>
+                        <span class="phase-dates">Week 5-6 (Day 29-42)</span>
+                    </div>
+                    <div class="phase-content">
+                        <h2>🧠 Advanced Algorithms — Graphs, DP, Greedy</h2>
+                        <div class="phase-grid">
+                            <div class="phase-card">
+                                <h4>📚 Topics to Master</h4>
+                                <ul class="topic-list">
+                                    <li><input type="checkbox" class="roadmap-check" data-topic="graphs-bfs-dfs"> Graphs — BFS, DFS</li>
+                                    <li><input type="checkbox" class="roadmap-check" data-topic="topological-sort"> Topological Sort</li>
+                                    <li><input type="checkbox" class="roadmap-check" data-topic="union-find"> Union-Find (Disjoint Set)</li>
+                                    <li><input type="checkbox" class="roadmap-check" data-topic="dijkstra"> Dijkstra's / Shortest Path</li>
+                                    <li><input type="checkbox" class="roadmap-check" data-topic="dp-1d"> DP — 1D Problems</li>
+                                    <li><input type="checkbox" class="roadmap-check" data-topic="dp-2d"> DP — 2D Problems</li>
+                                    <li><input type="checkbox" class="roadmap-check" data-topic="dp-subsequences"> DP — Subsequences (LIS, LCS)</li>
+                                    <li><input type="checkbox" class="roadmap-check" data-topic="greedy"> Greedy Algorithms</li>
+                                    <li><input type="checkbox" class="roadmap-check" data-topic="backtracking"> Backtracking (Subsets, Permutations, N-Queens)</li>
+                                    <li><input type="checkbox" class="roadmap-check" data-topic="bit-manipulation"> Bit Manipulation</li>
+                                </ul>
+                            </div>
+                            <div class="phase-card">
+                                <h4>🎯 Key Problems</h4>
+                                <ul class="problem-list">
+                                    <li><input type="checkbox" class="roadmap-check" data-topic="p-num-islands"> <a href="https://leetcode.com/problems/number-of-islands/" target="_blank">Number of Islands</a> <span class="diff medium">Medium</span></li>
+                                    <li><input type="checkbox" class="roadmap-check" data-topic="p-clone-graph"> <a href="https://leetcode.com/problems/clone-graph/" target="_blank">Clone Graph</a> <span class="diff medium">Medium</span></li>
+                                    <li><input type="checkbox" class="roadmap-check" data-topic="p-course-schedule"> <a href="https://leetcode.com/problems/course-schedule/" target="_blank">Course Schedule</a> <span class="diff medium">Medium</span></li>
+                                    <li><input type="checkbox" class="roadmap-check" data-topic="p-climbing-stairs"> <a href="https://leetcode.com/problems/climbing-stairs/" target="_blank">Climbing Stairs</a> <span class="diff easy">Easy</span></li>
+                                    <li><input type="checkbox" class="roadmap-check" data-topic="p-coin-change"> <a href="https://leetcode.com/problems/coin-change/" target="_blank">Coin Change</a> <span class="diff medium">Medium</span></li>
+                                    <li><input type="checkbox" class="roadmap-check" data-topic="p-longest-inc-sub"> <a href="https://leetcode.com/problems/longest-increasing-subsequence/" target="_blank">Longest Increasing Subsequence</a> <span class="diff medium">Medium</span></li>
+                                    <li><input type="checkbox" class="roadmap-check" data-topic="p-word-break"> <a href="https://leetcode.com/problems/word-break/" target="_blank">Word Break</a> <span class="diff medium">Medium</span></li>
+                                    <li><input type="checkbox" class="roadmap-check" data-topic="p-house-robber"> <a href="https://leetcode.com/problems/house-robber/" target="_blank">House Robber</a> <span class="diff medium">Medium</span></li>
+                                    <li><input type="checkbox" class="roadmap-check" data-topic="p-combination-sum"> <a href="https://leetcode.com/problems/combination-sum/" target="_blank">Combination Sum</a> <span class="diff medium">Medium</span></li>
+                                    <li><input type="checkbox" class="roadmap-check" data-topic="p-subsets"> <a href="https://leetcode.com/problems/subsets/" target="_blank">Subsets</a> <span class="diff medium">Medium</span></li>
+                                    <li><input type="checkbox" class="roadmap-check" data-topic="p-word-search"> <a href="https://leetcode.com/problems/word-search/" target="_blank">Word Search</a> <span class="diff medium">Medium</span></li>
+                                    <li><input type="checkbox" class="roadmap-check" data-topic="p-alien-dict"> <a href="https://leetcode.com/problems/alien-dictionary/" target="_blank">Alien Dictionary</a> <span class="diff hard">Hard</span></li>
+                                </ul>
+                            </div>
+                            <div class="phase-card">
+                                <h4>📖 Resources</h4>
+                                <ul class="resource-list">
+                                    <li><a href="https://www.youtube.com/watch?v=oBt53YbR9Kk" target="_blank">freeCodeCamp — DP for Beginners</a></li>
+                                    <li><a href="https://www.youtube.com/watch?v=tWVWeAqZ0WU" target="_blank">freeCodeCamp — Graph Algorithms</a></li>
+                                    <li><a href="https://leetcode.com/discuss/general-discussion/458695/dynamic-programming-patterns" target="_blank">LeetCode DP Patterns Guide</a></li>
+                                    <li><a href="https://neetcode.io/practice" target="_blank">NeetCode Practice — Filter by topic</a></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Week 7-8 -->
+                <div class="roadmap-phase">
+                    <div class="phase-marker phase-4">
+                        <span class="phase-number">Phase 4</span>
+                        <span class="phase-dates">Week 7-8 (Day 43-56)</span>
+                    </div>
+                    <div class="phase-content">
+                        <h2>🏛️ System Design + Hard Problems + Behavioral</h2>
+                        <div class="phase-grid">
+                            <div class="phase-card">
+                                <h4>📚 System Design Topics</h4>
+                                <ul class="topic-list">
+                                    <li><input type="checkbox" class="roadmap-check" data-topic="sd-scalability"> Scalability, Load Balancing, Caching</li>
+                                    <li><input type="checkbox" class="roadmap-check" data-topic="sd-databases"> SQL vs NoSQL, Sharding, Replication</li>
+                                    <li><input type="checkbox" class="roadmap-check" data-topic="sd-cap"> CAP Theorem & Consistency Models</li>
+                                    <li><input type="checkbox" class="roadmap-check" data-topic="sd-api-design"> API Design & Rate Limiting</li>
+                                    <li><input type="checkbox" class="roadmap-check" data-topic="sd-message-queues"> Message Queues (Kafka, RabbitMQ)</li>
+                                    <li><input type="checkbox" class="roadmap-check" data-topic="sd-microservices"> Microservices vs Monolith</li>
+                                    <li><input type="checkbox" class="roadmap-check" data-topic="sd-cdn"> CDN, DNS, Proxies</li>
+                                    <li><input type="checkbox" class="roadmap-check" data-topic="sd-oop-solid"> OOP Principles & SOLID</li>
+                                </ul>
+                            </div>
+                            <div class="phase-card">
+                                <h4>🎯 Hard Coding Problems</h4>
+                                <ul class="problem-list">
+                                    <li><input type="checkbox" class="roadmap-check" data-topic="p-lru-cache"> <a href="https://leetcode.com/problems/lru-cache/" target="_blank">LRU Cache</a> <span class="diff medium">Medium</span></li>
+                                    <li><input type="checkbox" class="roadmap-check" data-topic="p-median-sorted"> <a href="https://leetcode.com/problems/median-of-two-sorted-arrays/" target="_blank">Median of Two Sorted Arrays</a> <span class="diff hard">Hard</span></li>
+                                    <li><input type="checkbox" class="roadmap-check" data-topic="p-trapping-rain"> <a href="https://leetcode.com/problems/trapping-rain-water/" target="_blank">Trapping Rain Water</a> <span class="diff hard">Hard</span></li>
+                                    <li><input type="checkbox" class="roadmap-check" data-topic="p-sliding-window-max"> <a href="https://leetcode.com/problems/sliding-window-maximum/" target="_blank">Sliding Window Maximum</a> <span class="diff hard">Hard</span></li>
+                                    <li><input type="checkbox" class="roadmap-check" data-topic="p-serialize-tree"> <a href="https://leetcode.com/problems/serialize-and-deserialize-binary-tree/" target="_blank">Serialize & Deserialize Binary Tree</a> <span class="diff hard">Hard</span></li>
+                                    <li><input type="checkbox" class="roadmap-check" data-topic="p-min-window"> <a href="https://leetcode.com/problems/minimum-window-substring/" target="_blank">Minimum Window Substring</a> <span class="diff hard">Hard</span></li>
+                                    <li><input type="checkbox" class="roadmap-check" data-topic="p-word-ladder"> <a href="https://leetcode.com/problems/word-ladder/" target="_blank">Word Ladder</a> <span class="diff hard">Hard</span></li>
+                                    <li><input type="checkbox" class="roadmap-check" data-topic="p-max-rect"> <a href="https://leetcode.com/problems/maximal-rectangle/" target="_blank">Maximal Rectangle</a> <span class="diff hard">Hard</span></li>
+                                </ul>
+                            </div>
+                            <div class="phase-card">
+                                <h4>📖 Resources</h4>
+                                <ul class="resource-list">
+                                    <li><a href="https://github.com/donnemartin/system-design-primer" target="_blank">System Design Primer (GitHub — 250k+ ⭐)</a></li>
+                                    <li><a href="https://www.youtube.com/@ByteByteGo" target="_blank">ByteByteGo YouTube</a></li>
+                                    <li><a href="https://www.youtube.com/c/GauravSensei" target="_blank">Gaurav Sen YouTube</a></li>
+                                    <li><a href="https://www.youtube.com/@HelloInterview" target="_blank">Hello Interview YouTube</a></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Week 8.5 - Final Sprint -->
+                <div class="roadmap-phase">
+                    <div class="phase-marker phase-5">
+                        <span class="phase-number">Phase 5</span>
+                        <span class="phase-dates">Final Sprint (Day 57-60)</span>
+                    </div>
+                    <div class="phase-content">
+                        <h2>⚡ Final Sprint — Mock Interviews & Revision</h2>
+                        <div class="phase-grid">
+                            <div class="phase-card">
+                                <h4>📚 Final Revision Checklist</h4>
+                                <ul class="topic-list">
+                                    <li><input type="checkbox" class="roadmap-check" data-topic="rev-weak-topics"> Revisit weak topics from heatmap</li>
+                                    <li><input type="checkbox" class="roadmap-check" data-topic="rev-top-patterns"> Revise top 15 patterns</li>
+                                    <li><input type="checkbox" class="roadmap-check" data-topic="rev-system-designs"> Practice 3 system designs end-to-end</li>
+                                    <li><input type="checkbox" class="roadmap-check" data-topic="rev-behavioral-stories"> Polish 8-10 STAR stories</li>
+                                    <li><input type="checkbox" class="roadmap-check" data-topic="rev-complexity"> Review Big-O for all patterns</li>
+                                    <li><input type="checkbox" class="roadmap-check" data-topic="rev-resume"> ATS-optimized resume review</li>
+                                    <li><input type="checkbox" class="roadmap-check" data-topic="rev-mock-1"> Mock Interview #1 (Coding)</li>
+                                    <li><input type="checkbox" class="roadmap-check" data-topic="rev-mock-2"> Mock Interview #2 (System Design)</li>
+                                    <li><input type="checkbox" class="roadmap-check" data-topic="rev-mock-3"> Mock Interview #3 (Behavioral)</li>
+                                    <li><input type="checkbox" class="roadmap-check" data-topic="rev-mock-4"> Mock Interview #4 (Full Loop Simulation)</li>
+                                </ul>
+                            </div>
+                            <div class="phase-card">
+                                <h4>📖 Mock Interview Platforms</h4>
+                                <ul class="resource-list">
+                                    <li><a href="https://www.pramp.com/" target="_blank">Pramp — Free Peer Mock Interviews</a></li>
+                                    <li><a href="https://interviewing.io/" target="_blank">Interviewing.io — Practice with Ex-FAANG</a></li>
+                                    <li><a href="https://www.tryexponent.com/" target="_blank">Exponent — System Design Mocks</a></li>
+                                    <li><a href="https://leetcode.com/contest/" target="_blank">LeetCode Weekly Contests</a></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ==================== SCHEDULE SECTION ==================== -->
+        <section id="schedule" class="section">
+            <div class="section-header">
+                <h1>🌙 Night Warrior Schedule</h1>
+                <p class="section-subtitle">Daily 9:00 PM → 1:00 AM (4 hours of focused study)</p>
+            </div>
+
+            <div class="schedule-container">
+                <!-- Phase 1 Schedule: Week 1-2 -->
+                <div class="schedule-block">
+                    <h2 class="schedule-phase-title">📅 Phase 1 Schedule (Day 1-14) — Foundations</h2>
+                    <div class="schedule-table-wrapper">
+                        <table class="schedule-table">
+                            <thead>
+                                <tr>
+                                    <th>Time</th>
+                                    <th>Activity</th>
+                                    <th>Details</th>
+                                    <th>Resource</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td class="time-cell">9:00 - 9:15 PM</td>
+                                    <td>🧠 Warm-up</td>
+                                    <td>Solve 1 Easy problem you've done before (speed drill)</td>
+                                    <td><a href="https://leetcode.com/problemset/all/?difficulty=EASY&page=1" target="_blank">LeetCode Easy</a></td>
+                                </tr>
+                                <tr>
+                                    <td class="time-cell">9:15 - 10:00 PM</td>
+                                    <td>📚 Learn New Pattern</td>
+                                    <td>Watch NeetCode/Striver video on today's pattern (Two Pointers, Sliding Window, etc.)</td>
+                                    <td><a href="https://neetcode.io/courses" target="_blank">NeetCode Courses</a></td>
+                                </tr>
+                                <tr>
+                                    <td class="time-cell">10:00 - 11:15 PM</td>
+                                    <td>💻 Solve 2-3 Problems</td>
+                                    <td>Attempt on your own (25 min each), then watch solution if stuck</td>
+                                    <td><a href="https://neetcode.io/practice" target="_blank">NeetCode 150</a></td>
+                                </tr>
+                                <tr>
+                                    <td class="time-cell">11:15 - 11:30 PM</td>
+                                    <td>☕ Break</td>
+                                    <td>Walk around, drink water, stretch — NO phone scrolling</td>
+                                    <td>—</td>
+                                </tr>
+                                <tr>
+                                    <td class="time-cell">11:30 PM - 12:15 AM</td>
+                                    <td>🔁 Revision + Notes</td>
+                                    <td>Re-solve 1 problem from yesterday without help. Write pattern notes.</td>
+                                    <td><a href="https://obsidian.md/" target="_blank">Obsidian (Notes)</a></td>
+                                </tr>
+                                <tr>
+                                    <td class="time-cell">12:15 - 12:50 AM</td>
+                                    <td>📖 CS Fundamentals</td>
+                                    <td>OS concepts, Networking basics, DBMS (rotate daily)</td>
+                                    <td><a href="https://www.geeksforgeeks.org/last-minute-notes-operating-systems/" target="_blank">GFG Quick Notes</a></td>
+                                </tr>
+                                <tr>
+                                    <td class="time-cell">12:50 - 1:00 AM</td>
+                                    <td>📝 Daily Check-in</td>
+                                    <td>Log progress here, update streak, note struggles</td>
+                                    <td>This Tracker ☝️</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Phase 2 Schedule: Week 3-4 -->
+                <div class="schedule-block">
+                    <h2 class="schedule-phase-title">📅 Phase 2 Schedule (Day 15-28) — Data Structures</h2>
+                    <div class="schedule-table-wrapper">
+                        <table class="schedule-table">
+                            <thead>
+                                <tr>
+                                    <th>Time</th>
+                                    <th>Activity</th>
+                                    <th>Details</th>
+                                    <th>Resource</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td class="time-cell">9:00 - 9:15 PM</td>
+                                    <td>🧠 Warm-up</td>
+                                    <td>1 Easy/Medium from Phase 1 topics (keep skills sharp)</td>
+                                    <td><a href="https://leetcode.com/problemset/all/" target="_blank">LeetCode</a></td>
+                                </tr>
+                                <tr>
+                                    <td class="time-cell">9:15 - 10:00 PM</td>
+                                    <td>📚 Learn DS Concept</td>
+                                    <td>Trees/Heaps/Tries — concept + implementation from scratch</td>
+                                    <td><a href="https://www.youtube.com/@takeUforward" target="_blank">Striver YouTube</a></td>
+                                </tr>
+                                <tr>
+                                    <td class="time-cell">10:00 - 11:15 PM</td>
+                                    <td>💻 Solve 2-3 Problems</td>
+                                    <td>Focus on tree traversals, heap operations, linked list manipulations</td>
+                                    <td><a href="https://leetcode.com/tag/tree/" target="_blank">LeetCode Tree Tag</a></td>
+                                </tr>
+                                <tr>
+                                    <td class="time-cell">11:15 - 11:30 PM</td>
+                                    <td>☕ Break</td>
+                                    <td>Rest eyes, light stretching</td>
+                                    <td>—</td>
+                                </tr>
+                                <tr>
+                                    <td class="time-cell">11:30 PM - 12:15 AM</td>
+                                    <td>🔁 Revision</td>
+                                    <td>Re-solve yesterday's toughest problem + write approach notes</td>
+                                    <td><a href="https://neetcode.io/practice" target="_blank">NeetCode</a></td>
+                                </tr>
+                                <tr>
+                                    <td class="time-cell">12:15 - 12:50 AM</td>
+                                    <td>🎤 Behavioral Prep</td>
+                                    <td>Write 2 STAR stories, practice speaking them aloud (timer: 2 min each)</td>
+                                    <td><a href="https://www.amazon.jobs/content/en/our-workplace/leadership-principles" target="_blank">Amazon LPs</a></td>
+                                </tr>
+                                <tr>
+                                    <td class="time-cell">12:50 - 1:00 AM</td>
+                                    <td>📝 Daily Check-in</td>
+                                    <td>Log progress, update tracker</td>
+                                    <td>This Tracker ☝️</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Phase 3 Schedule: Week 5-6 -->
+                <div class="schedule-block">
+                    <h2 class="schedule-phase-title">📅 Phase 3 Schedule (Day 29-42) — Advanced Algorithms</h2>
+                    <div class="schedule-table-wrapper">
+                        <table class="schedule-table">
+                            <thead>
+                                <tr>
+                                    <th>Time</th>
+                                    <th>Activity</th>
+                                    <th>Details</th>
+                                    <th>Resource</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td class="time-cell">9:00 - 9:15 PM</td>
+                                    <td>🧠 Warm-up</td>
+                                    <td>1 Medium from earlier phases — time yourself (15 min max)</td>
+                                    <td><a href="https://leetcode.com/problemset/all/?difficulty=MEDIUM" target="_blank">LeetCode Medium</a></td>
+                                </tr>
+                                <tr>
+                                    <td class="time-cell">9:15 - 10:15 PM</td>
+                                    <td>📚 DP/Graph Concept</td>
+                                    <td>Learn pattern: Memoization → Tabulation → Space Optimization</td>
+                                    <td><a href="https://www.youtube.com/watch?v=oBt53YbR9Kk" target="_blank">freeCodeCamp DP</a></td>
+                                </tr>
+                                <tr>
+                                    <td class="time-cell">10:15 - 11:30 PM</td>
+                                    <td>💻 Solve 2 Problems</td>
+                                    <td>1 Medium + 1 Hard (DP/Graph/Backtracking). 35 min each.</td>
+                                    <td><a href="https://leetcode.com/tag/dynamic-programming/" target="_blank">LeetCode DP Tag</a></td>
+                                </tr>
+                                <tr>
+                                    <td class="time-cell">11:30 - 11:45 PM</td>
+                                    <td>☕ Break</td>
+                                    <td>Quick walk, hydrate</td>
+                                    <td>—</td>
+                                </tr>
+                                <tr>
+                                    <td class="time-cell">11:45 PM - 12:30 AM</td>
+                                    <td>🏛️ System Design Intro</td>
+                                    <td>Start basics: Scalability, Load Balancers, Caching, DB basics</td>
+                                    <td><a href="https://github.com/donnemartin/system-design-primer" target="_blank">System Design Primer</a></td>
+                                </tr>
+                                <tr>
+                                    <td class="time-cell">12:30 - 12:50 AM</td>
+                                    <td>🎤 Behavioral</td>
+                                    <td>Refine STAR stories, record yourself answering</td>
+                                    <td><a href="https://www.pramp.com/" target="_blank">Pramp Mock</a></td>
+                                </tr>
+                                <tr>
+                                    <td class="time-cell">12:50 - 1:00 AM</td>
+                                    <td>📝 Daily Check-in</td>
+                                    <td>Log progress</td>
+                                    <td>This Tracker ☝️</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Phase 4 Schedule: Week 7-8 -->
+                <div class="schedule-block">
+                    <h2 class="schedule-phase-title">📅 Phase 4 Schedule (Day 43-56) — System Design + Hard Mode</h2>
+                    <div class="schedule-table-wrapper">
+                        <table class="schedule-table">
+                            <thead>
+                                <tr>
+                                    <th>Time</th>
+                                    <th>Activity</th>
+                                    <th>Details</th>
+                                    <th>Resource</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td class="time-cell">9:00 - 9:20 PM</td>
+                                    <td>🧠 Warm-up</td>
+                                    <td>1 Medium from any topic (simulate interview conditions)</td>
+                                    <td><a href="https://www.techinterviewhandbook.org/grind75" target="_blank">Grind 75</a></td>
+                                </tr>
+                                <tr>
+                                    <td class="time-cell">9:20 - 10:20 PM</td>
+                                    <td>🏛️ System Design Deep Dive</td>
+                                    <td>Design 1 system end-to-end (URL shortener, Chat app, etc.)</td>
+                                    <td><a href="https://www.youtube.com/@ByteByteGo" target="_blank">ByteByteGo</a></td>
+                                </tr>
+                                <tr>
+                                    <td class="time-cell">10:20 - 11:20 PM</td>
+                                    <td>💻 Solve 1-2 Hard Problems</td>
+                                    <td>Focus on common FAANG hard problems. Think aloud as you solve.</td>
+                                    <td><a href="https://leetcode.com/problemset/all/?difficulty=HARD" target="_blank">LeetCode Hard</a></td>
+                                </tr>
+                                <tr>
+                                    <td class="time-cell">11:20 - 11:35 PM</td>
+                                    <td>☕ Break</td>
+                                    <td>Decompress, stretch</td>
+                                    <td>—</td>
+                                </tr>
+                                <tr>
+                                    <td class="time-cell">11:35 PM - 12:15 AM</td>
+                                    <td>🔁 Revision Roulette</td>
+                                    <td>Randomly pick 2 solved problems and re-solve from scratch</td>
+                                    <td><a href="https://neetcode.io/practice" target="_blank">NeetCode</a></td>
+                                </tr>
+                                <tr>
+                                    <td class="time-cell">12:15 - 12:50 AM</td>
+                                    <td>🎤 Behavioral Deep Prep</td>
+                                    <td>Mock behavioral round: answer 3 questions with a timer (3 min each)</td>
+                                    <td><a href="https://www.tryexponent.com/questions" target="_blank">Exponent Questions</a></td>
+                                </tr>
+                                <tr>
+                                    <td class="time-cell">12:50 - 1:00 AM</td>
+                                    <td>📝 Daily Check-in</td>
+                                    <td>Final log for the day</td>
+                                    <td>This Tracker ☝️</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Phase 5 Schedule: Final Sprint -->
+                <div class="schedule-block">
+                    <h2 class="schedule-phase-title">📅 Phase 5 Schedule (Day 57-60) — Final Sprint</h2>
+                    <div class="schedule-table-wrapper">
+                        <table class="schedule-table">
+                            <thead>
+                                <tr>
+                                    <th>Time</th>
+                                    <th>Activity</th>
+                                    <th>Details</th>
+                                    <th>Resource</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td class="time-cell">9:00 - 10:00 PM</td>
+                                    <td>🎯 Full Mock Interview</td>
+                                    <td>Day 57: Coding, Day 58: System Design, Day 59: Behavioral, Day 60: Full Loop</td>
+                                    <td><a href="https://www.pramp.com/" target="_blank">Pramp</a></td>
+                                </tr>
+                                <tr>
+                                    <td class="time-cell">10:00 - 11:00 PM</td>
+                                    <td>📋 Review & Fix</td>
+                                    <td>Analyze mock interview performance, identify gaps, drill weak areas</td>
+                                    <td>Your notes</td>
+                                </tr>
+                                <tr>
+                                    <td class="time-cell">11:00 - 11:15 PM</td>
+                                    <td>☕ Break</td>
+                                    <td>Relax</td>
+                                    <td>—</td>
+                                </tr>
+                                <tr>
+                                    <td class="time-cell">11:15 PM - 12:30 AM</td>
+                                    <td>🔁 Pattern Speed Run</td>
+                                    <td>Solve 3-4 random Medium problems (15 min max each)</td>
+                                    <td><a href="https://leetcode.com/problemset/all/?difficulty=MEDIUM" target="_blank">LeetCode Random</a></td>
+                                </tr>
+                                <tr>
+                                    <td class="time-cell">12:30 - 1:00 AM</td>
+                                    <td>🧘 Confidence Building</td>
+                                    <td>Review your progress chart, re-read best solutions, visualize success</td>
+                                    <td>This Tracker ☝️</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ==================== DSA PROBLEMS SECTION ==================== -->
+        <section id="dsa" class="section">
+            <div class="section-header">
+                <h1>💻 DSA Problem Tracker</h1>
+                <p class="section-subtitle">150 must-solve problems organized by pattern — Based on NeetCode 150 & Blind 75</p>
+            </div>
+
+            <!-- Filter Bar -->
+            <div class="filter-bar">
+                <div class="filter-group">
+                    <label>Filter by:</label>
+                    <select id="difficultyFilter">
+                        <option value="all">All Difficulties</option>
+                        <option value="easy">Easy</option>
+                        <option value="medium">Medium</option>
+                        <option value="hard">Hard</option>
+                    </select>
+                    <select id="statusFilter">
+                        <option value="all">All Status</option>
+                        <option value="unsolved">Unsolved</option>
+                        <option value="solved">Solved</option>
+                    </select>
+                    <select id="patternFilter">
+                        <option value="all">All Patterns</option>
+                    </select>
+                </div>
+                <div class="filter-stats">
+                    <span id="solvedCount">0</span> / <span id="totalCount">0</span> solved
+                </div>
+            </div>
+
+            <div id="dsaProblems" class="problems-container"></div>
+        </section>
+
+        <!-- ==================== SYSTEM DESIGN SECTION ==================== -->
+        <section id="system-design" class="section">
+            <div class="section-header">
+                <h1>🏛️ System Design Mastery</h1>
+                <p class="section-subtitle">Real interview questions asked at Google, Meta, Amazon, Apple, Netflix</p>
+            </div>
+
+            <div class="sd-grid" id="sdGrid">
+                <!-- Populated by JS -->
+            </div>
+
+            <div class="card sd-concepts-card">
+                <h3>📚 Core Concepts Checklist</h3>
+                <div class="concepts-grid" id="conceptsGrid">
+                    <!-- Populated by JS -->
+                </div>
+            </div>
+        </section>
+
+        <!-- ==================== BEHAVIORAL SECTION ==================== -->
+        <section id="behavioral" class="section">
+            <div class="section-header">
+                <h1>🎤 Behavioral Interview Prep</h1>
+                <p class="section-subtitle">Master the STAR method • Amazon Leadership Principles • Common Questions</p>
+            </div>
+
+            <!-- STAR Method Guide -->
+            <div class="card star-card">
+                <h3>⭐ STAR Method Framework</h3>
+                <div class="star-grid">
+                    <div class="star-step">
+                        <div class="star-letter">S</div>
+                        <h4>Situation</h4>
+                        <p>Set the context briefly. Keep it to 20-30 seconds. Only provide details that are necessary.</p>
+                    </div>
+                    <div class="star-step">
+                        <div class="star-letter">T</div>
+                        <h4>Task</h4>
+                        <p>What was your specific responsibility? What was the challenge or goal?</p>
+                    </div>
+                    <div class="star-step">
+                        <div class="star-letter">A</div>
+                        <h4>Action</h4>
+                        <p>This is 50% of your answer. Detail what YOU specifically did. Use "I", not "we".</p>
+                    </div>
+                    <div class="star-step">
+                        <div class="star-letter">R</div>
+                        <h4>Result</h4>
+                        <p>Share quantifiable outcomes. "Reduced latency by 20%", "Saved $50k annually".</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Behavioral Questions -->
+            <div class="behavioral-grid" id="behavioralGrid">
+                <!-- Populated by JS -->
+            </div>
+
+            <!-- Story Bank -->
+            <div class="card story-bank-card">
+                <h3>📝 Your STAR Story Bank</h3>
+                <p class="story-hint">Prepare 8-10 versatile stories. Each story can be adapted for multiple question types.</p>
+                <div id="storyBank">
+                    <!-- Stories populated by JS -->
+                </div>
+                <button class="btn btn-primary" id="addStoryBtn">+ Add New Story</button>
+            </div>
+        </section>
+
+        <!-- ==================== RESOURCES SECTION ==================== -->
+        <section id="resources" class="section">
+            <div class="section-header">
+                <h1>📚 Resource Library</h1>
+                <p class="section-subtitle">All the best free resources in one place — curated and verified</p>
+            </div>
+
+            <div class="resources-grid">
+                <!-- DSA Resources -->
+                <div class="resource-category">
+                    <h3>💻 DSA Practice Platforms</h3>
+                    <div class="resource-links">
+                        <a href="https://leetcode.com/" target="_blank" class="resource-link">
+                            <span class="resource-icon">⚡</span>
+                            <div>
+                                <strong>LeetCode</strong>
+                                <p>2800+ problems, company tags, contests</p>
+                            </div>
+                        </a>
+                        <a href="https://neetcode.io/" target="_blank" class="resource-link">
+                            <span class="resource-icon">🎯</span>
+                            <div>
+                                <strong>NeetCode.io</strong>
+                                <p>Curated 150/250 problems with video solutions</p>
+                            </div>
+                        </a>
+                        <a href="https://takeuforward.org/strivers-a2z-dsa-course/strivers-a2z-dsa-course-sheet-2" target="_blank" class="resource-link">
+                            <span class="resource-icon">📋</span>
+                            <div>
+                                <strong>Striver's A2Z DSA Sheet</strong>
+                                <p>474 problems — complete curriculum from basics to advanced</p>
+                            </div>
+                        </a>
+                        <a href="https://www.techinterviewhandbook.org/grind75" target="_blank" class="resource-link">
+                            <span class="resource-icon">⏱️</span>
+                            <div>
+                                <strong>Grind 75</strong>
+                                <p>Customizable study plan based on available time</p>
+                            </div>
+                        </a>
+                        <a href="https://www.hackerrank.com/domains/tutorials/30-days-of-code" target="_blank" class="resource-link">
+                            <span class="resource-icon">🏆</span>
+                            <div>
+                                <strong>HackerRank</strong>
+                                <p>30 Days of Code challenge + domain-specific practice</p>
+                            </div>
+                        </a>
+                        <a href="https://codeforces.com/" target="_blank" class="resource-link">
+                            <span class="resource-icon">🏅</span>
+                            <div>
+                                <strong>Codeforces</strong>
+                                <p>Competitive programming contests for speed training</p>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- YouTube Channels -->
+                <div class="resource-category">
+                    <h3>📺 YouTube Channels</h3>
+                    <div class="resource-links">
+                        <a href="https://www.youtube.com/c/NeetCode" target="_blank" class="resource-link">
+                            <span class="resource-icon">🎬</span>
+                            <div>
+                                <strong>NeetCode</strong>
+                                <p>Best pattern-based explanations for coding interviews</p>
+                            </div>
+                        </a>
+                        <a href="https://www.youtube.com/@takeUforward" target="_blank" class="resource-link">
+                            <span class="resource-icon">🎬</span>
+                            <div>
+                                <strong>Take U Forward (Striver)</strong>
+                                <p>Deep-dive DSA tutorials with structured roadmaps</p>
+                            </div>
+                        </a>
+                        <a href="https://www.youtube.com/@ByteByteGo" target="_blank" class="resource-link">
+                            <span class="resource-icon">🎬</span>
+                            <div>
+                                <strong>ByteByteGo</strong>
+                                <p>System design concepts with stunning visuals</p>
+                            </div>
+                        </a>
+                        <a href="https://www.youtube.com/c/GauravSensei" target="_blank" class="resource-link">
+                            <span class="resource-icon">🎬</span>
+                            <div>
+                                <strong>Gaurav Sen</strong>
+                                <p>System design fundamentals & real-world architecture</p>
+                            </div>
+                        </a>
+                        <a href="https://www.youtube.com/@abdul_bari" target="_blank" class="resource-link">
+                            <span class="resource-icon">🎬</span>
+                            <div>
+                                <strong>Abdul Bari</strong>
+                                <p>Algorithm explanations — best for beginners</p>
+                            </div>
+                        </a>
+                        <a href="https://www.youtube.com/@WilliamFiset-videos" target="_blank" class="resource-link">
+                            <span class="resource-icon">🎬</span>
+                            <div>
+                                <strong>William Fiset</strong>
+                                <p>Deep dives into algorithms & data structures</p>
+                            </div>
+                        </a>
+                        <a href="https://www.youtube.com/@HelloInterview" target="_blank" class="resource-link">
+                            <span class="resource-icon">🎬</span>
+                            <div>
+                                <strong>Hello Interview</strong>
+                                <p>Modern system design walkthroughs</p>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- System Design Resources -->
+                <div class="resource-category">
+                    <h3>🏛️ System Design</h3>
+                    <div class="resource-links">
+                        <a href="https://github.com/donnemartin/system-design-primer" target="_blank" class="resource-link">
+                            <span class="resource-icon">📖</span>
+                            <div>
+                                <strong>System Design Primer (GitHub)</strong>
+                                <p>250k+ stars — the bible of system design prep</p>
+                            </div>
+                        </a>
+                        <a href="https://www.designgurus.io/course-play/grokking-the-system-design-interview" target="_blank" class="resource-link">
+                            <span class="resource-icon">📖</span>
+                            <div>
+                                <strong>Grokking System Design</strong>
+                                <p>Structured course covering all classic designs</p>
+                            </div>
+                        </a>
+                        <a href="https://blog.bytebytego.com/" target="_blank" class="resource-link">
+                            <span class="resource-icon">📖</span>
+                            <div>
+                                <strong>ByteByteGo Blog</strong>
+                                <p>Visual system design articles by Alex Xu</p>
+                            </div>
+                        </a>
+                        <a href="https://highscalability.com/" target="_blank" class="resource-link">
+                            <span class="resource-icon">📖</span>
+                            <div>
+                                <strong>High Scalability</strong>
+                                <p>Real-world architecture case studies</p>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Mock Interviews -->
+                <div class="resource-category">
+                    <h3>🎤 Mock Interviews & Behavioral</h3>
+                    <div class="resource-links">
+                        <a href="https://www.pramp.com/" target="_blank" class="resource-link">
+                            <span class="resource-icon">🤝</span>
+                            <div>
+                                <strong>Pramp</strong>
+                                <p>FREE peer-to-peer mock interviews</p>
+                            </div>
+                        </a>
+                        <a href="https://interviewing.io/" target="_blank" class="resource-link">
+                            <span class="resource-icon">🤝</span>
+                            <div>
+                                <strong>Interviewing.io</strong>
+                                <p>Anonymous mock interviews with ex-FAANG engineers</p>
+                            </div>
+                        </a>
+                        <a href="https://www.tryexponent.com/" target="_blank" class="resource-link">
+                            <span class="resource-icon">🤝</span>
+                            <div>
+                                <strong>Exponent</strong>
+                                <p>System design & PM mock interviews</p>
+                            </div>
+                        </a>
+                        <a href="https://www.amazon.jobs/content/en/our-workplace/leadership-principles" target="_blank" class="resource-link">
+                            <span class="resource-icon">📋</span>
+                            <div>
+                                <strong>Amazon Leadership Principles</strong>
+                                <p>Official 16 principles — must-know for Amazon</p>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- CS Fundamentals -->
+                <div class="resource-category">
+                    <h3>🎓 CS Fundamentals</h3>
+                    <div class="resource-links">
+                        <a href="https://www.geeksforgeeks.org/operating-systems/" target="_blank" class="resource-link">
+                            <span class="resource-icon">🖥️</span>
+                            <div>
+                                <strong>GFG — Operating Systems</strong>
+                                <p>Process management, memory, scheduling, deadlocks</p>
+                            </div>
+                        </a>
+                        <a href="https://www.geeksforgeeks.org/computer-network-tutorials/" target="_blank" class="resource-link">
+                            <span class="resource-icon">🌐</span>
+                            <div>
+                                <strong>GFG — Computer Networks</strong>
+                                <p>OSI model, TCP/IP, HTTP, DNS, protocols</p>
+                            </div>
+                        </a>
+                        <a href="https://www.geeksforgeeks.org/dbms/" target="_blank" class="resource-link">
+                            <span class="resource-icon">🗄️</span>
+                            <div>
+                                <strong>GFG — DBMS</strong>
+                                <p>Normalization, ACID, indexing, transactions</p>
+                            </div>
+                        </a>
+                        <a href="https://www.geeksforgeeks.org/oops-object-oriented-design/" target="_blank" class="resource-link">
+                            <span class="resource-icon">🧩</span>
+                            <div>
+                                <strong>GFG — OOP & Design Patterns</strong>
+                                <p>SOLID principles, design patterns, OOP concepts</p>
+                            </div>
+                        </a>
+                        <a href="https://visualgo.net/" target="_blank" class="resource-link">
+                            <span class="resource-icon">👁️</span>
+                            <div>
+                                <strong>VisuAlgo</strong>
+                                <p>Visualize data structures & algorithm execution</p>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Tools -->
+                <div class="resource-category">
+                    <h3>🛠️ Tools & Utilities</h3>
+                    <div class="resource-links">
+                        <a href="https://obsidian.md/" target="_blank" class="resource-link">
+                            <span class="resource-icon">📝</span>
+                            <div>
+                                <strong>Obsidian</strong>
+                                <p>Best note-taking app for building a knowledge graph</p>
+                            </div>
+                        </a>
+                        <a href="https://excalidraw.com/" target="_blank" class="resource-link">
+                            <span class="resource-icon">🎨</span>
+                            <div>
+                                <strong>Excalidraw</strong>
+                                <p>Whiteboard for system design diagrams</p>
+                            </div>
+                        </a>
+                        <a href="https://www.bigocheatsheet.com/" target="_blank" class="resource-link">
+                            <span class="resource-icon">📊</span>
+                            <div>
+                                <strong>Big-O Cheat Sheet</strong>
+                                <p>Time & space complexity reference</p>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Toast Notification -->
+    <div class="toast" id="toast">
+        <span class="toast-icon">✅</span>
+        <span class="toast-text" id="toastText">Progress saved!</span>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
