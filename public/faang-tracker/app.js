@@ -193,6 +193,33 @@ const DSA_PROBLEMS = [
     { id: 148, name: "Largest Rectangle in Histogram", url: "https://leetcode.com/problems/largest-rectangle-in-histogram/", difficulty: "hard", pattern: "Stack", companies: "Google, Amazon" },
     { id: 149, name: "Edit Distance", url: "https://leetcode.com/problems/edit-distance/", difficulty: "hard", pattern: "2D Dynamic Programming", companies: "Google, Amazon" },
     { id: 150, name: "Regular Expression Matching", url: "https://leetcode.com/problems/regular-expression-matching/", difficulty: "hard", pattern: "2D Dynamic Programming", companies: "Google, Meta, Amazon" },
+    
+    // Top 25 Advanced & Frequent FAANG Problems
+    { id: 151, name: "Serialize and Deserialize BST", url: "https://leetcode.com/problems/serialize-and-deserialize-bst/", difficulty: "medium", pattern: "Trees", companies: "Amazon, Meta" },
+    { id: 152, name: "LRU Cache", url: "https://leetcode.com/problems/lru-cache/", difficulty: "medium", pattern: "Design", companies: "Amazon, Microsoft, Meta" },
+    { id: 153, name: "LFU Cache", url: "https://leetcode.com/problems/lfu-cache/", difficulty: "hard", pattern: "Design", companies: "Amazon, Google" },
+    { id: 154, name: "Find First and Last Position of Element in Sorted Array", url: "https://leetcode.com/problems/find-first-and-last-position-of-element-in-sorted-array/", difficulty: "medium", pattern: "Binary Search", companies: "Meta, Amazon" },
+    { id: 155, name: "Merge Intervals", url: "https://leetcode.com/problems/merge-intervals/", difficulty: "medium", pattern: "Intervals", companies: "Google, Amazon, Meta" },
+    { id: 156, name: "Insert Interval", url: "https://leetcode.com/problems/insert-interval/", difficulty: "medium", pattern: "Intervals", companies: "Google, Amazon" },
+    { id: 157, name: "Meeting Rooms II", url: "https://leetcode.com/problems/meeting-rooms-ii/", difficulty: "medium", pattern: "Intervals", companies: "Google, Amazon, Meta" },
+    { id: 158, name: "Alien Dictionary", url: "https://leetcode.com/problems/alien-dictionary/", difficulty: "hard", pattern: "Graphs / Topological Sort", companies: "Meta, Amazon" },
+    { id: 159, name: "Graph Valid Tree", url: "https://leetcode.com/problems/graph-valid-tree/", difficulty: "medium", pattern: "Graphs", companies: "Google, LinkedIn" },
+    { id: 160, name: "Number of Connected Components", url: "https://leetcode.com/problems/number-of-connected-components-in-an-undirected-graph/", difficulty: "medium", pattern: "Graphs", companies: "Google, Amazon" },
+    { id: 161, name: "Course Schedule III", url: "https://leetcode.com/problems/course-schedule-iii/", difficulty: "hard", pattern: "Greedy / Heap", companies: "Google" },
+    { id: 162, name: "Kth Smallest Element in a Sorted Matrix", url: "https://leetcode.com/problems/kth-smallest-element-in-a-sorted-matrix/", difficulty: "medium", pattern: "Binary Search / Heap", companies: "Amazon, Google" },
+    { id: 163, name: "Find K Pairs with Smallest Sums", url: "https://leetcode.com/problems/find-k-pairs-with-smallest-sums/", difficulty: "medium", pattern: "Heap", companies: "Amazon, Google" },
+    { id: 164, name: "Longest Increasing Path in a Matrix", url: "https://leetcode.com/problems/longest-increasing-path-in-a-matrix/", difficulty: "hard", pattern: "Graphs / DFS", companies: "Google, Meta" },
+    { id: 165, name: "Distinct Subsequences", url: "https://leetcode.com/problems/distinct-subsequences/", difficulty: "hard", pattern: "2D Dynamic Programming", companies: "Amazon, Google" },
+    { id: 166, name: "Word Break II", url: "https://leetcode.com/problems/word-break-ii/", difficulty: "hard", pattern: "Backtracking / DP", companies: "Amazon, Meta" },
+    { id: 167, name: "Remove Invalid Parentheses", url: "https://leetcode.com/problems/remove-invalid-parentheses/", difficulty: "hard", pattern: "BFS / Backtracking", companies: "Meta, Amazon" },
+    { id: 168, name: "Minimum Window Substring", url: "https://leetcode.com/problems/minimum-window-substring/", difficulty: "hard", pattern: "Sliding Window", companies: "Meta, Google, Amazon" },
+    { id: 169, name: "Valid Number", url: "https://leetcode.com/problems/valid-number/", difficulty: "hard", pattern: "Math / String", companies: "Meta" },
+    { id: 170, name: "Integer to English Words", url: "https://leetcode.com/problems/integer-to-english-words/", difficulty: "hard", pattern: "Math / String", companies: "Meta, Amazon" },
+    { id: 171, name: "Design Search Autocomplete System", url: "https://leetcode.com/problems/design-search-autocomplete-system/", difficulty: "hard", pattern: "Tries", companies: "Google, Amazon" },
+    { id: 172, name: "String to Integer (atoi)", url: "https://leetcode.com/problems/string-to-integer-atoi/", difficulty: "medium", pattern: "String", companies: "Amazon, Google" },
+    { id: 173, name: "Valid Sudoku", url: "https://leetcode.com/problems/valid-sudoku/", difficulty: "medium", pattern: "Arrays & Hashing", companies: "Amazon, Apple" },
+    { id: 174, name: "First Missing Positive", url: "https://leetcode.com/problems/first-missing-positive/", difficulty: "hard", pattern: "Arrays & Hashing", companies: "Amazon, Meta" },
+    { id: 175, name: "Max Points on a Line", url: "https://leetcode.com/problems/max-points-on-a-line/", difficulty: "hard", pattern: "Math / Geometry", companies: "Google, Apple" },
 ];
 
 // ==========================================
