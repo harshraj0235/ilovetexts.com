@@ -67,6 +67,16 @@ export default async function Home({ params }) {
       <script id="schema-org" type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLdOrg) }} />
 
       <WorkspaceSwitch lang={lang} />
+      
+      <section style={{ textAlign: 'center', padding: '3rem 1rem 1rem', maxWidth: '800px', margin: '0 auto' }}>
+        <h1 style={{ fontSize: 'clamp(2rem, 5vw, 2.5rem)', fontWeight: '800', marginBottom: '1rem', lineHeight: '1.2' }}>
+          {t.siteTitle}
+        </h1>
+        <p style={{ fontSize: '1.1rem', color: 'var(--text-secondary)', lineHeight: '1.6', margin: '0 auto', maxWidth: '650px' }}>
+          {t.siteDescription} All tools run instantly in your browser with no server uploads, ensuring your data remains 100% private. No registration required.
+        </p>
+      </section>
+
       <CommandCenter 
         categories={CATEGORIES}
         lang={lang}
