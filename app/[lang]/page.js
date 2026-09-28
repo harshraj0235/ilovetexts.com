@@ -87,11 +87,8 @@ export default async function Home({ params }) {
             fontWeight: '600',
             textDecoration: 'none',
             boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)',
-            marginBottom: '1rem',
-            transition: 'transform 0.2s ease'
+            marginBottom: '1rem'
           }}
-          onMouseOver={(e) => e.currentTarget.style.transform = 'translateY(-2px)'}
-          onMouseOut={(e) => e.currentTarget.style.transform = 'translateY(0)'}
         >
           🚀 Open FAANG Interview Tracker
         </a>
@@ -107,3 +104,4 @@ export default async function Home({ params }) {
     </>
   );
 }
+
