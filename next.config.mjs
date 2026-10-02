@@ -396,10 +396,6 @@ const nextConfig = {
   async rewrites() {
     return [
       {
-        source: '/india-trip',
-        destination: '/india-trip-game/india.html',
-      },
-      {
         source: '/sitemap/:lang.xml',
         destination: '/sitemap-api/:lang',
       },
