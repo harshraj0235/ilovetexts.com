@@ -197,6 +197,7 @@
         ><span id="trip-save">Saved locally</span>
       </div>
       <div id="trip-touch">
+        <span class="driving-hint">HOLD TO DRIVE · W / ↑ GAS · A / D STEER · SPACE BRAKE</span>
         <div>
           <button data-drive="a" aria-label="Steer left">
             <i data-lucide="arrow-left"></i></button
@@ -208,7 +209,7 @@
           <button data-drive="s" aria-label="Brake">
             <i data-lucide="arrow-down"></i></button
           ><button data-drive="w" aria-label="Accelerate">
-            <i data-lucide="arrow-up"></i>
+            <i data-lucide="arrow-up"></i><small>GAS</small>
           </button>
         </div>
       </div>
@@ -232,7 +233,7 @@
       <div class="controls">
         <span><kbd>W / ↑</kbd> Accelerate</span
         ><span><kbd>S / ↓ / SPACE</kbd> Brake</span
-        ><span><kbd>A D / ← →</kbd> Steer within road</span
+        ><span><kbd>A D / ← →</kbd> Steer</span
         ><span><kbd>C</kbd> Camera</span><span><kbd>ESC</kbd> Pause</span>
       </div>
       <label class="quality-setting"
@@ -240,7 +241,7 @@
           <option value="high">High</option>
           <option value="low">Performance</option>
         </select></label
-      ><button id="continue-trip" class="primary">
+      ><button id="trip-sound" class="secondary" aria-pressed="true">Sound on</button><button id="continue-trip" class="primary">
         Back on the road <i data-lucide="arrow-right"></i></button
       ><button id="menu-planner" class="secondary">
         Save & return to planner

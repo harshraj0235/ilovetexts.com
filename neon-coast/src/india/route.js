@@ -138,7 +138,7 @@ export function advanceTrip(trip, dt, throttle, brake, steering) {
     const offroad = Math.abs(trip.lane) > 5.2;
     const maxSpeed = offroad ? 7 : trip.gear === -1 ? 6 : 31;
     const acceleration = throttle ? 4.8 * (1 - trip.speed / (maxSpeed + 6)) : -0.7 - trip.speed * 0.025;
-    trip.speed = Math.max(0, Math.min(31, trip.speed + (acceleration - (brake ? 13 : 0) - (offroad && trip.speed > maxSpeed ? 8 : 0)) * dt));
+    trip.speed = Math.max(0, Math.min(trip.gear === -1 ? 6 : 31, trip.speed + (acceleration - (brake ? 13 : 0) - (offroad && trip.speed > maxSpeed ? 8 : 0)) * dt));
     const target = Math.max(-1, Math.min(1, steering)) * 0.42 / (1 + trip.speed * 0.22);
     trip.steerAngle += (target - trip.steerAngle) * (1 - Math.exp(-dt * 9));
     const velocity = trip.speed * (trip.gear || 1);

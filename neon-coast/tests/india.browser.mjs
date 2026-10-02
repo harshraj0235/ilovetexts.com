@@ -38,8 +38,13 @@ try {
   await page.locator('#start-trip').click();
   await page.waitForFunction(() => window.indiaRoadTrip?.snapshot().world?.frames > 5);
   const originalHeading = await page.evaluate(() => window.indiaRoadTrip.snapshot().trip.heading);
+  assert.ok(await page.locator('[data-drive="w"]').isVisible(), 'desktop accelerator is visible');
+  const originalCoordinate = await page.evaluate(() => window.indiaRoadTrip.snapshot().trip.coordinate);
   await page.keyboard.down('w');
   await page.waitForFunction(() => window.indiaRoadTrip.snapshot().trip.speed > 8);
+  const rolling = await page.evaluate(() => window.indiaRoadTrip.snapshot());
+  assert.notDeepEqual(rolling.trip.coordinate, originalCoordinate, 'manual driving changes real position');
+  assert.ok(Math.abs(rolling.world.wheelRotation) > 1, 'wheels rotate while driving');
   await page.keyboard.down('d');
   await page.waitForTimeout(500);
   await page.keyboard.up('d');
@@ -192,6 +197,11 @@ try {
     () => window.indiaRoadTrip.snapshot().trip.speed > 1,
   );
   await mobile.mouse.up();
+  await mobile.waitForFunction(() => !document.querySelector('[data-drive="w"]').classList.contains('pressed'));
+  await mobile.locator('#trip-pause').tap();
+  const pausedWheel = await mobile.evaluate(() => window.indiaRoadTrip.snapshot().world.wheelRotation);
+  await mobile.waitForTimeout(250);
+  assert.equal(await mobile.evaluate(() => window.indiaRoadTrip.snapshot().world.wheelRotation), pausedWheel, 'paused wheels stay still');
   assert.deepEqual(errors, []);
   console.log(
     JSON.stringify(

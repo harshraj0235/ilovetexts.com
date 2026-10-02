@@ -35,9 +35,13 @@ import {
   vehicleCoordinate,
 } from "./route.js";
 import { createRoadWorld } from "./world.js";
+import { createDrivingAudio } from "./audio.js";
 import "./style.css";
 
 const $ = (id) => document.getElementById(id);
+const drivingAudio = createDrivingAudio();
+addEventListener('pointerdown', () => drivingAudio.unlock());
+addEventListener('keydown', () => drivingAudio.unlock());
 createIcons({
   icons: {
     ArrowLeft,
@@ -504,7 +508,7 @@ async function startTrip(restored = null) {
     saveTrip();
     updateHUD();
     loadScenery(true);
-    toast("Parcel collected. Drive to the destination.");
+    toast("Hold W / ↑ or the accelerator pedal to drive. A / D to steer.");
   } catch (error) {
     status(`Could not start the trip: ${error.message}`, true);
     $("planner").hidden = false;
@@ -558,6 +562,11 @@ $("return-planner").onclick = planner;
 $("menu-planner").onclick = planner;
 $("another-trip").onclick = planner;
 $("trip-camera").onclick = () => world?.camera();
+$("trip-sound").onclick = () => {
+  const enabled = drivingAudio.toggle();
+  $("trip-sound").textContent = enabled ? 'Sound on' : 'Sound off';
+  $("trip-sound").setAttribute('aria-pressed', String(enabled));
+};
 $("trip-recover").onclick = () => {
   if (!trip || trip.delivered) return;
   keys.clear();
@@ -722,6 +731,7 @@ document.querySelectorAll("[data-drive]").forEach((button) => {
   button.onpointerdown = (e) => {
     e.preventDefault();
     button.setPointerCapture(e.pointerId);
+    if (!trip || paused || trip.arrived) return;
     keys.add(button.dataset.drive);
   };
   for (const event of ["pointerup", "pointercancel", "lostpointercapture"])
@@ -733,18 +743,24 @@ let last = performance.now(),
   saveTime = 0,
   lastCollision = 0;
 function frame(now) {
-  const dt = Math.min(0.05, (now - last) / 1000);
+  const dt = Math.max(0, Math.min(0.25, (now - last) / 1000));
   last = now;
+  drivingAudio.update(trip, trip && $("planner").hidden && !paused && !trip.arrived, keys.has('w'));
   if (trip && $("planner").hidden) {
     if (!paused) {
       const wasArrived = trip.arrived;
-      advanceTrip(
+      // Substeps preserve real-time movement on slower devices without unstable steering.
+      for (let remaining = dt; remaining > 0; remaining -= 1 / 60) advanceTrip(
         trip,
-        dt,
+        Math.min(remaining, 1 / 60),
         keys.has("w"),
         keys.has("s") || keys.has(" "),
         (keys.has("d") ? 1 : 0) - (keys.has("a") ? 1 : 0),
       );
+      trip.braking = keys.has("s") || keys.has(" ");
+      document.querySelectorAll('[data-drive]').forEach(button => {
+        button.classList.toggle('pressed', keys.has(button.dataset.drive));
+      });
       if (!wasArrived && trip.arrived) {
         toast("You made it. Deliver the parcel to collect your reward.");
         saveTrip();

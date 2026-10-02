@@ -128,6 +128,16 @@ test("saved trips validate coordinates, bounds and pace", () => {
     null,
   );
 });
+test("reverse remains capped and brakes win over a held accelerator", () => {
+  const route = prepareRoute({ ...raw, coordinates: [[77.2, 28.6], [77.2, 28.7]] });
+  const trip = { route, travelled: 500, scale: 1, speed: 0, lane: -2.1 };
+  recoverVehicle(trip);
+  trip.gear = -1;
+  for (let i = 0; i < 1200; i++) advanceTrip(trip, 1 / 60, true, false, 0);
+  assert.ok(trip.speed > 5 && trip.speed <= 6);
+  for (let i = 0; i < 120; i++) advanceTrip(trip, 1 / 60, true, true, 0);
+  assert.equal(trip.speed, 0);
+});
 test("OSM XML parsing uses actual node coordinates and way geometry", () => {
   const xml =
     '<osm><node id="1" lat="28.61" lon="77.2"><tag k="natural" v="tree"/></node><node id="2" lat="28.62" lon="77.21"/><way id="4"><nd ref="1"/><nd ref="2"/><tag k="waterway" v="river"/><tag k="name" v="River"/></way></osm>';

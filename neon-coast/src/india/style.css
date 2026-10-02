@@ -673,7 +673,29 @@ dialog::backdrop {
   color: #b6cdb5;
 }
 #trip-touch {
-  display: none;
+  position: absolute;
+  display: flex;
+  gap: 28px;
+  left: 50%;
+  transform: translateX(-50%);
+  bottom: 140px;
+  pointer-events: none;
+  user-select: none;
+}
+#trip-touch > div { display: flex; gap: 8px; }
+#trip-touch button {
+  pointer-events: auto;
+  width: 52px; height: 52px; border-radius: 12px;
+  background: #163c31e8; border: 1px solid #d5e9bf55;
+  touch-action: none; display: flex; align-items: center; justify-content: center;
+  flex-direction: column; gap: 2px;
+}
+#trip-touch button small { font-size: 8px; letter-spacing: 1px; }
+#trip-touch button.pressed { background: #4e7950; box-shadow: 0 0 18px #c5ed8566; transform: translateY(2px); }
+.driving-hint {
+  position: absolute; bottom: 61px; left: 50%; transform: translateX(-50%);
+  white-space: nowrap; font-size: 9px; letter-spacing: 1px;
+  background: #14352ee8; padding: 8px 12px; border-radius: 6px; color: #eff6d9;
 }
 @media (max-width: 1100px) {
   .planner-layout {
@@ -853,7 +875,9 @@ dialog::backdrop {
     left: 17px;
     right: 17px;
     bottom: 48px;
+    transform: none;
   }
+  .driving-hint { display: none; }
   #trip-touch > div {
     display: flex;
     gap: 8px;

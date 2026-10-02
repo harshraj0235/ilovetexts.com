@@ -60,11 +60,13 @@ export function createRoadWorld(host) {
   const roadGroup = new THREE.Group(),
     featuresGroup = new THREE.Group();
   scene.add(roadGroup, featuresGroup);
-  const wheels = new THREE.CylinderGeometry(0.53, 0.53, 0.35, 12);
+  const wheels = new THREE.CylinderGeometry(0.53, 0.53, 0.35, 24);
   function makeCar(brand) {
     const g = new THREE.Group();
     g.userData.paintParts = [];
     g.userData.frontWheels = [];
+    g.userData.wheels = [];
+    g.userData.brakeLights = [];
     for (const spec of [
       [2.35, 0.6, 4.6, 0, 0.7, 0],
       [2.25, 0.35, 4.25, 0, 1.05, 0],
@@ -77,21 +79,54 @@ export function createRoadWorld(host) {
     box(1.85, 0.7, 2.05, "#284c56", 0, 1.45, 0.2, g);
     for (const x of [-1.16, 1.16])
       for (const z of [-1.4, 1.45]) {
-        const wheel = new THREE.Mesh(wheels, material("#29372f"));
+        const pivot = new THREE.Group();
+        pivot.position.set(x, 0.55, z);
+        g.add(pivot);
+        const rolling = new THREE.Group();
+        pivot.add(rolling);
+        const wheel = new THREE.Mesh(wheels, material("#202323"));
         wheel.rotation.z = Math.PI / 2;
-        wheel.position.set(x, 0.55, z);
-        g.add(wheel);
-        if (z < 0) g.userData.frontWheels.push(wheel);
-        box(0.03, 0.38, 0.38, "#c4ceca", x * 1.18, 0.55, z, g);
+        rolling.add(wheel);
+        g.userData.wheels.push(rolling);
+        if (z < 0) g.userData.frontWheels.push(pivot);
+        for (let spoke = 0; spoke < 5; spoke++) {
+          const rim = box(0.04, 0.72, 0.075, "#bec8c9", Math.sign(x) * 0.185, 0, 0, rolling);
+          rim.rotation.x = spoke * Math.PI / 5;
+        }
       }
     for (const x of [-0.75, 0.75]) {
       box(0.55, 0.18, 0.06, "#fff2c6", x, 0.98, -2.32, g);
-      box(0.6, 0.15, 0.06, "#ed786b", x, 0.95, 2.32, g);
+      const lamp = box(0.6, 0.15, 0.06, "#9d1d13", x, 0.95, 2.32, g);
+      lamp.material = new THREE.MeshStandardMaterial({ color: '#a51b13', emissive: '#ff230b', emissiveIntensity: 0.3 });
+      g.userData.brakeLights.push(lamp);
+    }
+    box(1.5, 0.18, 0.07, '#1b2628', 0, 0.65, -2.33, g);
+    box(0.65, 0.19, 0.07, '#f3ead4', 0, 0.55, 2.34, g);
+    for (const side of [-1, 1]) {
+      box(0.25, 0.18, 0.38, brand.color, side * 1.21, 1.42, -0.65, g);
+      box(0.06, 0.62, 0.1, '#202b30', side * 0.94, 1.48, 0.15, g);
     }
     applyLivery(g, brand);
     scene.add(g);
     return g;
   }
+  // Fine aggregate gives nearby asphalt a visible reference for speed.
+  const asphaltCanvas = document.createElement('canvas');
+  asphaltCanvas.width = asphaltCanvas.height = 128;
+  const asphaltContext = asphaltCanvas.getContext('2d');
+  const grain = asphaltContext.createImageData(128, 128);
+  let seed = 23;
+  for (let i = 0; i < grain.data.length; i += 4) {
+    seed = (Math.imul(seed, 1664525) + 1013904223) >>> 0;
+    const shade = 100 + seed % 45;
+    grain.data.set([shade, shade, shade, 255], i);
+  }
+  asphaltContext.putImageData(grain, 0, 0);
+  const asphalt = new THREE.CanvasTexture(asphaltCanvas);
+  asphalt.wrapS = asphalt.wrapT = THREE.RepeatWrapping;
+  asphalt.colorSpace = THREE.SRGBColorSpace;
+  asphalt.anisotropy = Math.min(8, renderer.capabilities.getMaxAnisotropy());
+  material('#505b59').map = asphalt;
   let car,
     route,
     origin,
@@ -138,7 +173,7 @@ export function createRoadWorld(host) {
     if (coords.length < 2) return;
     const points = coords.map((c) => localPoint(c, origin)),
       positions = [],
-      indices = [];
+      indices = [], uvs = [];
     for (let i = 0; i < points.length; i++) {
       const a = points[Math.max(0, i - 1)],
         b = points[Math.min(points.length - 1, i + 1)],
@@ -155,6 +190,8 @@ export function createRoadWorld(host) {
         y,
         points[i].z - nz,
       );
+      const along = distance(coords[0], coords[i]);
+      uvs.push(0, along / 4, width / 4, along / 4);
       if (i < points.length - 1) {
         const k = i * 2;
         indices.push(k, k + 2, k + 1, k + 1, k + 2, k + 3);
@@ -166,6 +203,7 @@ export function createRoadWorld(host) {
       new THREE.Float32BufferAttribute(positions, 3),
     );
     geometry.setIndex(indices);
+    geometry.setAttribute('uv', new THREE.Float32BufferAttribute(uvs, 2));
     geometry.computeVertexNormals();
     const mesh = new THREE.Mesh(geometry, material(color));
     mesh.material.side = THREE.DoubleSide;
@@ -264,13 +302,23 @@ export function createRoadWorld(host) {
     ribbon(coords, 10.2, "#ecedcf", 0.1);
     ribbon(coords, 9.85, "#505b59", 0.115);
     for (
-      let s = Math.max(0, trip.travelled - 500);
+      let s = Math.max(0, Math.floor((trip.travelled - 500) / 18) * 18);
       s < Math.min(route.length, trip.travelled + 1750);
       s += 18
     ) {
       const a = sampleRoute(route, s).coordinate,
         b = sampleRoute(route, s + 7).coordinate;
       ribbon([a, b], 0.16, "#ece5ab", 0.14);
+    }
+    // Roadside delineators are simulated, spaced in metres along the route.
+    for (let s = Math.max(0, Math.floor((trip.travelled - 400) / 40) * 40); s < Math.min(route.length, trip.travelled + 1300); s += 40) {
+      const sample = sampleRoute(route, s), p = localPoint(sample.coordinate, origin);
+      for (const side of [-1, 1]) {
+        const x = p.x + Math.cos(sample.yaw) * 6.4 * side;
+        const z = p.z - Math.sin(sample.yaw) * 6.4 * side;
+        box(0.14, 0.85, 0.14, '#ece9da', x, 0.43, z, roadGroup);
+        box(0.17, 0.17, 0.17, side < 0 ? '#ece39a' : '#c74628', x, 0.72, z, roadGroup);
+      }
     }
     for (const element of features) {
       const tags = element.tags || {},
@@ -372,6 +420,11 @@ export function createRoadWorld(host) {
     features = [...dedupe.values()].slice(-2500);
     featureVersion++;
   }
+  let previousSpeed = 0, wheelTravel = 0;
+  function animateWheels(mesh, speed, dt, steering = 0) {
+    for (const pivot of mesh.userData.frontWheels) pivot.rotation.y = -steering;
+    for (const wheel of mesh.userData.wheels) wheel.rotation.x -= speed * dt / 0.53;
+  }
   function render(trip, dt, paused) {
     if (!route) return false;
     if (
@@ -388,7 +441,16 @@ export function createRoadWorld(host) {
       p.z,
     );
     car.rotation.y = yaw;
-    for (const wheel of car.userData.frontWheels) wheel.rotation.y = -(trip.steerAngle || 0);
+    const movingDt = paused ? 0 : dt;
+    animateWheels(car, trip.speed * (trip.gear || 1), movingDt, trip.steerAngle || 0);
+    wheelTravel += trip.speed * movingDt;
+    const acceleration = paused ? 0 : (trip.speed - previousSpeed) / Math.max(dt, 0.001);
+    previousSpeed = trip.speed;
+    const suspensionBlend = 1 - Math.exp(-movingDt * 7);
+    car.rotation.x += (THREE.MathUtils.clamp(-acceleration * 0.006, -0.045, 0.065) - car.rotation.x) * suspensionBlend;
+    car.rotation.z += (THREE.MathUtils.clamp(-(trip.steerAngle || 0) * trip.speed * 0.025, -0.055, 0.055) - car.rotation.z) * suspensionBlend;
+    car.position.y += Math.sin(wheelTravel * 1.8) * Math.min(0.014, trip.speed * 0.001);
+    for (const lamp of car.userData.brakeLights) lamp.material.emissiveIntensity = trip.braking ? 3 : 0.3;
     carBody.position.set(car.position.x, 0.85, car.position.z);
     carBody.quaternion.setFromEuler(0, yaw, 0);
     carBody.velocity.setZero();
@@ -408,6 +470,7 @@ export function createRoadWorld(host) {
         v.z - Math.sin(s.yaw) * lane,
       );
       t.mesh.rotation.y = s.yaw + (t.opposite ? Math.PI : 0);
+      animateWheels(t.mesh, t.opposite ? 12 : 10, movingDt);
       t.body.position.set(t.mesh.position.x, 0.85, t.mesh.position.z);
       t.body.quaternion.setFromEuler(0, t.mesh.rotation.y, 0);
     }
@@ -424,13 +487,16 @@ export function createRoadWorld(host) {
         )
       : new THREE.Vector3(
           pos.x + Math.sin(yaw) * 14,
-          7,
+          4.7,
           pos.z + Math.cos(yaw) * 14,
         );
     if (!cameraInitialized || trip.scale > 1) camera.position.copy(desired);
     else camera.position.lerp(desired, 1 - Math.exp(-dt * 7));
     cameraInitialized = true;
     camera.lookAt(target.x, cameraMode ? 1.65 : 1.7, target.z);
+    const fov = (cameraMode ? 64 : 56) + Math.min(7, trip.speed * 0.22);
+    camera.fov += (fov - camera.fov) * (1 - Math.exp(-dt * 3));
+    camera.updateProjectionMatrix();
     car.visible = !cameraMode;
     sun.position.set(pos.x - 80, 140, pos.z + 100);
     sun.target.position.copy(pos);
@@ -472,6 +538,7 @@ export function createRoadWorld(host) {
       frames: renderer.info.render.frame,
       car: car?.position.toArray(),
       cameraMode,
+      wheelRotation: car?.userData.wheels[0].rotation.x,
     }),
     probe: () => {
       renderer.render(scene, camera);
