@@ -103,7 +103,7 @@ const nextConfig = {
               "script-src 'self' 'unsafe-inline' 'unsafe-eval' blob: https://www.googletagmanager.com https://www.google-analytics.com https://api.producthunt.com https://unpkg.com",
               "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
               "font-src 'self' https://fonts.gstatic.com",
-              "img-src 'self' data: blob: https://api.producthunt.com https://www.google-analytics.com https://www.googletagmanager.com",
+              "img-src 'self' data: blob: https://tile.openstreetmap.org https://api.producthunt.com https://www.google-analytics.com https://www.googletagmanager.com",
               "media-src 'self' blob:",
               "connect-src 'self' blob: https://www.google-analytics.com https://analytics.google.com https://www.googletagmanager.com https://translate.googleapis.com https://texttospeech.googleapis.com https://api.datamuse.com https://inputtools.google.com https://unpkg.com",
               "worker-src 'self' blob:",
@@ -395,6 +395,10 @@ const nextConfig = {
   },
   async rewrites() {
     return [
+      {
+        source: '/india-trip',
+        destination: '/india-trip-game/india.html',
+      },
       {
         source: '/sitemap/:lang.xml',
         destination: '/sitemap-api/:lang',

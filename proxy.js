@@ -107,6 +107,9 @@ export function proxy(request) {
   }
 
   const firstSegment = pathname.split('/')[1]; // e.g., 'hi', 'word-counter', 'blog', etc.
+  if (firstSegment === 'india-trip' || firstSegment === 'india-trip-game') {
+    return NextResponse.next();
+  }
 
   // If first segment is a supported non-English language → check for English-only pages first
   if (LANG_CODES.has(firstSegment)) {

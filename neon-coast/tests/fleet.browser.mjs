@@ -1,0 +1,71 @@
+import { chromium } from 'playwright';
+import assert from 'node:assert/strict';
+import { mkdir } from 'node:fs/promises';
+import { BRANDS } from '../src/brands.js';
+
+await mkdir('artifacts', { recursive: true });
+const browser = await chromium.launch({ executablePath: process.env.CHROME_PATH || undefined, headless: true, args: ['--enable-webgl', '--enable-unsafe-swiftshader'] });
+const errors = [];
+try {
+  const page = await browser.newPage({ viewport: { width: 1440, height: 900 } });
+  page.setDefaultTimeout(60000); page.on('pageerror', e => errors.push(e.message));
+  await page.goto('http://localhost:4173');
+  await page.waitForFunction(() => window.neonCoast?.snapshot().frames > 5);
+  const original = await page.evaluate(() => window.neonCoast.fleetSnapshot());
+  assert.equal(Object.values(original.logos).filter(s => s === 'loaded').length, 14);
+  assert.equal(new Set(original.traffic).size, 14);
+  assert.equal(original.paint, 'ff2b45');
+  assert.equal(original.decals, 7);
+  assert.ok((await page.evaluate(() => window.neonCoast.canvasProbe())).colors > 12);
+  await page.screenshot({ path: 'artifacts/fleet-driving.png' });
+  await page.locator('#start-mission').click();
+  await page.locator('#fleet-button').click();
+  const paused = await page.evaluate(() => window.neonCoast.snapshot());
+  const rotation = await page.evaluate(() => window.neonCoast.fleetSnapshot().garage.rotation);
+  await page.waitForFunction(r => window.neonCoast.fleetSnapshot().garage.rotation > r + .05, rotation);
+  assert.equal((await page.evaluate(() => window.neonCoast.snapshot())).mission.time, paused.mission.time);
+  assert.ok(await page.evaluate(() => window.neonCoast.previewProbe()) > 5);
+  for (const brand of BRANDS) {
+    await page.locator(`[data-brand="${brand.id}"]`).click();
+    const state = await page.evaluate(() => window.neonCoast.fleetSnapshot());
+    assert.equal(state.garage.previewBrand, brand.id);
+    assert.equal(state.garage.previewPaint, brand.color.slice(1));
+    assert.equal(state.selected, 'zomato');
+  }
+  assert.ok(await page.locator('.fleet-card img').evaluateAll(images => images.every(img => img.complete && img.naturalWidth > 0)));
+  await page.locator('[data-brand="zomato"]').click();
+  await page.screenshot({ path: 'artifacts/fleet-desktop.png' });
+  await page.locator('[data-fleet-filter="Groceries"]').click();
+  assert.equal(await page.locator('.fleet-card:visible').count(), BRANDS.filter(b => b.category === 'Groceries').length);
+  await page.locator('[data-brand="amazon-now"]').click();
+  await page.locator('#fleet-random').click();
+  assert.notEqual((await page.evaluate(() => window.neonCoast.fleetSnapshot())).garage.pending, 'amazon-now');
+  await page.locator('[data-brand="blinkit"]').click();
+  await page.locator('#fleet-apply').click();
+  const applied = await page.evaluate(() => window.neonCoast.fleetSnapshot());
+  assert.equal(applied.selected, 'blinkit'); assert.equal(applied.paint, 'f8cb46');
+  assert.deepEqual(applied.traffic, original.traffic);
+  assert.equal((await page.evaluate(() => window.neonCoast.snapshot())).cash, paused.cash);
+  await page.reload(); await page.waitForFunction(() => window.neonCoast?.snapshot().frames > 3);
+  assert.equal((await page.evaluate(() => window.neonCoast.fleetSnapshot())).selected, 'blinkit');
+  await page.keyboard.press('g');
+  await page.locator('[data-brand="swiggy"]').click(); await page.keyboard.press('Escape');
+  assert.equal((await page.evaluate(() => window.neonCoast.fleetSnapshot())).selected, 'blinkit');
+  assert.equal((await page.evaluate(() => window.neonCoast.snapshot())).paused, false);
+
+  const mobile = await browser.newPage({ viewport: { width: 390, height: 844 }, isMobile: true, hasTouch: true, deviceScaleFactor: 1 });
+  mobile.setDefaultTimeout(60000); mobile.on('pageerror', e => errors.push(e.message));
+  await mobile.goto('http://localhost:4173'); await mobile.waitForFunction(() => window.neonCoast?.snapshot().frames > 3);
+  await mobile.locator('#fleet-button').tap();
+  await mobile.locator('[data-brand="zepto"]').tap();
+  assert.ok(await mobile.evaluate(() => window.neonCoast.previewProbe()) > 5);
+  await mobile.screenshot({ path: 'artifacts/fleet-mobile.png' });
+  const bounds = await mobile.locator('#fleet-dialog').boundingBox();
+  assert.ok(bounds.x >= 0 && bounds.x + bounds.width <= 390 && bounds.y >= 0 && bounds.y + bounds.height <= 844);
+  await mobile.locator('#fleet-apply').tap();
+  assert.equal((await mobile.evaluate(() => window.neonCoast.fleetSnapshot())).selected, 'zepto');
+  assert.ok((await mobile.evaluate(() => window.neonCoast.canvasProbe())).colors > 12);
+  await mobile.screenshot({ path: 'artifacts/fleet-mobile-driving.png' });
+  assert.deepEqual(errors, []);
+  console.log(JSON.stringify({ brands: BRANDS.length, trafficBrands: new Set(original.traffic).size, checks: ['all local logos loaded', 'all 14 preview paint colors', 'rotating nonblank 3D preview', 'mission paused in garage', 'filters', 'random selection', 'apply without altering traffic or balance', 'selection survives reload', 'cancel preserves selection', 'mobile selection and layout', 'desktop/mobile canvas pixels'], errors }, null, 2));
+} finally { await browser.close(); }

@@ -1,0 +1,260 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <meta name="theme-color" content="#14352e" />
+    <title>India Road Trip | Neon Coast</title>
+  </head>
+  <body>
+    <main id="planner">
+      <header class="planner-header">
+        <a href="%BASE_URL%india.html" class="wordmark"
+          >NEON<span>COAST</span><small>INDIA ROAD TRIP</small></a
+        ><a href="%BASE_URL%index.html" class="back-link"
+          ><i data-lucide="arrow-left"></i> Coastal free roam</a
+        >
+      </header>
+      <div class="planner-layout">
+        <section class="trip-form">
+          <span class="eyebrow">YOUR NEXT DELIVERY</span>
+          <h1>Across India.<br />Behind the wheel.</h1>
+          <p class="intro">
+            Choose two places. Pick up a parcel. Take the road.
+          </p>
+          <div class="place-field">
+            <label for="from-input">PICKUP</label>
+            <div class="search-row">
+              <input
+                id="from-input"
+                value="Delhi"
+                autocomplete="off"
+                aria-controls="from-results"
+              /><button
+                id="from-search"
+                title="Search pickup"
+                aria-label="Search pickup"
+              >
+                <i data-lucide="search"></i>
+              </button>
+            </div>
+            <div id="from-results" class="results" hidden></div>
+          </div>
+          <button
+            id="swap"
+            class="swap"
+            title="Swap pickup and destination"
+            aria-label="Swap pickup and destination"
+          >
+            <i data-lucide="arrow-down-up"></i>
+          </button>
+          <div class="place-field">
+            <label for="to-input">DESTINATION</label>
+            <div class="search-row">
+              <input
+                id="to-input"
+                value="Rishikesh"
+                autocomplete="off"
+                aria-controls="to-results"
+              /><button
+                id="to-search"
+                title="Search destination"
+                aria-label="Search destination"
+              >
+                <i data-lucide="search"></i>
+              </button>
+            </div>
+            <div id="to-results" class="results" hidden></div>
+          </div>
+          <div class="trip-options">
+            <label>DELIVERY CAR<select id="brand-select"></select></label
+            ><label
+              >TRIP PACE<select id="pace">
+                <option value="1">Manual driving 1×</option>
+                <option value="20">Assisted 20×</option>
+                <option value="60">Assisted 60×</option>
+              </select></label
+            >
+          </div>
+          <button id="plan-route" class="primary">
+            Find driving route <i data-lucide="route"></i>
+          </button>
+          <p id="plan-status" role="status">
+            Delhi to Rishikesh is ready to explore.
+          </p>
+          <section id="route-summary" hidden>
+            <div class="route-stats">
+              <div>
+                <strong id="route-km"></strong><span>ROAD DISTANCE</span>
+              </div>
+              <div>
+                <strong id="route-time"></strong><span>MAP ESTIMATE</span>
+              </div>
+              <div>
+                <strong id="route-reward"></strong><span>DELIVERY REWARD</span>
+              </div>
+            </div>
+            <p id="route-source"></p>
+            <button id="start-trip" class="primary">
+              Collect parcel & drive <i data-lucide="arrow-right"></i>
+            </button>
+          </section>
+          <button id="resume-trip" class="secondary" hidden>
+            Resume saved delivery <i data-lucide="play"></i>
+          </button>
+          <details class="coverage">
+            <summary>Map & scenery coverage</summary>
+            <p>
+              Road paths and map positions come from OpenStreetMap routing. 3D
+              roads are simplified and flat. Mapped buildings, rivers, bridges
+              and vegetation load near your car when available. Individual
+              trees, terrain heights, road widths and building appearances are
+              not a complete real-world reconstruction. Route assist follows the
+              road; you control speed and lane position. Traffic is simulated.
+            </p>
+            <p>
+              Online services can be unavailable. A dated Delhi–Rishikesh route
+              snapshot is included; other routes need a connection. Some islands
+              and disconnected roads cannot be joined by car.
+            </p>
+          </details>
+        </section>
+        <section class="map-section">
+          <div class="map-title">
+            <span><i data-lucide="map"></i> INDIA / ROUTE PLANNER</span
+            ><span id="map-status">OpenStreetMap</span>
+          </div>
+          <div id="planning-map" aria-label="Real India route map"></div>
+          <div class="preset-strip">
+            <span>TAKE THE SCENIC WAY</span>
+            <div id="presets"></div>
+          </div>
+        </section>
+      </div>
+    </main>
+    <section id="trip-screen" hidden>
+      <div id="trip-world" aria-label="3D mapped driving route"></div>
+      <header class="trip-header">
+        <a class="wordmark" href="%BASE_URL%india.html"
+          >NEON<span>COAST</span><small>INDIA ROAD TRIP</small></a
+        >
+        <div class="trip-actions">
+          <span id="trip-cash"></span
+          ><button
+            id="trip-camera"
+            title="Change camera"
+            aria-label="Change camera"
+          >
+            <i data-lucide="camera"></i></button
+          ><button id="trip-recover" title="Recover car on road" aria-label="Recover car on road"><i data-lucide="rotate-ccw"></i></button
+          ><button id="trip-gear" title="Change gear when stopped" aria-label="Change gear when stopped">D</button
+          ><button id="trip-pause" title="Pause trip" aria-label="Pause trip">
+            <i data-lucide="pause"></i>
+          </button>
+        </div>
+      </header>
+      <aside class="delivery-panel">
+        <span class="eyebrow"
+          ><i data-lucide="package"></i> PARCEL ON BOARD</span
+        >
+        <h2 id="delivery-title"></h2>
+        <div class="delivery-meta">
+          <span id="trip-brand"></span><strong id="trip-reward"></strong>
+        </div>
+        <progress id="trip-progress" max="1" value="0"></progress>
+        <div class="progress-caption">
+          <span id="trip-covered"></span><span id="trip-remaining"></span>
+        </div>
+        <p id="scenery-status" role="status">Loading mapped scenery...</p>
+      </aside>
+      <div class="navigation-banner">
+        <i data-lucide="navigation"></i>
+        <div>
+          <strong id="road-name">Joining the route</strong
+          ><span id="next-turn"></span>
+        </div>
+      </div>
+      <div id="trip-toast" role="status"></div>
+      <div class="trip-map-wrap">
+        <div class="trip-map-title">
+          <span id="nearest-place">LIVE ROUTE</span
+          ><button id="follow-map" title="Follow car" aria-label="Follow car">
+            <i data-lucide="locate-fixed"></i>
+          </button>
+        </div>
+        <div id="driving-map" aria-label="Live position on real map"></div>
+      </div>
+      <div class="trip-speed">
+        <span id="trip-pace"></span>
+        <div><strong id="trip-speed">0</strong><small>KM/H</small></div>
+        <span id="drive-mode">MANUAL STEERING</span>
+      </div>
+      <div class="trip-bottom">
+        <button id="return-planner">
+          <i data-lucide="route"></i><span>Route planner</span></button
+        ><button id="deliver" class="primary" hidden>
+          Deliver parcel <i data-lucide="package-check"></i></button
+        ><span id="trip-save">Saved locally</span>
+      </div>
+      <div id="trip-touch">
+        <div>
+          <button data-drive="a" aria-label="Steer left">
+            <i data-lucide="arrow-left"></i></button
+          ><button data-drive="d" aria-label="Steer right">
+            <i data-lucide="arrow-right"></i>
+          </button>
+        </div>
+        <div>
+          <button data-drive="s" aria-label="Brake">
+            <i data-lucide="arrow-down"></i></button
+          ><button data-drive="w" aria-label="Accelerate">
+            <i data-lucide="arrow-up"></i>
+          </button>
+        </div>
+      </div>
+      <footer class="data-credit">
+        <a
+          href="https://www.openstreetmap.org/copyright"
+          target="_blank"
+          rel="noreferrer"
+          >© OpenStreetMap contributors</a
+        ><span>OSRM routes · Simplified 3D scenery</span>
+      </footer>
+    </section>
+    <dialog id="trip-menu">
+      <div class="dialog-head">
+        <span class="eyebrow">INDIA ROAD TRIP</span
+        ><button id="close-trip-menu" aria-label="Close pause menu">
+          <i data-lucide="x"></i>
+        </button>
+      </div>
+      <h2>Parked for a moment.</h2>
+      <div class="controls">
+        <span><kbd>W / ↑</kbd> Accelerate</span
+        ><span><kbd>S / ↓ / SPACE</kbd> Brake</span
+        ><span><kbd>A D / ← →</kbd> Steer within road</span
+        ><span><kbd>C</kbd> Camera</span><span><kbd>ESC</kbd> Pause</span>
+      </div>
+      <label class="quality-setting"
+        >Graphics<select id="trip-quality">
+          <option value="high">High</option>
+          <option value="low">Performance</option>
+        </select></label
+      ><button id="continue-trip" class="primary">
+        Back on the road <i data-lucide="arrow-right"></i></button
+      ><button id="menu-planner" class="secondary">
+        Save & return to planner
+      </button>
+    </dialog>
+    <dialog id="arrival-dialog">
+      <span class="eyebrow">DELIVERY COMPLETE</span>
+      <h2 id="arrival-title"></h2>
+      <p id="arrival-copy"></p>
+      <strong id="arrival-reward"></strong
+      ><button id="another-trip" class="primary">
+        Next delivery <i data-lucide="arrow-right"></i>
+      </button>
+    </dialog>
+    <script type="module" src="/src/india/main.js"></script>
+  </body>
+</html>

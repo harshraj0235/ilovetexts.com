@@ -1,0 +1,86 @@
+[
+  {
+    "brand": "zomato",
+    "source": "https://play.google.com/store/apps/details?id=com.application.zomato&hl=en_IN",
+    "asset": "https://play-lh.googleusercontent.com/F3A40FhcqC9fAoPeYpC_olDg2Upkq1UsylJCvmZmB7a26R0S6L-2Zo35-exR8n-__0M-uFTHq3T_nbS9oxDQ15w=s0-br30",
+    "file": "zomato.png"
+  },
+  {
+    "brand": "swiggy",
+    "source": "https://play.google.com/store/apps/details?id=in.swiggy.android&hl=en_IN",
+    "asset": "https://play-lh.googleusercontent.com/FJ5W5ygiN-DYfpd2-3LqyN5F-OxDtQ7z_9v5nAeD4vOrN8kQitoOwULactKgKvktXowVEM491wE-unmGmnt8OWM=s0-br30",
+    "file": "swiggy.png"
+  },
+  {
+    "brand": "zepto",
+    "source": "https://play.google.com/store/apps/details?id=com.zeptoconsumerapp&hl=en_IN",
+    "asset": "https://play-lh.googleusercontent.com/jrtmMFv4qjtgMPQeaQzUFZ3EYBkHd_8OFYl6O1Ngt5Pey52RJAR4u8K4IoPILkJz76a7s5U3DNaY3r3xnl7t8X4=s0-br30",
+    "file": "zepto.png"
+  },
+  {
+    "brand": "blinkit",
+    "source": "https://play.google.com/store/apps/details?id=com.grofers.customerapp&hl=en_IN",
+    "asset": "https://play-lh.googleusercontent.com/dY1ryTjOaVsnslxvNamNvSBulmDUkvW5f5FJ_HDApMfecSOIxjCafpNAv4LTG8TJVyp0XR9tAAaRI4K77Eiqfg=s0-br30",
+    "file": "blinkit.png"
+  },
+  {
+    "brand": "eatsure",
+    "source": "https://play.google.com/store/apps/details?id=com.done.faasos&hl=en_IN",
+    "asset": "https://play-lh.googleusercontent.com/rge1TD1xUvaa32NNReRUFkAFWW9rqnpbRFt3_LfwKy--H26l29b236FUM4TCIF5mqTDA0-LDOmyln-r4rvQZmDk=s0-br30",
+    "file": "eatsure.png"
+  },
+  {
+    "brand": "swish",
+    "source": "https://play.google.com/store/apps/details?id=com.swishapp&hl=en_IN",
+    "asset": "https://play-lh.googleusercontent.com/6QqgsKMY_GHAigUYLLk_TKcSe_e85YWxRDDCSPh1kbKL0VoAFKWRyZEF5GOUB9ctm8C5tPW-nMUmjL18yaHlNh0=s0-br30",
+    "file": "swish.png"
+  },
+  {
+    "brand": "flipkart",
+    "source": "https://play.google.com/store/apps/details?id=com.flipkart.android&hl=en_IN",
+    "asset": "https://play-lh.googleusercontent.com/mlWjVjxflQoYJHBBgDQ08FqT8i3KnDG__2RH8P-GWOKlEPAIo8TllTZo3HDQ3J5zlO6oAhc1FAv0Bf2on0wL8w=s0-br30",
+    "file": "flipkart.png"
+  },
+  {
+    "brand": "amazon",
+    "source": "https://play.google.com/store/apps/details?id=in.amazon.mShop.android.shopping&hl=en_IN",
+    "asset": "https://play-lh.googleusercontent.com/E2Nyw1kSrYFvi5DFOznWOR2iXY9mwxwfYHXV37aLHmuKtEW3gs7StIvVptoV2x8_ykiHQQmliwpfDsFm0Quuwbk=s0-br30",
+    "file": "amazon.png"
+  },
+  {
+    "brand": "bigbasket",
+    "source": "https://play.google.com/store/apps/details?id=com.bigbasket.mobileapp&hl=en_IN",
+    "asset": "https://play-lh.googleusercontent.com/OP5Xf_95EAJhJ_riZcWxyaFUu4TaEISBVHXLkzRfK2PH2AZQrVGsZgru0Y4r2BMJhnl_fCRixVBDLQGVhNuI=s0-br30",
+    "file": "bigbasket.png"
+  },
+  {
+    "brand": "uber-eats",
+    "source": "https://play.google.com/store/apps/details?id=com.ubercab.eats&hl=en_IN",
+    "asset": "https://play-lh.googleusercontent.com/nQpl8xd3y1dpvHp-VcZrQ7H8ikP5jDYi0tYdS-FzqKyb0qqBb-0FVzuC3eepETxYECADHSitC89yhvWkXxcy=s0-br30",
+    "file": "uber-eats.png"
+  },
+  {
+    "brand": "dominos",
+    "source": "https://play.google.com/store/apps/details?id=com.Dominos&hl=en_IN",
+    "asset": "https://play-lh.googleusercontent.com/O8YSXi4yJeyKCzV45RMFK7oChDB8qIBCUWq4Yt_dfcqByFy27sTGe7sU9ucex8W_zButZ7-RmqiXUSN1lk9s=s0-br30",
+    "file": "dominos.png"
+  },
+  {
+    "brand": "doordash",
+    "source": "https://play.google.com/store/apps/details?id=com.dd.doordash&hl=en_IN",
+    "asset": "https://play-lh.googleusercontent.com/daqnb5FdirTUewbv81mzwbnhD6_d1ITPYjM-XBFykk3QXRebKeaZLwWjyIbFKzLaEm6c12_wqVEHQhVrX3kO=s0-br30",
+    "file": "doordash.png"
+  },
+  {
+    "brand": "flipkart-minutes",
+    "source": "https://commons.wikimedia.org/wiki/File:Flipkart_Minutes_logo.png",
+    "asset": "https://upload.wikimedia.org/wikipedia/commons/f/ff/Flipkart_Minutes_logo.png",
+    "file": "flipkart-minutes.png"
+  },
+  {
+    "brand": "amazon-now",
+    "source": "https://www.aboutamazon.in/news/retail/amazon-premium-beauty-brands-available-india",
+    "asset": "https://amazon-blogs-brightspot.s3.amazonaws.com/3e/5c/10b3077a4642b92213f90b0a7da2/amazonnow-hero.png",
+    "file": "amazon-now.png"
+  }
+]

@@ -1,0 +1,15 @@
+import { mkdir, writeFile } from 'node:fs/promises';
+const dir = new URL('../public/routes/', import.meta.url);
+await mkdir(dir, { recursive: true });
+const from = { name: 'Delhi', state: 'Delhi', coordinates: [77.209, 28.6139] };
+const to = { name: 'Rishikesh', state: 'Uttarakhand', coordinates: [78.2676, 30.0869] };
+const base = 'https://router.project-osrm.org';
+const url = `${base}/route/v1/driving/${from.coordinates.join(',')};${to.coordinates.join(',')}?overview=full&geometries=geojson&steps=true`;
+const response = await fetch(url, { signal: AbortSignal.timeout(35000) });
+if (!response.ok) throw new Error(`Routing HTTP ${response.status}`);
+const data = await response.json();
+if (data.code !== 'Ok' || !data.routes?.length) throw new Error(data.message || 'No route');
+const route = data.routes[0];
+const record = { from, to, distance: route.distance, duration: route.duration, coordinates: route.geometry.coordinates, steps: route.legs.flatMap(leg => leg.steps.map(s => ({ distance: s.distance, duration: s.duration, name: s.name, ref: s.ref || '', maneuver: s.maneuver }))), source: url, fetchedAt: new Date().toISOString(), attribution: 'OpenStreetMap contributors / OSRM' };
+await writeFile(new URL('delhi-rishikesh.json', dir), JSON.stringify(record));
+console.log(JSON.stringify({ km: route.distance / 1000, coordinates: record.coordinates.length, steps: record.steps.length }));
