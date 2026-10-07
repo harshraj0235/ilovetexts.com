@@ -186,6 +186,28 @@ const nextConfig = {
         permanent: true,
       },
 
+      // ── /workflow → /workflows (singular to plural fix) ────────────────────
+      {
+        source: '/workflow',
+        destination: '/workflows',
+        permanent: true,
+      },
+      {
+        source: '/:lang(hi|pt|es|de|id)/workflow',
+        destination: '/:lang/workflows',
+        permanent: true,
+      },
+      {
+        source: '/workflow/:slug*',
+        destination: '/workflows/:slug*',
+        permanent: true,
+      },
+      {
+        source: '/:lang(hi|pt|es|de|id)/workflow/:slug*',
+        destination: '/:lang/workflows/:slug*',
+        permanent: true,
+      },
+
       // ── word-counter → word-counting-tools (category rename) ──────────────
       {
         source: '/word-counter/:slug*',
