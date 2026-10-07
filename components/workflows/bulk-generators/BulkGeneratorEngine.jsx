@@ -58,23 +58,23 @@ function validateRows(rows, requiredFields) {
 }
 
 /* ═══════════════════════════════════════════════════════════
-   MAIN BULK GENERATOR ENGINE COMPONENT
+   MAIN BULK GENERATOR ENGINE — PREMIUM UI v2
    ═══════════════════════════════════════════════════════════ */
 export default function BulkGeneratorEngine({
   toolName,
   toolIcon,
   toolDescription,
-  requiredFields = [],     // [{ key: 'name', label: 'Full Name', required: true }]
-  optionalFields = [],     // [{ key: 'photo', label: 'Photo URL' }]
-  renderPreview,           // (row, mapping, templateSettings, index) => canvas element
-  renderCard,              // same but for list rendering
+  requiredFields = [],
+  optionalFields = [],
+  renderPreview,
+  renderCard,
   sampleData = [],
   templateSettings: defaultTemplateSettings = {},
   templateEditor: TemplateEditor = null,
   maxRows = 500,
   filePrefix = 'output',
 }) {
-  const [step, setStep] = useState(0); // 0=upload, 1=map, 2=validate, 3=preview, 4=generate
+  const [step, setStep] = useState(0);
   const [file, setFile] = useState(null);
   const [headers, setHeaders] = useState([]);
   const [rows, setRows] = useState([]);
@@ -86,8 +86,8 @@ export default function BulkGeneratorEngine({
   const [templateSettings, setTemplateSettings] = useState(defaultTemplateSettings);
   const [dragOver, setDragOver] = useState(false);
   const [error, setError] = useState('');
+  const [done, setDone] = useState(false);
   const fileRef = useRef(null);
-  const previewCanvasRef = useRef(null);
 
   const allFields = useMemo(() => [...requiredFields, ...optionalFields], [requiredFields, optionalFields]);
   const requiredMapped = useMemo(() => requiredFields.filter(f => f.required !== false), [requiredFields]);
@@ -108,11 +108,10 @@ export default function BulkGeneratorEngine({
     try {
       setFile(f);
       const { headers: h, rows: r } = await parseExcel(f);
-      if (r.length === 0) { setError('The file is empty.'); return; }
-      if (r.length > maxRows) { setError(`Too many rows (${r.length}). Maximum ${maxRows} rows allowed.`); return; }
+      if (r.length === 0) { setError('The file is empty — no data rows found.'); return; }
+      if (r.length > maxRows) { setError(`Too many rows (${r.length}). Maximum ${maxRows} rows.`); return; }
       setHeaders(h);
       setRows(r);
-      // Auto-map matching column names
       const auto = {};
       allFields.forEach(field => {
         const match = h.find(col => col.toLowerCase().replace(/[_\s]/g, '') === field.key.toLowerCase().replace(/[_\s]/g, ''));
@@ -121,7 +120,7 @@ export default function BulkGeneratorEngine({
       setMapping(auto);
       setStep(1);
     } catch (e) {
-      setError('Could not parse file. Make sure it\'s a valid Excel/CSV.');
+      setError('Could not parse file. Ensure it is a valid Excel or CSV.');
     }
   }, [allFields, maxRows]);
 
@@ -157,6 +156,7 @@ export default function BulkGeneratorEngine({
   /* ── GENERATE ──────────────────────────── */
   const handleGenerate = async () => {
     setGenerating(true);
+    setDone(false);
     setProgress(0);
     setStep(4);
     try {
@@ -171,7 +171,6 @@ export default function BulkGeneratorEngine({
           data: pdfBytes,
         });
         setProgress(Math.round(((i + 1) / rows.length) * 100));
-        // Let UI breathe
         if (i % 5 === 0) await new Promise(r => setTimeout(r, 0));
       }
       const blob = await createZip(files);
@@ -181,6 +180,7 @@ export default function BulkGeneratorEngine({
       a.download = `${filePrefix}_${rows.length}_files.zip`;
       a.click();
       URL.revokeObjectURL(url);
+      setDone(true);
     } catch (e) {
       setError(`Generation failed: ${e.message}`);
     }
@@ -198,14 +198,28 @@ export default function BulkGeneratorEngine({
     XLSX.writeFile(wb, `${filePrefix}_sample.xlsx`);
   };
 
+  /* ── RESET ─────────────────────────────── */
+  const resetAll = () => {
+    setStep(0); setFile(null); setRows([]); setHeaders([]); setMapping({});
+    setIssues([]); setPreviewIdx(0); setDone(false); setProgress(0); setError('');
+  };
+
   /* ── STEP INDICATOR ─────────────────────── */
-  const steps = ['Upload Excel', 'Map Columns', 'Validate Data', 'Preview & Edit', 'Generate ZIP'];
+  const steps = [
+    { label: 'Upload', icon: '📂' },
+    { label: 'Map Columns', icon: '🔗' },
+    { label: 'Validate', icon: '✅' },
+    { label: 'Preview', icon: '👁️' },
+    { label: 'Download', icon: '📦' },
+  ];
+
+  const mappedCount = allFields.filter(f => mapping[f.key]).length;
 
   return (
     <div className={s.engine}>
-      {/* Progress Steps */}
-      <div className={s.stepsBar}>
-        {steps.map((label, i) => (
+      {/* ── Progress Steps ── */}
+      <nav className={s.stepsBar} aria-label="Generation progress">
+        {steps.map((st, i) => (
           <button
             key={i}
             className={`${s.stepDot} ${i === step ? s.stepActive : ''} ${i < step ? s.stepDone : ''}`}
@@ -214,14 +228,22 @@ export default function BulkGeneratorEngine({
             aria-current={i === step ? 'step' : undefined}
           >
             <span className={s.stepNum}>{i < step ? '✓' : i + 1}</span>
-            <span className={s.stepLabel}>{label}</span>
+            <span className={s.stepLabel}>{st.label}</span>
           </button>
         ))}
-      </div>
+      </nav>
 
-      {error && <div className={s.errorBanner}><span>⚠</span> {error} <button onClick={() => setError('')}>✕</button></div>}
+      {error && (
+        <div className={s.errorBanner} role="alert">
+          <span>⚠️</span>
+          <span>{error}</span>
+          <button onClick={() => setError('')} aria-label="Dismiss error">✕</button>
+        </div>
+      )}
 
-      {/* ════════ STEP 0: UPLOAD ════════ */}
+      {/* ════════════════════════════════════════
+         STEP 0: UPLOAD
+         ════════════════════════════════════════ */}
       {step === 0 && (
         <div className={s.uploadStep}>
           <div
@@ -230,60 +252,74 @@ export default function BulkGeneratorEngine({
             onDragLeave={() => setDragOver(false)}
             onDrop={onDrop}
             onClick={() => fileRef.current?.click()}
+            onKeyDown={e => e.key === 'Enter' && fileRef.current?.click()}
             role="button"
             tabIndex={0}
+            aria-label="Upload your Excel or CSV file"
           >
             <div className={s.dropIcon}>{toolIcon || '📄'}</div>
-            <h3>Drop your Excel or CSV file here</h3>
-            <p>or click to browse — supports .xlsx, .xls, .csv (max {maxRows} rows)</p>
+            <h3>Drop your Excel or CSV here</h3>
+            <p>or click to browse — .xlsx, .xls, .csv supported (up to {maxRows} rows)</p>
             <input
               ref={fileRef}
               type="file"
               accept=".xlsx,.xls,.csv"
               onChange={e => handleFile(e.target.files[0])}
               className={s.hiddenInput}
-              aria-label="Upload Excel file"
+              aria-label="Choose file"
             />
           </div>
+
           <div className={s.uploadActions}>
             <button className={s.secondaryBtn} onClick={downloadSample}>
-              ⬇ Download sample Excel
+              ⬇ Download sample template
             </button>
           </div>
+
           <div className={s.featureGrid}>
             <div className={s.featureCard}>
               <span className={s.featureIcon}>🔒</span>
-              <strong>100% Private</strong>
-              <p>Files processed in your browser. Nothing uploaded to any server.</p>
+              <strong>100% Private & Secure</strong>
+              <p>Everything runs in your browser. Your data never leaves your device — nothing is uploaded to any server.</p>
             </div>
             <div className={s.featureCard}>
               <span className={s.featureIcon}>⚡</span>
-              <strong>Instant Bulk Generation</strong>
-              <p>Generate hundreds of PDFs from a single Excel file in seconds.</p>
+              <strong>Lightning-Fast Bulk Output</strong>
+              <p>Generate hundreds of personalised PDFs from a single spreadsheet in just seconds.</p>
             </div>
             <div className={s.featureCard}>
               <span className={s.featureIcon}>📦</span>
-              <strong>ZIP Download</strong>
-              <p>All files packaged in a single ZIP — ready to print or share.</p>
+              <strong>One-Click ZIP Download</strong>
+              <p>Every file neatly named and packaged into one ZIP archive — ready to print or share.</p>
             </div>
           </div>
         </div>
       )}
 
-      {/* ════════ STEP 1: COLUMN MAPPING ════════ */}
+      {/* ════════════════════════════════════════
+         STEP 1: COLUMN MAPPING
+         ════════════════════════════════════════ */}
       {step === 1 && (
         <div className={s.mapStep}>
           <div className={s.mapHeader}>
             <div>
-              <h3>Map your columns</h3>
-              <p>Match each required field to a column from your file ({rows.length} rows found in <em>{file?.name}</em>).</p>
+              <h3>Map your spreadsheet columns</h3>
+              <p>
+                Found <strong>{rows.length}</strong> rows and <strong>{headers.length}</strong> columns in <em>{file?.name}</em>.
+                {mappedCount > 0 && <> — <strong>{mappedCount}</strong> of {allFields.length} fields mapped</>}
+              </p>
             </div>
-            <span className={s.rowBadge}>{rows.length} rows</span>
+            <span className={s.rowBadge}>📊 {rows.length} rows</span>
           </div>
+
           <div className={s.mapGrid}>
             {allFields.map(field => (
               <label key={field.key} className={s.mapField}>
-                <span>{field.label} {field.required !== false && <span className={s.reqStar}>*</span>}</span>
+                <span>
+                  {field.label}
+                  {field.required !== false && <span className={s.reqStar}>*</span>}
+                  {mapping[field.key] && <span style={{ color: 'var(--success)', marginLeft: 4 }}>✓</span>}
+                </span>
                 <select
                   value={mapping[field.key] || ''}
                   onChange={e => updateMapping(field.key, e.target.value)}
@@ -294,9 +330,10 @@ export default function BulkGeneratorEngine({
               </label>
             ))}
           </div>
+
           {/* Data Preview Table */}
           <div className={s.dataPreview}>
-            <h4>Data Preview (first 5 rows)</h4>
+            <h4>📋 Data preview — first 5 rows</h4>
             <div className={s.tableWrap}>
               <table className={s.previewTable}>
                 <thead>
@@ -310,8 +347,9 @@ export default function BulkGeneratorEngine({
               </table>
             </div>
           </div>
+
           <div className={s.stepActions}>
-            <button className={s.secondaryBtn} onClick={() => { setStep(0); setFile(null); setRows([]); setHeaders([]); }}>← Back</button>
+            <button className={s.secondaryBtn} onClick={resetAll}>← Start Over</button>
             <button className={s.primaryBtn} onClick={runValidation} disabled={!canProceedToValidate}>
               Validate Data →
             </button>
@@ -319,27 +357,44 @@ export default function BulkGeneratorEngine({
         </div>
       )}
 
-      {/* ════════ STEP 2: VALIDATE ════════ */}
+      {/* ════════════════════════════════════════
+         STEP 2: VALIDATE
+         ════════════════════════════════════════ */}
       {step === 2 && (
         <div className={s.validateStep}>
           <div className={s.validateHeader}>
-            <div className={issues.length === 0 ? s.validatePass : s.validateWarn}>
-              <span>{issues.length === 0 ? '✅' : '⚠️'}</span>
-              <div>
-                <strong>{issues.length === 0 ? 'All data looks good!' : `${issues.length} issue${issues.length > 1 ? 's' : ''} found`}</strong>
-                <p>{issues.length === 0 ? `${rows.length} rows validated — no missing required fields.` : 'Missing values detected. You can still proceed; empty fields will appear blank.'}</p>
+            {issues.length === 0 ? (
+              <div className={s.validatePass}>
+                <span>🎉</span>
+                <div>
+                  <strong>Perfect! All data looks great.</strong>
+                  <p>{rows.length} rows validated — every required field is filled. You are ready to preview and generate.</p>
+                </div>
               </div>
-            </div>
+            ) : (
+              <div className={s.validateWarn}>
+                <span>⚠️</span>
+                <div>
+                  <strong>{issues.length} missing value{issues.length > 1 ? 's' : ''} detected</strong>
+                  <p>Some rows have empty required fields. You can still proceed — empty fields will appear blank in the output.</p>
+                </div>
+              </div>
+            )}
           </div>
+
           {issues.length > 0 && (
             <div className={s.issueList}>
-              <h4>Missing Data Details</h4>
+              <h4>Missing data details</h4>
               <div className={s.tableWrap}>
                 <table className={s.previewTable}>
-                  <thead><tr><th>Row</th><th>Field</th><th>Column</th></tr></thead>
+                  <thead><tr><th>Row #</th><th>Missing Field</th><th>Mapped Column</th></tr></thead>
                   <tbody>
                     {issues.slice(0, 50).map((iss, i) => (
-                      <tr key={i}><td>{iss.row}</td><td>{iss.field}</td><td>{iss.column}</td></tr>
+                      <tr key={i}>
+                        <td><strong>{iss.row}</strong></td>
+                        <td>{iss.field}</td>
+                        <td style={{ fontFamily: 'monospace', fontSize: 12 }}>{iss.column}</td>
+                      </tr>
                     ))}
                   </tbody>
                 </table>
@@ -347,37 +402,56 @@ export default function BulkGeneratorEngine({
               {issues.length > 50 && <p className={s.muted}>Showing first 50 of {issues.length} issues.</p>}
             </div>
           )}
+
           <div className={s.stepActions}>
             <button className={s.secondaryBtn} onClick={() => setStep(1)}>← Fix Mapping</button>
             <button className={s.primaryBtn} onClick={() => setStep(3)}>
-              Continue to Preview →
+              Preview & Customise →
             </button>
           </div>
         </div>
       )}
 
-      {/* ════════ STEP 3: PREVIEW & TEMPLATE EDIT ════════ */}
+      {/* ════════════════════════════════════════
+         STEP 3: PREVIEW & TEMPLATE EDITOR
+         ════════════════════════════════════════ */}
       {step === 3 && (
         <div className={s.previewStep}>
           <div className={s.previewLayout}>
-            {/* Template Settings */}
+            {/* Template Settings Panel */}
             {TemplateEditor && (
               <div className={s.templatePanel}>
-                <h4>🎨 Template Settings</h4>
+                <h4>🎨 Design Settings</h4>
                 <TemplateEditor settings={templateSettings} onChange={setTemplateSettings} />
               </div>
             )}
-            {/* Preview Navigation */}
+
+            {/* Preview Area */}
             <div className={s.previewPanel}>
               <div className={s.previewNav}>
-                <button disabled={previewIdx === 0} onClick={() => setPreviewIdx(p => p - 1)} className={s.secondaryBtn}>← Prev</button>
-                <span className={s.previewCounter}>Preview {previewIdx + 1} of {rows.length}</span>
-                <button disabled={previewIdx >= rows.length - 1} onClick={() => setPreviewIdx(p => p + 1)} className={s.secondaryBtn}>Next →</button>
+                <button
+                  disabled={previewIdx === 0}
+                  onClick={() => setPreviewIdx(p => p - 1)}
+                  className={s.secondaryBtn}
+                >
+                  ← Prev
+                </button>
+                <span className={s.previewCounter}>
+                  Previewing <strong>{previewIdx + 1}</strong> of <strong>{rows.length}</strong>
+                </span>
+                <button
+                  disabled={previewIdx >= rows.length - 1}
+                  onClick={() => setPreviewIdx(p => p + 1)}
+                  className={s.secondaryBtn}
+                >
+                  Next →
+                </button>
               </div>
-              <div className={s.previewCanvas} ref={previewCanvasRef}>
+
+              <div className={s.previewCanvas}>
                 {renderCard && renderCard(getMappedRow(rows[previewIdx]), mapping, templateSettings, previewIdx)}
               </div>
-              {/* Quick row jump */}
+
               <div className={s.previewJump}>
                 <label>
                   Jump to row:
@@ -395,35 +469,54 @@ export default function BulkGeneratorEngine({
               </div>
             </div>
           </div>
+
           <div className={s.stepActions}>
             <button className={s.secondaryBtn} onClick={() => setStep(2)}>← Back</button>
             <button className={s.generateBtn} onClick={handleGenerate}>
-              🚀 Generate {rows.length} PDFs & Download ZIP
+              🚀 Generate {rows.length} PDF{rows.length !== 1 ? 's' : ''} & Download ZIP
             </button>
           </div>
         </div>
       )}
 
-      {/* ════════ STEP 4: GENERATING ════════ */}
+      {/* ════════════════════════════════════════
+         STEP 4: GENERATING / DONE
+         ════════════════════════════════════════ */}
       {step === 4 && (
         <div className={s.generateStep}>
           <div className={s.generateCard}>
             {generating ? (
               <>
                 <div className={s.spinner} />
-                <h3>Generating your files…</h3>
-                <div className={s.progressBar}><div className={s.progressFill} style={{ width: `${progress}%` }} /></div>
-                <p className={s.progressText}>{progress}% — {Math.round(rows.length * progress / 100)} of {rows.length} files</p>
+                <h3>Creating your files…</h3>
+                <div className={s.progressBar}>
+                  <div className={s.progressFill} style={{ width: `${progress}%` }} />
+                </div>
+                <p className={s.progressText}>
+                  {progress}% complete — {Math.round(rows.length * progress / 100)} of {rows.length} files
+                </p>
+              </>
+            ) : done ? (
+              <>
+                <div className={s.successIcon}>🎉</div>
+                <h3>All done — your ZIP is ready!</h3>
+                <p className={s.muted}>
+                  {rows.length} PDF file{rows.length !== 1 ? 's' : ''} generated and downloaded as a ZIP archive.
+                </p>
+                <div className={s.stepActions} style={{ justifyContent: 'center' }}>
+                  <button className={s.primaryBtn} onClick={handleGenerate}>⬇ Download Again</button>
+                  <button className={s.secondaryBtn} onClick={() => setStep(3)}>← Edit & Preview</button>
+                  <button className={s.secondaryBtn} onClick={resetAll}>🔄 New Batch</button>
+                </div>
               </>
             ) : (
               <>
-                <div className={s.successIcon}>✅</div>
-                <h3>All done!</h3>
-                <p>{rows.length} PDF files packaged into a ZIP and downloaded.</p>
-                <div className={s.stepActions}>
-                  <button className={s.secondaryBtn} onClick={() => { setStep(3); }}>← Back to Preview</button>
-                  <button className={s.primaryBtn} onClick={handleGenerate}>⬇ Download Again</button>
-                  <button className={s.secondaryBtn} onClick={() => { setStep(0); setFile(null); setRows([]); setHeaders([]); setMapping({}); setIssues([]); setPreviewIdx(0); }}>Start New Batch</button>
+                <div className={s.successIcon}>⚠️</div>
+                <h3>Something went wrong</h3>
+                <p className={s.muted}>Please check the error message and try again.</p>
+                <div className={s.stepActions} style={{ justifyContent: 'center' }}>
+                  <button className={s.secondaryBtn} onClick={() => setStep(3)}>← Back to Preview</button>
+                  <button className={s.primaryBtn} onClick={handleGenerate}>🔄 Retry</button>
                 </div>
               </>
             )}

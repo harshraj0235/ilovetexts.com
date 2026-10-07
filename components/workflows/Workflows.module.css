@@ -72,5 +72,15 @@
 .faq p { margin-top: 12px; }
 .small { font-size: 13px; }
 .price { font-size: 38px; color: var(--ink); letter-spacing: -.04em; }
+.seoSection { margin-top: 48px; display: grid; gap: 24px; }
+.seoSection h2 { font-size: clamp(20px, 2.5vw, 28px); letter-spacing: -.03em; font-weight: 650; }
+.seoSection h3 { font-size: 18px; letter-spacing: -.02em; margin-top: 8px; }
+.seoSection p, .seoSection li { color: var(--muted); line-height: 1.75; }
+.seoSection ul { padding-left: 20px; margin: 0; }
+.seoSection li + li { margin-top: 6px; }
+.faqList { display: grid; gap: 0; }
+.faqItem { border-top: 1px solid var(--line); padding: 18px 0; }
+.faqItem summary { cursor: pointer; font-weight: 600; font-size: 15px; }
+.faqItem p { margin-top: 12px; }
 @media (max-width: 760px) { .hero { grid-template-columns: 1fr; gap: 24px; } .grid { grid-template-columns: 1fr; } .stats { grid-template-columns: repeat(2,minmax(0,1fr)); } .page { padding-top: 24px; } .settings, .editorFields { grid-template-columns: 1fr; } .toolbar { grid-template-columns: 1fr; } .wide { grid-column: auto; } }
 @media (prefers-reduced-motion: reduce) { .page * { scroll-behavior: auto; transition: none; } }
