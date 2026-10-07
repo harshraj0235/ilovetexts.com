@@ -31,7 +31,49 @@ export default function Workflows() {
         </div>
       </section>
       <section className={s.section} aria-labelledby="choose-workflow">
-        <div className={s.sectionHeading}><h2 id="choose-workflow">Choose what you need today.</h2><span className={s.badge}>Two free workflows</span></div>
+        <div className={s.sectionHeading}><h2 id="choose-workflow">Bulk Generators (Upload Excel → Download ZIP)</h2><span className={s.badge}>New Tools</span></div>
+        <div className={s.grid}>
+          <article className={s.card}>
+            <span className={s.badge}>Free · Bulk Generator</span><h3>Bulk ID Card Generator</h3>
+            <p>Upload names, IDs and photos to instantly create hundreds of print-ready front and back ID cards.</p>
+            <ul className={s.list}><li>For schools, offices, event organisers</li><li>Customisable template colours and logos</li><li>Zip export of individual PDFs</li></ul>
+            <div className={s.actions}><Link href="/workflows/bulk-id-card-generator" className={s.primary}>Open Generator →</Link></div>
+          </article>
+          <article className={s.card}>
+            <span className={s.badge}>Free · Bulk Generator</span><h3>Bulk Report Card Generator</h3>
+            <p>Upload student marks in Excel. We'll automatically calculate totals, percentages, grades and generate report cards.</p>
+            <ul className={s.list}><li>For tuition teachers, small schools</li><li>GPA, Percentage, or Letter Grades</li><li>Local browser processing</li></ul>
+            <div className={s.actions}><Link href="/workflows/bulk-report-card-generator" className={s.primary}>Open Generator →</Link></div>
+          </article>
+          <article className={s.card}>
+            <span className={s.badge}>Free · Bulk Generator</span><h3>Bulk Fee Receipt Generator</h3>
+            <p>Upload recorded payments to generate numbered fee receipts with student name, amount, and payment date.</p>
+            <ul className={s.list}><li>For coaching centres, clubs, societies</li><li>Amount in words (Indian numbering)</li><li>Auto-numbering receipts</li></ul>
+            <div className={s.actions}><Link href="/workflows/bulk-fee-receipt-generator" className={s.primary}>Open Generator →</Link></div>
+          </article>
+          <article className={s.card}>
+            <span className={s.badge}>Free · Bulk Generator</span><h3>Bulk Offer & Appointment Letters</h3>
+            <p>Upload employee details to seamlessly fill your approved letter template and export individual PDFs.</p>
+            <ul className={s.list}><li>For HR teams and recruiters</li><li>Switch between Offer/Appointment</li><li>Custom Terms & Conditions</li></ul>
+            <div className={s.actions}><Link href="/workflows/bulk-appointment-offer-letter-generator" className={s.primary}>Open Generator →</Link></div>
+          </article>
+          <article className={s.card}>
+            <span className={s.badge}>Free · Bulk Generator</span><h3>Bulk Event Badge Generator</h3>
+            <p>Upload attendees to create professional conference badges with names, categories, and QR codes.</p>
+            <ul className={s.list}><li>For conferences and exhibitions</li><li>Colour-coded categories (VIP, Speaker)</li><li>Auto-generated scannable QR Codes</li></ul>
+            <div className={s.actions}><Link href="/workflows/bulk-event-badge-generator" className={s.primary}>Open Generator →</Link></div>
+          </article>
+          <article className={s.card}>
+            <span className={s.badge}>Free · Bulk Generator</span><h3>Bulk Product Label Generator</h3>
+            <p>Upload inventory names, prices and barcodes to arrange printable retail product labels.</p>
+            <ul className={s.list}><li>For retail shops, warehouses, brands</li><li>Barcode or QR Code formats</li><li>Dynamic currency & tax notes</li></ul>
+            <div className={s.actions}><Link href="/workflows/bulk-product-label-generator" className={s.primary}>Open Generator →</Link></div>
+          </article>
+        </div>
+      </section>
+
+      <section className={s.section} aria-labelledby="other-workflows">
+        <div className={s.sectionHeading}><h2 id="other-workflows">Document Workflows</h2><span className={s.badge}>Guided flows</span></div>
         <div className={s.grid}>
           <article className={s.card}>
             <span className={s.badge}>Free · ApplicationReady</span><h3>Application documents → organised pack</h3>
